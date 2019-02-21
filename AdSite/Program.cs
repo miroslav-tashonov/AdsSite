@@ -18,10 +18,10 @@ namespace AdSite
     {
         public static void Main(string[] args)
         {
-
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             logger.Info("app init");
-            var host = BuildWebHost(args).Build();
+            var host = BuildWebHost(args);
+
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -47,14 +47,21 @@ namespace AdSite
 
         }
 
-        public static IWebHostBuilder BuildWebHost(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseIISIntegration()
                 .UseStartup<Startup>()
+                .ConfigureKestrel((context, options) =>
+                {
+                    // Set properties and call methods on options
+                })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
                 })
-                .UseNLog();  // NLog: setup NLog for Dependency injection
+                .UseNLog()
+            .Build();  // NLog: setup NLog for Dependency injection
     }
 }

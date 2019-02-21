@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://www.AdSite.com/",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:51464/",
       "sslPort": 44321
@@ -17,10 +21,10 @@
       }
     },
     "AdSite": {
-      "commandName": "Project",
+      "commandName": "IIS",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
       "applicationUrl": "http://localhost:51465/"
     }
