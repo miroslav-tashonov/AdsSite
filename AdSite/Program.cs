@@ -18,7 +18,7 @@ namespace AdSite
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("Configs\\nlog.config").GetCurrentClassLogger();
             logger.Info("app init");
             var host = BuildWebHost(args);
 
@@ -50,6 +50,16 @@ namespace AdSite
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+
+                    config.AddJsonFile("Configs\\appsettings.json", optional: true)
+                        .AddJsonFile($"Configs\\appsettings.{env.EnvironmentName}.json", optional: true);
+
+                    config.AddEnvironmentVariables();
+                })
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .ConfigureKestrel((context, options) =>

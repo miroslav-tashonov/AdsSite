@@ -13,3 +13,4 @@ logs/
 [Oo]bj/
 [Ll]og/
 appsettings.production.json
+node_modules/
