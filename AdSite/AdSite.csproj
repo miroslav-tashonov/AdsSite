@@ -4,6 +4,13 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-AdSite-4525A884-A14A-4D1E-97B9-CE525A2A67CF</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="lib\**" />
+    <Content Remove="lib\**" />
+    <EmbeddedResource Remove="lib\**" />
+    <None Remove="lib\**" />
+  </ItemGroup>
   
 
   <ItemGroup>
