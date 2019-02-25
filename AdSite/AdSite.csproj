@@ -18,6 +18,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" PrivateAssets="All" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
   </ItemGroup>
+  
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdSite.Data\AdSite.Data.csproj" />
+    <ProjectReference Include="..\AdSite.Models\AdSite.Models.csproj" />
+  </ItemGroup>
 
 
   <ItemGroup>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AdSite.Data;
+using AdSite.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +31,7 @@ namespace AdSite
                     var serviceProvider = services.GetRequiredService<IServiceProvider>();
                     var configuration = services.GetRequiredService<IConfiguration>();
 
-                    SeedRoles.CreateRoles(serviceProvider, configuration).Wait();
+                    SeedRolesExtension.CreateRoles(serviceProvider, configuration).Wait();
 
                 }
                 catch (Exception exception)
@@ -71,7 +72,7 @@ namespace AdSite
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
                 })
-                .UseNLog()
-            .Build();  // NLog: setup NLog for Dependency injection
+                .UseNLog()// NLog: setup NLog for Dependency injection
+                .Build();  
     }
 }

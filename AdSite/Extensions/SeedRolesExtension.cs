@@ -1,5 +1,5 @@
-﻿using AdSite.Extensions;
-using AdSite.Models;
+﻿using AdSite.Models;
+using AdSite.Models.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,13 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdSite.Data
+namespace AdSite.Extensions
 {
-    public class SeedRoles
+    public class SeedRolesExtension
     {
         public static async Task CreateRoles(IServiceProvider serviceProvider, IConfiguration Configuration)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger<SeedRoles>>();
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedRolesExtension>>();
             logger.LogInformation("adding customs roles");
 
 

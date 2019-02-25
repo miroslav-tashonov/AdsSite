@@ -36,7 +36,10 @@ namespace AdSite
             });
              
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("UsersConnection")));
+
+            services.AddDbContext<AdSiteDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("AdSiteConnection")));
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {

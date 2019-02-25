@@ -1,8 +1,8 @@
+using AdSite.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AdSite.Controllers;
 
 namespace Microsoft.AspNetCore.Mvc
 {

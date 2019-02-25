@@ -227,22 +227,14 @@ namespace AdSite.Controllers
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // Add a user to the default role, or any role you prefer here
-                    var userCode = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole),UserRole.User) );
-                    if (userCode.Succeeded)
-                    {
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        _logger.LogInformation("User created a new account with password.");
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        await _userManager.DeleteAsync(user);
-                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
+
                 }
                 AddErrors(result);
             }
@@ -324,21 +316,15 @@ namespace AdSite.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    var userResult = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
-                    if (userResult.Succeeded)
+                    result = await _userManager.AddLoginAsync(user, info);
+                    if (result.Succeeded)
                     {
-                        result = await _userManager.AddLoginAsync(user, info);
-                        if (result.Succeeded)
-                        {
-                            await _signInManager.SignInAsync(user, isPersistent: false);
-                            _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                            return RedirectToLocal(returnUrl);
-                        }
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                        return RedirectToLocal(returnUrl);
                     }
-                    else
-                    {
-                        await _userManager.DeleteAsync(user);
-                    }
+
+
                 }
                 AddErrors(result);
             }
