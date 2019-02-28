@@ -15,6 +15,7 @@ using AdSite.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AdSite.Services.LocalizationService;
+using AdSite.Data.Repositories;
 
 namespace AdSite
 {
@@ -93,6 +94,7 @@ namespace AdSite
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ILocalizationService, LocalizationService>();
+            services.AddTransient<IRepository<Localization>, LocalizationRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
         }

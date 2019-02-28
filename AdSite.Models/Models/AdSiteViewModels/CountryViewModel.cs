@@ -4,22 +4,22 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.DatabaseModels
+namespace AdSite.Models.ViewModels
 {
-    public class Country : StampBaseClass
+    public class CountryViewModel
     {
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string Abbreviation { get; set; }
-
-        #region Foreign Keys
+        
         public ICollection<City> Cities { get; set; }
         public ICollection<Ad> Ads { get; set; }
         public ICollection<Category> Categories { get; set; }
         public ICollection<UserRoleCountry> UserRoleCountry{ get; set; }
         public ICollection<Localization> Localizations { get; set; }
-        #endregion
 
+        DateTime CreatedAt { get; set; }
+        DateTime ModifiedAt { get; set; }
+        ApplicationUser ModifiedBy { get; set; }
+        ApplicationUser CreatedBy { get; set; }
     }
 }

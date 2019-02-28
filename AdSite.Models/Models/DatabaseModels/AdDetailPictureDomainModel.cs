@@ -6,7 +6,6 @@ namespace AdSite.Models.DatabaseModels
 {
     public class AdDetailPicture : StampBaseClass
     {
-        public Guid AdDetailPictureID { get; set; } // primary key
         //todo: image file property
 
         #region Foreign Keys

@@ -57,7 +57,7 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    CountryID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
@@ -67,7 +67,7 @@ namespace AdSite.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Countries", x => x.CountryID);
+                    table.PrimaryKey("PK_Countries", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,31 +192,32 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    CategoryID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
                     ModifiedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CountryId = table.Column<Guid>(nullable: false),
-                    ParentCategoryId = table.Column<Guid>(nullable: true)
+                    ParentCategoryId = table.Column<Guid>(nullable: true),
+                    ParentID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryID);
+                    table.PrimaryKey("PK_Categories", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Categories_Countries_CountryId",
                         column: x => x.CountryId,
                         principalSchema: "adsite",
                         principalTable: "Countries",
-                        principalColumn: "CountryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Categories_Categories_ParentCategoryId",
-                        column: x => x.ParentCategoryId,
+                        name: "FK_Categories_Categories_ParentID",
+                        column: x => x.ParentID,
                         principalSchema: "adsite",
                         principalTable: "Categories",
-                        principalColumn: "CategoryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -225,7 +226,7 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    CityID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
@@ -236,13 +237,13 @@ namespace AdSite.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cities", x => x.CityID);
+                    table.PrimaryKey("PK_Cities", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Cities_Countries_CountryId",
                         column: x => x.CountryId,
                         principalSchema: "adsite",
                         principalTable: "Countries",
-                        principalColumn: "CountryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -251,7 +252,7 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    LocalizationID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     LocalizationKey = table.Column<string>(nullable: false),
                     English = table.Column<string>(nullable: true),
                     Macedonian = table.Column<string>(nullable: true),
@@ -260,13 +261,13 @@ namespace AdSite.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Localizations", x => x.LocalizationID);
+                    table.PrimaryKey("PK_Localizations", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Localizations_Countries_CountryID",
                         column: x => x.CountryID,
                         principalSchema: "adsite",
                         principalTable: "Countries",
-                        principalColumn: "CountryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -275,14 +276,14 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     ApplicationUserId = table.Column<string>(nullable: true),
                     CountryId = table.Column<Guid>(nullable: false),
                     ApplicationIdentityRoleId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoleCountry", x => x.Id);
+                    table.PrimaryKey("PK_UserRoleCountry", x => x.ID);
                     table.ForeignKey(
                         name: "FK_UserRoleCountry_AspNetRoles_ApplicationIdentityRoleId",
                         column: x => x.ApplicationIdentityRoleId,
@@ -302,7 +303,7 @@ namespace AdSite.Data.Migrations
                         column: x => x.CountryId,
                         principalSchema: "adsite",
                         principalTable: "Countries",
-                        principalColumn: "CountryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -311,7 +312,7 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    AdID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
@@ -325,27 +326,27 @@ namespace AdSite.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ads", x => x.AdID);
+                    table.PrimaryKey("PK_Ads", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Ads_Categories_CategoryID",
                         column: x => x.CategoryID,
                         principalSchema: "adsite",
                         principalTable: "Categories",
-                        principalColumn: "CategoryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Ads_Cities_CityID",
                         column: x => x.CityID,
                         principalSchema: "adsite",
                         principalTable: "Cities",
-                        principalColumn: "CityID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Ads_Countries_CountryID",
                         column: x => x.CountryID,
                         principalSchema: "adsite",
                         principalTable: "Countries",
-                        principalColumn: "CountryID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Ads_AspNetUsers_OwnerId",
@@ -361,7 +362,7 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    AdDetailID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
@@ -371,13 +372,13 @@ namespace AdSite.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AdDetails", x => x.AdDetailID);
+                    table.PrimaryKey("PK_AdDetails", x => x.ID);
                     table.ForeignKey(
                         name: "FK_AdDetails_Ads_AdID",
                         column: x => x.AdID,
                         principalSchema: "adsite",
                         principalTable: "Ads",
-                        principalColumn: "AdID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -386,7 +387,7 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 columns: table => new
                 {
-                    AdDetailPictureID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
@@ -395,13 +396,13 @@ namespace AdSite.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AdDetailPictures", x => x.AdDetailPictureID);
+                    table.PrimaryKey("PK_AdDetailPictures", x => x.ID);
                     table.ForeignKey(
                         name: "FK_AdDetailPictures_AdDetails_AdDetailID",
                         column: x => x.AdDetailID,
                         principalSchema: "adsite",
                         principalTable: "AdDetails",
-                        principalColumn: "AdDetailID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -495,16 +496,16 @@ namespace AdSite.Data.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_ParentCategoryId",
+                name: "IX_Categories_ParentID",
                 schema: "adsite",
                 table: "Categories",
-                column: "ParentCategoryId");
+                column: "ParentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_CategoryID_ParentCategoryId",
+                name: "IX_Categories_ID_ParentCategoryId",
                 schema: "adsite",
                 table: "Categories",
-                columns: new[] { "CategoryID", "ParentCategoryId" },
+                columns: new[] { "ID", "ParentCategoryId" },
                 unique: true,
                 filter: "[ParentCategoryId] IS NOT NULL");
 

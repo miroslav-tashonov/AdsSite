@@ -7,7 +7,6 @@ namespace AdSite.Models.DatabaseModels
 {
     public class City : StampBaseClass
     {
-        public Guid CityID { get; set; } // primary key
         [Required]
         public string Name { get; set; }
         [Required]

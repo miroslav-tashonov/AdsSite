@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190228110731_init")]
+    [Migration("20190228170725_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,7 +99,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Ad", b =>
                 {
-                    b.Property<Guid>("AdID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("CategoryID");
@@ -123,7 +123,7 @@ namespace AdSite.Data.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.HasKey("AdID");
+                    b.HasKey("ID");
 
                     b.HasIndex("CategoryID");
 
@@ -138,7 +138,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.AdDetail", b =>
                 {
-                    b.Property<Guid>("AdDetailID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("AdID");
@@ -154,7 +154,7 @@ namespace AdSite.Data.Migrations
 
                     b.Property<string>("ModifiedBy");
 
-                    b.HasKey("AdDetailID");
+                    b.HasKey("ID");
 
                     b.HasIndex("AdID")
                         .IsUnique();
@@ -164,7 +164,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.AdDetailPicture", b =>
                 {
-                    b.Property<Guid>("AdDetailPictureID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("AdDetailID");
@@ -177,7 +177,7 @@ namespace AdSite.Data.Migrations
 
                     b.Property<string>("ModifiedBy");
 
-                    b.HasKey("AdDetailPictureID");
+                    b.HasKey("ID");
 
                     b.HasIndex("AdDetailID");
 
@@ -186,7 +186,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Category", b =>
                 {
-                    b.Property<Guid>("CategoryID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("CountryId");
@@ -204,13 +204,15 @@ namespace AdSite.Data.Migrations
 
                     b.Property<Guid?>("ParentCategoryId");
 
-                    b.HasKey("CategoryID");
+                    b.Property<Guid?>("ParentID");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("ParentCategoryId");
+                    b.HasIndex("ParentID");
 
-                    b.HasIndex("CategoryID", "ParentCategoryId")
+                    b.HasIndex("ID", "ParentCategoryId")
                         .IsUnique()
                         .HasFilter("[ParentCategoryId] IS NOT NULL");
 
@@ -219,7 +221,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.City", b =>
                 {
-                    b.Property<Guid>("CityID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("CountryId");
@@ -238,7 +240,7 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("Postcode")
                         .IsRequired();
 
-                    b.HasKey("CityID");
+                    b.HasKey("ID");
 
                     b.HasIndex("CountryId");
 
@@ -247,7 +249,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Country", b =>
                 {
-                    b.Property<Guid>("CountryID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Abbreviation")
@@ -264,14 +266,14 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.HasKey("CountryID");
+                    b.HasKey("ID");
 
                     b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Localization", b =>
                 {
-                    b.Property<Guid>("LocalizationID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Albanian");
@@ -285,7 +287,7 @@ namespace AdSite.Data.Migrations
 
                     b.Property<string>("Macedonian");
 
-                    b.HasKey("LocalizationID");
+                    b.HasKey("ID");
 
                     b.HasIndex("CountryID");
 
@@ -294,7 +296,7 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.UserRoleCountry", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ApplicationIdentityRoleId");
@@ -303,7 +305,7 @@ namespace AdSite.Data.Migrations
 
                     b.Property<Guid>("CountryId");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("ApplicationIdentityRoleId");
 
@@ -448,7 +450,7 @@ namespace AdSite.Data.Migrations
 
                     b.HasOne("AdSite.Models.DatabaseModels.Category", "Parent")
                         .WithMany("Children")
-                        .HasForeignKey("ParentCategoryId");
+                        .HasForeignKey("ParentID");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.City", b =>

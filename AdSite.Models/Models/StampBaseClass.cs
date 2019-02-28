@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AdSite.Models
 {
-    public class StampBaseClass
+    public class StampBaseClass : RepositoryEntity
     {
         public string CreatedBy { get; set; }
         public DateTime CreatedAt
@@ -17,7 +17,6 @@ namespace AdSite.Models
         public DateTime ModifiedAt {
             get => DateTime.Now;
             set { }
-        }        
-        
+        }
     }
 }

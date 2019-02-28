@@ -1,23 +1,25 @@
-﻿using System;
+﻿using AdSite.Models.DatabaseModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.DatabaseModels
+namespace AdSite.Models.ViewModels
 {
-    public class Category : StampBaseClass
+    public class CategoryViewModel
     {
-        [Required]
         public string Name { get; set; }
-
-        #region Foreign Keys & navigation properties
-        public Guid CountryId { get; set; }
+        
         public Country Country { get; set; }
         public ICollection<Ad> Ads { get; set; }
-
-        public Guid? ParentCategoryId { get; set; }
+        
         public virtual Category Parent { get; set; }
         public virtual ICollection<Category> Children { get; set; }
-        #endregion
+        
+        DateTime CreatedAt { get; set; }
+        DateTime ModifiedAt { get; set; }
+        ApplicationUser ModifiedBy { get; set; }
+        ApplicationUser CreatedBy { get; set; }
+
     }
 }

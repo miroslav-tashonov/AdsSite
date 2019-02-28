@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AdSite.Data.Repositories;
+using AdSite.Models.DatabaseModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,14 +8,24 @@ namespace AdSite.Services.LocalizationService
 {
     public interface ILocalizationService
     {
-        string Get(Guid countryId, string localizationKey);
+        Localization Get(Guid localizationId);
+
+         
     }
+
+
 
     public class LocalizationService : ILocalizationService
     {
-        public string Get(Guid countryId, string localizationKey)
+        private readonly IRepository<Localization> _repository;
+        public LocalizationService(IRepository<Localization> repository)
         {
-            return "Tashonov";
+            _repository = repository;
+        }
+
+        public Localization Get(Guid localizationId = new Guid())
+        {
+            return _repository.Get(localizationId);
         }
     }
 }

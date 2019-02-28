@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.DatabaseModels
+namespace AdSite.Models.ViewModels
 {
-    public class Localization : RepositoryEntity
+    public class LocalizationViewModel
     {
-        [Required]
         public string LocalizationKey { get; set; }
 
         public string English { get; set; }

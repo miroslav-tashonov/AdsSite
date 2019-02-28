@@ -7,7 +7,6 @@ namespace AdSite.Models.DatabaseModels
 {
     public class AdDetail : StampBaseClass
     {
-        public Guid AdDetailID { get; set; } // primary key
         [Required]
         public string Description { get; set; }
         

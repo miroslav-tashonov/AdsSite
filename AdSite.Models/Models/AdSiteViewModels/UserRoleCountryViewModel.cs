@@ -4,17 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdSite.Models.DatabaseModels
+namespace AdSite.Models.ViewModels
 {
-    public class UserRoleCountry : RepositoryEntity
+    public class UserRoleCountryViewModel
     {
-        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-
-        public Guid CountryId { get; set; }
         public Country Country { get; set; }
-
-        public string ApplicationIdentityRoleId { get; set; }
         public ApplicationIdentityRole ApplicationIdentityRole { get; set; }
     }
 }

@@ -50,7 +50,7 @@ namespace AdSite.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Category>()
-                .HasIndex(category => new { category.CategoryID, category.ParentCategoryId }).IsUnique();
+                .HasIndex(category => new { category.ID, category.ParentCategoryId }).IsUnique();
 
             builder.Entity<ApplicationUser>()
                 .HasMany(ads => ads.Ads)

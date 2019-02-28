@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdSite.Models;
 using AdSite.Models.DatabaseModels;
-using AdSite.Models.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
