@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.AdSiteDomainModels
+namespace AdSite.Models.DatabaseModels
 {
-    public class AdDetail
+    public class AdDetail : StampBaseClass
     {
-        public int AdDetailID { get; set; } // primary key
-
+        public Guid AdDetailID { get; set; } // primary key
+        [Required]
         public string Description { get; set; }
         
 
         #region Foreign Keys
-        public int AdID { get; set; }
+        public Guid AdID { get; set; }
         public Ad Ad { get; set; }
         public ICollection<AdDetailPicture> AdDetailPictures { get; set; }
         #endregion

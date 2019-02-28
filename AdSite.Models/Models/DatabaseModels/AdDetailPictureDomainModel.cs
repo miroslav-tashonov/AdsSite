@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdSite.Models.AdSiteDomainModels
+namespace AdSite.Models.DatabaseModels
 {
-    public class AdDetailPicture
+    public class AdDetailPicture : StampBaseClass
     {
-        public int AdDetailPictureID { get; set; } // primary key
+        public Guid AdDetailPictureID { get; set; } // primary key
         //todo: image file property
 
         #region Foreign Keys
-        public int AdDetailID { get; set; }
+        public Guid AdDetailID { get; set; }
         public AdDetail AdDetail { get; set; }
         #endregion
 

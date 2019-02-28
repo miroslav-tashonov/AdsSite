@@ -1,6 +1,6 @@
+using AdSite.Services;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using AdSite.Services;
 
 namespace AdSite.Extensions
 {

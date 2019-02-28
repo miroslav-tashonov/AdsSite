@@ -1,31 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.AdSiteDomainModels
+namespace AdSite.Models.DatabaseModels
 {
-    public class Ad
+    public class Ad : StampBaseClass
     {
-        public int AdID { get; set; } // primary key
-
+        public Guid AdID { get; set; } // primary key
+        [Required]
         public string Name { get; set; }
+        [Required]
         public decimal Price { get; set; }
 
         //todo: property for Main Picture
 
         #region Foreign Keys
-        public int CategoryID { get; set; }
-        public int CityID { get; set; }
-        public int CountryID { get; set; }
-        public int AdDetailID { get; set; }
+        public Guid CategoryID { get; set; }
+        public Guid CityID { get; set; }
+        public Guid CountryID { get; set; }
 
         public Category Category { get; set; }
         public City City { get; set; }
         public Country Country { get; set; }
         public AdDetail AdDetail { get; set; }
 
-        //todo: reference to aspnet users for the owner
-        //public User Owner { get; set; }
+        public ApplicationUser Owner { get; set; }
         #endregion
 
     }

@@ -14,4 +14,9 @@ namespace AdSite.Services
             return Task.CompletedTask;
         }
     }
+
+    public interface IEmailSender
+    {
+        Task SendEmailAsync(string email, string subject, string message);
+    }
 }

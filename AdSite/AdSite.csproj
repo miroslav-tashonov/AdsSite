@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AdSite.Data\AdSite.Data.csproj" />
     <ProjectReference Include="..\AdSite.Models\AdSite.Models.csproj" />
+    <ProjectReference Include="..\AdSite.Services\AdSite.Services.csproj" />
   </ItemGroup>
 
 

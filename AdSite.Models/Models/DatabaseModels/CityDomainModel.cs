@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.AdSiteDomainModels
+namespace AdSite.Models.DatabaseModels
 {
-    public class City
+    public class City : StampBaseClass
     {
-        public int CityID { get; set; } // primary key
-
+        public Guid CityID { get; set; } // primary key
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Postcode { get; set; }
-
-        //property for Main Picture
 
         #region Foreign Keys
 
-        public int CountryId { get; set; }
-
+        public Guid CountryId { get; set; }
         public Country Country { get; set; }
         public ICollection<Ad> Ads { get; set; }
         #endregion

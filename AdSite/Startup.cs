@@ -10,9 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AdSite.Data;
 using AdSite.Models;
+using AdSite.Models.DatabaseModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AdSite.Services.LocalizationService;
 
 namespace AdSite
 {
@@ -36,10 +38,7 @@ namespace AdSite
             });
              
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("UsersConnection")));
-
-            services.AddDbContext<AdSiteDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AdSiteConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
@@ -93,6 +92,7 @@ namespace AdSite
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ILocalizationService, LocalizationService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
         }

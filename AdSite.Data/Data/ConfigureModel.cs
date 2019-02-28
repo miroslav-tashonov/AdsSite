@@ -1,4 +1,5 @@
-﻿using AdSite.Models.AdSiteDomainModels;
+﻿using AdSite.Models;
+using AdSite.Models.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,20 +25,18 @@ namespace AdSite.Data
                 .HasOne(country => country.Country)
                 .WithMany(ads => ads.Ads)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+            builder.Entity<Ad>()
+                .HasOne(adDetail => adDetail.AdDetail)
+                .WithOne(ad => ad.Ad)
+                .HasForeignKey<AdDetail>(ad => ad.AdID);
+
 
             builder.Entity<AdDetail>()
                 .HasMany(adDetailPictures => adDetailPictures.AdDetailPictures)
-                .WithOne()
+                .WithOne( adDetail => adDetail.AdDetail )
+                .HasForeignKey(adDetail => adDetail.AdDetailID)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<AdDetail>()
-                .HasOne(ad => ad.Ad)
-                .WithOne(adDetail => adDetail.AdDetail)
-                .HasForeignKey<Ad>( ad => ad.AdID );
-
-            builder.Entity<AdDetailPicture>()
-                .HasOne(adDetail => adDetail.AdDetail)
-                .WithMany(adDetailPictures => adDetailPictures.AdDetailPictures);
+            
 
 
             builder.Entity<City>()
@@ -47,15 +46,36 @@ namespace AdSite.Data
 
             builder.Entity<Category>()
                 .HasOne(country => country.Country)
-                .WithMany(category => category.Categories);
+                .WithMany(category => category.Categories)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Category>()
+                .HasIndex(category => new { category.CategoryID, category.ParentCategoryId }).IsUnique();
 
-            /*builder.Entity<Ad>().ToTable("Ad");
-            builder.Entity<AdDetail>().ToTable("AdDetail");
-            builder.Entity<AdDetailPicture>().ToTable("AdDetailPicture");
-            builder.Entity<City>().ToTable("City");
-            builder.Entity<Country>().ToTable("Country");
-            builder.Entity<Category>().ToTable("Category");*/
+            builder.Entity<ApplicationUser>()
+                .HasMany(ads => ads.Ads)
+                .WithOne(owner => owner.Owner)
+                .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<ApplicationUser>()
+                .HasMany(ads => ads.Ads)
+                .WithOne(owner => owner.Owner)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<UserRoleCountry>()
+                .HasOne(country => country.Country)
+                .WithMany(tuple => tuple.UserRoleCountry)
+                .HasForeignKey(urc => urc.CountryId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<UserRoleCountry>()
+                .HasOne(identityRole => identityRole.ApplicationIdentityRole)
+                .WithMany(tuple => tuple.UserRoleCountry)
+                .HasForeignKey(urc => urc.ApplicationIdentityRoleId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<UserRoleCountry>()
+                .HasOne(identityUser => identityUser.ApplicationUser)
+                .WithMany(tuple => tuple.UserRoleCountry)
+                .HasForeignKey(urc => urc.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
