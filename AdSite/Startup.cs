@@ -94,7 +94,7 @@ namespace AdSite
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ILocalizationService, LocalizationService>();
-            services.AddTransient<IRepository<Localization>, LocalizationRepository>();
+            services.AddTransient<ILocalizationRepository, LocalizationRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
         }

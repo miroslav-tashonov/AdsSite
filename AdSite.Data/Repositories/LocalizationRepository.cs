@@ -1,11 +1,19 @@
 ﻿using AdSite.Models.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AdSite.Data.Repositories
 {
-    public class LocalizationRepository : IRepository<Localization>
+    public interface ILocalizationRepository : IRepository<Localization>
+    {
+        Localization GetLocalizationByKey(string key);
+    }
+
+    public class LocalizationRepository : ILocalizationRepository
     {
         private readonly ApplicationDbContext _context;
         public LocalizationRepository(ApplicationDbContext context)
@@ -13,34 +21,68 @@ namespace AdSite.Data.Repositories
             _context = context;
         }
 
-        public void Add(Localization entity)
+        public bool Add(Localization entity)
         {
-            throw new NotImplementedException();
+            _context.Add(entity);
+            return SaveChangesResult();
         }
 
-        public bool Delete(Guid? id)
+        public bool Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var localization = Get(id);
+            _context.Localizations.Remove(localization);
+            return SaveChangesResult();
         }
 
-        public bool Exists(Localization entity)
+        public bool Exists(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Localizations.Any(e => e.ID == id);
         }
 
         public Localization Get(Guid id)
         {
-            return _context.Localizations.Find(id);
+            var localization = _context.Localizations.FirstOrDefaultAsync(m => m.ID == id);
+            var result = localization.Result;
+            if (result == null)
+            {
+                throw new Exception();
+            }
+
+            return result;
         }
 
         public List<Localization> GetAll()
         {
+            var localizations = _context.Localizations.ToListAsync();
+            return localizations.Result;
+        }
+
+        public Localization GetLocalizationByKey(string key)
+        {
             throw new NotImplementedException();
         }
 
-        public Localization Update(Localization entity)
+        public bool Update(Localization entity)
         {
-            throw new NotImplementedException();
+            _context.Update(entity);
+            return SaveChangesResult();
+        }
+
+        public bool SaveChangesResult()
+        {
+            try
+            {
+                var result = _context.SaveChangesAsync();
+                if (result.Result == 0)
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            return true;
         }
     }
 }

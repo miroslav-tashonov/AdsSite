@@ -20,7 +20,6 @@ namespace AdSite.Controllers
 
         public IActionResult Index()
         {
-            var value = _localizationService.Get(Guid.Parse("d469fb43-86a0-4784-a75d-009b9d0784a0"));
             return View();
         }
         [Authorize(Roles=("Admin"))]

@@ -10,11 +10,11 @@ namespace AdSite.Data.Repositories
 {
     public interface IRepository<T> where T : RepositoryEntity
     {
-        void Add(T entity);
+        bool Add(T entity);
         T Get(Guid id);
         List<T> GetAll();
-        bool Exists(T entity);
-        bool Delete(Guid? id);
-        T Update(T entity);
+        bool Exists(Guid id);
+        bool Delete(Guid id);
+        bool Update(T entity);
     }
 }
