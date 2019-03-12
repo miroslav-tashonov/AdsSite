@@ -269,25 +269,41 @@ namespace AdSite.Data.Migrations
                     b.ToTable("Countries");
                 });
 
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Language", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CultureId");
+
+                    b.Property<string>("LanguageName");
+
+                    b.Property<string>("LanguageShortName");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Languages");
+                });
+
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Localization", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Albanian");
-
                     b.Property<Guid?>("CountryID");
 
-                    b.Property<string>("English");
+                    b.Property<Guid?>("LanguageID");
 
                     b.Property<string>("LocalizationKey")
                         .IsRequired();
 
-                    b.Property<string>("Macedonian");
+                    b.Property<string>("LocalizationValue");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CountryID");
+
+                    b.HasIndex("LanguageID");
 
                     b.ToTable("Localizations");
                 });
@@ -464,6 +480,11 @@ namespace AdSite.Data.Migrations
                     b.HasOne("AdSite.Models.DatabaseModels.Country")
                         .WithMany("Localizations")
                         .HasForeignKey("CountryID");
+
+                    b.HasOne("AdSite.Models.DatabaseModels.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageID")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.UserRoleCountry", b =>

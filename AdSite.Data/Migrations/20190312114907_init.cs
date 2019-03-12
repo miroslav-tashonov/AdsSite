@@ -71,6 +71,21 @@ namespace AdSite.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Languages",
+                schema: "adsite",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CultureId = table.Column<int>(nullable: false),
+                    LanguageName = table.Column<string>(nullable: true),
+                    LanguageShortName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Languages", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 schema: "adsite",
                 columns: table => new
@@ -248,30 +263,6 @@ namespace AdSite.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Localizations",
-                schema: "adsite",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    LocalizationKey = table.Column<string>(nullable: false),
-                    English = table.Column<string>(nullable: true),
-                    Macedonian = table.Column<string>(nullable: true),
-                    Albanian = table.Column<string>(nullable: true),
-                    CountryID = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Localizations", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Localizations_Countries_CountryID",
-                        column: x => x.CountryID,
-                        principalSchema: "adsite",
-                        principalTable: "Countries",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserRoleCountry",
                 schema: "adsite",
                 columns: table => new
@@ -305,6 +296,36 @@ namespace AdSite.Data.Migrations
                         principalTable: "Countries",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Localizations",
+                schema: "adsite",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    LocalizationKey = table.Column<string>(nullable: false),
+                    LocalizationValue = table.Column<string>(nullable: true),
+                    LanguageID = table.Column<Guid>(nullable: true),
+                    CountryID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Localizations", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Localizations_Countries_CountryID",
+                        column: x => x.CountryID,
+                        principalSchema: "adsite",
+                        principalTable: "Countries",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Localizations_Languages_LanguageID",
+                        column: x => x.LanguageID,
+                        principalSchema: "adsite",
+                        principalTable: "Languages",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -522,6 +543,12 @@ namespace AdSite.Data.Migrations
                 column: "CountryID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Localizations_LanguageID",
+                schema: "adsite",
+                table: "Localizations",
+                column: "LanguageID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoleCountry_ApplicationIdentityRoleId",
                 schema: "adsite",
                 table: "UserRoleCountry",
@@ -576,6 +603,10 @@ namespace AdSite.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AdDetails",
+                schema: "adsite");
+
+            migrationBuilder.DropTable(
+                name: "Languages",
                 schema: "adsite");
 
             migrationBuilder.DropTable(

@@ -20,6 +20,7 @@ namespace AdSite.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Localization> Localizations { get; set; }
+        public DbSet<Language> Languages{ get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

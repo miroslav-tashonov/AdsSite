@@ -10,7 +10,7 @@ namespace AdSite.Data.Repositories
 {
     public interface ILocalizationRepository : IRepository<Localization>
     {
-        Localization GetLocalizationByKey(string key);
+        string GetLocalizationValue(string key, int lcid);
     }
 
     public class LocalizationRepository : ILocalizationRepository
@@ -57,9 +57,19 @@ namespace AdSite.Data.Repositories
             return localizations.Result;
         }
 
-        public Localization GetLocalizationByKey(string key)
+        /// <summary>
+        ///     Returns Localization Value based on localization key and language culture ID
+        /// </summary>
+        public string GetLocalizationValue(string key, int cultureId)
         {
-            throw new NotImplementedException();
+            var localization = _context.Localizations.Where
+                (x => x.Language.CultureId == cultureId && 
+                x.LocalizationKey == key);
+
+            string returnValue = localization.Count() > 0 ? 
+                localization.FirstOrDefault().LocalizationValue : String.Empty;
+
+            return returnValue;
         }
 
         public bool Update(Localization entity)

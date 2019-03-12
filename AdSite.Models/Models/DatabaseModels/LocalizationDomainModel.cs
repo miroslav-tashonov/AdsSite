@@ -10,8 +10,8 @@ namespace AdSite.Models.DatabaseModels
         [Required]
         public string LocalizationKey { get; set; }
 
-        public string English { get; set; }
-        public string Macedonian { get; set; }
-        public string Albanian { get; set; }
+        public string LocalizationValue { get; set; }
+
+        public Language Language { get; set; }
     }
 }

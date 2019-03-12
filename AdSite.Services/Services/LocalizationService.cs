@@ -3,6 +3,7 @@ using AdSite.Models.DatabaseModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AdSite.Services.LocalizationService
@@ -10,6 +11,7 @@ namespace AdSite.Services.LocalizationService
     public interface ILocalizationService
     {
         Localization Get(Guid localizationId);
+        string GetByKey(string localizationKey, int cultureId);
         List<Localization> GetAll();
         bool Exists(Guid id);
         bool Delete(Guid id);
@@ -50,6 +52,11 @@ namespace AdSite.Services.LocalizationService
         public List<Localization> GetAll()
         {
             return _repository.GetAll();
+        }
+
+        public string GetByKey(string localizationKey, int cultureId)
+        {
+            return _repository.GetLocalizationValue(localizationKey, cultureId);
         }
 
         public bool Update(Localization localization)

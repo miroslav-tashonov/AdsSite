@@ -15,15 +15,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.LocalizationKey)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.English)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Macedonian)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Albanian)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -32,15 +23,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.LocalizationKey)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.English)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Macedonian)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Albanian)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

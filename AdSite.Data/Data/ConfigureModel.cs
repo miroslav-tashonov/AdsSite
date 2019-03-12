@@ -76,6 +76,11 @@ namespace AdSite.Data
                 .WithMany(tuple => tuple.UserRoleCountry)
                 .HasForeignKey(urc => urc.ApplicationUserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Localization>()
+                .HasOne(language => language.Language)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
