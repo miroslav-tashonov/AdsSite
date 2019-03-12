@@ -37,7 +37,7 @@ namespace AdSite.TagHelpers
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
-                    .SetSlidingExpiration(TimeSpan.FromHours(24));
+                    .SetSlidingExpiration(TimeSpan.FromDays(31));
 
                 // Save data in cache.
                 _cache.Set(entryKey, localizationValue, cacheEntryOptions);
