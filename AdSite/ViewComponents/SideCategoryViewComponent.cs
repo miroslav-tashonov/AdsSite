@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace AdSite.ViewComponents
 {
-    public class SideCategoryViewComponent : ViewComponent
+    public class CategoriesViewComponent : ViewComponent
     {
         private readonly ICategoryService _categoryService;
 
-        public SideCategoryViewComponent(ICategoryService categoryService)
+        public CategoriesViewComponent(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }

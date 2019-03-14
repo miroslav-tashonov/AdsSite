@@ -17,7 +17,7 @@
         @if (category.Children != null && category.Children.Count > 0)
         {
             <ul>
-                @await Component.InvokeAsync("SideCategory", new { blogCategories = category.Children, isFirstCall = false })
+                @await Component.InvokeAsync("Categories", new { blogCategories = category.Children, isFirstCall = false })
             </ul>
         }
     </li>
