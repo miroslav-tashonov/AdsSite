@@ -6,20 +6,13 @@ using System.Text;
 
 namespace AdSite.Models.ViewModels
 {
-    public class CategoryViewModel
+    public class CategoryViewModel : AuditedEntityViewModel
     {
+        public Guid ID { get; }
         public string Name { get; set; }
-        
-        public Country Country { get; set; }
-        public ICollection<Ad> Ads { get; set; }
-        
-        public virtual Category Parent { get; set; }
+        public Guid ParentCategoryID { get; set; }
+        public virtual Category ParentCategory { get; set; }
         public virtual ICollection<Category> Children { get; set; }
-        
-        DateTime CreatedAt { get; set; }
-        DateTime ModifiedAt { get; set; }
-        ApplicationUser ModifiedBy { get; set; }
-        ApplicationUser CreatedBy { get; set; }
 
     }
 }

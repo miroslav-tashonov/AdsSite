@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdSite.TagHelpers
 {
-    using AdSite.Services.LocalizationService;
+    using AdSite.Services;
     using Microsoft.AspNetCore.Razor.TagHelpers;
     using Microsoft.Extensions.Caching.Memory;
     using System.Text;

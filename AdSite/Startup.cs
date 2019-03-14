@@ -14,7 +14,7 @@ using AdSite.Models.DatabaseModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AdSite.Services.LocalizationService;
+using AdSite.Services;
 using AdSite.Data.Repositories;
 
 namespace AdSite
@@ -52,8 +52,6 @@ namespace AdSite
                 facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
-
-
 
             #region Configure Users Access 
             services.Configure<IdentityOptions>(options =>
@@ -93,12 +91,9 @@ namespace AdSite
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<ILocalizationService, LocalizationService>();
-            services.AddTransient<ILocalizationRepository, LocalizationRepository>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
+            RegisterApplicationServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,6 +122,17 @@ namespace AdSite
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+
+        //custom services registration
+        private void RegisterApplicationServices(IServiceCollection services)
+        {
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ILocalizationService, LocalizationService>();
+            services.AddTransient<ILocalizationRepository, LocalizationRepository>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
     }
 }

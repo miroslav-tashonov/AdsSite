@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdSite.Models;
 using Microsoft.AspNetCore.Authorization;
-using AdSite.Services.LocalizationService;
+using AdSite.Services;
 
 namespace AdSite.Controllers
 {

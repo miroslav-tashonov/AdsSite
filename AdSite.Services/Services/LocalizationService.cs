@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AdSite.Services.LocalizationService
+namespace AdSite.Services
 {
     public interface ILocalizationService
     {

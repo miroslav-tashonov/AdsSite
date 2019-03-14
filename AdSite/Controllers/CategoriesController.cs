@@ -9,24 +9,25 @@ using AdSite.Data;
 using AdSite.Models.DatabaseModels;
 using AdSite.Services;
 
+
 namespace AdSite.Controllers
 {
-    public class LocalizationsController : Controller
+    public class CategoriesController : Controller
     {
-        private readonly ILocalizationService _localizationService;
+        private readonly ICategoryService _categoryService;
 
-        public LocalizationsController(ILocalizationService localizationService)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _localizationService = localizationService;
+            _categoryService = categoryService;
         }
 
-        // GET: Localizations
+        // GET: Categories
         public IActionResult Index()
         {
-            return View(_localizationService.GetAll());
+            return View(_categoryService.GetAll());
         }
 
-        // GET: Localizations/Details/5
+        // GET: Categories/Details/5
         public IActionResult Details(Guid? id)
         {
             if (id == null)
@@ -34,32 +35,32 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var localization = _localizationService.Get((Guid)id);
+            var entity = _categoryService.Get((Guid)id);
 
-            return View(localization);
+            return View(entity);
         }
 
-        // GET: Localizations/Create
+        // GET: Categories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Localizations/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Localization localization)
+        public IActionResult Create(Category entity)
         {
             if (ModelState.IsValid)
             {
-                _localizationService.Add(localization);
+                _categoryService.Add(entity);
             }
-            return View(localization);
+            return View(entity);
         }
 
-        // GET: Localizations/Edit/5
+        // GET: Categories/Edit/5
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -67,22 +68,22 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var localization = _localizationService.Get((Guid)id);
-            if (localization == null)
+            var entity = _categoryService.Get((Guid)id);
+            if (entity == null)
             {
                 return NotFound();
             }
-            return View(localization);
+            return View(entity);
         }
 
-        // POST: Localizations/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, Localization localization)
+        public IActionResult Edit(Guid id, Category entity)
         {
-            if (id != localization.ID)
+            if (id != entity.ID)
             {
                 return NotFound();
             }
@@ -91,11 +92,11 @@ namespace AdSite.Controllers
             {
                 try
                 {
-                    _localizationService.Update(localization);
+                    _categoryService.Update(entity);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LocalizationExists(localization.ID))
+                    if (!CategoryExists(entity.ID))
                     {
                         return NotFound();
                     }
@@ -106,10 +107,10 @@ namespace AdSite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(localization);
+            return View(entity);
         }
 
-        // GET: Localizations/Delete/5
+        // GET: Categories/Delete/5
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -117,16 +118,16 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var localization = _localizationService.Get((Guid)id);
-            if (localization == null)
+            var entity = _categoryService.Get((Guid)id);
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return View(localization);
+            return View(entity);
         }
 
-        // POST: Localizations/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
@@ -136,13 +137,13 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            _localizationService.Delete(id);
+            _categoryService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LocalizationExists(Guid id)
+        private bool CategoryExists(Guid id)
         {
-            return _localizationService.Exists(id);
+            return _categoryService.Exists(id);
         }
     }
 }
