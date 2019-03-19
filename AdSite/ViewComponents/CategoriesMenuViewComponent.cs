@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace AdSite.ViewComponents
 {
-    public class CategoriesViewComponent : ViewComponent
+    public class CategoriesMenuViewComponent : ViewComponent
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoriesViewComponent(ICategoryService categoryService)
+        public CategoriesMenuViewComponent(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
@@ -25,7 +25,7 @@ namespace AdSite.ViewComponents
                 categories = _categoryService.GetBlogCategoryTree();
             }
 
-            var viewModel = new CategoryComponentViewModel { IsFirst = isFirstCall, CompenentCategories = categories };
+            var viewModel = new CategoryComponentViewModel { IsFirst = isFirstCall, ComponentCategories = categories };
 
             return View(viewModel);
         }

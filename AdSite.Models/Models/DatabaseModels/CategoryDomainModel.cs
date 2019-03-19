@@ -13,14 +13,16 @@ namespace AdSite.Models.DatabaseModels
         }
         [Required]
         public string Name { get; set; }
+        public string Type { get; set; }
 
         #region Foreign Keys & navigation properties
         public Guid CountryId { get; set; }
         public Country Country { get; set; }
         public ICollection<Ad> Ads { get; set; }
-        public Guid? ParentCategoryId { get; set; }
+        public Guid? ParentId { get; set; }
         public virtual Category Parent { get; set; }
         public virtual ICollection<Category> Children { get; set; }
         #endregion
     }
+    
 }

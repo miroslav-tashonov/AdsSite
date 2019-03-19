@@ -1,0 +1,45 @@
+﻿@model AdSite.Models.ViewModels.CategoryFilterComponentViewModel
+
+
+<script src="~/js/jquery-1.11.2.min.js"></script>
+<script src="~/lib/jstree/jstree.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(function () {
+
+            var arrayCollection = @Html.Raw(Json.Serialize(Model.ComponentCategories));
+
+            $('#categoriesJsTree').jstree({
+                'core': {
+                    "themes": {
+                        "icons": false
+                    },
+                    'data': arrayCollection
+                },
+                "plugins": ["checkbox"]
+            });
+
+
+            $('#categoriesJsTree').on('changed.jstree', function (e, data) {
+                var i, j, r = [];
+                for (i = 0, j = data.selected.length; i < j; i++) {
+                    r.push(data.instance.get_node(data.selected[i]).id);
+                }
+                alert('Selected: ' + r.join(', '));
+                // $('#event_result').html('Selected: ' + r.join(', '));
+            }).jstree();
+        });
+
+        //your code here
+    });
+</script>
+
+<div class="section-filter">
+    <div class="section-filter-cont">
+        <div class="section-filter-item opened">
+            <p class="section-filter-ttl">Material <i class="fa fa-angle-down"></i></p>
+            <div id="categoriesJsTree" >
+            </div>
+        </div>
+    </div>
+</div>

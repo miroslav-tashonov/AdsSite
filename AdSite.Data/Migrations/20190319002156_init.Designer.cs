@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190312114907_init")]
+    [Migration("20190319002156_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,19 +202,19 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<Guid?>("ParentCategoryId");
+                    b.Property<Guid?>("ParentId");
 
-                    b.Property<Guid?>("ParentID");
+                    b.Property<string>("Type");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("ParentID");
+                    b.HasIndex("ParentId");
 
-                    b.HasIndex("ID", "ParentCategoryId")
+                    b.HasIndex("ID", "ParentId")
                         .IsUnique()
-                        .HasFilter("[ParentCategoryId] IS NOT NULL");
+                        .HasFilter("[ParentId] IS NOT NULL");
 
                     b.ToTable("Categories");
                 });
@@ -466,7 +466,7 @@ namespace AdSite.Data.Migrations
 
                     b.HasOne("AdSite.Models.DatabaseModels.Category", "Parent")
                         .WithMany("Children")
-                        .HasForeignKey("ParentID");
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.City", b =>

@@ -1,10 +1,12 @@
-﻿@model IEnumerable<AdSite.Models.DatabaseModels.Category>
-
+﻿@model IEnumerable<AdSite.Models.ViewModels.CategoryViewModel>
+<!--
 @{
     ViewData["Title"] = "Index";
 }
 
 <h2>Index</h2>
+
+
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,26 +18,29 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ParentCategoryId)
+                @Html.DisplayNameFor(model => model.ParentCategory)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentCategoryId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParentCategory.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+    -->
+@await Component.InvokeAsync("CategoriesFilter");

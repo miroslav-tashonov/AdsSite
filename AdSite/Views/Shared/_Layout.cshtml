@@ -9,6 +9,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700ii%7CRoboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic" rel="stylesheet">
 
+    <link rel="stylesheet" href="~/css/site.min.css">
     <link rel="stylesheet" href="~/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/ion.rangeSlider.css">
@@ -17,9 +18,9 @@
     <link rel="stylesheet" href="~/css/jquery.fancybox.css">
     <link rel="stylesheet" href="~/css/flexslider.css">
     <link rel="stylesheet" href="~/css/swiper.css">
-    <link rel="stylesheet" href="~/css/swiper.css">
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/media.css">
+    <link rel="stylesheet" href="~/lib/jstree/themes/default/style.min.css">
 
 </head>
 <body>
@@ -128,7 +129,7 @@
                     <div class="topcatalog">
                         <a class="topcatalog-btn" href="catalog-list.html"><span>All</span> catalog</a>
                         <ul class="topcatalog-list">
-                            @await Component.InvokeAsync("Categories", new { isFirstCall = true });
+                            @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true });
                         </ul>
                     </div>
                     <!-- Catalog menu - end -->
@@ -386,22 +387,12 @@
     </footer>
     <!-- Footer - end -->
     <!-- jQuery plugins/scripts - start -->
-    <script src="~/js/jquery-1.11.2.min.js"></script>
-    <script src="~/js/jquery.bxslider.min.js"></script>
-    <script src="~/js/fancybox/fancybox.js"></script>
-    <script src="~/js/fancybox/helpers/jquery.fancybox-thumbs.js"></script>
-    <script src="~/js/jquery.flexslider-min.js"></script>
-    <script src="~/js/swiper.jquery.min.js"></script>
-    <script src="~/js/jquery.waypoints.min.js"></script>
-    <script src="~/js/progressbar.min.js"></script>
-    <script src="~/js/ion.rangeSlider.min.js"></script>
-    <script src="~/js/chosen.jquery.min.js"></script>
-    <script src="~/js/jQuery.Brazzers-Carousel.js"></script>
-    <script src="~/js/plugins.js"></script>
-    <script src="~/js/main.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhAYvx0GmLyN5hlf6Uv_e9pPvUT3YpozE"></script>
-    <script src="~/js/gmap.js"></script>
+
+    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jstree/jstree.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
     <!-- jQuery plugins/scripts - end -->
     @RenderSection("Scripts", required: false)
 </body>

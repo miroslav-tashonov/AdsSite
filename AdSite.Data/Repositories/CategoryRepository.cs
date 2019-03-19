@@ -48,7 +48,7 @@ namespace AdSite.Data.Repositories
 
         public Category Get(Guid id)
         {
-            var category = _context.Categories.FirstOrDefaultAsync(m => m.ID == id);
+            var category = _context.Categories.Include(c => c.Children).FirstOrDefaultAsync(m => m.ID == id);
             var result = category.Result;
             if (result == null)
             {
@@ -91,11 +91,7 @@ namespace AdSite.Data.Repositories
 
         public List<Category> GetBlogCategoryTree()
         {
-            return _context.Categories
-                           .Include(i => i.Children)
-                           .AsEnumerable()
-                           .Where(x => x.Parent == null)
-                           .ToList();
+            return _context.Categories.ToList();
         }
     }
 }

@@ -8,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using AdSite.Data;
 using AdSite.Models.DatabaseModels;
 using AdSite.Services;
-
+using AdSite.Models.Models.AdSiteViewModels;
+using AdSite.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace AdSite.Controllers
 {
@@ -27,72 +29,53 @@ namespace AdSite.Controllers
             return View(_categoryService.GetAll());
         }
 
-        // GET: Categories/Details/5
-        public IActionResult Details(Guid? id)
+        // GET: Categories/Details
+        public IActionResult Details()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var categories = _categoryService.GetBlogCategoryTree();
+            var mappedJSTreeCategories = JSTreeViewModel.MapToJSTreeViewModel(categories);
+            var viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
 
-            var entity = _categoryService.Get((Guid)id);
-
-            return View(entity);
+            return View(viewModel);
         }
-
-        // GET: Categories/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
+        
         // POST: Categories/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category entity)
+        public IActionResult Create([FromBody]CategoryCreateModel entity)
         {
             if (ModelState.IsValid)
             {
-                _categoryService.Add(entity);
+                bool statusResult = _categoryService.Add(entity);
+                if(statusResult)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            return View(entity);
-        }
-
-        // GET: Categories/Edit/5
-        public IActionResult Edit(Guid? id)
-        {
-            if (id == null)
+            else
             {
-                return NotFound();
+                return StatusCode(500);
             }
-
-            var entity = _categoryService.Get((Guid)id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-            return View(entity);
         }
-
-        // POST: Categories/Edit/5
+        
+        // POST: Categories/Edit
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, Category entity)
+        public IActionResult Edit([FromBody]CategoryEditModel entity)
         {
-            if (id != entity.ID)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _categoryService.Update(entity);
+                   _categoryService.Update(entity);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -109,23 +92,7 @@ namespace AdSite.Controllers
             }
             return View(entity);
         }
-
-        // GET: Categories/Delete/5
-        public IActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var entity = _categoryService.Get((Guid)id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-
-            return View(entity);
-        }
+        
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -138,7 +105,7 @@ namespace AdSite.Controllers
             }
 
             _categoryService.Delete(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details));
         }
 
         private bool CategoryExists(Guid id)

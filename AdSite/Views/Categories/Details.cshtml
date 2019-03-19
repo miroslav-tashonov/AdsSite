@@ -1,30 +1,186 @@
-﻿@model AdSite.Models.DatabaseModels.Category
-
-@{
-    ViewData["Title"] = "Details";
+﻿@model AdSite.Models.ViewModels.CategoryFilterComponentViewModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
 }
 
-<h2>Details</h2>
+<input type="hidden" id="RequestVerificationToken"
+       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ParentCategoryId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ParentCategoryId)
-        </dd>
-    </dl>
+<div class="col-md-4 col-sm-8 col-xs-8">
+    <button type="button" class="btn btn-success btn-sm" onclick="demo_create('stem');"><i class="glyphicon glyphicon-asterisk"></i>Create Category Stem</button>
+    <button type="button" class="btn btn-success btn-sm" onclick="demo_create('leaf');"><i class="glyphicon glyphicon-asterisk"></i>Create Category Leaf</button>
+    <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i>Edit Category</button>
+    <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i>Delete Category</button>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+
+
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/jstree/jstree.min.js"></script>
+<link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css">
+<script src="~/lib/toastr.js/toastr.min.js"></script>
+<script>
+    function demo_create(type) {
+        var ref = $('#jstree_demo').jstree(true),
+            sel = ref.get_selected();
+        if (!sel.length) {
+            sel = ref.create_node("#", { "text": "New Category", "type": "stem" });
+            if (sel) {
+                ref.edit(sel);
+            }
+        }
+        else {
+            sel = sel[0];
+            if(type == 'leaf')
+                sel = ref.create_node(sel, { "type": "leaf" });
+            if (type == 'stem')
+                sel = ref.create_node(sel, { "type": "stem" });
+            if (sel) {
+                ref.edit(sel);
+            }
+        }
+    };
+    function demo_rename() {
+        var ref = $('#jstree_demo').jstree(true),
+            sel = ref.get_selected();
+        if (!sel.length) { return false; }
+        sel = sel[0];
+        ref.edit(sel);
+    };
+    function demo_delete() {
+        var ref = $('#jstree_demo').jstree(true),
+            sel = ref.get_selected();
+        if (!sel.length) { return false; }
+        ref.delete_node(sel);
+    };
+
+    function isGuid(stringToTest) {
+        if (stringToTest[0] === "{") {
+            stringToTest = stringToTest.substring(1, stringToTest.length - 1);
+        }
+        var regexGuid = /^(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}$/gi;
+        return regexGuid.test(stringToTest);
+    }
+
+    $(document).ready(function () {
+        $(function () {
+            var arrayCollection = @Html.Raw(Json.Serialize(Model.ComponentCategories));
+
+    $('#jstree_demo').jstree({
+        "core": {
+            "multiple": false,
+            "animation": 0,
+            "check_callback": true,
+            "themes": { "stripes": true },
+            'data': arrayCollection
+        },
+        "types": {
+            "#": {
+                "max_children": 30,
+                "max_depth": 7,
+                "valid_children": ["stem"]
+            },
+            "stem": {
+                "icon": "jstree-file",
+                "valid_children": ["stem", "leaf"]
+            },
+            "leaf": {
+                "icon": "glyphicon glyphicon-file",
+                "valid_children": []
+            }
+        },
+        "plugins": [
+            "contextmenu", "dnd", "search",
+            "state", "types", "wholerow"
+        ]
+            });
+
+
+            $('#jstree_demo').on('rename_node.jstree', function (e, data) {
+                debugger;
+                var id = data.node.id;
+                var parent;
+                var type;
+                if (data.node.parent != "#") {
+                    parent = data.node.parent;
+                }
+
+                    type = data.node.type
+                    if (isGuid(id))
+                    {
+                        let category = {
+                            "Id": id, "Name": data.node.text, "ParentId": parent, "Type": type
+                        };
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/Categories/Edit",
+                            data: JSON.stringify(category),
+                            contentType: 'application/json',
+                            success: function () {
+                                toastr.success('Success!');
+                            },
+                            error: function () {
+                                toastr.error('There was an error while processing your request!');
+                            },
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
+                            },
+                        });
+                    }
+                    else {
+                        let category = {
+                            "Name": data.node.text, "ParentId": parent, "Type": type
+                        };
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/Categories/Create",
+                            data: JSON.stringify(category),
+                            contentType: 'application/json',
+                            success: function () {
+                                toastr.success('Success!');
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 2000);
+                            },
+                            error: function () {
+                                toastr.error('There was an error while processing your request!');
+                            },
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
+                            },
+                        });
+                    }
+
+            });
+
+            $('#jstree_demo').on('delete_node.jstree', function (e, data) {
+                let Id = data.node.id;
+                if (Id) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Categories/Delete/" + Id,
+                        contentType: 'application/json',
+                        success: function () {
+                            toastr.success('Success!');
+                        },
+                        error: function () {
+                            toastr.error('There was an error while processing your request!');
+                        },
+                        headers: {
+                            RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
+                        },
+                    });
+                }
+            });
+    });
+});
+</script>
+
+<div id="jstree_demo">
 </div>

@@ -213,9 +213,9 @@ namespace AdSite.Data.Migrations
                     ModifiedBy = table.Column<string>(nullable: true),
                     ModifiedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(nullable: true),
                     CountryId = table.Column<Guid>(nullable: false),
-                    ParentCategoryId = table.Column<Guid>(nullable: true),
-                    ParentID = table.Column<Guid>(nullable: true)
+                    ParentId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -228,8 +228,8 @@ namespace AdSite.Data.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Categories_Categories_ParentID",
-                        column: x => x.ParentID,
+                        name: "FK_Categories_Categories_ParentId",
+                        column: x => x.ParentId,
                         principalSchema: "adsite",
                         principalTable: "Categories",
                         principalColumn: "ID",
@@ -517,18 +517,18 @@ namespace AdSite.Data.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_ParentID",
+                name: "IX_Categories_ParentId",
                 schema: "adsite",
                 table: "Categories",
-                column: "ParentID");
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_ID_ParentCategoryId",
+                name: "IX_Categories_ID_ParentId",
                 schema: "adsite",
                 table: "Categories",
-                columns: new[] { "ID", "ParentCategoryId" },
+                columns: new[] { "ID", "ParentId" },
                 unique: true,
-                filter: "[ParentCategoryId] IS NOT NULL");
+                filter: "[ParentId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_CountryId",

@@ -1,4 +1,5 @@
 ﻿using AdSite.Models.DatabaseModels;
+using AdSite.Models.Models.AdSiteViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,11 +11,21 @@ namespace AdSite.Models.ViewModels
     {
         public CategoryComponentViewModel()
         {
-            CompenentCategories = new List<Category>();
+            ComponentCategories = new List<Category>();
         }
 
         public bool IsFirst{ get; set; }
-        public ICollection<Category> CompenentCategories { get; set; }
+        public ICollection<Category> ComponentCategories { get; set; }
+
+    }
+
+    public class CategoryFilterComponentViewModel
+    {
+        public CategoryFilterComponentViewModel()
+        {
+            ComponentCategories = new List<JSTreeViewModel>();
+        }
+        public ICollection<JSTreeViewModel> ComponentCategories { get; set; }
 
     }
 }

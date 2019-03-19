@@ -1,0 +1,31 @@
+﻿@model AdSite.Models.ViewModels.CategoryComponentViewModel;
+
+@if (Model.ComponentCategories!=null && Model.ComponentCategories.Any())
+{
+    @foreach (var category in Model.ComponentCategories)
+    {
+        <li>
+            <a data-toggle="collapse" asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@category.ID"
+               data-target="#@category.ID"
+               aria-controls="@category.ID"
+               role="button" aria-expanded="true">
+
+
+                <div>
+                    @category.Name
+                    @if (category.Children != null && category.Children.Count > 0)
+                    {
+                        <i class="fa fa-angle-right float-right"> </i>
+                    }
+                </div>
+            </a>
+            @if (category.Children != null && category.Children.Count > 0)
+            {
+
+                <ul>
+                    @await Component.InvokeAsync("CategoriesMenu", new { blogCategories = category.Children, isFirstCall = false })
+                </ul>
+            }
+        </li>
+    }
+}

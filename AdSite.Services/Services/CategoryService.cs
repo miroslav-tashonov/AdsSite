@@ -16,8 +16,8 @@ namespace AdSite.Services
         List<CategoryViewModel> GetAll();
         bool Exists(Guid id);
         bool Delete(Guid id);
-        bool Add(Category category);
-        bool Update(Category category);
+        bool Add(CategoryCreateModel category);
+        bool Update(CategoryEditModel category);
         List<Category> GetBlogCategoryTree();
     }
 
@@ -31,14 +31,31 @@ namespace AdSite.Services
             _repository = repository;
         }
 
-        public bool Add(Category category)
+        public bool Add(CategoryCreateModel entity)
         {
-            return _repository.Update(category);            
+            Guid? parent = entity.ParentId;
+            if (parent == Guid.Empty)
+                parent = null;
+            Category category = new Category
+            {
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now,
+                Type = entity.Type,
+                Name = entity.Name,
+                ParentId = parent,
+                CountryId = new Guid("9B0CBFD6-0070-4285-B353-F13189BD2291")
+            };
+
+
+            return _repository.Add(category);
         }
 
         public bool Delete(Guid id)
         {
-            return _repository.Delete(id);
+            //first recursively delete all child nodes
+            RecursivelyDeleteCategoryNodes(id);
+
+            return true;
         }
 
         public bool Exists(Guid id)
@@ -62,8 +79,18 @@ namespace AdSite.Services
         }
 
 
-        public bool Update(Category category)
+        public bool Update(CategoryEditModel entity)
         {
+            Guid? parent = entity.ParentId;
+            if (parent == Guid.Empty)
+                parent = null;
+
+            Category category = _repository.Get(entity.ID);
+            category.ModifiedAt = DateTime.Now;
+            category.Name = entity.Name;
+            category.Type = entity.Type;
+            category.ParentId = parent;
+
             return _repository.Update(category);
         }
 
@@ -76,7 +103,6 @@ namespace AdSite.Services
             };
 
             return model;
-
         }
 
 
@@ -85,11 +111,27 @@ namespace AdSite.Services
             return _repository.GetBlogCategoryTree();
         }
 
+        private void RecursivelyDeleteCategoryNodes(Guid id)
+        {
+            var entity = _repository.Get(id);
+            if (entity != null)
+            {
+                if (entity.Children != null && entity.Children.Any())
+                {
+                    foreach (var children in entity.Children.ToList())
+                    {
+                        RecursivelyDeleteCategoryNodes(children.ID);
+                    }
+                }
+
+                _repository.Delete(entity.ID);
+            }
+        }
 
         private List<CategoryViewModel> MapToViewModel(List<Category> entities)
         {
             List<CategoryViewModel> model = new List<CategoryViewModel>();
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 model.Add(MapToViewModel(entity));
             }
