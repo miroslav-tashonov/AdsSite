@@ -1,5 +1,5 @@
 ﻿using AdSite.Models.DatabaseModels;
-using AdSite.Models.ViewModels;
+using AdSite.Models.CRUDModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,9 @@ namespace AdSite.Data.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        List<Category> GetBlogCategoryTree();
+        List<Category> GetCategoryTree();
+        List<Category> GetCategoryAsTreeStructure();
+        bool SaveChangesResult();
     }
 
     public class CategoryRepository : ICategoryRepository
@@ -34,11 +36,12 @@ namespace AdSite.Data.Repositories
             var result = category.Result;
             if (result == null)
             {
-                throw new Exception();
+                throw new Exception("Cannot find the entity in delete section");
             }
 
             _context.Categories.Remove(result);
-            return SaveChangesResult();
+            //return SaveChangesResult();
+            return true;
         }
 
         public bool Exists(Guid id)
@@ -79,19 +82,24 @@ namespace AdSite.Data.Repositories
                 var result = _context.SaveChangesAsync();
                 if (result.Result == 0)
                 {
-                    throw new Exception();
+                    throw new Exception("Cannot save changes to db");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                throw ex;
             }
             return true;
         }
 
-        public List<Category> GetBlogCategoryTree()
+        public List<Category> GetCategoryTree()
         {
             return _context.Categories.ToList();
+        }
+
+        public List<Category> GetCategoryAsTreeStructure()
+        {
+            return _context.Categories.Include(i => i.Children).AsEnumerable().Where(p => p.Parent == null).ToList();
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AdSite.Data;
 using AdSite.Models;
-using AdSite.Models.DatabaseModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AdSite.Services;
 using AdSite.Data.Repositories;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace AdSite
 {
@@ -31,12 +29,30 @@ namespace AdSite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new List<CultureInfo>
+                {
+                    //todo get cultures from DB
+                    new CultureInfo("en-US"),
+                    new CultureInfo("mk-MK"),
+                    new CultureInfo("de-DE"),
+                    new CultureInfo("fr-FR")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures; 
+            });
+
+
             services.AddMemoryCache();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
              
@@ -110,6 +126,8 @@ namespace AdSite
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseRequestLocalization(BuildLocalizationOptions());
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -133,6 +151,27 @@ namespace AdSite
             services.AddTransient<ILocalizationRepository, LocalizationRepository>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+        }
+
+        private RequestLocalizationOptions BuildLocalizationOptions()
+        {
+            var supportedCultures = new List<CultureInfo>
+            {
+                //todo get cultures from DB
+                new CultureInfo("en-US"),
+                new CultureInfo("mk-MK"),
+                new CultureInfo("de-DE"),
+                new CultureInfo("fr-FR")
+            };
+
+            var options = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            };
+
+            return options;
         }
     }
 }

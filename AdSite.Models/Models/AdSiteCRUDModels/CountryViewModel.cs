@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.ViewModels
+namespace AdSite.Models.CRUDModels
 {
-    public class CityViewModel
+    public class CountryViewModel
     {
         public string Name { get; set; }
-        public string Postcode { get; set; }
-
+        public string Abbreviation { get; set; }
         
-        public Country Country { get; set; }
+        public ICollection<City> Cities { get; set; }
         public ICollection<Ad> Ads { get; set; }
+        public ICollection<Category> Categories { get; set; }
+        public ICollection<UserRoleCountry> UserRoleCountry{ get; set; }
+        public ICollection<Localization> Localizations { get; set; }
 
         DateTime CreatedAt { get; set; }
         DateTime ModifiedAt { get; set; }

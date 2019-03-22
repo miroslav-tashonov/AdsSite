@@ -1,12 +1,13 @@
 ﻿using AdSite.Models.DatabaseModels;
 using AdSite.Models.Models.AdSiteViewModels;
-using AdSite.Models.ViewModels;
+using AdSite.Models.CRUDModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdSite.Mappers;
 
 namespace AdSite.ViewComponents
 {
@@ -21,13 +22,9 @@ namespace AdSite.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = _categoryService.GetBlogCategoryTree();
-
-            var mappedJSTreeCategories = JSTreeViewModel.MapToJSTreeViewModel(categories);
-
+            var categories = _categoryService.GetCategoryTree();
+            var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
             var viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
-
-
 
             return View(viewModel);
         }

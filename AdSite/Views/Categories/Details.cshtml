@@ -1,4 +1,4 @@
-﻿@model AdSite.Models.ViewModels.CategoryFilterComponentViewModel
+﻿@model AdSite.Models.CRUDModels.CategoryFilterComponentViewModel
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions{
     public string GetAntiXsrfRequestToken()
@@ -7,25 +7,38 @@
     }
 }
 
+@section Scripts {
+    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jstree/jstree.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+}
+
 <input type="hidden" id="RequestVerificationToken"
        name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
-<div class="col-md-4 col-sm-8 col-xs-8">
-    <button type="button" class="btn btn-success btn-sm" onclick="demo_create('stem');"><i class="glyphicon glyphicon-asterisk"></i>Create Category Stem</button>
-    <button type="button" class="btn btn-success btn-sm" onclick="demo_create('leaf');"><i class="glyphicon glyphicon-asterisk"></i>Create Category Leaf</button>
-    <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i>Edit Category</button>
-    <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i>Delete Category</button>
+<script type="text/html" id="ErrorTemplate">
+    <localize name="Toast_Error"></localize>
+</script>
+<script type="text/html" id="SuccessTemplate">
+    <localize name="Toast_Success"></localize>
+</script>
+
+<div class="">
+    <button type="button" class="btn btn-success btn-md" onclick="demo_create('stem');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryStem"></localize></button>
+    <button type="button" class="btn btn-success btn-md" onclick="demo_create('leaf');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryLeaf"></localize></button>
+    <button type="button" class="btn btn-warning btn-md" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i><localize name="Categories_EditCategory"></localize></button>
+    <button type="button" class="btn btn-danger btn-md" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i><localize name="Categories_DeleteCategory"></localize></button>
 </div>
 
+<br />
+<br />
 
 
-<script src="~/lib/jquery/jquery.min.js"></script>
-<script src="~/lib/jstree/jstree.min.js"></script>
-<link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css">
-<script src="~/lib/toastr.js/toastr.min.js"></script>
 <script>
     function demo_create(type) {
-        var ref = $('#jstree_demo').jstree(true),
+        var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
             sel = ref.create_node("#", { "text": "New Category", "type": "stem" });
@@ -45,14 +58,14 @@
         }
     };
     function demo_rename() {
-        var ref = $('#jstree_demo').jstree(true),
+        var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) { return false; }
         sel = sel[0];
         ref.edit(sel);
     };
     function demo_delete() {
-        var ref = $('#jstree_demo').jstree(true),
+        var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) { return false; }
         ref.delete_node(sel);
@@ -68,39 +81,48 @@
 
     $(document).ready(function () {
         $(function () {
+            debugger;
+            var successMessageHtml = $("#SuccessTemplate").html();
+            var errorMessageHtml = $("#ErrorTemplate").html();
+
+
             var arrayCollection = @Html.Raw(Json.Serialize(Model.ComponentCategories));
 
-    $('#jstree_demo').jstree({
-        "core": {
-            "multiple": false,
-            "animation": 0,
-            "check_callback": true,
-            "themes": { "stripes": true },
-            'data': arrayCollection
-        },
-        "types": {
-            "#": {
-                "max_children": 30,
-                "max_depth": 7,
-                "valid_children": ["stem"]
-            },
-            "stem": {
-                "icon": "jstree-file",
-                "valid_children": ["stem", "leaf"]
-            },
-            "leaf": {
-                "icon": "glyphicon glyphicon-file",
-                "valid_children": []
-            }
-        },
-        "plugins": [
-            "contextmenu", "dnd", "search",
-            "state", "types", "wholerow"
-        ]
+
+            $('#jstree').jstree({
+                "core": {
+                    "multiple": false,
+                    "animation": 0,
+                    "check_callback": function (op) {
+                        if (op === "delete_node") { return confirm("Are you sure you want to delete?"); }
+                        return true;
+                    },
+                    "themes": { "stripes": true },
+                    'data': arrayCollection
+                },
+                "types": {
+                    "#": {
+                        "max_children": 30,
+                        "max_depth": 7,
+                        "valid_children": ["stem"]
+                    },
+                    "stem": {
+                        "icon": "glyphicon glyphicon-plus",
+                        "valid_children": ["stem", "leaf"]
+                    },
+                    "leaf": {
+                        "icon": "glyphicon glyphicon-leaf",
+                        "valid_children": []
+                    }
+                },
+                "plugins": [
+                    "contextmenu", "dnd", "search",
+                    "state", "types", "wholerow"
+                ]
             });
 
 
-            $('#jstree_demo').on('rename_node.jstree', function (e, data) {
+            $('#jstree').on('rename_node.jstree', function (e, data) {
                 debugger;
                 var id = data.node.id;
                 var parent;
@@ -108,7 +130,6 @@
                 if (data.node.parent != "#") {
                     parent = data.node.parent;
                 }
-
                     type = data.node.type
                     if (isGuid(id))
                     {
@@ -124,8 +145,8 @@
                             success: function () {
                                 toastr.success('Success!');
                             },
-                            error: function () {
-                                toastr.error('There was an error while processing your request!');
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                toastr.error('There was an error while processing your request!' + jqXHR.responseText);
                             },
                             headers: {
                                 RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -148,8 +169,11 @@
                                     location.reload();
                                 }, 2000);
                             },
-                            error: function () {
-                                toastr.error('There was an error while processing your request!');
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                toastr.error('There was an error while processing your request!' + jqXHR.responseText);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 3000);
                             },
                             headers: {
                                 RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -159,7 +183,7 @@
 
             });
 
-            $('#jstree_demo').on('delete_node.jstree', function (e, data) {
+            $('#jstree').on('delete_node.jstree', function (e, data) {
                 let Id = data.node.id;
                 if (Id) {
                     $.ajax({
@@ -169,8 +193,8 @@
                         success: function () {
                             toastr.success('Success!');
                         },
-                        error: function () {
-                            toastr.error('There was an error while processing your request!');
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            toastr.error('There was an error while processing your request!' + jqXHR.responseText);
                         },
                         headers: {
                             RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -182,5 +206,6 @@
 });
 </script>
 
-<div id="jstree_demo">
+<div id="jstree">
 </div>
+

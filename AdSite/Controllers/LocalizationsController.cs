@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using AdSite.Data;
 using AdSite.Models.DatabaseModels;
 using AdSite.Services;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
 
 namespace AdSite.Controllers
 {
@@ -143,6 +145,18 @@ namespace AdSite.Controllers
         private bool LocalizationExists(Guid id)
         {
             return _localizationService.Exists(id);
+        }
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return LocalRedirect(returnUrl);
         }
     }
 }

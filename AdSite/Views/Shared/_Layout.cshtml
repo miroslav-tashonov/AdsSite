@@ -20,7 +20,12 @@
     <link rel="stylesheet" href="~/css/swiper.css">
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/media.css">
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css">
     <link rel="stylesheet" href="~/lib/jstree/themes/default/style.min.css">
+    <!-- jQuery plugins/scripts - start -->
+    @RenderSection("Scripts", required: false)
+    <!-- jQuery plugins/scripts - end -->
+
 
 </head>
 <body>
@@ -276,7 +281,7 @@
             </div>
         </div>
         <!-- Topmenu - end -->
-
+        @await Html.PartialAsync("_SelectLanguagePartial")
     </header>
     <!-- Header - end -->
     <!-- Main Content - start -->
@@ -386,14 +391,6 @@
 
     </footer>
     <!-- Footer - end -->
-    <!-- jQuery plugins/scripts - start -->
-
-    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jstree/jstree.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-    <!-- jQuery plugins/scripts - end -->
-    @RenderSection("Scripts", required: false)
+    
 </body>
 </html>

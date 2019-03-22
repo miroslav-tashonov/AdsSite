@@ -1,61 +1,88 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
 using AdSite.Services;
-using AdSite.Models.Models.AdSiteViewModels;
-using AdSite.Models.ViewModels;
-using Microsoft.AspNetCore.Http;
+using AdSite.Models.CRUDModels;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using AdSite.Mappers;
+using System.Threading;
 
 namespace AdSite.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly ILocalizationService _localizationService;
+        ILogger<CategoriesController> _logger;
 
-        public CategoriesController(ICategoryService categoryService)
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN= "Categories_ErrorMessage_MustLogin";
+        private readonly string LOCALIZATION_ERROR_CATEGORY_NOT_FOUND = "Categories_ErrorMessage_NotFound";
+        private readonly string LOCALIZATION_ERROR_CATEGORY_CONCURENT_EDIT = "Categories_ErrorMessage_ConcurrentEdit";
+
+
+        public CategoriesController(ICategoryService categoryService, ILocalizationService localizationService, ILogger<CategoriesController> logger)
         {
             _categoryService = categoryService;
-        }
-
-        // GET: Categories
-        public IActionResult Index()
-        {
-            return View(_categoryService.GetAll());
+            _localizationService = localizationService;
+            _logger = logger;
         }
 
         // GET: Categories/Details
         public IActionResult Details()
         {
-            var categories = _categoryService.GetBlogCategoryTree();
-            var mappedJSTreeCategories = JSTreeViewModel.MapToJSTreeViewModel(categories);
-            var viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
+            var viewModel = new CategoryFilterComponentViewModel();
+            try
+            {
+                var categories = _categoryService.GetCategoryTree();
+                var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
+                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return NotFound(ex.Message);
+            }
 
             return View(viewModel);
         }
-        
+
         // POST: Categories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([FromBody]CategoryCreateModel entity)
         {
             if (ModelState.IsValid)
             {
-                bool statusResult = _categoryService.Add(entity);
-                if(statusResult)
+                string currentUser = HttpContext?.User?.Identity?.Name;
+                if (!String.IsNullOrEmpty(currentUser))
                 {
-                    return Ok();
+                    AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser);
+
+                    try
+                    {
+                        bool statusResult = _categoryService.Add(entity);
+                        if (statusResult)
+                        {
+                            return Ok();
+                        }
+                        else
+                        {
+                            return NotFound();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, ex.Message);
+                        return StatusCode(500, ex.Message);
+                    }
                 }
                 else
                 {
-                    return NotFound();
+                    string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_USER_MUST_LOGIN, CultureId);
+                    _logger.LogError(localizationKey);
+                    return NotFound(localizationKey);
                 }
             }
             else
@@ -63,36 +90,50 @@ namespace AdSite.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         // POST: Categories/Edit
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit([FromBody]CategoryEditModel entity)
         {
             if (ModelState.IsValid)
             {
-                try
+                string currentUser = HttpContext?.User?.Identity?.Name;
+                if (!String.IsNullOrEmpty(currentUser))
                 {
-                   _categoryService.Update(entity);
+                    AuditedEntityMapper<CategoryEditModel>.FillModifyAuditedEntityFields(entity, currentUser);
+
+                    try
+                    {
+                        _categoryService.Update(entity);
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!CategoryExists(entity.ID))
+                        {
+                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CATEGORY_NOT_FOUND, CultureId);
+                            _logger.LogError(localizationKey);
+                            return NotFound(localizationKey);
+                        }
+                        else
+                        {
+                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CATEGORY_CONCURENT_EDIT, CultureId);
+                            _logger.LogError(localizationKey);
+                            return NotFound(localizationKey);
+                        }
+                    }
+                    return RedirectToAction(nameof(Details));
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!CategoryExists(entity.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_USER_MUST_LOGIN, CultureId);
+                    _logger.LogError(localizationKey);
+                    return NotFound(localizationKey);
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(entity);
         }
-        
+
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -104,7 +145,16 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            _categoryService.Delete(id);
+            try
+            {
+                _categoryService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+
             return RedirectToAction(nameof(Details));
         }
 

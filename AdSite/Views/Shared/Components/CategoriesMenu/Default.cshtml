@@ -1,6 +1,6 @@
-﻿@model AdSite.Models.ViewModels.CategoryComponentViewModel;
+﻿@model AdSite.Models.CRUDModels.CategoryComponentViewModel
 
-@if (Model.ComponentCategories!=null && Model.ComponentCategories.Any())
+@if (Model.ComponentCategories != null && Model.ComponentCategories.Any())
 {
     @foreach (var category in Model.ComponentCategories)
     {
@@ -9,23 +9,18 @@
                data-target="#@category.ID"
                aria-controls="@category.ID"
                role="button" aria-expanded="true">
-
-
-                <div>
-                    @category.Name
-                    @if (category.Children != null && category.Children.Count > 0)
-                    {
-                        <i class="fa fa-angle-right float-right"> </i>
-                    }
-                </div>
+                @category.Name
             </a>
+
             @if (category.Children != null && category.Children.Count > 0)
             {
-
+                <i class="fa fa-angle-right float-right"> </i>
                 <ul>
-                    @await Component.InvokeAsync("CategoriesMenu", new { blogCategories = category.Children, isFirstCall = false })
+                    @await Component.InvokeAsync("CategoriesMenu", new { categories = category.Children, isFirstCall = false })
                 </ul>
+
             }
+
         </li>
     }
 }

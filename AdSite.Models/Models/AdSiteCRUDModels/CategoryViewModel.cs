@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdSite.Models.ViewModels
+namespace AdSite.Models.CRUDModels
 {
     public class CategoryViewModel : AuditedEntityViewModel
     {
@@ -15,17 +15,22 @@ namespace AdSite.Models.ViewModels
         public virtual ICollection<Category> Children { get; set; }
     }
 
-    public class CategoryCreateModel
+    public class CategoryCreateModel : AuditedEntityModel
     {
+        [Required]
         public string Name { get; set; }
         public Guid ParentId { get; set; }
+        [Required]
         public string Type { get; set; }
     }
 
-    public class CategoryEditModel
+    public class CategoryEditModel : AuditedEntityModel
     {
+        [Required]
         public Guid ID { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Type { get; set; }
         public Guid ParentId { get; set; }
     }

@@ -1,5 +1,5 @@
 ﻿using AdSite.Models.DatabaseModels;
-using AdSite.Models.ViewModels;
+using AdSite.Models.CRUDModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,7 +22,7 @@ namespace AdSite.ViewComponents
         {
             if (isFirstCall)
             {
-                categories = _categoryService.GetBlogCategoryTree();
+                categories = _categoryService.GetCategoryAsTreeStructure();
             }
 
             var viewModel = new CategoryComponentViewModel { IsFirst = isFirstCall, ComponentCategories = categories };

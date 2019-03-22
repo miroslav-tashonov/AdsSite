@@ -1,5 +1,6 @@
 ﻿using AdSite.Data.Repositories;
 using AdSite.Models.DatabaseModels;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,9 +25,11 @@ namespace AdSite.Services
     public class LocalizationService : ILocalizationService
     {
         private readonly ILocalizationRepository _repository;
-        public LocalizationService(ILocalizationRepository repository)
+        private readonly ILogger<LocalizationService> _logger;
+        public LocalizationService(ILocalizationRepository repository, ILogger<LocalizationService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public bool Add(Localization localization)
@@ -56,7 +59,15 @@ namespace AdSite.Services
 
         public string GetByKey(string localizationKey, int cultureId)
         {
-            return _repository.GetLocalizationValue(localizationKey, cultureId);
+            try
+            {
+                return _repository.GetLocalizationValue(localizationKey, cultureId);
+            }
+            catch
+            {
+                _logger.LogWarning("Cannot Find localization key with value : " + localizationKey);
+                return localizationKey;
+            }
         }
 
         public bool Update(Localization localization)

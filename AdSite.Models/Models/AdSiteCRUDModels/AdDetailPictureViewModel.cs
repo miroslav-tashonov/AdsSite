@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdSite.Models.ViewModels
+namespace AdSite.Models.CRUDModels
 {
     public class AdDetailPictureViewModel
     {

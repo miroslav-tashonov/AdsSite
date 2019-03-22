@@ -33,16 +33,11 @@ namespace AdSite.TagHelpers
             if (!_cache.TryGetValue(entryKey, out localizationValue))
             {
                 localizationValue = _localizationService.GetByKey(this.Name, currentCultureId);
-
-                // Set cache options.
+                
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    // Keep in cache for this time, reset time if accessed.
                     .SetSlidingExpiration(TimeSpan.FromDays(31));
-
-                // Save data in cache.
                 _cache.Set(entryKey, localizationValue, cacheEntryOptions);
             }
-
 
             output.TagName = "LocalizeTagHelper";
             output.TagMode = TagMode.StartTagAndEndTag;

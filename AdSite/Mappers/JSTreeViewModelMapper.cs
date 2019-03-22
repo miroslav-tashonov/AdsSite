@@ -1,18 +1,14 @@
 ﻿using AdSite.Models.DatabaseModels;
-using AdSite.Models.ViewModels;
+using AdSite.Models.Models.AdSiteViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace AdSite.Models.Models.AdSiteViewModels
+namespace AdSite.Mappers
 {
-    public class JSTreeViewModel
+    public class JSTreeViewModelMapper
     {
-        public string id { get; set; }
-        public string parent { get; set; }
-        public string text { get; set; }
-        public string type { get; set; }
         public static JSTreeViewModel MapToJSTreeViewModel(Category category)
         {
             string parentCategoryId = String.IsNullOrEmpty(category.ParentId.ToString()) ? "#" : category.ParentId.ToString();
@@ -39,7 +35,4 @@ namespace AdSite.Models.Models.AdSiteViewModels
             return model;
         }
     }
-
-
-
 }
