@@ -14,6 +14,7 @@ using AdSite.Models;
 using AdSite.Models.AccountViewModels;
 using AdSite.Services;
 using AdSite.Extensions;
+using AdSite.Models.Extensions;
 
 namespace AdSite.Controllers
 {
@@ -225,16 +226,30 @@ namespace AdSite.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User created a new account with password.");
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Failed to add user to role. Deleting user");
+                        result = await _userManager.DeleteAsync(user);
+                        if(!result.Succeeded)
+                        {
+                            _logger.LogInformation("Failed to delete user after being unable to be added to role.");
+                            throw new Exception("Failed to delete user after being unable to be added to role.");
+                        }
 
+                    }
                 }
                 AddErrors(result);
             }
@@ -316,12 +331,27 @@ namespace AdSite.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(user, info);
+                    result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
                     if (result.Succeeded)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        return RedirectToLocal(returnUrl);
+                        result = await _userManager.AddLoginAsync(user, info);
+                        if (result.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                            return RedirectToLocal(returnUrl);
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Failed to add user to role. Deleting user");
+                        result = await _userManager.DeleteAsync(user);
+                        if (!result.Succeeded)
+                        {
+                            _logger.LogInformation("Failed to delete user after being unable to be added to role.");
+                            throw new Exception("Failed to delete user after being unable to be added to role.");
+                        }
+
                     }
 
 

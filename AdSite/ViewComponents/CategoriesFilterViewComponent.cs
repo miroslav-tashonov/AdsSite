@@ -28,7 +28,5 @@ namespace AdSite.ViewComponents
 
             return View(viewModel);
         }
-
-    
     }
 }

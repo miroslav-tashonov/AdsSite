@@ -11,15 +11,14 @@ using System.Threading.Tasks;
 
 namespace AdSite.Extensions
 {
-    public class SeedRolesExtension
+    public class SeedExtension
     {
         public static async Task CreateRoles(IServiceProvider serviceProvider, IConfiguration Configuration)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger<SeedRolesExtension>>();
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
             logger.LogInformation("adding customs roles");
 
-
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationIdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             string[] roleNames = {
@@ -35,10 +34,9 @@ namespace AdSite.Extensions
                 var roleExist = await RoleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                    roleResult = await RoleManager.CreateAsync(new ApplicationIdentityRole(roleName));
                 }
             }
-            
         }
     }
 }

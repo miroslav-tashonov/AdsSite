@@ -9,5 +9,13 @@ namespace AdSite.Models
     public class ApplicationIdentityRole : IdentityRole
     {
         public ICollection<UserRoleCountry> UserRoleCountry { get; set; }
+
+        public ApplicationIdentityRole(string role) : base(role)
+        {
+        }
+
+        public ApplicationIdentityRole() : base()
+        {
+        }
     }
 }

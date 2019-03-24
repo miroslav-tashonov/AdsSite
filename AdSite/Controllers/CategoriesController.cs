@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using AdSite.Services;
 using AdSite.Models.CRUDModels;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
 using AdSite.Mappers;
 using System.Threading;
 
@@ -14,13 +13,12 @@ namespace AdSite.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly ILocalizationService _localizationService;
-        ILogger<CategoriesController> _logger;
+        private readonly ILogger<CategoriesController> _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN= "Categories_ErrorMessage_MustLogin";
         private readonly string LOCALIZATION_ERROR_CATEGORY_NOT_FOUND = "Categories_ErrorMessage_NotFound";
         private readonly string LOCALIZATION_ERROR_CATEGORY_CONCURENT_EDIT = "Categories_ErrorMessage_ConcurrentEdit";
-
 
         public CategoriesController(ICategoryService categoryService, ILocalizationService localizationService, ILogger<CategoriesController> logger)
         {

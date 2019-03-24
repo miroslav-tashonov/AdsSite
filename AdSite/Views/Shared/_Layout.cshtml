@@ -100,25 +100,7 @@
                             </a>
                         </li>
 
-                        <li class="topauth">
-                            <a href="auth.html">
-                                <i class="fa fa-lock"></i>
-                                <span class="shop-menu-ttl">Registration</span>
-                            </a>
-                            <a href="auth.html">
-                                <span class="shop-menu-ttl">Login</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <div class="h-cart">
-                                <a href="cart.html">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span class="shop-menu-ttl">Cart</span>
-                                    (<b>0</b>)
-                                </a>
-                            </div>
-                        </li>
+                        @await Html.PartialAsync("_LoginPartial")
 
                     </ul>
                 </div>
@@ -142,128 +124,7 @@
                     <button type="button" class="mainmenu-btn">Menu</button>
 
                     <ul class="mainmenu">
-                        <li>
-                            <a href="index.html">
-                                Home
-                            </a>
-                        </li>
-                        <li class="menu-item-has-children">
-                            <a href="catalog-list.html">
-                                Catalog <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="catalog-list.html">
-                                        Catalog List - Style 1
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="catalog-list-2.html">
-                                        Catalog List - Style 2
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="catalog-gallery.html">
-                                        Catalog Gallery - Style 1
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="catalog-gallery-2.html">
-                                        Catalog Gallery - Style 2
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="catalog-table.html">
-                                        Catalog Table
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children">
-                            <a href="catalog-list.html">
-                                Product <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="product.html">
-                                        Product - Style 1 (Slider)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="product-2.html">
-                                        Product - Style 2 (Scroll)
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="elements.html">
-                                Elements
-                            </a>
-                        </li>
-                        <li class="menu-item-has-children">
-                            <a href="blog.html">
-                                Blog <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="blog.html">
-                                        Blog - Style 1
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="blog-2.html">
-                                        Blog - Style 2
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="post.html">
-                                        Single Post
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children">
-                            <a href="#" class="active">
-                                Pages <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="contacts.html">
-                                        Contacts
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="cart.html">
-                                        Cart
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="auth.html">
-                                        Authorization
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="compare.html">
-                                        Compare
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="wishlist.html">
-                                        Wishlist
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="404.html" class="active">
-                                        Error 404
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="mainmenu-more">
-                            <span>...</span>
-                            <ul class="mainmenu-sub"></ul>
-                        </li>
+                        @await Html.PartialAsync("_NavigationBar")
                     </ul>
                     <!-- Main menu - end -->
                     <!-- Search - start -->
@@ -275,8 +136,6 @@
                         </form>
                     </div>
                     <!-- Search - end -->
-
-                    @await Html.PartialAsync("_LoginPartial")
                 </nav>
             </div>
         </div>
@@ -391,6 +250,6 @@
 
     </footer>
     <!-- Footer - end -->
-    
+
 </body>
 </html>

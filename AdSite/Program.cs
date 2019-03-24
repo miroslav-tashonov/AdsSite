@@ -31,7 +31,7 @@ namespace AdSite
                     var serviceProvider = services.GetRequiredService<IServiceProvider>();
                     var configuration = services.GetRequiredService<IConfiguration>();
 
-                    SeedRolesExtension.CreateRoles(serviceProvider, configuration).Wait();
+                    SeedExtension.CreateRoles(serviceProvider, configuration).Wait();
 
                 }
                 catch (Exception exception)

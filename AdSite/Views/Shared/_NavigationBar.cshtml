@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<li>
+    <a href="index.html">
+        <localize name="Layouts_Home"></localize>
+    </a>
+</li>
+<li>
+    <a href="catalog-list.html">
+        <localize name="Layouts_AllAds"></localize>
+    </a>
+</li>
+<li>
+    <a href="catalog-list.html">
+        <localize name="Layouts_AboutUs"></localize>
+    </a>
+</li>
+<li>
+    <a href="catalog-list.html">
+        <localize name="Layouts_Help"></localize>
+    </a>
+</li>
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole("User"))
+    {
+        <li>
+            <a href="catalog-list.html">
+                <localize name="Layouts_UserPanel"></localize>
+            </a>
+        </li>
+    }
+    @if (User.IsInRole("Admin"))
+    {
+        <li>
+            <a href="catalog-list.html">
+                <localize name="Layouts_AdminPanel"></localize>
+            </a>
+        </li>
+    }
+}
