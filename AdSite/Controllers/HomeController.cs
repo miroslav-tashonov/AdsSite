@@ -23,11 +23,11 @@ namespace AdSite.Controllers
             return View();
         }
         [Authorize(Roles=("Admin"))]
-        public IActionResult About()
+        public IActionResult AdminPanel()
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
+            return View("_AdminPartial");
         }
 
         public IActionResult Contact()

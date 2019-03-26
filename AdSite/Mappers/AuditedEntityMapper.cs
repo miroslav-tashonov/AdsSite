@@ -9,10 +9,10 @@ namespace AdSite.Mappers
 {
     public static class AuditedEntityMapper<T>
     {
-        public static void FillCreateAuditedEntityFields(T entity, string currentUser)
+
+        public static void FillCreateAuditedEntityFields(T entity, string currentUser, Guid countryId)
         {
             DateTime currentTime = DateTime.Now;
-            Guid countryId = new Guid("9B0CBFD6-0070-4285-B353-F13189BD2291");
 
             Type entityType = entity.GetType();
 

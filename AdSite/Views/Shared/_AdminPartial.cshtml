@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul>
+    @if (User.IsInRole("Admin"))
+    {
+    <li>
+        <a href="index.html">
+            <localize name="AdminLayouts_ConfigureCategories"></localize>
+        </a>
+    </li>
+    <li>
+        <a href="index.html">
+            <localize name="AdminLayouts_ManageLanguages"></localize>
+        </a>
+    </li>
+    <li>
+        <a href="index.html">
+            <localize name="AdminLayouts_ManageWebSettings"></localize>
+        </a>
+    </li>
+    }
+
+</ul>

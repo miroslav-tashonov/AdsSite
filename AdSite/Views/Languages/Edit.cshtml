@@ -1,0 +1,41 @@
+﻿@model AdSite.Models.DatabaseModels.Language
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Language</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CultureId" class="control-label"></label>
+                <input asp-for="CultureId" class="form-control" />
+                <span asp-validation-for="CultureId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageName" class="control-label"></label>
+                <input asp-for="LanguageName" class="form-control" />
+                <span asp-validation-for="LanguageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageShortName" class="control-label"></label>
+                <input asp-for="LanguageShortName" class="form-control" />
+                <span asp-validation-for="LanguageShortName" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

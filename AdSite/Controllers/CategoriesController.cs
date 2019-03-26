@@ -12,19 +12,21 @@ namespace AdSite.Controllers
     public class CategoriesController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
         private readonly ILogger<CategoriesController> _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN= "Categories_ErrorMessage_MustLogin";
-        private readonly string LOCALIZATION_ERROR_CATEGORY_NOT_FOUND = "Categories_ErrorMessage_NotFound";
-        private readonly string LOCALIZATION_ERROR_CATEGORY_CONCURENT_EDIT = "Categories_ErrorMessage_ConcurrentEdit";
+        private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN= "ErrorMessage_MustLogin";
+        private readonly string LOCALIZATION_ERROR_NOT_FOUND = "ErrorMessage_NotFound";
+        private readonly string LOCALIZATION_ERROR_CONCURENT_EDIT = "ErrorMessage_ConcurrentEdit";
 
-        public CategoriesController(ICategoryService categoryService, ILocalizationService localizationService, ILogger<CategoriesController> logger)
+        public CategoriesController(ICategoryService categoryService, ILocalizationService localizationService, ILogger<CategoriesController> logger, ICountryService countryService)
         {
             _categoryService = categoryService;
             _localizationService = localizationService;
             _logger = logger;
+            _countryService = countryService;
         }
 
         // GET: Categories/Details
@@ -56,7 +58,8 @@ namespace AdSite.Controllers
                 string currentUser = HttpContext?.User?.Identity?.Name;
                 if (!String.IsNullOrEmpty(currentUser))
                 {
-                    AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser);
+                    Guid countryId = _countryService.Get();
+                    AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
 
                     try
                     {
@@ -109,13 +112,13 @@ namespace AdSite.Controllers
                     {
                         if (!CategoryExists(entity.ID))
                         {
-                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CATEGORY_NOT_FOUND, CultureId);
+                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
                             _logger.LogError(localizationKey);
                             return NotFound(localizationKey);
                         }
                         else
                         {
-                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CATEGORY_CONCURENT_EDIT, CultureId);
+                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CONCURENT_EDIT, CultureId);
                             _logger.LogError(localizationKey);
                             return NotFound(localizationKey);
                         }

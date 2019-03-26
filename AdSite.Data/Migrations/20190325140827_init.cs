@@ -299,6 +299,33 @@ namespace AdSite.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WebSettings",
+                schema: "adsite",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    Phone = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    FacebookSocialLink = table.Column<string>(nullable: true),
+                    InstagramSocialLink = table.Column<string>(nullable: true),
+                    TwitterSocialLink = table.Column<string>(nullable: true),
+                    GooglePlusSocialLink = table.Column<string>(nullable: true),
+                    VKSocialLink = table.Column<string>(nullable: true),
+                    CountryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WebSettings", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_WebSettings_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalSchema: "adsite",
+                        principalTable: "Countries",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Localizations",
                 schema: "adsite",
                 columns: table => new
@@ -565,6 +592,12 @@ namespace AdSite.Data.Migrations
                 schema: "adsite",
                 table: "UserRoleCountry",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WebSettings_CountryId",
+                schema: "adsite",
+                table: "WebSettings",
+                column: "CountryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -599,6 +632,10 @@ namespace AdSite.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRoleCountry",
+                schema: "adsite");
+
+            migrationBuilder.DropTable(
+                name: "WebSettings",
                 schema: "adsite");
 
             migrationBuilder.DropTable(

@@ -126,8 +126,9 @@ namespace AdSite
             else
             {
                 app.UseHsts();
-                app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseRequestLocalization(BuildLocalizationOptions());
 
@@ -154,6 +155,10 @@ namespace AdSite
             services.AddTransient<ILocalizationRepository, LocalizationRepository>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IWebSettingsService, WebSettingsService>();
+            services.AddTransient<IWebSettingsRepository, WebSettingsRepository>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<ICountryRepository, CountryRepository>();
         }
 
         private RequestLocalizationOptions BuildLocalizationOptions()

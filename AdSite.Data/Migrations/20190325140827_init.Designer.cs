@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190319002156_init")]
+    [Migration("20190325140827_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -332,6 +332,36 @@ namespace AdSite.Data.Migrations
                     b.ToTable("UserRoleCountry");
                 });
 
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.WebSettings", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CountryId");
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("FacebookSocialLink");
+
+                    b.Property<string>("GooglePlusSocialLink");
+
+                    b.Property<string>("InstagramSocialLink");
+
+                    b.Property<string>("Phone")
+                        .IsRequired();
+
+                    b.Property<string>("TwitterSocialLink");
+
+                    b.Property<string>("VKSocialLink");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("WebSettings");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -505,6 +535,14 @@ namespace AdSite.Data.Migrations
                         .WithMany("UserRoleCountry")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.WebSettings", b =>
+                {
+                    b.HasOne("AdSite.Models.DatabaseModels.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
