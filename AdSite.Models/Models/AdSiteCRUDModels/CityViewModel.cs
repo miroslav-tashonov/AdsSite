@@ -20,4 +20,17 @@ namespace AdSite.Models.CRUDModels
         ApplicationUser ModifiedBy { get; set; }
         ApplicationUser CreatedBy { get; set; }
     }
+
+    public class CityCreateModel : AuditedEntityModel
+    {
+        public string Name { get; set; }
+        public string Postcode { get; set; }
+    }
+    public class CityEditModel : AuditedEntityModel
+    {
+        public Guid ID { get; set; }
+        public string Name { get; set; }
+        public string Postcode { get; set; }
+    }
+
 }

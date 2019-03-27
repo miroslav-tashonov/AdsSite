@@ -147,6 +147,8 @@ namespace AdSite
             services.AddTransient<ICountryRepository, CountryRepository>();
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<ILanguageRepository, LanguageRepository>();
+            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<ICityRepository, CityRepository>();
         }
 
         private void RegisterSupportedLanguages(IServiceCollection services, ServiceProvider serviceProvider)
