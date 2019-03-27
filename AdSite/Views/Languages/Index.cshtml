@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AdSite.Models.DatabaseModels.Language>
+﻿@model IEnumerable<AdSite.Models.CRUDModels.LanguageViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -25,23 +25,22 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CultureId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LanguageName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LanguageShortName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LanguageName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LanguageShortName)
+                </td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@item.ID"  method="post">
+                        <button type="submit" class="btn-link" >Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -1,154 +1,126 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
+using AdSite.Services;
+using AdSite.Models.CRUDModels;
+using Microsoft.Extensions.Logging;
+using System.Threading;
+using AdSite.Mappers;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace AdSite.Controllers
 {
     public class LanguagesController : Controller
     {
+        private readonly ILanguageService _languageService;
+        private readonly ILocalizationService _localizationService;
+        private readonly ICountryService _countryService;
+        private readonly ILogger _logger;
 
-        //private readonly ILanguagesService _languageService;
-        //public LanguagesController(ILanguagesService languageService)
-        //{
-        //    _languageService = languageService;
-        //}
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private readonly string LOCALIZATION_ERROR_NOT_FOUND = "ErrorMessage_NotFound";
 
-        //// GET: Languages
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _context.Languages.ToListAsync());
-        //}
+        public LanguagesController(ILanguageService languageService, ILocalizationService localizationService, ICountryService countryService, ILogger<LanguagesController> logger)
+        {
+            _languageService = languageService;
+            _localizationService = localizationService;
+            _logger = logger;
+            _countryService = countryService;
+        }
 
-        //// GET: Languages/Details/5
-        //public async Task<IActionResult> Details(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Languages
+        public IActionResult Index()
+        {
+            Guid countryId = _countryService.Get();
 
-        //    var language = await _context.Languages
-        //        .FirstOrDefaultAsync(m => m.ID == id);
-        //    if (language == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return View(_languageService.GetAll(countryId));
+        }
 
-        //    return View(language);
-        //}
+        // GET: Languages/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        //// GET: Languages/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        // POST: Languages/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([FromForm]LanguageCreateModel entity)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid countryId = _countryService.Get();
+                AuditedEntityMapper<LanguageCreateModel>.FillCountryEntityField(entity, countryId);
 
-        //// POST: Languages/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("CultureId,LanguageName,LanguageShortName,ID")] Language language)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        language.ID = Guid.NewGuid();
-        //        _context.Add(language);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(language);
-        //}
+                try
+                {
+                    bool statusResult = _languageService.Add(entity);
+                    if (statusResult)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    return StatusCode(500, ex.Message);
+                }
 
-        //// GET: Languages/Edit/5
-        //public async Task<IActionResult> Edit(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
 
-        //    var language = await _context.Languages.FindAsync(id);
-        //    if (language == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(language);
-        //}
+        // POST: Languages/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(Guid id)
+        {
+            bool deleteResult = _languageService.Delete(id);
+            if (deleteResult)
+                return RedirectToAction(nameof(Index));
+            else
+            {
+                string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
+                _logger.LogError(localizationKey);
+                return NotFound();
+            }
+        }
 
-        //// POST: Languages/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(Guid id, [Bind("CultureId,LanguageName,LanguageShortName,ID")] Language language)
-        //{
-        //    if (id != language.ID)
-        //    {
-        //        return NotFound();
-        //    }
+        private bool LanguageExists(Guid id)
+        {
+            return _languageService.Exists(id);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(language);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!LanguageExists(language.ID))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(language);
-        //}
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            int lcid;
+            Int32.TryParse(culture, out lcid);
+            if (lcid > 0)
+            {
+                var cultureInfo = new CultureInfo(lcid);
 
-        //// GET: Languages/Delete/5
-        //public async Task<IActionResult> Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+                Response.Cookies.Append(
+                    CookieRequestCultureProvider.DefaultCookieName,
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cultureInfo.Name)),
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                );
 
-        //    var language = await _context.Languages
-        //        .FirstOrDefaultAsync(m => m.ID == id);
-        //    if (language == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(language);
-        //}
-
-        //// POST: Languages/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(Guid id)
-        //{
-        //    var language = await _context.Languages.FindAsync(id);
-        //    _context.Languages.Remove(language);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool LanguageExists(Guid id)
-        //{
-        //    return _context.Languages.Any(e => e.ID == id);
-        //}
+                return LocalRedirect(returnUrl);
+            }
+            else
+                return LocalRedirect("/Error/404");
+        }
     }
 }

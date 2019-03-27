@@ -13,7 +13,7 @@ namespace AdSite.Services
     {
         Localization Get(Guid localizationId);
         string GetByKey(string localizationKey, int cultureId);
-        List<Localization> GetAll();
+        List<Localization> GetAll(Guid countryId);
         bool Exists(Guid id);
         bool Delete(Guid id);
         bool Add(Localization localization);
@@ -52,9 +52,9 @@ namespace AdSite.Services
             return _repository.Get(localizationId);
         }
 
-        public List<Localization> GetAll()
+        public List<Localization> GetAll(Guid countryId)
         {
-            return _repository.GetAll();
+            return _repository.GetAll(countryId);
         }
 
         public string GetByKey(string localizationKey, int cultureId)

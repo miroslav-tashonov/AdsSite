@@ -22,11 +22,14 @@
     <link rel="stylesheet" href="~/css/media.css">
     <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css">
     <link rel="stylesheet" href="~/lib/jstree/themes/default/style.min.css">
+
+    <link rel="stylesheet" href="~/lib/bootstrap-select/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="~/lib/flag-icon-css/css/flag-icon.min.css">
+
     <!-- jQuery plugins/scripts - start -->
     @RenderSection("Scripts", required: false)
     <!-- jQuery plugins/scripts - end -->
-
-
+    
 </head>
 <body>
     <!-- Header - start -->
@@ -102,6 +105,10 @@
 
                         @await Html.PartialAsync("_LoginPartial")
 
+                        <li>
+                            @await Html.PartialAsync("_SelectLanguagePartial")
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -140,7 +147,6 @@
             </div>
         </div>
         <!-- Topmenu - end -->
-        @await Html.PartialAsync("_SelectLanguagePartial")
     </header>
     <!-- Header - end -->
     <!-- Main Content - start -->

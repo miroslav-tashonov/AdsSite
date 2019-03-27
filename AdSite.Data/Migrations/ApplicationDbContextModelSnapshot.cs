@@ -274,6 +274,8 @@ namespace AdSite.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("CountryId");
+
                     b.Property<int>("CultureId");
 
                     b.Property<string>("LanguageName");
@@ -281,6 +283,8 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("LanguageShortName");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Languages");
                 });
@@ -501,6 +505,14 @@ namespace AdSite.Data.Migrations
                 {
                     b.HasOne("AdSite.Models.DatabaseModels.Country", "Country")
                         .WithMany("Cities")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Language", b =>
+                {
+                    b.HasOne("AdSite.Models.DatabaseModels.Country", "Country")
+                        .WithMany()
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

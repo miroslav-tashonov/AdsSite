@@ -14,15 +14,18 @@ namespace AdSite.ViewComponents
     public class CategoriesFilterViewComponent : ViewComponent
     {
         private readonly ICategoryService _categoryService;
-        
-        public CategoriesFilterViewComponent(ICategoryService categoryService)
+        private readonly ICountryService _countryService;
+        public CategoriesFilterViewComponent(ICategoryService categoryService, ICountryService countryService)
         {
             _categoryService = categoryService;
+            _countryService = countryService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = _categoryService.GetCategoryTree();
+            Guid countryId = _countryService.Get();
+
+            var categories = _categoryService.GetCategoryTree(countryId);
             var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
             var viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
 

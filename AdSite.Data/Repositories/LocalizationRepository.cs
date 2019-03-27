@@ -51,9 +51,9 @@ namespace AdSite.Data.Repositories
             return result;
         }
 
-        public List<Localization> GetAll()
+        public List<Localization> GetAll(Guid countryId)
         {
-            var localizations = _context.Localizations.ToListAsync();
+            var localizations = _context.Localizations.Where(c => c.Language.CountryId == countryId).ToListAsync();
             return localizations.Result;
         }
 

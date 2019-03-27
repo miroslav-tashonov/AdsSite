@@ -1,7 +1,23 @@
-﻿@model AdSite.Models.DatabaseModels.Language
+﻿@model AdSite.Models.CRUDModels.LanguageCreateModel
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@using System.Globalization;
+@using AdSite.Models.CRUDModels
+
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@section Scripts {
+    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js" asp-append-version="true"></script>
+}
 
 @{
-    ViewData["Title"] = "Create";
+    var createCultureItems = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                          .Select(c => new LanguageSelectViewModel() { CultureId = c.LCID, LanguageShortName = c.Name, LanguageName = c.DisplayName })
+                          .ToList();
+    
 }
 
 <h2>Create</h2>
@@ -10,29 +26,25 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form id="selectLanguage" asp-controller="Languages"
+              asp-action="Create" method="post" class="form-horizontal" role="form">
+
+            <select asp-for="CultureId" class="createSelectpicker form-control" name="CultureId">
+                <options asp-items="createCultureItems" />
+            </select>
+
             <div class="form-group">
-                <label asp-for="CultureId" class="control-label"></label>
-                <input asp-for="CultureId" class="form-control" />
-                <span asp-validation-for="CultureId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LanguageName" class="control-label"></label>
-                <input asp-for="LanguageName" class="form-control" />
-                <span asp-validation-for="LanguageName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LanguageShortName" class="control-label"></label>
-                <input asp-for="LanguageShortName" class="form-control" />
-                <span asp-validation-for="LanguageShortName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Add Language" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('.createSelectpicker').selectpicker();
+    });
+</script>
 
 <div>
     <a asp-action="Index">Back to List</a>

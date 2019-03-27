@@ -11,5 +11,8 @@ namespace AdSite.Models.DatabaseModels
         public int CultureId { get; set; }
         public string LanguageName { get; set; }
         public string LanguageShortName { get; set; }
+
+        public Country Country { get; set; }
+        public Guid CountryId { get; set; }
     }
 }

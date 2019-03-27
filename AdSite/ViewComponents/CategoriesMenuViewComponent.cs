@@ -12,17 +12,21 @@ namespace AdSite.ViewComponents
     public class CategoriesMenuViewComponent : ViewComponent
     {
         private readonly ICategoryService _categoryService;
+        private readonly ICountryService _countryService;
 
-        public CategoriesMenuViewComponent(ICategoryService categoryService)
+        public CategoriesMenuViewComponent(ICategoryService categoryService, ICountryService countryService)
         {
             _categoryService = categoryService;
+            _countryService = countryService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(ICollection<Category> categories, bool isFirstCall)
         {
             if (isFirstCall)
             {
-                categories = _categoryService.GetCategoryAsTreeStructure();
+                Guid countryId = _countryService.Get();
+
+                categories = _categoryService.GetCategoryAsTreeStructure(countryId);
             }
 
             var viewModel = new CategoryComponentViewModel { IsFirst = isFirstCall, ComponentCategories = categories };

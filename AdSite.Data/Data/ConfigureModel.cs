@@ -91,6 +91,10 @@ namespace AdSite.Data
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Language>()
+                .HasOne(country => country.Country)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

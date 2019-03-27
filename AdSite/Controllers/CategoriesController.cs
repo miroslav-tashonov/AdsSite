@@ -35,7 +35,9 @@ namespace AdSite.Controllers
             var viewModel = new CategoryFilterComponentViewModel();
             try
             {
-                var categories = _categoryService.GetCategoryTree();
+                Guid countryId = _countryService.Get();
+
+                var categories = _categoryService.GetCategoryTree(countryId);
                 var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
                 viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
             }

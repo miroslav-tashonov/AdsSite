@@ -16,16 +16,20 @@ namespace AdSite.Controllers
     public class LocalizationsController : Controller
     {
         private readonly ILocalizationService _localizationService;
+        private readonly ICountryService _countryService;
 
-        public LocalizationsController(ILocalizationService localizationService)
+        public LocalizationsController(ILocalizationService localizationService, ICountryService countryService)
         {
             _localizationService = localizationService;
+            _countryService = countryService;
         }
 
         // GET: Localizations
         public IActionResult Index()
         {
-            return View(_localizationService.GetAll());
+            Guid countryId = _countryService.Get();
+
+            return View(_localizationService.GetAll(countryId));
         }
 
         // GET: Localizations/Details/5
@@ -145,18 +149,6 @@ namespace AdSite.Controllers
         private bool LocalizationExists(Guid id)
         {
             return _localizationService.Exists(id);
-        }
-
-        [HttpPost]
-        public IActionResult SetLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-
-            return LocalRedirect(returnUrl);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace AdSite.Services
         bool Update(CategoryEditModel category);
 
         //todo: we need to add country as parameter here
-        List<Category> GetCategoryTree();
-        List<Category> GetCategoryAsTreeStructure();
+        List<Category> GetCategoryTree(Guid countryId);
+        List<Category> GetCategoryAsTreeStructure(Guid countryId);
     }
 
 
@@ -100,14 +100,14 @@ namespace AdSite.Services
             return _repository.Exists(id);
         }
 
-        public List<Category> GetCategoryTree()
+        public List<Category> GetCategoryTree(Guid countryId)
         {
-            return _repository.GetCategoryTree();
+            return _repository.GetCategoryTree(countryId);
         }
 
-        public List<Category> GetCategoryAsTreeStructure()
+        public List<Category> GetCategoryAsTreeStructure(Guid countryId)
         {
-            return _repository.GetCategoryAsTreeStructure();
+            return _repository.GetCategoryAsTreeStructure(countryId);
         }
         
         public bool Update(CategoryEditModel entity)
@@ -127,26 +127,6 @@ namespace AdSite.Services
             return _repository.Update(category);
         }
 
-        private CategoryViewModel MapToViewModel(Category entity)
-        {
-            CategoryViewModel model = new CategoryViewModel
-            {
-                Name = entity.Name,
-
-            };
-
-            return model;
-        }
-
-        private List<CategoryViewModel> MapToViewModel(List<Category> entities)
-        {
-            List<CategoryViewModel> model = new List<CategoryViewModel>();
-            foreach (var entity in entities)
-            {
-                model.Add(MapToViewModel(entity));
-            }
-            return model;
-        }
 
     }
 }

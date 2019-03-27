@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190325140827_init")]
+    [Migration("20190326123119_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -276,6 +276,8 @@ namespace AdSite.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("CountryId");
+
                     b.Property<int>("CultureId");
 
                     b.Property<string>("LanguageName");
@@ -283,6 +285,8 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("LanguageShortName");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Languages");
                 });
@@ -503,6 +507,14 @@ namespace AdSite.Data.Migrations
                 {
                     b.HasOne("AdSite.Models.DatabaseModels.Country", "Country")
                         .WithMany("Cities")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Language", b =>
+                {
+                    b.HasOne("AdSite.Models.DatabaseModels.Country", "Country")
+                        .WithMany()
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

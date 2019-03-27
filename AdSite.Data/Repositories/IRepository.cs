@@ -12,7 +12,16 @@ namespace AdSite.Data.Repositories
     {
         bool Add(T entity);
         T Get(Guid id);
-        List<T> GetAll();
+        List<T> GetAll(Guid countryId);
+        bool Exists(Guid id);
+        bool Delete(Guid id);
+        bool Update(T entity);
+    }
+
+    public interface ICountryRepository<T> where T: RepositoryEntity
+    {
+        bool Add(T entity);
+        T Get(Guid id);
         bool Exists(Guid id);
         bool Delete(Guid id);
         bool Update(T entity);

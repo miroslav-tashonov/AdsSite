@@ -28,26 +28,8 @@ namespace AdSite
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, ILanguageService languageService)
         {
-
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new List<CultureInfo>
-                {
-                    //todo get cultures from DB
-                    new CultureInfo("en-US"),
-                    new CultureInfo("mk-MK"),
-                    new CultureInfo("de-DE"),
-                    new CultureInfo("fr-FR")
-                };
-
-                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures; 
-            });
-
-
             services.AddMemoryCache();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -113,6 +95,27 @@ namespace AdSite
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             RegisterApplicationServices(services);
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+
+
+                //languageService.GetAll();
+
+                var supportedCultures = new List<CultureInfo>
+                {
+                    //todo get cultures from DB
+                    new CultureInfo("en-US"),
+                    new CultureInfo("mk-MK"),
+                    new CultureInfo("de-DE"),
+                    new CultureInfo("fr-FR")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -159,10 +162,14 @@ namespace AdSite
             services.AddTransient<IWebSettingsRepository, WebSettingsRepository>();
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<ICountryRepository, CountryRepository>();
+            services.AddTransient<ILanguageService, LanguageService>();
+            services.AddTransient<ILanguageRepository, LanguageRepository>();
         }
 
         private RequestLocalizationOptions BuildLocalizationOptions()
         {
+
+
             var supportedCultures = new List<CultureInfo>
             {
                 //todo get cultures from DB

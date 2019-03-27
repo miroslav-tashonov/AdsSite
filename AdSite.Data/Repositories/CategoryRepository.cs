@@ -11,8 +11,8 @@ namespace AdSite.Data.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        List<Category> GetCategoryTree();
-        List<Category> GetCategoryAsTreeStructure();
+        List<Category> GetCategoryTree(Guid countryId);
+        List<Category> GetCategoryAsTreeStructure(Guid countryId);
         bool SaveChangesResult();
     }
 
@@ -61,9 +61,9 @@ namespace AdSite.Data.Repositories
             return result;
         }
 
-        public List<Category> GetAll()
+        public List<Category> GetAll(Guid countryId)
         {
-            var categories = _context.Categories.ToListAsync();
+            var categories = _context.Categories.Where(category => category.CountryId == countryId).ToListAsync();
 
             return categories.Result;
         }
@@ -92,14 +92,14 @@ namespace AdSite.Data.Repositories
             return true;
         }
 
-        public List<Category> GetCategoryTree()
+        public List<Category> GetCategoryTree(Guid countryId)
         {
-            return _context.Categories.ToList();
+            return _context.Categories.Where(category => category.CountryId == countryId).ToList();
         }
 
-        public List<Category> GetCategoryAsTreeStructure()
+        public List<Category> GetCategoryAsTreeStructure(Guid countryId)
         {
-            return _context.Categories.Include(i => i.Children).AsEnumerable().Where(p => p.Parent == null).ToList();
+            return _context.Categories.Include(i => i.Children).AsEnumerable().Where(p => p.Parent == null && p.CountryId == countryId).ToList();
         }
     }
 }

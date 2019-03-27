@@ -58,5 +58,14 @@ namespace AdSite.Mappers
             fieldPropertyInfo.SetValue(entity, currentTime, null);
         }
 
+        public static void FillCountryEntityField(T entity, Guid countryId)
+        {
+            Type entityType = entity.GetType();
+
+            PropertyInfo fieldPropertyInfo = entityType.GetProperty("CountryId");
+            if (fieldPropertyInfo == null)
+                throw new Exception(string.Format("Property CountryId not found"));
+            fieldPropertyInfo.SetValue(entity, countryId, null);
+        }
     }
 }

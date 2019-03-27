@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace AdSite.Data.Repositories
 {
-    public interface ICountryRepository : IRepository<Country>
+    public interface ICountryRepository : ICountryRepository<Country>
     {
+
     }
 
     public class CountryRepository : ICountryRepository
