@@ -8,9 +8,7 @@
 @inject IOptions<RequestLocalizationOptions> LocOptions
 
 @section Scripts {
-    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js" asp-append-version="true"></script>
+    
 }
 
 @{
@@ -20,23 +18,24 @@
     
 }
 
-<h2>Create</h2>
+<h2><localize name="Language_Create"></localize></h2>
 
-<h4>Language</h4>
+<h4></h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form id="selectLanguage" asp-controller="Languages"
               asp-action="Create" method="post" class="form-horizontal" role="form">
 
-            <select asp-for="CultureId" class="createSelectpicker form-control" name="CultureId">
-                <options asp-items="createCultureItems" />
+            <select asp-for="CultureId" class="createSelectpicker form-group" name="CultureId">
+                <options asp-items="createCultureItems" selected-item-enabled="false" />
             </select>
 
             <br />
             <br />
             <div class="form-group">
                 <input type="submit" value="Add Language" class="btn btn-default" />
+                <button asp-action="Index" class="btn btn-default" onclick="window.history.back();">Back to List</button>
             </div>
         </form>
     </div>
@@ -47,8 +46,4 @@
         $('.createSelectpicker').selectpicker();
     });
 </script>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

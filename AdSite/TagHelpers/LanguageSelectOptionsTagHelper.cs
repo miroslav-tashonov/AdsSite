@@ -9,13 +9,15 @@ using System.Threading;
 
 namespace AdSite.TagHelpers
 {
-    [HtmlTargetElement("options", Attributes = "asp-items")]
+    [HtmlTargetElement("options", Attributes = "[asp-items],[selected-item-enabled]")]
     public class LanguageSelectOptionsTagHelper : TagHelper
     {
         [HtmlAttributeNotBound]
         public IHtmlGenerator Generator { get; set; }
         [HtmlAttributeName("asp-items")]
         public object Items { get; set; }
+        [HtmlAttributeName("selected-item-enabled")]
+        public object SelectedItemEnabled { get; set; }
 
         public LanguageSelectOptionsTagHelper(IHtmlGenerator generator)
         {
@@ -27,6 +29,7 @@ namespace AdSite.TagHelpers
         {
             output.SuppressOutput();
             IEnumerable<LanguageSelectViewModel> items = null;
+            bool selectedItemEnabled = (bool)SelectedItemEnabled;
             if (Items != null)
             {
                 var enumerable = Items as System.Collections.IEnumerable;
@@ -43,9 +46,11 @@ namespace AdSite.TagHelpers
                     throw new InvalidOperationException("Invalid items for <options>");
                 }
 
+                int currentCultureId = Thread.CurrentThread.CurrentCulture.LCID;
+
                 foreach (var item in items)
                 {
-                    var selectedAttr = Thread.CurrentThread.CurrentCulture.LCID == item.CultureId ? "selected='selected'" : "";
+                    var selectedAttr = (currentCultureId == item.CultureId && selectedItemEnabled) ? "selected='selected'" : "";
 
                     if (!String.IsNullOrEmpty(item.LanguageShortName))
                     {
