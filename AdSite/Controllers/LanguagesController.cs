@@ -33,9 +33,16 @@ namespace AdSite.Controllers
         // GET: Languages
         public IActionResult Index()
         {
-            Guid countryId = _countryService.Get();
+            try
+            {
+                Guid countryId = _countryService.Get();
 
-            return View(_languageService.GetAll(countryId));
+                return View(_languageService.GetAll(countryId));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // GET: Languages/Create
@@ -86,14 +93,23 @@ namespace AdSite.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            bool deleteResult = _languageService.Delete(id);
-            if (deleteResult)
-                return RedirectToAction(nameof(Index));
-            else
+            try
             {
-                string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
-                _logger.LogError(localizationKey);
-                return NotFound();
+                Guid countryId = _countryService.Get();
+
+                bool deleteResult = _languageService.Delete(id, countryId);
+                if (deleteResult)
+                    return RedirectToAction(nameof(Index));
+                else
+                {
+                    string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
+                    _logger.LogError(localizationKey);
+                    return NotFound();
+                }
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 

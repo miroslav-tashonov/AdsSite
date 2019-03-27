@@ -11,7 +11,8 @@ namespace AdSite.Data.Repositories
 {
     public interface ILanguageRepository : IRepository<Language>
     {
-
+        bool Exists(int lcid, Guid countryId);
+        int Count(Guid countryId);
     }
 
     public class LanguageRepository : ILanguageRepository
@@ -44,6 +45,17 @@ namespace AdSite.Data.Repositories
         public bool Exists(Guid id)
         {
             return _context.Languages.Any(e => e.ID == id);
+        }
+        public bool Exists(int lcid, Guid countryId)
+        {
+            return _context.Languages.Any(e => e.CultureId == lcid && e.CountryId == countryId);
+        }
+
+
+
+        public int Count(Guid countryId)
+        {
+            return _context.Languages.Count();
         }
 
         public Language Get(Guid id)

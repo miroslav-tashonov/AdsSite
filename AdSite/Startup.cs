@@ -28,7 +28,7 @@ namespace AdSite
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services, ILanguageService languageService)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
 
@@ -38,7 +38,7 @@ namespace AdSite
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-             
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -96,30 +96,13 @@ namespace AdSite
 
             RegisterApplicationServices(services);
 
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-
-
-                //languageService.GetAll();
-
-                var supportedCultures = new List<CultureInfo>
-                {
-                    //todo get cultures from DB
-                    new CultureInfo("en-US"),
-                    new CultureInfo("mk-MK"),
-                    new CultureInfo("de-DE"),
-                    new CultureInfo("fr-FR")
-                };
-
-                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
-            });
-
+            //needed for setting languages that are currently in DB
+            var serviceProvider = services.BuildServiceProvider();
+            RegisterSupportedLanguages(services, serviceProvider);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILanguageService languageService, ICountryService countryService)
         {
             if (env.IsDevelopment())
             {
@@ -133,7 +116,7 @@ namespace AdSite
 
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
-            app.UseRequestLocalization(BuildLocalizationOptions());
+            app.UseRequestLocalization(BuildLocalizationOptions(languageService, countryService));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -166,27 +149,63 @@ namespace AdSite
             services.AddTransient<ILanguageRepository, LanguageRepository>();
         }
 
-        private RequestLocalizationOptions BuildLocalizationOptions()
+        private void RegisterSupportedLanguages(IServiceCollection services, ServiceProvider serviceProvider)
         {
+            string defaultLanguage = Configuration["DefaultLanguage:Value"];
+            var languageService = serviceProvider.GetService<ILanguageService>();
+            var countryService = serviceProvider.GetService<ICountryService>();
 
+            Guid countryId = countryService.Get();
+            var languages = languageService.GetAll(countryId);
 
-            var supportedCultures = new List<CultureInfo>
+            List<CultureInfo> supportedCultures = new List<CultureInfo>();
+            foreach (var language in languages)
             {
-                //todo get cultures from DB
-                new CultureInfo("en-US"),
-                new CultureInfo("mk-MK"),
-                new CultureInfo("de-DE"),
-                new CultureInfo("fr-FR")
-            };
+                try
+                {
+                    supportedCultures.Add(new CultureInfo(language.CultureId));
+                }
+                catch (Exception ex)
+                {
 
-            var options = new RequestLocalizationOptions
+                }
+            }
+
+            services.Configure<RequestLocalizationOptions>(options =>
             {
-                DefaultRequestCulture = new RequestCulture("en-US"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures
-            };
+                options.DefaultRequestCulture = new RequestCulture(culture: defaultLanguage, uiCulture: defaultLanguage);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+        }
 
-            return options;
+        private RequestLocalizationOptions BuildLocalizationOptions(ILanguageService languageService, ICountryService countryService)
+        {
+            try
+            {
+                string defaultLanguage = Configuration["DefaultLanguage:Value"];
+                Guid countryId = countryService.Get();
+                var languages = languageService.GetAll(countryId);
+
+                List<CultureInfo> supportedCultures = new List<CultureInfo>();
+                foreach (var language in languages)
+                {
+                    supportedCultures.Add(new CultureInfo(language.CultureId));
+                }
+
+                var options = new RequestLocalizationOptions
+                {
+                    DefaultRequestCulture = new RequestCulture(defaultLanguage),
+                    SupportedCultures = supportedCultures,
+                    SupportedUICultures = supportedCultures
+                };
+
+                return options;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

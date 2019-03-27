@@ -13,10 +13,11 @@ namespace AdSite.Services
 {
     public interface ILanguageService
     {
+        bool Exists(int lcid, Guid countryId);
         bool Exists(Guid id);
-        bool Delete(Guid id);
+
+        bool Delete(Guid id, Guid countryId);
         bool Add(LanguageCreateModel language);
-        bool Update(LanguageEditModel language);
         List<LanguageViewModel> GetAll(Guid country);
     }
 
@@ -27,6 +28,9 @@ namespace AdSite.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILanguageRepository _repository;
         private readonly ILogger _logger;
+
+        private readonly int NUMBER_OF_LANGUAGES_REQUIRED_PER_COUNTRY = 1;
+
         public LanguageService(ILanguageRepository repository, ILogger<LanguageService> logger, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
@@ -36,41 +40,56 @@ namespace AdSite.Services
 
         public bool Add(LanguageCreateModel entity)
         {
+            
             int cultureId;
             int.TryParse(entity.CultureId, out cultureId);
             if (cultureId > 0)
             {
-                try
+                if (!Exists(cultureId, entity.CountryId))
                 {
-                    CultureInfo cultureInfo = new CultureInfo(cultureId);
-                    Language language = new Language
+                    try
                     {
-                        CultureId = cultureId,
-                        LanguageName = cultureInfo.DisplayName,
-                        LanguageShortName = cultureInfo.Name,
-                        CountryId = entity.CountryId
-                    };
+                        CultureInfo cultureInfo = new CultureInfo(cultureId);
+                        Language language = new Language
+                        {
+                            CultureId = cultureId,
+                            LanguageName = cultureInfo.DisplayName,
+                            LanguageShortName = cultureInfo.Name,
+                            CountryId = entity.CountryId
+                        };
 
-                    return _repository.Add(language);
+                        return _repository.Add(language);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
-                catch(Exception ex)
+                else
                 {
-                    _logger.LogError(ex.Message);
-                    return false;
+                    throw new Exception("Language is already added.");
                 }
             }
             else
             {
-                _logger.LogError("Cannot find Culture with cultureId ");
-                return false;
+                throw new Exception("Cannot find Culture with cultureId ");
             }
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(Guid id, Guid countryId)
         {
             try
             {
-                _repository.Delete(id);
+                if (_repository.Count(countryId) > NUMBER_OF_LANGUAGES_REQUIRED_PER_COUNTRY)
+                {
+                    _repository.Delete(id);
+                }
+                else
+                {
+                    _logger.LogError("Cannot delete the last language.");
+                    throw new Exception("Cannot delete the last language.");
+                }
             }
             catch (Exception ex)
             {
@@ -86,21 +105,10 @@ namespace AdSite.Services
             return _repository.Exists(id);
         }
 
-        public bool Update(LanguageEditModel entity)
+        public bool Exists(int lcid, Guid countryId)
         {
-            Language language = _repository.Get(entity.ID);
-            if (language == null)
-            {
-                throw new Exception("Cannot find language with id " + entity.ID);
-            }
-
-            language.CultureId = entity.CultureId;
-            language.LanguageName = entity.LanguageName;
-            language.LanguageShortName = entity.LanguageShortName;
-
-            return _repository.Update(language);
+            return _repository.Exists(lcid, countryId);
         }
-
 
         public List<LanguageViewModel> GetAll(Guid countryId)
         {

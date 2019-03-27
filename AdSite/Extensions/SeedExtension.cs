@@ -1,11 +1,15 @@
 ﻿using AdSite.Models;
+using AdSite.Models.CRUDModels;
+using AdSite.Models.DatabaseModels;
 using AdSite.Models.Extensions;
+using AdSite.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +17,7 @@ namespace AdSite.Extensions
 {
     public class SeedExtension
     {
-        public static async Task CreateRoles(IServiceProvider serviceProvider, IConfiguration Configuration)
+        public static async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
             logger.LogInformation("adding customs roles");
@@ -36,6 +40,37 @@ namespace AdSite.Extensions
                 {
                     roleResult = await RoleManager.CreateAsync(new ApplicationIdentityRole(roleName));
                 }
+            }
+        }
+
+        public static async Task CreateDefaultLanguage(IServiceProvider serviceProvider, IConfiguration configuration)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
+            logger.LogInformation("adding default language");
+
+            
+            try
+            {
+                string defaultLanguage = configuration["DefaultLanguage:Value"];
+
+                var _languageService = serviceProvider.GetService<ILanguageService>();
+                var _countryService = serviceProvider.GetService<ICountryService>();
+                CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
+                Guid countryId = _countryService.Get();
+                if (!_languageService.Exists(defaultCultureInfo.LCID, countryId))
+                {
+                    LanguageCreateModel language = new LanguageCreateModel();
+                    language.CountryId = countryId;
+                    language.CultureId = defaultCultureInfo.LCID.ToString();
+
+                    _languageService.Add(language);
+
+                }
+            }
+            catch(Exception ex)
+            {
+                logger.LogInformation("Language cannot be added ." + ex.Message);
+                throw new Exception("Language cannot be added ." + ex.Message);
             }
         }
     }

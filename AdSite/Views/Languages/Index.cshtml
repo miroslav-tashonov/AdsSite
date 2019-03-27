@@ -28,7 +28,9 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CultureId)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LanguageName)
                 </td>
@@ -36,7 +38,7 @@
                     @Html.DisplayFor(modelItem => item.LanguageShortName)
                 </td>
                 <td>
-                    <form asp-action="Delete" asp-route-id="@item.ID"  method="post">
+                    <form asp-action="Delete" asp-route-id="@item.ID"  method="post" onsubmit="return confirm('Are you sure you want to delete?');">
                         <button type="submit" class="btn-link" >Delete</button>
                     </form>
                 </td>
