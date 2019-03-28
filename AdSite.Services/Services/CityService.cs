@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdSite.Models.Mappers;
 
 namespace AdSite.Services
 {
@@ -16,8 +17,9 @@ namespace AdSite.Services
         bool Delete(Guid id);
         bool Add(CityCreateModel category);
         bool Update(CityEditModel category);
-        List<City> GetCities(Guid countryId);
-        City GetCity(Guid cityId);
+        List<CityViewModel> GetCities(Guid countryId);
+        CityViewModel GetCityAsViewModel(Guid cityId);
+        CityEditModel GetCityAsEditModel(Guid cityId);
     }
 
 
@@ -70,16 +72,37 @@ namespace AdSite.Services
             return _repository.Exists(id);
         }
 
-        public List<City> GetCities(Guid countryId)
+        public List<CityViewModel> GetCities(Guid countryId)
         {
-            return _repository.GetAll(countryId);
+            var entities = _repository.GetAll(countryId);
+            if (entities == null || entities.Count == 0 )
+            {
+                throw new Exception("City entity cannot be found");
+            }
+
+            return CityMapper.MapToCityViewModel(entities);
+        }
+        public CityEditModel GetCityAsEditModel(Guid id)
+        {
+            var entity = _repository.Get(id);
+            if (entity == null)
+            {
+                throw new Exception("City entity cannot be found");
+            }
+
+            return CityMapper.MapToCityEditModel(entity);
         }
 
-        public City GetCity(Guid cityId)
+        public CityViewModel GetCityAsViewModel(Guid id)
         {
-            return _repository.Get(cityId);
+            var entity = _repository.Get(id);
+            if (entity == null)
+            {
+                throw new Exception("City entity cannot be found");
+            }
+
+            return CityMapper.MapToCityViewModel(entity);
         }
-        
         public bool Update(CityEditModel entity)
         {
             City city = _repository.Get(entity.ID);

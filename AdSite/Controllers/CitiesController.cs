@@ -34,23 +34,22 @@ namespace AdSite.Controllers
             _localizationService = localizationService;
             _logger = logger;
         }
-        public IActionResult Details(Guid cityId)
+        public IActionResult Details(Guid? id)
         {
-            if (cityId == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             try
             {
-                return View(_cityService.GetCity(cityId));
+                return View(_cityService.GetCityAsViewModel((Guid)id));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return NotFound(ex.Message);
             }
-            
         }
 
         public IActionResult Index()
@@ -92,7 +91,7 @@ namespace AdSite.Controllers
                         bool statusResult = _cityService.Add(entity);
                         if (statusResult)
                         {
-                            return Ok();
+                            return RedirectToAction(nameof(Index));
                         }
                         else
                         {
@@ -127,7 +126,7 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var city = _cityService.GetCity((Guid)id);
+            var city = _cityService.GetCityAsEditModel((Guid)id);
             if (city == null)
             {
                 return NotFound();
@@ -166,7 +165,7 @@ namespace AdSite.Controllers
                             return NotFound(localizationKey);
                         }
                     }
-                    return RedirectToAction(nameof(Details));
+                    return RedirectToAction(nameof(Details), new { id = entity.ID });
                 }
                 else
                 {
@@ -187,7 +186,7 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var city = _cityService.GetCity((Guid)id);
+            var city = _cityService.GetCityAsViewModel((Guid)id);
             if (city == null)
             {
                 return NotFound();
@@ -217,7 +216,7 @@ namespace AdSite.Controllers
                 return StatusCode(500, ex.Message);
             }
 
-            return RedirectToAction(nameof(Details));
+            return RedirectToAction(nameof(Index));
         }
 
         private bool CityExists(Guid id)

@@ -13,6 +13,7 @@ namespace AdSite.Data.Repositories
     {
         WebSettings GetWebSettingsForCountry(Guid countryId);
         bool UpdateWebSettingsForCountry(WebSettings entity);
+        bool WebSettingsExistForCountry(Guid countryId);
         bool CreateWebSettingsForCountry(WebSettings entity);
     }
 
@@ -27,6 +28,12 @@ namespace AdSite.Data.Repositories
         public WebSettings GetWebSettingsForCountry(Guid countryId)
         {
             var webSettings = _context.WebSettings.FirstOrDefaultAsync(m => m.CountryId == countryId);
+            var result = webSettings.Result;
+            return result;
+        }
+        public bool WebSettingsExistForCountry(Guid countryId)
+        {
+            var webSettings = _context.WebSettings.AnyAsync(m => m.CountryId == countryId);
             var result = webSettings.Result;
             return result;
         }

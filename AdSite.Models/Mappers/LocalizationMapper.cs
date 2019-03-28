@@ -11,17 +11,17 @@ namespace AdSite.Models.Mappers
 
         public static LocalizationEditModel MapToLocalizationEditModel(Localization localization)
         {
-            var viewModel = new LocalizationEditModel();
+            var editModel = new LocalizationEditModel();
 
-            viewModel.Id = localization.ID;
-            viewModel.LocalizationKey = localization.LocalizationKey;
-            viewModel.LocalizationValue = localization.LocalizationValue;
-            viewModel.LanguageId = localization.Language.ID;
+            editModel.Id = localization.ID;
+            editModel.LocalizationKey = localization.LocalizationKey;
+            editModel.LocalizationValue = localization.LocalizationValue;
+            editModel.LanguageId = localization.Language.ID;
 
-            return viewModel;
+            return editModel;
         }
 
-        public static LocalizationViewModel MapToLookupViewModel(Localization localization)
+        public static LocalizationViewModel MapToLocalizationViewModel(Localization localization)
         {
             return new LocalizationViewModel()
             {
@@ -32,7 +32,7 @@ namespace AdSite.Models.Mappers
             };
         }
 
-        public static List<LocalizationViewModel> MapToLookupViewModel(List<Localization> localizations)
+        public static List<LocalizationViewModel> MapToLocalizationViewModel(List<Localization> localizations)
         {
             List<LocalizationViewModel> viewModelList = new List<LocalizationViewModel>();
 

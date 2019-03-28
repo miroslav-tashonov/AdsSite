@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdSite.Models.Mappers;
 
 namespace AdSite.Services
 {
@@ -14,8 +15,8 @@ namespace AdSite.Services
     {
         bool CreateWebSettingsForCountry(WebSettingsCreateModel category, Guid countryId);
         bool UpdateWebSettingsForCountry(WebSettingsEditModel category, Guid countryId);
-        WebSettings GetWebSettingsForCountry(Guid countryId);
-
+        WebSettingsViewModel GetWebSettingsForCountry(Guid countryId);
+        bool WebSettingsExistForCountry(Guid countryId);
     }
 
 
@@ -32,12 +33,19 @@ namespace AdSite.Services
             _userManager = userManager;
         }
 
-        public WebSettings GetWebSettingsForCountry(Guid countryId)
+        public WebSettingsViewModel GetWebSettingsForCountry(Guid countryId)
         {
-            return _repository.GetWebSettingsForCountry(countryId);
+            var entity = _repository.GetWebSettingsForCountry(countryId);
+            if (entity == null)
+                throw new Exception("Web settings entity couldnt be found");
+
+            return WebSettingsMapper.MapToWebSettingsViewModel(entity);
         }
 
-
+        public bool WebSettingsExistForCountry(Guid countryId)
+        {
+            return _repository.WebSettingsExistForCountry(countryId);
+        }
 
         public bool CreateWebSettingsForCountry(WebSettingsCreateModel entity, Guid countryId)
         {
@@ -54,7 +62,6 @@ namespace AdSite.Services
             };
 
             return _repository.CreateWebSettingsForCountry(webSettings);
-
         }
 
         public bool UpdateWebSettingsForCountry(WebSettingsEditModel entity, Guid countryId)

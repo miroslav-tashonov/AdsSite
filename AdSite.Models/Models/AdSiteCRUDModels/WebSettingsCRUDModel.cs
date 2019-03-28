@@ -8,7 +8,18 @@ namespace AdSite.Models.CRUDModels
 {
     public class WebSettingsViewModel
     {
+        public Guid ID { get; set; }
 
+        public string Phone { get; set; }
+        public string Email { get; set; }
+
+        public string FacebookSocialLink { get; set; }
+        public string InstagramSocialLink { get; set; }
+        public string TwitterSocialLink { get; set; }
+        public string GooglePlusSocialLink { get; set; }
+        public string VKSocialLink { get; set; }
+        
+        public Guid CountryId { get; set; }
     }
 
 

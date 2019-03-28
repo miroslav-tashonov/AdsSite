@@ -92,7 +92,7 @@ namespace AdSite.Services
                 throw new Exception("Localization entity cannot be found");
             }
 
-            return LocalizationMapper.MapToLookupViewModel(entity);
+            return LocalizationMapper.MapToLocalizationViewModel(entity);
         }
 
         public List<LocalizationViewModel> GetAll(Guid countryId)
@@ -100,7 +100,7 @@ namespace AdSite.Services
             var entities = _repository.GetAll(countryId);
 
 
-            return LocalizationMapper.MapToLookupViewModel(entities);
+            return LocalizationMapper.MapToLocalizationViewModel(entities);
         }
 
         public string GetByKey(string localizationKey, int cultureId)

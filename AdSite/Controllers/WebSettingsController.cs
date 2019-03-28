@@ -24,7 +24,6 @@ namespace AdSite.Controllers
         private readonly ILogger _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN = "ErrorMessage_MustLogin";
         private readonly string LOCALIZATION_ERROR_NOT_FOUND = "ErrorMessage_NotFound";
         private readonly string LOCALIZATION_ERROR_CONCURENT_EDIT = "ErrorMessage_ConcurrentEdit";
 
@@ -42,11 +41,12 @@ namespace AdSite.Controllers
         {
             Guid countryId = _countryService.Get();
 
-            var webSettings = _webSettingsService.GetWebSettingsForCountry(countryId);
-            if (webSettings == null)
+            if (!WebSettingsExistsForCountry(countryId))
             {
-                return NotFound(LOCALIZATION_ERROR_NOT_FOUND);
+                return RedirectToAction(nameof(Create));
             }
+
+            var webSettings = _webSettingsService.GetWebSettingsForCountry(countryId);
 
             return View(webSettings);
         }
@@ -56,11 +56,12 @@ namespace AdSite.Controllers
         {
             Guid countryId = _countryService.Get();
 
-            var webSettings = _webSettingsService.GetWebSettingsForCountry(countryId);
-            if (webSettings == null)
+            if (!WebSettingsExistsForCountry(countryId))
             {
                 return RedirectToAction(nameof(Create));
             }
+
+            var webSettings = _webSettingsService.GetWebSettingsForCountry(countryId);
 
             return View(webSettings);
         }
@@ -87,7 +88,7 @@ namespace AdSite.Controllers
                     bool statusResult = _webSettingsService.CreateWebSettingsForCountry(webSettings, countryId);
                     if (statusResult)
                     {
-                        return Ok();
+                        return RedirectToAction(nameof(Details));
                     }
                     else
                     {
@@ -142,7 +143,7 @@ namespace AdSite.Controllers
 
         private bool WebSettingsExistsForCountry(Guid countryId)
         {
-            return _webSettingsService.GetWebSettingsForCountry(countryId) == null ? false : true ;
+            return _webSettingsService.WebSettingsExistForCountry(countryId);
         }
     }
 }
