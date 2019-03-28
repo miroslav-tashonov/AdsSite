@@ -1,4 +1,5 @@
-﻿using AdSite.Models.DatabaseModels;
+﻿using AdSite.Models.CRUDModels.AuditedModels;
+using AdSite.Models.DatabaseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

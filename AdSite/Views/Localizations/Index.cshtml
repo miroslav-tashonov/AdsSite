@@ -1,10 +1,4 @@
-﻿@model IEnumerable<AdSite.Models.DatabaseModels.Localization>
-
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h2>Index</h2>
+﻿@model IEnumerable<AdSite.Models.CRUDModels.LocalizationViewModel>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -14,6 +8,12 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.LocalizationKey)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LocalizationValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Language.Name)
             </th>
             <th></th>
         </tr>
@@ -25,9 +25,15 @@
                 @Html.DisplayFor(modelItem => item.LocalizationKey)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                @Html.DisplayFor(modelItem => item.LocalizationValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Language.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

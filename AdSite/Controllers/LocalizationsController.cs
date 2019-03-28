@@ -10,29 +10,32 @@ using AdSite.Models.DatabaseModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using AdSite.Mappers;
+using System.Threading;
+using AdSite.Models.CRUDModels;
 
 namespace AdSite.Controllers
 {
     public class LocalizationsController : Controller
     {
         private readonly ILocalizationService _localizationService;
+        private readonly ILanguageService _languageService;
         private readonly ICountryService _countryService;
+        private readonly ILogger<LocalizationsController> _logger;
 
-        public LocalizationsController(ILocalizationService localizationService, ICountryService countryService)
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN = "ErrorMessage_MustLogin";
+        private readonly string LOCALIZATION_ERROR_NOT_FOUND = "ErrorMessage_NotFound";
+        private readonly string LOCALIZATION_ERROR_CONCURENT_EDIT = "ErrorMessage_ConcurrentEdit";
+
+        public LocalizationsController(ILocalizationService localizationService, ICountryService countryService, ILanguageService languageService, ILogger<LocalizationsController> logger)
         {
             _localizationService = localizationService;
             _countryService = countryService;
+            _languageService = languageService;
+            _logger = logger;
         }
-
-        // GET: Localizations
-        public IActionResult Index()
-        {
-            Guid countryId = _countryService.Get();
-
-            return View(_localizationService.GetAll(countryId));
-        }
-
-        // GET: Localizations/Details/5
         public IActionResult Details(Guid? id)
         {
             if (id == null)
@@ -40,40 +43,107 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var localization = _localizationService.Get((Guid)id);
+            try
+            {
+                return View(_localizationService.GetLocalizationAsViewModel((Guid)id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return NotFound(ex.Message);
+            }
 
-            return View(localization);
         }
 
+        public IActionResult Index()
+        {
+            try
+            {
+                Guid countryId = _countryService.Get();
+
+                return View(_localizationService.GetAll(countryId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return NotFound(ex.Message);
+            }
+
+        }
         // GET: Localizations/Create
         public IActionResult Create()
         {
-            return View();
+            try
+            {
+                Guid countryId = _countryService.Get();
+                ViewBag.Languages = _languageService.GetAllAsLookup(countryId);
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return NotFound(ex.Message);
+            }
         }
 
         // POST: Localizations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Localization localization)
+        public IActionResult Create([FromForm]LocalizationCreateModel entity)
         {
             if (ModelState.IsValid)
             {
-                _localizationService.Add(localization);
+                Guid countryId = _countryService.Get();
+                AuditedEntityMapper<LocalizationCreateModel>.FillCountryEntityField(entity, countryId);
+
+                try
+                {
+                    bool statusResult = _localizationService.Add(entity);
+                    if (statusResult)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    return StatusCode(500, ex.Message);
+                }
             }
-            return View(localization);
+            else
+            {
+                string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_USER_MUST_LOGIN, CultureId);
+                _logger.LogError(localizationKey);
+                return NotFound(localizationKey);
+            }
         }
 
-        // GET: Localizations/Edit/5
+
+        // GET: Localizations/Edit/Guid
         public IActionResult Edit(Guid? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return NotFound();
             }
 
-            var localization = _localizationService.Get((Guid)id);
+            try
+            {
+                Guid countryId = _countryService.Get();
+                ViewBag.Languages = _languageService.GetAllAsLookup(countryId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return NotFound(ex.Message);
+            }
+
+            var localization = _localizationService.GetLocalizationAsEditModel((Guid)id);
             if (localization == null)
             {
                 return NotFound();
@@ -81,39 +151,42 @@ namespace AdSite.Controllers
             return View(localization);
         }
 
-        // POST: Localizations/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Localizations/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, Localization localization)
+        public IActionResult Edit([FromForm]LocalizationEditModel entity)
         {
-            if (id != localization.ID)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _localizationService.Update(localization);
+                    _localizationService.Update(entity);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LocalizationExists(localization.ID))
+                    if (!LocalizationExists(entity.Id))
                     {
-                        return NotFound();
+                        string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
+                        _logger.LogError(localizationKey);
+                        return NotFound(localizationKey);
                     }
                     else
                     {
-                        throw;
+                        string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CONCURENT_EDIT, CultureId);
+                        _logger.LogError(localizationKey);
+                        return NotFound(localizationKey);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = entity.Id });
             }
-            return View(localization);
+            else
+            {
+                string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_USER_MUST_LOGIN, CultureId);
+                _logger.LogError(localizationKey);
+                return NotFound(localizationKey);
+            }
         }
+
 
         // GET: Localizations/Delete/5
         public IActionResult Delete(Guid? id)
@@ -123,7 +196,7 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            var localization = _localizationService.Get((Guid)id);
+            var localization = _localizationService.GetLocalizationAsViewModel((Guid)id);
             if (localization == null)
             {
                 return NotFound();
@@ -131,6 +204,7 @@ namespace AdSite.Controllers
 
             return View(localization);
         }
+
 
         // POST: Localizations/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -142,7 +216,16 @@ namespace AdSite.Controllers
                 return NotFound();
             }
 
-            _localizationService.Delete(id);
+            try
+            {
+                _localizationService.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

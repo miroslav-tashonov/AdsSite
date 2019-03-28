@@ -19,6 +19,9 @@ namespace AdSite.Services
         bool Delete(Guid id, Guid countryId);
         bool Add(LanguageCreateModel language);
         List<LanguageViewModel> GetAll(Guid country);
+
+        List<LookupViewModel> GetAllAsLookup(Guid country);
+
     }
 
 
@@ -115,6 +118,11 @@ namespace AdSite.Services
             return MapToViewModel(_repository.GetAll(countryId));
         }
 
+        public List<LookupViewModel> GetAllAsLookup(Guid countryId)
+        {
+            return MapToLookupViewModel(_repository.GetAll(countryId));
+        }
+
         private List<LanguageViewModel> MapToViewModel(List<Language> languages)
         {
             var listViewModel = new List<LanguageViewModel>();
@@ -128,6 +136,24 @@ namespace AdSite.Services
                     viewModel.CultureId = language.CultureId;
                     viewModel.LanguageName = language.LanguageName;
                     viewModel.LanguageShortName = language.LanguageShortName;
+
+                    listViewModel.Add(viewModel);
+                }
+            }
+            return listViewModel;
+        }
+
+        private List<LookupViewModel> MapToLookupViewModel(List<Language> languages)
+        {
+            var listViewModel = new List<LookupViewModel>();
+            if (languages != null && languages.Count > 0)
+            {
+                foreach (Language language in languages)
+                {
+                    var viewModel = new LookupViewModel();
+
+                    viewModel.Id = language.ID;
+                    viewModel.Name = language.LanguageName;
 
                     listViewModel.Add(viewModel);
                 }

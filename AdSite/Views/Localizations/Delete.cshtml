@@ -1,4 +1,4 @@
-﻿@model AdSite.Models.DatabaseModels.Localization
+﻿@model AdSite.Models.CRUDModels.LocalizationViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -17,10 +17,16 @@
         <dd>
             @Html.DisplayFor(model => model.LocalizationKey)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LocalizationValue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LocalizationValue)
+        </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="ID" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-action="Index">Back to List</a>
     </form>

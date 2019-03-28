@@ -41,7 +41,7 @@ namespace AdSite.Data.Repositories
 
         public Localization Get(Guid id)
         {
-            var localization = _context.Localizations.FirstOrDefaultAsync(m => m.ID == id);
+            var localization = _context.Localizations.Where(m => m.ID == id).Include(l => l.Language).FirstOrDefaultAsync();
             var result = localization.Result;
             if (result == null)
             {
@@ -53,7 +53,7 @@ namespace AdSite.Data.Repositories
 
         public List<Localization> GetAll(Guid countryId)
         {
-            var localizations = _context.Localizations.Where(c => c.Language.CountryId == countryId).ToListAsync();
+            var localizations = _context.Localizations.Where(c => c.Language.CountryId == countryId).Include(l => l.Language).ToListAsync();
             return localizations.Result;
         }
 

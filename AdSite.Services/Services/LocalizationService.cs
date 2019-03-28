@@ -1,5 +1,7 @@
 ﻿using AdSite.Data.Repositories;
+using AdSite.Models.CRUDModels;
 using AdSite.Models.DatabaseModels;
+using AdSite.Models.Mappers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,35 +13,59 @@ namespace AdSite.Services
 {
     public interface ILocalizationService
     {
-        Localization Get(Guid localizationId);
+        LocalizationEditModel GetLocalizationAsEditModel(Guid localizationId);
+        LocalizationViewModel GetLocalizationAsViewModel(Guid localizationId);
         string GetByKey(string localizationKey, int cultureId);
-        List<Localization> GetAll(Guid countryId);
+        List<LocalizationViewModel> GetAll(Guid countryId);
         bool Exists(Guid id);
         bool Delete(Guid id);
-        bool Add(Localization localization);
-        bool Update(Localization localization);
+        bool Add(LocalizationCreateModel localization);
+        bool Update(LocalizationEditModel localization);
     }
-
-
 
     public class LocalizationService : ILocalizationService
     {
         private readonly ILocalizationRepository _repository;
+        private readonly ILanguageRepository _languageRepository;
         private readonly ILogger<LocalizationService> _logger;
-        public LocalizationService(ILocalizationRepository repository, ILogger<LocalizationService> logger)
+        public LocalizationService(ILocalizationRepository repository, ILanguageRepository languageRepository, ILogger<LocalizationService> logger)
         {
             _repository = repository;
+            _languageRepository = languageRepository;
             _logger = logger;
         }
 
-        public bool Add(Localization localization)
+        public bool Add(LocalizationCreateModel entity)
         {
-            return _repository.Update(localization);            
+            var language = _languageRepository.Get(entity.LanguageId);
+            if (language == null)
+            {
+                throw new Exception("Language couldnt be found");
+            }
+
+            Localization localization = new Localization
+            {
+                LocalizationKey = entity.LocalizationKey,
+                LocalizationValue = entity.LocalizationValue,
+                Language = language,
+                CountryId = entity.CountryId
+            };
+
+
+            return _repository.Add(localization);
         }
 
         public bool Delete(Guid id)
         {
-            return _repository.Delete(id);
+            try
+            {
+                return _repository.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Exception while deleting categories : {0} - {1} ", ex.StackTrace, ex.Message);
+                throw ex;
+            }
         }
 
         public bool Exists(Guid id)
@@ -47,14 +73,34 @@ namespace AdSite.Services
             return _repository.Exists(id);
         }
 
-        public Localization Get(Guid localizationId = new Guid())
+        public LocalizationEditModel GetLocalizationAsEditModel(Guid localizationId)
         {
-            return _repository.Get(localizationId);
+            var entity = _repository.Get(localizationId);
+            if (entity == null)
+            {
+                throw new Exception("Localization entity cannot be found");
+            }
+
+            return LocalizationMapper.MapToLocalizationEditModel(entity);
         }
 
-        public List<Localization> GetAll(Guid countryId)
+        public LocalizationViewModel GetLocalizationAsViewModel(Guid localizationId)
         {
-            return _repository.GetAll(countryId);
+            var entity = _repository.Get(localizationId);
+            if(entity == null)
+            {
+                throw new Exception("Localization entity cannot be found");
+            }
+
+            return LocalizationMapper.MapToLookupViewModel(entity);
+        }
+
+        public List<LocalizationViewModel> GetAll(Guid countryId)
+        {
+            var entities = _repository.GetAll(countryId);
+
+
+            return LocalizationMapper.MapToLookupViewModel(entities);
         }
 
         public string GetByKey(string localizationKey, int cultureId)
@@ -70,9 +116,26 @@ namespace AdSite.Services
             }
         }
 
-        public bool Update(Localization localization)
+        public bool Update(LocalizationEditModel entity)
         {
+            var localization = _repository.Get(entity.Id);
+            if(localization == null)
+            {
+                throw new Exception("Entity with ID " + entity.Id + "cannot be found");
+            }
+
+            var language = _languageRepository.Get(entity.LanguageId);
+            if (language == null)
+            {
+                throw new Exception("Language couldnt be found");
+            }
+
+            localization.LocalizationKey = entity.LocalizationKey;
+            localization.LocalizationValue = entity.LocalizationValue;
+            localization.Language = language;
+
             return _repository.Update(localization);
         }
+
     }
 }

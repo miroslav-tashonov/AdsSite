@@ -42,6 +42,7 @@ namespace AdSite.Extensions
                 }
             }
         }
+        
 
         public static async Task CreateDefaultLanguage(IServiceProvider serviceProvider, IConfiguration configuration)
         {

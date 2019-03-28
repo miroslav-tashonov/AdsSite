@@ -1,4 +1,4 @@
-﻿@model AdSite.Models.DatabaseModels.Localization
+﻿@model AdSite.Models.CRUDModels.LocalizationEditModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -17,7 +17,20 @@
                 <input asp-for="LocalizationKey" class="form-control" />
                 <span asp-validation-for="LocalizationKey" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="LocalizationValue" class="control-label"></label>
+                <input asp-for="LocalizationValue" class="form-control" />
+                <span asp-validation-for="LocalizationValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageId" class="control-label"></label>
+                <select asp-for="LanguageId"
+                        class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.Languages,"Id", "Name"))"></select>
+
+            </div>
+
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

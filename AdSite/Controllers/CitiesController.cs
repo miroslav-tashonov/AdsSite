@@ -77,7 +77,7 @@ namespace AdSite.Controllers
         // POST: Cities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([FromBody]CityCreateModel entity)
+        public IActionResult Create([FromForm]CityCreateModel entity)
         {
             if (ModelState.IsValid)
             {

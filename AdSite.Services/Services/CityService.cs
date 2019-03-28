@@ -38,7 +38,8 @@ namespace AdSite.Services
         {
             City city = new City
             {
-                
+                Name = entity.Name,
+                Postcode = entity.Postcode,
                 CreatedBy = entity.CreatedBy,
                 CreatedAt = entity.CreatedAt,
                 ModifiedAt = entity.ModifiedAt,
@@ -82,7 +83,13 @@ namespace AdSite.Services
         public bool Update(CityEditModel entity)
         {
             City city = _repository.Get(entity.ID);
+            if(city == null)
+            {
+                throw new Exception("Entity with ID " + entity.ID + " couldnt be found.");
+            }
+
             city.Name = entity.Name;
+            city.Postcode = entity.Postcode;
 
             city.ModifiedAt = entity.ModifiedAt;
             city.ModifiedBy = entity.ModifiedBy;

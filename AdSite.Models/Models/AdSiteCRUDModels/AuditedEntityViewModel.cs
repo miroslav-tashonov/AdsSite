@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;
 
-namespace AdSite.Models.CRUDModels
+namespace AdSite.Models.CRUDModels.AuditedModels
 {
     public class AuditedEntityViewModel
     {
@@ -23,6 +23,16 @@ namespace AdSite.Models.CRUDModels
         public string ModifiedBy { get; set; }
         public string CreatedBy { get; set; }
         public Guid CountryId { get; set; }
+    }
+
+    public class AuditedCountryEntityModel
+    {
+        public Guid CountryId { get; set; }
+    }
+
+    public class AuditedCountryEntityViewModel
+    {
+        public LookupViewModel Country { get; set; }
     }
 
 }
