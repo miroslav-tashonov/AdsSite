@@ -67,7 +67,7 @@ namespace AdSite.Data.Repositories
                 x.LocalizationKey == key);
 
             string returnValue = localization.Count() > 0 ? 
-                localization.FirstOrDefault().LocalizationValue : String.Empty;
+                localization.FirstOrDefault().LocalizationValue : key;
 
             return returnValue;
         }

@@ -25,13 +25,18 @@ namespace AdSite.Models.CRUDModels
 
     public class CityCreateModel : AuditedEntityModel
     {
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Postcode { get; set; }
     }
     public class CityEditModel : AuditedEntityModel
     {
+        [Required]
         public Guid ID { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Postcode { get; set; }
     }
 

@@ -10,7 +10,6 @@
 @section Scripts {
     <script src="~/lib/jstree/jstree.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script src="~/lib/toastr.js/toastr.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 }
 
@@ -149,10 +148,10 @@
                             data: JSON.stringify(category),
                             contentType: 'application/json',
                             success: function () {
-                                toastr.success('Success!');
+                                
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-                                toastr.error('There was an error while processing your request!' + jqXHR.responseText);
+                                
                             },
                             headers: {
                                 RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -170,16 +169,14 @@
                             data: JSON.stringify(category),
                             contentType: 'application/json',
                             success: function () {
-                                toastr.success('Success!');
                                 setTimeout(function () {
                                     location.reload();
-                                }, 2000);
+                                }, 50);
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-                                toastr.error('There was an error while processing your request!' + jqXHR.responseText);
                                 setTimeout(function () {
                                     location.reload();
-                                }, 3000);
+                                }, 50);
                             },
                             headers: {
                                 RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -197,10 +194,8 @@
                         url: "/Categories/Delete/" + Id,
                         contentType: 'application/json',
                         success: function () {
-                            toastr.success('Success!');
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            toastr.error('There was an error while processing your request!' + jqXHR.responseText);
                         },
                         headers: {
                             RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()

@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using AdSite.Mappers;
 using AdSite.Models.CRUDModels;
+using AdSite.Extensions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AdSite.Controllers
 {
@@ -22,10 +24,15 @@ namespace AdSite.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly ILogger<CitiesController> _logger;
 
-        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly string LOCALIZATION_ERROR_USER_MUST_LOGIN = "ErrorMessage_MustLogin";
-        private readonly string LOCALIZATION_ERROR_NOT_FOUND = "ErrorMessage_NotFound";
-        private readonly string LOCALIZATION_ERROR_CONCURENT_EDIT = "ErrorMessage_ConcurrentEdit";
+        private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private readonly int SERVER_ERROR_CODE = 500;
+
+        private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
+        private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
+        private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
+        private string LOCALIZATION_ERROR_USER_MUST_LOGIN => _localizationService.GetByKey("ErrorMessage_MustLogin", CultureId);
+        private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
+        private string LOCALIZATION_ERROR_CONCURENT_EDIT => _localizationService.GetByKey("ErrorMessage_ConcurrentEdit", CultureId);
 
         public CitiesController(ICityService cityService, ICountryService countryService,ILocalizationService localizationService,ILogger<CitiesController> logger)
         {
@@ -38,7 +45,7 @@ namespace AdSite.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
             try
@@ -48,7 +55,7 @@ namespace AdSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return NotFound(ex.Message);
+                return NotFound(ex.Message).WithError(ex.Message);
             }
         }
 
@@ -63,7 +70,7 @@ namespace AdSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return NotFound(ex.Message);
+                return NotFound(ex.Message).WithError(ex.Message);
             }
 
         }
@@ -91,30 +98,26 @@ namespace AdSite.Controllers
                         bool statusResult = _cityService.Add(entity);
                         if (statusResult)
                         {
-                            return RedirectToAction(nameof(Index));
+                            return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                         }
                         else
                         {
-                            return NotFound();
+                            return RedirectToAction(nameof(Index)).WithError(LOCALIZATION_ERROR_DEFAULT);
                         }
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, ex.Message);
-                        return StatusCode(500, ex.Message);
+                        return StatusCode(SERVER_ERROR_CODE, ex.Message).WithError(ex.Message);
                     }
                 }
                 else
                 {
-                    string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_USER_MUST_LOGIN, CultureId);
-                    _logger.LogError(localizationKey);
-                    return NotFound(localizationKey);
+                    _logger.LogError(LOCALIZATION_ERROR_USER_MUST_LOGIN);
+                    return NotFound().WithError(LOCALIZATION_ERROR_USER_MUST_LOGIN);
                 }
             }
-            else
-            {
-                return StatusCode(500);
-            }
+            return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);
         }
 
 
@@ -123,14 +126,15 @@ namespace AdSite.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
             var city = _cityService.GetCityAsEditModel((Guid)id);
             if (city == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
+
             return View(city);
         }
 
@@ -154,27 +158,25 @@ namespace AdSite.Controllers
                     {
                         if (!CityExists(entity.ID))
                         {
-                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
-                            _logger.LogError(localizationKey);
-                            return NotFound(localizationKey);
+                            _logger.LogError(LOCALIZATION_ERROR_NOT_FOUND);
+                            return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
                         }
                         else
                         {
-                            string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_CONCURENT_EDIT, CultureId);
-                            _logger.LogError(localizationKey);
-                            return NotFound(localizationKey);
+                            _logger.LogError(LOCALIZATION_ERROR_CONCURENT_EDIT);
+                            return NotFound(LOCALIZATION_ERROR_CONCURENT_EDIT);
                         }
                     }
-                    return RedirectToAction(nameof(Details), new { id = entity.ID });
+
+                    return RedirectToAction(nameof(Details), new { id = entity.ID }).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                 }
                 else
                 {
-                    string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_USER_MUST_LOGIN, CultureId);
-                    _logger.LogError(localizationKey);
-                    return NotFound(localizationKey);
+                    _logger.LogError(LOCALIZATION_ERROR_USER_MUST_LOGIN);
+                    return NotFound(LOCALIZATION_ERROR_USER_MUST_LOGIN);
                 }
             }
-            return View(entity);
+            return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);
         }
 
 
@@ -183,13 +185,13 @@ namespace AdSite.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
             var city = _cityService.GetCityAsViewModel((Guid)id);
             if (city == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
             return View(city);
@@ -203,7 +205,7 @@ namespace AdSite.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
             try
@@ -213,10 +215,10 @@ namespace AdSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(500, ex.Message);
+                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
         }
 
         private bool CityExists(Guid id)

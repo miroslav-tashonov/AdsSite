@@ -9,6 +9,7 @@ using AdSite.Mappers;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
+using AdSite.Extensions;
 
 namespace AdSite.Controllers
 {
@@ -20,7 +21,12 @@ namespace AdSite.Controllers
         private readonly ILogger _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly string LOCALIZATION_ERROR_NOT_FOUND = "ErrorMessage_NotFound";
+        private readonly int SERVER_ERROR_CODE = 500;
+        private readonly string ERROR_URL = "/Error/404";
+
+        private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
+        private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
+        private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
 
         public LanguagesController(ILanguageService languageService, ILocalizationService localizationService, ICountryService countryService, ILogger<LanguagesController> logger)
         {
@@ -41,7 +47,7 @@ namespace AdSite.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }
         }
 
@@ -68,24 +74,21 @@ namespace AdSite.Controllers
                     bool statusResult = _languageService.Add(entity);
                     if (statusResult)
                     {
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                     }
                     else
                     {
-                        return NotFound();
+                        return RedirectToAction(nameof(Index)).WithError(LOCALIZATION_ERROR_DEFAULT);
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    return StatusCode(500, ex.Message);
+                    return StatusCode(SERVER_ERROR_CODE, ex.Message);
                 }
 
             }
-            else
-            {
-                return StatusCode(500);
-            }
+            return View(entity);
         }
 
         // POST: Languages/Delete/5
@@ -99,17 +102,16 @@ namespace AdSite.Controllers
 
                 bool deleteResult = _languageService.Delete(id, countryId);
                 if (deleteResult)
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                 else
                 {
-                    string localizationKey = _localizationService.GetByKey(LOCALIZATION_ERROR_NOT_FOUND, CultureId);
-                    _logger.LogError(localizationKey);
-                    return NotFound();
+                    _logger.LogError(LOCALIZATION_ERROR_NOT_FOUND);
+                    return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }
         }
 
@@ -133,10 +135,10 @@ namespace AdSite.Controllers
                     new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
                 );
 
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(returnUrl).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
             }
             else
-                return LocalRedirect("/Error/404");
+                return LocalRedirect(ERROR_URL).WithError(LOCALIZATION_ERROR_DEFAULT);
         }
     }
 }

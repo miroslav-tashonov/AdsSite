@@ -31,6 +31,10 @@ namespace AdSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+            services.AddSession(o =>
+            {
+                o.IdleTimeout = TimeSpan.FromSeconds(3600);
+            });
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -113,7 +117,7 @@ namespace AdSite
             {
                 app.UseHsts();
             }
-
+            app.UseSession();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseRequestLocalization(BuildLocalizationOptions(languageService, countryService));
