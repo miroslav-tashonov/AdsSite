@@ -75,7 +75,7 @@ namespace AdSite.Services
         public List<CityViewModel> GetCities(Guid countryId)
         {
             var entities = _repository.GetAll(countryId);
-            if (entities == null || entities.Count == 0 )
+            if (entities == null)
             {
                 throw new Exception("City entity cannot be found");
             }

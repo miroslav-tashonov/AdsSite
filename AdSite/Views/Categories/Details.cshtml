@@ -8,7 +8,6 @@
 }
 
 @section Scripts {
-    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jstree/jstree.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/lib/toastr.js/toastr.min.js"></script>
@@ -26,10 +25,11 @@
 </script>
 
 <div class="">
-    <button type="button" class="btn btn-success btn-md" onclick="demo_create('stem');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryStem"></localize></button>
-    <button type="button" class="btn btn-success btn-md" onclick="demo_create('leaf');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryLeaf"></localize></button>
-    <button type="button" class="btn btn-warning btn-md" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i><localize name="Categories_EditCategory"></localize></button>
-    <button type="button" class="btn btn-danger btn-md" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i><localize name="Categories_DeleteCategory"></localize></button>
+    <button type="button" class="btn btn-success btn-md" onclick="jstree_create('stem');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryStem"></localize></button>
+    <button type="button" class="btn btn-success btn-md" onclick="jstree_create('leaf');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryLeaf"></localize></button>
+    <button type="button" class="btn btn-warning btn-md" onclick="jstree_rename();"><i class="glyphicon glyphicon-pencil"></i><localize name="Categories_EditCategory"></localize></button>
+    <button type="button" class="btn btn-warning btn-md" onclick="jstree_deselectAll();"><i class="glyphicon glyphicon-pencil"></i><localize name="Categories_DeselectAll"></localize></button>
+    <button type="button" class="btn btn-danger btn-md" onclick="jstree_delete();"><i class="glyphicon glyphicon-remove"></i><localize name="Categories_DeleteCategory"></localize></button>
 </div>
 
 <br />
@@ -37,7 +37,7 @@
 
 
 <script>
-    function demo_create(type) {
+    function jstree_create(type) {
         var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
@@ -57,18 +57,26 @@
             }
         }
     };
-    function demo_rename() {
+    function jstree_rename() {
         var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) { return false; }
         sel = sel[0];
         ref.edit(sel);
     };
-    function demo_delete() {
+    function jstree_delete() {
         var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) { return false; }
         ref.delete_node(sel);
+    };
+
+
+    function jstree_deselectAll() {
+        var ref = $('#jstree').jstree(true),
+            sel = ref.get_selected();
+        if (!sel.length) { return false; }
+        ref.deselect_all();
     };
 
     function isGuid(stringToTest) {
@@ -81,7 +89,6 @@
 
     $(document).ready(function () {
         $(function () {
-            debugger;
             var successMessageHtml = $("#SuccessTemplate").html();
             var errorMessageHtml = $("#ErrorTemplate").html();
 
@@ -123,7 +130,6 @@
 
 
             $('#jstree').on('rename_node.jstree', function (e, data) {
-                debugger;
                 var id = data.node.id;
                 var parent;
                 var type;

@@ -137,7 +137,7 @@ namespace AdSite.Controllers
         // POST: Cities/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromBody]CityEditModel entity)
+        public IActionResult Edit([FromForm]CityEditModel entity)
         {
             if (ModelState.IsValid)
             {
