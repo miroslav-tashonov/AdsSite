@@ -10,18 +10,27 @@
 @section Scripts {
     <script src="~/lib/jstree/jstree.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 }
 
 <input type="hidden" id="RequestVerificationToken"
        name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
 
-<script type="text/html" id="ErrorTemplate">
-    <localize name="Toast_Error"></localize>
-</script>
-<script type="text/html" id="SuccessTemplate">
-    <localize name="Toast_Success"></localize>
-</script>
+<div style="display:none">
+    <div id="toastError">
+        <localize name="Toast_Error"></localize>
+    </div>
+    <div id="toastSuccess">
+        <localize name="Toast_Success"></localize>
+    </div>
+    <div id="categories_new">
+        <localize name="Categories_NewCategory"></localize>
+    </div>
+    <div id="deleteMessage">
+        <localize name="Localization_DeleteMessage"></localize>
+    </div>
+</div>
 
 <div class="">
     <button type="button" class="btn btn-success btn-md" onclick="jstree_create('stem');"><i class="glyphicon glyphicon-asterisk"></i><localize name="Categories_CreateCategoryStem"></localize></button>
@@ -36,11 +45,18 @@
 
 
 <script>
+    var removeElements = function (text, selector) {
+        var wrapped = $("<div>" + text + "</div>");
+        wrapped.find(selector).remove();
+        return wrapped.html();
+    }
+
     function jstree_create(type) {
+        var newCategory = $("#categories_new").text();
         var ref = $('#jstree').jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
-            sel = ref.create_node("#", { "text": "New Category", "type": "stem" });
+            sel = ref.create_node("#", { "text": newCategory, "type": "stem" });
             if (sel) {
                 ref.edit(sel);
             }
@@ -88,19 +104,15 @@
 
     $(document).ready(function () {
         $(function () {
-            var successMessageHtml = $("#SuccessTemplate").html();
-            var errorMessageHtml = $("#ErrorTemplate").html();
-
-
+            var deleteMessage = $("#deleteMessage").text();
             var arrayCollection = @Html.Raw(Json.Serialize(Model.ComponentCategories));
-
 
             $('#jstree').jstree({
                 "core": {
                     "multiple": false,
                     "animation": 0,
                     "check_callback": function (op) {
-                        if (op === "delete_node") { return confirm("Are you sure you want to delete?"); }
+                        if (op === "delete_node") { return confirm(deleteMessage); }
                         return true;
                     },
                     "themes": { "stripes": true },
@@ -148,10 +160,10 @@
                             data: JSON.stringify(category),
                             contentType: 'application/json',
                             success: function () {
-                                
+                                location.reload();
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-                                
+                                location.reload();
                             },
                             headers: {
                                 RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -169,14 +181,10 @@
                             data: JSON.stringify(category),
                             contentType: 'application/json',
                             success: function () {
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 50);
+                                location.reload();
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 50);
+                                location.reload();
                             },
                             headers: {
                                 RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()
@@ -194,8 +202,10 @@
                         url: "/Categories/Delete/" + Id,
                         contentType: 'application/json',
                         success: function () {
+                            location.reload();
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
+                            location.reload();
                         },
                         headers: {
                             RequestVerificationToken: $('input:hidden[name="RequestVerificationToken"]').val()

@@ -28,6 +28,14 @@ namespace AdSite.Services
         private readonly ILocalizationRepository _repository;
         private readonly ILanguageRepository _languageRepository;
         private readonly ILogger<LocalizationService> _logger;
+
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private string LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND => _repository.GetLocalizationValue("Localization_LocalizationClass_Not_Found", CultureId);
+        private string LOCALIZATION_LOCALIZATIONCLASS_KEY_NOT_FOUND => _repository.GetLocalizationValue("Localization_LocalizationClass_Key_Not_Found", CultureId);
+        private string LOCALIZATION_LOCALIZATIONCLASS_ENTITY_NOT_FOUND => _repository.GetLocalizationValue("Localization_LocalizationClass__Entity_Not_Found", CultureId);
+
+
+
         public LocalizationService(ILocalizationRepository repository, ILanguageRepository languageRepository, ILogger<LocalizationService> logger)
         {
             _repository = repository;
@@ -40,7 +48,7 @@ namespace AdSite.Services
             var language = _languageRepository.Get(entity.LanguageId);
             if (language == null)
             {
-                throw new Exception("Language couldnt be found");
+                throw new Exception(LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND);
             }
 
             Localization localization = new Localization
@@ -63,7 +71,7 @@ namespace AdSite.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Exception while deleting categories : {0} - {1} ", ex.StackTrace, ex.Message);
+                _logger.LogError("Exception while deleting localization : {0} - {1} ", ex.StackTrace, ex.Message);
                 throw ex;
             }
         }
@@ -78,7 +86,7 @@ namespace AdSite.Services
             var entity = _repository.Get(localizationId);
             if (entity == null)
             {
-                throw new Exception("Localization entity cannot be found");
+                throw new Exception(LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND);
             }
 
             return LocalizationMapper.MapToLocalizationEditModel(entity);
@@ -89,7 +97,7 @@ namespace AdSite.Services
             var entity = _repository.Get(localizationId);
             if(entity == null)
             {
-                throw new Exception("Localization entity cannot be found");
+                throw new Exception(LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND);
             }
 
             return LocalizationMapper.MapToLocalizationViewModel(entity);
@@ -111,7 +119,7 @@ namespace AdSite.Services
             }
             catch
             {
-                _logger.LogWarning("Cannot Find localization key with value : " + localizationKey);
+                _logger.LogWarning(LOCALIZATION_LOCALIZATIONCLASS_KEY_NOT_FOUND + localizationKey);
                 return localizationKey;
             }
         }
@@ -121,13 +129,13 @@ namespace AdSite.Services
             var localization = _repository.Get(entity.Id);
             if(localization == null)
             {
-                throw new Exception("Entity with ID " + entity.Id + "cannot be found");
+                throw new Exception(LOCALIZATION_LOCALIZATIONCLASS_ENTITY_NOT_FOUND  + entity.Id);
             }
 
             var language = _languageRepository.Get(entity.LanguageId);
             if (language == null)
             {
-                throw new Exception("Language couldnt be found");
+                throw new Exception(LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND);
             }
 
             localization.LocalizationKey = entity.LocalizationKey;

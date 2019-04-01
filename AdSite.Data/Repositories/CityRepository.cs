@@ -30,14 +30,22 @@ namespace AdSite.Data.Repositories
 
         public bool Delete(Guid id)
         {
-            var city = _context.Cities.FirstOrDefaultAsync(m => m.ID == id);
-            var result = city.Result;
-            if (result == null)
+            try
             {
-                throw new Exception("Cannot find the entity in delete section");
+                var city = _context.Cities.FirstOrDefaultAsync(m => m.ID == id);
+                var result = city.Result;
+                if (result == null)
+                {
+                    throw new Exception();
+                }
+
+                _context.Cities.Remove(result);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
 
-            _context.Cities.Remove(result);
             return SaveChangesResult();
         }
 
@@ -79,7 +87,7 @@ namespace AdSite.Data.Repositories
                 var result = _context.SaveChangesAsync();
                 if (result.Result == 0)
                 {
-                    throw new Exception("Cannot save changes to db");
+                    throw new Exception();
                 }
             }
             catch (Exception ex)

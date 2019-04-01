@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace AdSite.Data.Repositories
 {
+
     public interface ICategoryRepository : IRepository<Category>
     {
         List<Category> GetCategoryTree(Guid countryId);
@@ -18,7 +19,9 @@ namespace AdSite.Data.Repositories
 
     public class CategoryRepository : ICategoryRepository
     {
+
         private readonly ApplicationDbContext _context;
+
         public CategoryRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -32,14 +35,21 @@ namespace AdSite.Data.Repositories
 
         public bool Delete(Guid id)
         {
-            var category = _context.Categories.FirstOrDefaultAsync(m => m.ID == id);
-            var result = category.Result;
-            if (result == null)
+            try
             {
-                throw new Exception("Cannot find the entity in delete section");
-            }
+                var category = _context.Categories.FirstOrDefaultAsync(m => m.ID == id);
+                var result = category.Result;
+                if (result == null)
+                {
+                    throw new Exception();
+                }
 
-            _context.Categories.Remove(result);
+                _context.Categories.Remove(result);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
             //return SaveChangesResult();
             return true;
         }
@@ -82,7 +92,7 @@ namespace AdSite.Data.Repositories
                 var result = _context.SaveChangesAsync();
                 if (result.Result == 0)
                 {
-                    throw new Exception("Cannot save changes to db");
+                    throw new Exception();
                 }
             }
             catch (Exception ex)

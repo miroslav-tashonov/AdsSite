@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AdSite.Models.Mappers;
+using System.Threading;
 
 namespace AdSite.Services
 {
@@ -28,9 +29,16 @@ namespace AdSite.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICityRepository _repository;
+        private readonly ILocalizationRepository _localizationRepository;
         private readonly ILogger _logger;
-        public CityService(ICityRepository repository, ILogger<CityService> logger, UserManager<ApplicationUser> userManager)
+
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private string LOCALIZATION_CITY_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_City_Not_Found", CultureId);
+        private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
+
+        public CityService(ICityRepository repository, ILocalizationRepository localizationRepository, ILogger<CityService> logger, UserManager<ApplicationUser> userManager)
         {
+            _localizationRepository = localizationRepository;
             _repository = repository;
             _logger = logger;
             _userManager = userManager;
@@ -61,7 +69,7 @@ namespace AdSite.Services
             }
             catch(Exception ex)
             {
-                _logger.LogError("Exception while deleting categories : {0} - {1} ", ex.StackTrace, ex.Message);
+                _logger.LogError("Exception while deleting cities : {0} - {1} ", ex.StackTrace, ex.Message);
                 throw ex;
             }
         }
@@ -77,7 +85,7 @@ namespace AdSite.Services
             var entities = _repository.GetAll(countryId);
             if (entities == null)
             {
-                throw new Exception("City entity cannot be found");
+                throw new Exception(LOCALIZATION_CITY_NOT_FOUND);
             }
 
             return CityMapper.MapToCityViewModel(entities);
@@ -87,7 +95,7 @@ namespace AdSite.Services
             var entity = _repository.Get(id);
             if (entity == null)
             {
-                throw new Exception("City entity cannot be found");
+                throw new Exception(LOCALIZATION_CITY_NOT_FOUND);
             }
 
             return CityMapper.MapToCityEditModel(entity);
@@ -98,7 +106,7 @@ namespace AdSite.Services
             var entity = _repository.Get(id);
             if (entity == null)
             {
-                throw new Exception("City entity cannot be found");
+                throw new Exception(LOCALIZATION_CITY_NOT_FOUND);
             }
 
             return CityMapper.MapToCityViewModel(entity);
@@ -108,7 +116,7 @@ namespace AdSite.Services
             City city = _repository.Get(entity.ID);
             if(city == null)
             {
-                throw new Exception("Entity with ID " + entity.ID + " couldnt be found.");
+                throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
             }
 
             city.Name = entity.Name;

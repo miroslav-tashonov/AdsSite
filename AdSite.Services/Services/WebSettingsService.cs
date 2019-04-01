@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AdSite.Models.Mappers;
+using System.Threading;
 
 namespace AdSite.Services
 {
@@ -24,10 +25,16 @@ namespace AdSite.Services
     public class WebSettingsService : IWebSettingsService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILocalizationRepository _localizationRepository;
         private readonly IWebSettingsRepository _repository;
         private readonly ILogger _logger;
-        public WebSettingsService(IWebSettingsRepository repository, ILogger<WebSettingsService> logger, UserManager<ApplicationUser> userManager)
+
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private string LOCALIZATION_WEBSETTINGS_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_WebSettings_Not_Found", CultureId);
+
+        public WebSettingsService(IWebSettingsRepository repository, ILocalizationRepository localizationRepository, ILogger<WebSettingsService> logger, UserManager<ApplicationUser> userManager)
         {
+            _localizationRepository = localizationRepository;
             _repository = repository;
             _logger = logger;
             _userManager = userManager;
@@ -37,7 +44,7 @@ namespace AdSite.Services
         {
             var entity = _repository.GetWebSettingsForCountry(countryId);
             if (entity == null)
-                throw new Exception("Web settings entity couldnt be found");
+                throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
 
             return WebSettingsMapper.MapToWebSettingsViewModel(entity);
         }

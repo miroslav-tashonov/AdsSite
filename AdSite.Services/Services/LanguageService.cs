@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
+using System.Threading;
 
 namespace AdSite.Services
 {
@@ -30,12 +31,18 @@ namespace AdSite.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILanguageRepository _repository;
+        private readonly ILocalizationRepository _localizationRepository;
         private readonly ILogger _logger;
 
+        private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
+        private string LOCALIZATION_LANGUAGE_CULTURE_MISSING => _localizationRepository.GetLocalizationValue("Localization_Language_Culture_Missing", CultureId);
+        private string LOCALIZATION_LANGUAGE_LAST => _localizationRepository.GetLocalizationValue("Localization_Language_Last", CultureId);
+        private string LOCALIZATION_LANGUAGE_ALREADY_ADDED=> _localizationRepository.GetLocalizationValue("Localization_Language_Already_Added", CultureId);
         private readonly int NUMBER_OF_LANGUAGES_REQUIRED_PER_COUNTRY = 1;
 
-        public LanguageService(ILanguageRepository repository, ILogger<LanguageService> logger, UserManager<ApplicationUser> userManager)
+        public LanguageService(ILanguageRepository repository, ILocalizationRepository localizationRepository, ILogger<LanguageService> logger, UserManager<ApplicationUser> userManager)
         {
+            _localizationRepository = localizationRepository;
             _repository = repository;
             _logger = logger;
             _userManager = userManager;
@@ -71,12 +78,12 @@ namespace AdSite.Services
                 }
                 else
                 {
-                    throw new Exception("Language is already added.");
+                    throw new Exception(LOCALIZATION_LANGUAGE_ALREADY_ADDED);
                 }
             }
             else
             {
-                throw new Exception("Cannot find Culture with cultureId ");
+                throw new Exception(LOCALIZATION_LANGUAGE_CULTURE_MISSING);
             }
         }
 
@@ -90,8 +97,8 @@ namespace AdSite.Services
                 }
                 else
                 {
-                    _logger.LogError("Cannot delete the last language.");
-                    throw new Exception("Cannot delete the last language.");
+                    _logger.LogError(LOCALIZATION_LANGUAGE_LAST);
+                    throw new Exception(LOCALIZATION_LANGUAGE_LAST);
                 }
             }
             catch (Exception ex)

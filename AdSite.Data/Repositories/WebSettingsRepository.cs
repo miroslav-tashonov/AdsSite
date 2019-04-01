@@ -58,7 +58,7 @@ namespace AdSite.Data.Repositories
                 var result = _context.SaveChangesAsync();
                 if (result.Result == 0)
                 {
-                    throw new Exception("Cannot save changes to db");
+                    throw new Exception();
                 }
             }
             catch (Exception ex)

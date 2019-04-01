@@ -72,11 +72,11 @@ namespace AdSite.Controllers
                         bool statusResult = _categoryService.Add(entity);
                         if (statusResult)
                         {
-                            return Ok();
+                            return Ok().WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                         }
                         else
                         {
-                            return NotFound();
+                            return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
                         }
                     }
                     catch (Exception ex)
@@ -124,7 +124,7 @@ namespace AdSite.Controllers
                             return NotFound().WithError(LOCALIZATION_ERROR_CONCURENT_EDIT);
                         }
                     }
-                    return RedirectToAction(nameof(Details)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
+                    return Ok().WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                 }
                 else
                 {
@@ -156,7 +156,7 @@ namespace AdSite.Controllers
                 return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }
 
-            return RedirectToAction(nameof(Details));
+            return Ok().WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
         }
 
         private bool CategoryExists(Guid id)
