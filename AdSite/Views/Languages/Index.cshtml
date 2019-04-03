@@ -1,23 +1,71 @@
 ﻿@model IEnumerable<AdSite.Models.CRUDModels.LanguageViewModel>
 
 
+@{
+    string languageName = @Html.DisplayNameFor(model => model.LanguageName);
+    string selectedLanguageName = ViewData["CurrentColumn"].ToString() == languageName ?
+        "<option selected>" + languageName + "</option>" :
+        "<option>" + languageName + "</option>";
+
+    string languageShortName = @Html.DisplayNameFor(model => model.LanguageShortName);
+    string selectedLanguageShortName = ViewData["CurrentColumn"].ToString() == languageShortName ?
+        "<option selected>" + languageShortName + "</option>" :
+        "<option>" + languageShortName + "</option>";
+}
+
+<!--Localization javascript messages-->
+<div style="display:none">
+    <div id="deleteMessage">
+        <localize name="General_DeleteMessage"></localize>
+    </div>
+    <div id="languageName">
+        <localize name="Language_Fields_LanguageName"></localize>
+    </div>
+    <div id="languageShortName">
+        <localize name="Language_Fields_LanguageShortName"></localize>
+    </div>
+</div>
+<!---->
+
 <p>
-    <a asp-action="Create"><localize name="Language_CreateNew"></localize></a>
+    <a asp-action="Create" class="btn btn-primary"><localize name="Language_CreateNew"></localize></a>
 </p>
-<br/>
 <br />
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color row">
+        <div class="col-sm-5">
+            <div class="col-sm-4">
+                <localize name="General_FindBy"></localize>
+            </div>
+            <div class="col-sm-8">
+                <select name="ColumnName" class="form-control">
+                    @Html.Raw(selectedLanguageName)
+                    @Html.Raw(selectedLanguageShortName)
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="col-sm-10" style="padding-left:0px; padding-right:0px">
+                <input type="text" name="SearchString" value="@ViewData["currentFilter"]" class="form-control" />
+            </div>
+            <div class="col-sm-2" style="padding-left:0px; padding-right:0px">
+                <button type="submit" class="form-control"> <i class="fa fa-search"></i> </button>
+            </div>
+        </div>
+    </div>
+</form>
+
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CultureId)
+                <localize name="Language_Fields_LanguageName"></localize>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LanguageName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LanguageShortName)
+                <localize name="Language_Fields_LanguageShortName"></localize>
             </th>
             <th></th>
         </tr>
@@ -27,17 +75,14 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CultureId)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.LanguageName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LanguageShortName)
                 </td>
                 <td>
-                    <form asp-action="Delete" asp-route-id="@item.ID"  method="post" onsubmit="return confirm('Are you sure you want to delete?');">
-                        <button type="submit" class="btn-link" >Delete</button>
+                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" onsubmit="return confirm($('#deleteMessage').text());">
+                        <button type="submit" class="btn-link"><localize name="General_Delete"></localize></button>
                     </form>
                 </td>
             </tr>

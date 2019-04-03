@@ -37,13 +37,18 @@ namespace AdSite.Controllers
         }
 
         // GET: Languages
-        public IActionResult Index()
+        public IActionResult Index(string columnName, string searchString)
         {
+            searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
+            columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentColumn"] = columnName;
+
             try
             {
                 Guid countryId = _countryService.Get();
 
-                return View(_languageService.GetAll(countryId));
+                return View(_languageService.GetAll(columnName, searchString, countryId));
             }
             catch(Exception ex)
             {

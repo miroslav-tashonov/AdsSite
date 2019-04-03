@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Threading;
+using AdSite.Models.Mappers;
 
 namespace AdSite.Services
 {
@@ -19,7 +20,9 @@ namespace AdSite.Services
 
         bool Delete(Guid id, Guid countryId);
         bool Add(LanguageCreateModel language);
+
         List<LanguageViewModel> GetAll(Guid country);
+        List<LanguageViewModel> GetAll(string columnName, string searchString, Guid country);
 
         List<LookupViewModel> GetAllAsLookup(Guid country);
 
@@ -38,6 +41,8 @@ namespace AdSite.Services
         private string LOCALIZATION_LANGUAGE_CULTURE_MISSING => _localizationRepository.GetLocalizationValue("Localization_Language_Culture_Missing", CultureId);
         private string LOCALIZATION_LANGUAGE_LAST => _localizationRepository.GetLocalizationValue("Localization_Language_Last", CultureId);
         private string LOCALIZATION_LANGUAGE_ALREADY_ADDED=> _localizationRepository.GetLocalizationValue("Localization_Language_Already_Added", CultureId);
+        private string LOCALIZATION_LANGUAGE_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_Language_Not_Found", CultureId);
+
         private readonly int NUMBER_OF_LANGUAGES_REQUIRED_PER_COUNTRY = 1;
 
         public LanguageService(ILanguageRepository repository, ILocalizationRepository localizationRepository, ILogger<LanguageService> logger, UserManager<ApplicationUser> userManager)
@@ -120,52 +125,40 @@ namespace AdSite.Services
             return _repository.Exists(lcid, countryId);
         }
 
+        public List<LanguageViewModel> GetAll(string columnName, string searchString, Guid countryId)
+        {
+            List<Language> entities;
+
+            switch (columnName.ToLower())
+            {
+                case "languagename":
+                    entities = _repository.GetByLanguageName(searchString, countryId);
+                    break;
+                case "languageshortname":
+                    entities = _repository.GetByLanguageShortName(searchString, countryId);
+                    break;
+                default:
+                    entities = _repository.GetAll(countryId);
+                    break;
+            }
+
+            if (entities == null)
+            {
+                throw new Exception(LOCALIZATION_LANGUAGE_NOT_FOUND);
+            }
+
+            return LanguagesMapper.MapToViewModel(entities);
+        }
+
         public List<LanguageViewModel> GetAll(Guid countryId)
         {
-            return MapToViewModel(_repository.GetAll(countryId));
+            return LanguagesMapper.MapToViewModel(_repository.GetAll(countryId));
         }
+
 
         public List<LookupViewModel> GetAllAsLookup(Guid countryId)
         {
-            return MapToLookupViewModel(_repository.GetAll(countryId));
-        }
-
-        private List<LanguageViewModel> MapToViewModel(List<Language> languages)
-        {
-            var listViewModel = new List<LanguageViewModel>();
-            if (languages != null && languages.Count > 0)
-            {
-                foreach (Language language in languages)
-                {
-                    var viewModel = new LanguageViewModel();
-
-                    viewModel.ID = language.ID;
-                    viewModel.CultureId = language.CultureId;
-                    viewModel.LanguageName = language.LanguageName;
-                    viewModel.LanguageShortName = language.LanguageShortName;
-
-                    listViewModel.Add(viewModel);
-                }
-            }
-            return listViewModel;
-        }
-
-        private List<LookupViewModel> MapToLookupViewModel(List<Language> languages)
-        {
-            var listViewModel = new List<LookupViewModel>();
-            if (languages != null && languages.Count > 0)
-            {
-                foreach (Language language in languages)
-                {
-                    var viewModel = new LookupViewModel();
-
-                    viewModel.Id = language.ID;
-                    viewModel.Name = language.LanguageName;
-
-                    listViewModel.Add(viewModel);
-                }
-            }
-            return listViewModel;
+            return LanguagesMapper.MapToLookupViewModel(_repository.GetAll(countryId));
         }
     }
 }

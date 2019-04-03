@@ -16,7 +16,7 @@ namespace AdSite.Services
         LocalizationEditModel GetLocalizationAsEditModel(Guid localizationId);
         LocalizationViewModel GetLocalizationAsViewModel(Guid localizationId);
         string GetByKey(string localizationKey, int cultureId);
-        List<LocalizationViewModel> GetAll(Guid countryId);
+        List<LocalizationViewModel> GetAll(string columnName, string searchString, Guid countryId);
         bool Exists(Guid id);
         bool Delete(Guid id);
         bool Add(LocalizationCreateModel localization);
@@ -103,10 +103,27 @@ namespace AdSite.Services
             return LocalizationMapper.MapToLocalizationViewModel(entity);
         }
 
-        public List<LocalizationViewModel> GetAll(Guid countryId)
+        public List<LocalizationViewModel> GetAll(string columnName, string searchString, Guid countryId)
         {
-            var entities = _repository.GetAll(countryId);
+            List<Localization> entities;
 
+            switch (columnName.ToLower())
+            {
+                case "localizationkey":
+                    entities = _repository.GetByLocalizationKey(searchString, countryId);
+                    break;
+                case "localizationvalue":
+                    entities = _repository.GetByLocalizationValue(searchString, countryId);
+                    break;
+                default:
+                    entities = _repository.GetAll(countryId);
+                    break;
+            }
+
+            if (entities == null)
+            {
+                throw new Exception(LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND);
+            }
 
             return LocalizationMapper.MapToLocalizationViewModel(entities);
         }

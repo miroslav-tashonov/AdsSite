@@ -8,6 +8,8 @@ namespace AdSite.Models.ManageViewModels
 {
     public class ChangePasswordViewModel
     {
+        public string id { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Current password")]

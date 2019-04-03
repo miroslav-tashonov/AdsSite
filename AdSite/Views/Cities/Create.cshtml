@@ -1,36 +1,28 @@
 ﻿@model AdSite.Models.CRUDModels.CityCreateModel
 
-@{
-    ViewData["Title"] = "Create";
-}
+<h2><localize name="City_CreateNew"></localize></h2>
 
-<h2>Create</h2>
+<br />
 
-<h4>City</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label class="control-label"><localize name="City_Field_Name"></localize></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Postcode" class="control-label"></label>
+                <label class="control-label"><localize name="City_Field_Postcode"></localize></label>
                 <input asp-for="Postcode" class="form-control" />
                 <span asp-validation-for="Postcode" class="text-danger"></span>
             </div>
-            </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <button type="submit" class="btn btn-default"><localize name="General_Create"></localize></button>
+                <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

@@ -11,6 +11,10 @@ namespace AdSite.Data.Repositories
     public interface ILocalizationRepository : IRepository<Localization>
     {
         string GetLocalizationValue(string key, int lcid);
+
+        List<Localization> GetByLocalizationKey(string searchString, Guid countryId);
+
+        List<Localization> GetByLocalizationValue(string searchString, Guid countryId);
     }
 
     public class LocalizationRepository : ILocalizationRepository
@@ -54,6 +58,24 @@ namespace AdSite.Data.Repositories
         public List<Localization> GetAll(Guid countryId)
         {
             var localizations = _context.Localizations.Where(c => c.Language.CountryId == countryId).Include(l => l.Language).ToListAsync();
+            return localizations.Result;
+        }
+
+        public List<Localization> GetByLocalizationKey(string searchString, Guid countryId)
+        {
+            var localizations = _context.Localizations.Where(c => c.Language.CountryId == countryId && c.LocalizationKey.Contains(searchString))
+                                                      .Include(l => l.Language)
+                                                      .ToListAsync();
+
+            return localizations.Result;
+        }
+
+        public List<Localization> GetByLocalizationValue(string searchString, Guid countryId)
+        {
+            var localizations = _context.Localizations.Where(c => c.Language.CountryId == countryId && c.LocalizationValue.Contains(searchString))
+                                                      .Include(l => l.Language)
+                                                      .ToListAsync();
+
             return localizations.Result;
         }
 

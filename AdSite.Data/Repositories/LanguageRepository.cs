@@ -13,6 +13,9 @@ namespace AdSite.Data.Repositories
     {
         bool Exists(int lcid, Guid countryId);
         int Count(Guid countryId);
+
+        List<Language> GetByLanguageName(string languageName, Guid countryId);
+        List<Language> GetByLanguageShortName(string languageName, Guid countryId);
     }
 
     public class LanguageRepository : ILanguageRepository
@@ -84,6 +87,23 @@ namespace AdSite.Data.Repositories
             return languages.Result;
         }
 
+        public List<Language> GetByLanguageName(string languageName, Guid countryId)
+        {
+            var languages = _context.Languages.Where(language => language.CountryId == countryId && 
+                                                    language.LanguageName.Contains(languageName))
+                                              .ToListAsync();
+
+            return languages.Result;
+        }
+
+        public List<Language> GetByLanguageShortName(string languageShortName, Guid countryId)
+        {
+            var languages = _context.Languages.Where(language => language.CountryId == countryId &&
+                                                    language.LanguageShortName.Contains(languageShortName))
+                                              .ToListAsync();
+
+            return languages.Result;
+        }
 
         public bool Update(Language entity)
         {

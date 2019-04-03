@@ -66,7 +66,7 @@ namespace AdSite.TagHelpers
                             else
                                 output.Content.AppendHtml($"<option>{item.Text}</option>");
                         }
-                        catch(Exception ex)
+                        catch
                         {
                             
                         }

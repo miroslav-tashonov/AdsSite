@@ -18,14 +18,18 @@
     
 }
 
-<h2><localize name="Language_Create"></localize></h2>
+<h2><localize name="Language_CreateNew"></localize></h2>
 
 <h4></h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 center-block">
         <form id="selectLanguage" asp-controller="Languages"
               asp-action="Create" method="post" class="form-horizontal" role="form">
+
+            <label class="control-label"><localize name="Languages_Entity"></localize></label>
+            <br />
+            <br />
 
             <select asp-for="CultureId" class="createSelectpicker form-group" name="CultureId">
                 <options asp-items="createCultureItems" selected-item-enabled="false" />
@@ -34,8 +38,8 @@
             <br />
             <br />
             <div class="form-group">
-                <input type="submit" value="Add Language" class="btn btn-default" />
-                <button asp-action="Index" class="btn btn-default" onclick="window.history.back();">Back to List</button>
+                <button type="submit" class="btn btn-default"><localize name="Language_AddLanguage"></localize> </button>
+                <button asp-action="Index" class="btn btn-default" onclick="window.history.back();"><localize name="General_BackToList"></localize></button>
             </div>
         </form>
     </div>

@@ -1,60 +1,53 @@
 ﻿@model AdSite.Models.DatabaseModels.WebSettings
 
-@{
-    ViewData["Title"] = "Create";
-}
+<h2><localize name="WebSettings_Entity"></localize></h2>
 
-<h2>Create</h2>
-
-<h4>WebSettings</h4>
 <hr />
 <div class="row">
+
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_Phone"></localize></label>
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_Email"></localize></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FacebookSocialLink" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_FacebookSocialLink"></localize></label>
                 <input asp-for="FacebookSocialLink" class="form-control" />
                 <span asp-validation-for="FacebookSocialLink" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="InstagramSocialLink" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_InstagramSocialLink"></localize></label>
                 <input asp-for="InstagramSocialLink" class="form-control" />
                 <span asp-validation-for="InstagramSocialLink" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TwitterSocialLink" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_TwitterSocialLink"></localize></label>
                 <input asp-for="TwitterSocialLink" class="form-control" />
                 <span asp-validation-for="TwitterSocialLink" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GooglePlusSocialLink" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_GooglePlusSocialLink"></localize></label>
                 <input asp-for="GooglePlusSocialLink" class="form-control" />
                 <span asp-validation-for="GooglePlusSocialLink" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VKSocialLink" class="control-label"></label>
+                <label class="control-label"><localize name="WebSettings_Fields_VKSocialLink"></localize></label>
                 <input asp-for="VKSocialLink" class="form-control" />
                 <span asp-validation-for="VKSocialLink" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <button type="submit" class="btn btn-default"><localize name="General_Create"></localize></button>
+                <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

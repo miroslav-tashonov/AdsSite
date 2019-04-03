@@ -48,16 +48,19 @@ namespace AdSite.Controllers
         public string StatusMessage { get; set; }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string id)
         {
-            var user = await _userManager.GetUserAsync(User);
+
+            var user = await FindUser(id);
+
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user.");
             }
 
             var model = new IndexViewModel
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
@@ -77,10 +80,10 @@ namespace AdSite.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await FindUser(model.Id);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{model.Id}'.");
             }
 
             var email = user.Email;
@@ -116,10 +119,10 @@ namespace AdSite.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await FindUser(model.Id);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{model.Id}'.");
             }
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -132,12 +135,12 @@ namespace AdSite.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangePassword()
+        public async Task<IActionResult> ChangePassword(string id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await FindUser(id);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{id}'.");
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -146,7 +149,7 @@ namespace AdSite.Controllers
                 return RedirectToAction(nameof(SetPassword));
             }
 
-            var model = new ChangePasswordViewModel { StatusMessage = StatusMessage };
+            var model = new ChangePasswordViewModel { StatusMessage = StatusMessage, id = user.Id};
             return View(model);
         }
 
@@ -159,10 +162,10 @@ namespace AdSite.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await FindUser(model.id);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{model.id}'.");
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
@@ -180,12 +183,12 @@ namespace AdSite.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SetPassword()
+        public async Task<IActionResult> SetPassword(string id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await FindUser(id);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{id}'.");
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -195,7 +198,7 @@ namespace AdSite.Controllers
                 return RedirectToAction(nameof(ChangePassword));
             }
 
-            var model = new SetPasswordViewModel { StatusMessage = StatusMessage };
+            var model = new SetPasswordViewModel { StatusMessage = StatusMessage, id = user.Id };
             return View(model);
         }
 
@@ -208,10 +211,10 @@ namespace AdSite.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await FindUser(model.id);
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{model.id}'.");
             }
 
             var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
@@ -493,6 +496,21 @@ namespace AdSite.Controllers
         }
 
         #region Helpers
+
+        private async Task<ApplicationUser> FindUser(string id)
+        {
+            ApplicationUser user;
+            if (string.IsNullOrEmpty(id))
+            {
+                user = await _userManager.GetUserAsync(User);
+            }
+            else
+            {
+                user = _userManager.Users.Where(u => u.Id == id)?.First();
+            }
+
+            return user;
+        }
 
         private void AddErrors(IdentityResult result)
         {

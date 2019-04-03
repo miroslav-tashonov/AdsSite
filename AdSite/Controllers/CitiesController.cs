@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
-using AdSite.Services;
-using Microsoft.Extensions.Logging;
-using System.Threading;
+﻿using AdSite.Extensions;
 using AdSite.Mappers;
 using AdSite.Models.CRUDModels;
-using AdSite.Extensions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using AdSite.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
 
 namespace AdSite.Controllers
 {
@@ -34,7 +27,7 @@ namespace AdSite.Controllers
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
         private string LOCALIZATION_ERROR_CONCURENT_EDIT => _localizationService.GetByKey("ErrorMessage_ConcurrentEdit", CultureId);
 
-        public CitiesController(ICityService cityService, ICountryService countryService,ILocalizationService localizationService,ILogger<CitiesController> logger)
+        public CitiesController(ICityService cityService, ICountryService countryService, ILocalizationService localizationService, ILogger<CitiesController> logger)
         {
             _cityService = cityService;
             _countryService = countryService;
@@ -59,13 +52,18 @@ namespace AdSite.Controllers
             }
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string columnName, string searchString)
         {
+            searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
+            columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentColumn"] = columnName;
+
             try
             {
                 Guid countryId = _countryService.Get();
 
-                return View(_cityService.GetCities(countryId));
+                return View(_cityService.GetCities(columnName, searchString, countryId));
             }
             catch (Exception ex)
             {
@@ -164,7 +162,7 @@ namespace AdSite.Controllers
                         else
                         {
                             _logger.LogError(LOCALIZATION_ERROR_CONCURENT_EDIT);
-                            return NotFound(LOCALIZATION_ERROR_CONCURENT_EDIT);
+                            return NotFound().WithError(LOCALIZATION_ERROR_CONCURENT_EDIT);
                         }
                     }
 
@@ -173,7 +171,7 @@ namespace AdSite.Controllers
                 else
                 {
                     _logger.LogError(LOCALIZATION_ERROR_USER_MUST_LOGIN);
-                    return NotFound(LOCALIZATION_ERROR_USER_MUST_LOGIN);
+                    return NotFound().WithError(LOCALIZATION_ERROR_USER_MUST_LOGIN);
                 }
             }
             return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);

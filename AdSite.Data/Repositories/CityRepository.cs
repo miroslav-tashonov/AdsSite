@@ -1,17 +1,16 @@
 ﻿using AdSite.Models.DatabaseModels;
-using AdSite.Models.CRUDModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdSite.Data.Repositories
 {
     public interface ICityRepository : IRepository<City>
     {
+        List<City> GetByCityName(string searchString, Guid countryId);
 
+        List<City> GetByCityPostcode(string searchString, Guid countryId);
     }
 
     public class CityRepository : ICityRepository
@@ -41,7 +40,7 @@ namespace AdSite.Data.Repositories
 
                 _context.Cities.Remove(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -73,6 +72,20 @@ namespace AdSite.Data.Repositories
             return cities.Result;
         }
 
+        public List<City> GetByCityName(string searchString, Guid countryId)
+        {
+            var cities = _context.Cities.Where(city => city.CountryId == countryId && city.Name.Contains(searchString)).ToListAsync();
+
+            return cities.Result;
+        }
+
+        public List<City> GetByCityPostcode(string searchString, Guid countryId)
+        {
+            var cities = _context.Cities.Where(city => city.CountryId == countryId && city.Postcode.Contains(searchString)).ToListAsync();
+
+            return cities.Result;
+        }
+
 
         public bool Update(City entity)
         {
@@ -96,6 +109,6 @@ namespace AdSite.Data.Repositories
             }
             return true;
         }
-        
+
     }
 }

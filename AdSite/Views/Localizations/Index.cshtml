@@ -1,41 +1,85 @@
 ﻿@model IEnumerable<AdSite.Models.CRUDModels.LocalizationViewModel>
 
+@{
+    string localizationKey = @Html.DisplayNameFor(model => model.LocalizationKey);
+    string selectedLocalizationKey = ViewData["CurrentColumn"].ToString() == localizationKey ?
+        "<option selected>" + localizationKey + "</option>" :
+        "<option>" + localizationKey + "</option>";
+
+    string localizationValue = @Html.DisplayNameFor(model => model.LocalizationValue);
+    string selectedLocalizationValue = ViewData["CurrentColumn"].ToString() == localizationValue ?
+        "<option selected>" + localizationValue + "</option>" :
+        "<option>" + localizationValue + "</option>";
+}
+
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create"><localize name="Localization_CreateNew"></localize></a>
 </p>
+
+<br />
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color row">
+        <div class="col-sm-3">
+            <div class="col-sm-4">
+                <localize name="General_FindBy"></localize>
+            </div>
+            <div class="col-sm-8">
+                <select name="ColumnName" class="form-control">
+                    @Html.Raw(selectedLocalizationKey)
+                    @Html.Raw(selectedLocalizationValue)
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="col-sm-10" style="padding-left:0px; padding-right:0px">
+                <input type="text" name="SearchString" value="@ViewData["currentFilter"]" class="form-control" />
+            </div>
+            <div class="col-sm-2" style="padding-left:0px; padding-right:0px">
+                <button type="submit" class="form-control"> <i class="fa fa-search"></i> </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<br />
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LocalizationKey)
+                <localize name="Localization_Fields_LocalizationKey"></localize>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocalizationValue)
+                <localize name="Localization_Fields_LocalizationValue"></localize>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Language.Name)
+                <localize name="Language_Fields_Name"></localize>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocalizationKey)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocalizationValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocalizationKey)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocalizationValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Language.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-link"><localize name="General_Edit"></localize></a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-link"><localize name="General_Details"></localize></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-link"><localize name="General_Delete"></localize></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -27,6 +27,8 @@ namespace AdSite.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
+        private readonly int SERVER_ERROR_CODE = 500;
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -43,6 +45,61 @@ namespace AdSite.Controllers
         public string ErrorMessage { get; set; }
 
         [HttpGet]
+        public IActionResult ManageUsers()
+        {
+            var allUsers = _userManager.Users?.AsEnumerable();
+            return View(allUsers);
+        }
+
+
+        // GET: Account/Delete
+        public IActionResult Delete(string id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var account = _userManager.Users.Where(u => u.Id == id);
+            if (account == null || !account.Any() )
+            {
+                return NotFound();
+            }
+
+            return View(account.FirstOrDefault());
+        }
+
+
+        // POST: Cities/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(string id)
+        {
+            var account = _userManager.Users.Where(u => u.Id == id);
+            if (account == null || !account.Any())
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _userManager.DeleteAsync(account.FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
+            }
+
+            return RedirectToAction(nameof(ManageUsers));
+        }
+
+
+
+
+
+
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
@@ -52,6 +109,8 @@ namespace AdSite.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
+
+        
 
         [HttpPost]
         [AllowAnonymous]

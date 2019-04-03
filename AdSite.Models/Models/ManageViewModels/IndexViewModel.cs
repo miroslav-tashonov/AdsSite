@@ -8,6 +8,8 @@ namespace AdSite.Models.ManageViewModels
 {
     public class IndexViewModel
     {
+        public string Id { get; set; }
+
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }

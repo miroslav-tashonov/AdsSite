@@ -1,31 +1,33 @@
 ﻿@model AdSite.Models.CRUDModels.CityEditModel
 
-<h2>Edit City</h2>
-<br/>
-<hr />
+<h2><localize name="City_Edit"></localize></h2>
+
+<br />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label class="control-label"><localize name="City_Field_Name"></localize> </label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Postcode" class="control-label"></label>
+                <label class="control-label"><localize name="City_Field_Postcode"></localize></label>
                 <input asp-for="Postcode" class="form-control" />
                 <span asp-validation-for="Postcode" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
+                <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    
 </div>
 

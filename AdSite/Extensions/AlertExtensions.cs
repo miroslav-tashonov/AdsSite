@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AdSite.Extensions
@@ -46,8 +44,6 @@ namespace AdSite.Extensions
             {
                 return null;
             }
-
-            return (List<Alert>)tempData[Alerts];
         }
 
         public static void SetAlerts(this ITempDataDictionary tempData, List<Alert> alerts)
@@ -60,18 +56,18 @@ namespace AdSite.Extensions
         {
             return new AlertDecoratorResult(result, "success", message);
         }
-        
+
         public static ActionResult WithInfo(this ActionResult result, string message)
         {
             return new AlertDecoratorResult(result, "info", message);
         }
-        
+
 
         public static ActionResult WithWarning(this ActionResult result, string message)
         {
             return new AlertDecoratorResult(result, "warning", message);
         }
-        
+
         public static ActionResult WithError(this ActionResult result, string message)
         {
             return new AlertDecoratorResult(result, "error", message);
@@ -87,7 +83,7 @@ namespace AdSite.Extensions
         public IActionResult InnerResult { get; set; }
         public string Command { get; set; }
         public string Message { get; set; }
-        
+
 
         public AlertDecoratorResult(ActionResult innerResult, string command, string message)
         {
@@ -108,7 +104,7 @@ namespace AdSite.Extensions
         {
             ITempDataDictionaryFactory factory = context.HttpContext.RequestServices.GetService(typeof(ITempDataDictionaryFactory)) as ITempDataDictionaryFactory;
             ITempDataDictionary tempData = factory.GetTempData(context.HttpContext);
-            
+
             var alerts = tempData.GetAlerts() ?? new List<Alert>();
 
             alerts.Add(new Alert(Command, Message));
