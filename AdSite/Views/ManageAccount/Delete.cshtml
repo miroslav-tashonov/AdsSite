@@ -1,4 +1,4 @@
-﻿@model AdSite.Models.CRUDModels.LocalizationViewModel
+﻿@model ApplicationUser
 @using AdSite.Views.Shared;
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Localizations);
@@ -8,26 +8,23 @@
 
 <h3><localize name="General_DeleteMessage"></localize></h3>
 <div>
-    <h4><localize name="Localization_Entity"></localize></h4>
+    <h4><localize name="Account_Entity"></localize></h4>
     <hr />
-
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            <localize name="Localization_Fields_LocalizationKey"></localize>
+            @Html.DisplayNameFor(model => model.UserName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.LocalizationKey)
+            @Html.DisplayFor(model => model.UserName)
         </dd>
         <dt>
-            <localize name="Localization_Fields_LocalizationValue"></localize>
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.LocalizationValue)
+            @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
-
-    <br />
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />

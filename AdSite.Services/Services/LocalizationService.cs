@@ -102,7 +102,7 @@ namespace AdSite.Services
 
             return LocalizationMapper.MapToLocalizationViewModel(entity);
         }
-
+        
         public List<LocalizationViewModel> GetAll(string columnName, string searchString, Guid countryId)
         {
             List<Localization> entities;

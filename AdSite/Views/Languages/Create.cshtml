@@ -4,19 +4,17 @@
 @using Microsoft.Extensions.Options
 @using System.Globalization;
 @using AdSite.Models.CRUDModels
+@using AdSite.Views.Shared;
 
 @inject IOptions<RequestLocalizationOptions> LocOptions
-
-@section Scripts {
-    
-}
-
 @{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Languages);
     var createCultureItems = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                           .Select(c => new LanguageSelectViewModel() { CultureId = c.LCID, LanguageShortName = c.Name, LanguageName = c.DisplayName })
                           .ToList();
-    
 }
+
+@await Html.PartialAsync("_AdminPartial")
 
 <h2><localize name="Language_CreateNew"></localize></h2>
 

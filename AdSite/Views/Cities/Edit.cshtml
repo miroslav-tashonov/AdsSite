@@ -1,4 +1,9 @@
 ﻿@model AdSite.Models.CRUDModels.CityEditModel
+@using AdSite.Views.Shared;
+@{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
+}
+@await Html.PartialAsync("_AdminPartial")
 
 <h2><localize name="City_Edit"></localize></h2>
 
@@ -28,6 +33,6 @@
 </div>
 
 <div>
-    
+
 </div>
 

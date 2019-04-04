@@ -1,16 +1,21 @@
 ﻿@model IEnumerable<AdSite.Models.CRUDModels.LocalizationViewModel>
+@using AdSite.Views.Shared;
 
 @{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Localizations);
+
     string localizationKey = @Html.DisplayNameFor(model => model.LocalizationKey);
-    string selectedLocalizationKey = ViewData["CurrentColumn"].ToString() == localizationKey ?
+    string selectedLocalizationKey = ViewData["CurrentColumn"]?.ToString() == localizationKey ?
         "<option selected>" + localizationKey + "</option>" :
         "<option>" + localizationKey + "</option>";
 
     string localizationValue = @Html.DisplayNameFor(model => model.LocalizationValue);
-    string selectedLocalizationValue = ViewData["CurrentColumn"].ToString() == localizationValue ?
+    string selectedLocalizationValue = ViewData["CurrentColumn"]?.ToString() == localizationValue ?
         "<option selected>" + localizationValue + "</option>" :
         "<option>" + localizationValue + "</option>";
 }
+
+@await Html.PartialAsync("_AdminPartial")
 
 <p>
     <a class="btn btn-primary" asp-action="Create"><localize name="Localization_CreateNew"></localize></a>

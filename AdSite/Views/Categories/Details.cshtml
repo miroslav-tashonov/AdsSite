@@ -1,4 +1,11 @@
 ﻿@model AdSite.Models.CRUDModels.CategoryFilterComponentViewModel
+@using AdSite.Views.Shared;
+@{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Categories);
+}
+
+@await Html.PartialAsync("_AdminPartial")
+
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions{
     public string GetAntiXsrfRequestToken()

@@ -1,4 +1,9 @@
 ﻿@model AdSite.Models.CRUDModels.CityViewModel
+@using AdSite.Views.Shared;
+@{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
+}
+@await Html.PartialAsync("_AdminPartial")
 
 <h3><localize name="General_DeleteMessage"></localize></h3>
 <div>
@@ -26,7 +31,7 @@
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <button type="submit" value="Delete" class="btn btn-default" ><localize name="General_Delete"></localize></button> |
+        <button type="submit" value="Delete" class="btn btn-default"><localize name="General_Delete"></localize></button> |
         <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
     </form>
 </div>

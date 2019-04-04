@@ -112,7 +112,7 @@ namespace AdSite.Data.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                throw ex;
             }
             return true;
         }

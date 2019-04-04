@@ -40,7 +40,7 @@
     @if (User.IsInRole("Admin"))
     {
         <li>
-            <a href="catalog-list.html">
+            <a asp-action="AdminPanel" asp-controller="Home">
                 <localize name="Layouts_AdminPanel"></localize>
             </a>
         </li>

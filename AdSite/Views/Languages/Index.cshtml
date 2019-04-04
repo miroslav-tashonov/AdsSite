@@ -1,17 +1,21 @@
 ﻿@model IEnumerable<AdSite.Models.CRUDModels.LanguageViewModel>
-
+@using AdSite.Views.Shared;
 
 @{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Languages);
+
     string languageName = @Html.DisplayNameFor(model => model.LanguageName);
-    string selectedLanguageName = ViewData["CurrentColumn"].ToString() == languageName ?
+    string selectedLanguageName = ViewData["CurrentColumn"]?.ToString() == languageName ?
         "<option selected>" + languageName + "</option>" :
         "<option>" + languageName + "</option>";
 
     string languageShortName = @Html.DisplayNameFor(model => model.LanguageShortName);
-    string selectedLanguageShortName = ViewData["CurrentColumn"].ToString() == languageShortName ?
+    string selectedLanguageShortName = ViewData["CurrentColumn"]?.ToString() == languageShortName ?
         "<option selected>" + languageShortName + "</option>" :
         "<option>" + languageShortName + "</option>";
 }
+
+@await Html.PartialAsync("_AdminPartial")
 
 <!--Localization javascript messages-->
 <div style="display:none">

@@ -7,12 +7,10 @@
       "destination": "wwwroot/lib/jstree/"
     },
     {
-      "provider": "cdnjs",
       "library": "jquery@1.9.1",
       "destination": "wwwroot/lib/jquery/"
     },
     {
-      "provider": "cdnjs",
       "library": "toastr.js@2.1.4",
       "destination": "wwwroot/lib/toastr.js/",
       "files": [

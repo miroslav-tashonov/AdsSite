@@ -1,4 +1,9 @@
 ﻿@model AdSite.Models.CRUDModels.CityCreateModel
+@using AdSite.Views.Shared;
+@{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
+}
+@await Html.PartialAsync("_AdminPartial")
 
 <h2><localize name="City_CreateNew"></localize></h2>
 
