@@ -42,14 +42,14 @@ namespace AdSite.Extensions
                 }
             }
         }
-        
+
 
         public static async Task CreateDefaultLanguage(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
             logger.LogInformation("adding default language");
 
-            
+
             try
             {
                 string defaultLanguage = configuration["DefaultLanguage:Value"];
@@ -68,11 +68,35 @@ namespace AdSite.Extensions
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogInformation("Language cannot be added ." + ex.Message);
                 throw new Exception("Language cannot be added ." + ex.Message);
             }
         }
+
+        public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
+            logger.LogInformation("adding default language");
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            //todo hide credentials 
+            if (!userManager.Users.Any(u => u.UserName == "admin"))
+            {
+                var user = new ApplicationUser { UserName = "admin", Email = "admin@email.com" };
+                var result = await userManager.CreateAsync(user, "Admin123!");
+                if (result.Succeeded)
+                {
+                    result = await userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.Admin));
+                    if (result.Succeeded)
+                    {
+                        logger.LogInformation("Admin created !!");
+                    }
+                }
+            }
+        }
     }
+
 }

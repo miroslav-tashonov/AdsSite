@@ -33,7 +33,7 @@ namespace AdSite
 
                     SeedExtension.CreateRoles(serviceProvider).Wait();
                     SeedExtension.CreateDefaultLanguage(serviceProvider, configuration).Wait();
-
+                    SeedExtension.CreateAdminAccount(serviceProvider).Wait();
                 }
                 catch (Exception exception)
                 {

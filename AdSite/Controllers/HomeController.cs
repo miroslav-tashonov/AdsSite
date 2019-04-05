@@ -25,9 +25,13 @@ namespace AdSite.Controllers
         [Authorize(Roles=("Admin"))]
         public IActionResult AdminPanel()
         {
-            ViewData["Message"] = "Your application description page.";
+            return View("_AdminNavigationPartial");
+        }
 
-            return View("_AdminPartial");
+        [Authorize(Roles = ("User"))]
+        public IActionResult UsersPanel()
+        {
+            return View("_UsersNavigationPartial");
         }
 
         public IActionResult Contact()

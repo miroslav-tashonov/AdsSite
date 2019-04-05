@@ -153,6 +153,8 @@ namespace AdSite
             services.AddTransient<ILanguageRepository, LanguageRepository>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICityRepository, CityRepository>();
+            services.AddTransient<IAdService, AdService>();
+            services.AddTransient<IAdRepository, AdRepository>();
         }
 
         private void RegisterSupportedLanguages(IServiceCollection services, ServiceProvider serviceProvider)

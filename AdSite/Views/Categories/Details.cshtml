@@ -4,7 +4,7 @@
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Categories);
 }
 
-@await Html.PartialAsync("_AdminPartial")
+@await Html.PartialAsync("_AdminNavigationPartial")
 
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions{

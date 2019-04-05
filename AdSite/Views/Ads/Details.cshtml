@@ -1,29 +1,20 @@
-﻿@model AdSite.Models.CRUDModels.CityViewModel
+﻿@model AdSite.Models.CRUDModels.AdViewModel
 @using AdSite.Views.Shared;
-@{
-    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
-}
-@await Html.PartialAsync("_AdminNavigationPartial")
+
 
 <h2><localize name="General_Details"></localize></h2>
 
-<h4><localize name="City_Entity"></localize></h4>
+<h4><localize name="Ad_Entity"></localize></h4>
 
 <hr />
 
 <div class="center-block">
     <dl class="dl-horizontal">
         <dt>
-            <localize name="City_Field_Name"></localize>
+            <localize name="Ad_Field_Name"></localize>
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            <localize name="City_Field_Postcode"></localize>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Postcode)
         </dd>
     </dl>
 </div>

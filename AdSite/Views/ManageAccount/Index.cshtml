@@ -15,7 +15,7 @@
         "<option>" + email + "</option>";
 }
 
-@await Html.PartialAsync("_AdminPartial")
+@await Html.PartialAsync("_AdminNavigationPartial")
 
 <p>
     <a class="btn btn-primary" asp-action="Register" asp-controller="Account"><localize name="Account_CreateNew"></localize></a>
@@ -73,6 +73,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
+                <a asp-action="ChangeRole" asp-route-id="@item.Id" class="btn-link"><localize name="Account_ChangeRole"></localize></a>
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn-link"><localize name="General_Delete"></localize></a>
             </td>
         </tr>

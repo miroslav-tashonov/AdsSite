@@ -1,4 +1,5 @@
-﻿using AdSite.Models.DatabaseModels;
+﻿using AdSite.Models.CRUDModels.AuditedModels;
+using AdSite.Models.DatabaseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +9,7 @@ namespace AdSite.Models.CRUDModels
 {
     public class AdViewModel
     {
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
 
@@ -24,4 +26,20 @@ namespace AdSite.Models.CRUDModels
         ApplicationUser ModifiedBy { get; set; }
         ApplicationUser CreatedBy { get; set; }
     }
+
+
+    public class AdCreateModel : AuditedEntityModel
+    {
+        [Required]
+        public string Name { get; set; }
+    }
+    public class AdEditModel : AuditedEntityModel
+    {
+        [Required]
+        public Guid ID { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+    }
+
 }

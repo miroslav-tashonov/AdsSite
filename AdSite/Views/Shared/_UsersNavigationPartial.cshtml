@@ -1,0 +1,17 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using AdSite.Views.Shared
+@inject IAuthorizationService AuthorizationService
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (User.IsInRole("User"))
+{
+    <ul class="nav nav-pills">
+        <li class="@UsersNavPages.MyAdsNavClass(ViewContext)"><a asp-action="Index" asp-controller="ManageAccount"><localize name="Ads_MyAds"></localize></a></li>
+        <li class="@UsersNavPages.NewAdNavClass(ViewContext)"><a asp-action="Details" asp-controller="Categories"><localize name="Ads_NewAd"></localize></a></li>
+    </ul>
+
+    <br />
+}

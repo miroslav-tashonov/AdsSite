@@ -16,8 +16,6 @@ namespace AdSite.Services
         bool Delete(Guid id);
         bool Add(CategoryCreateModel category);
         bool Update(CategoryEditModel category);
-
-        //todo: we need to add country as parameter here
         List<Category> GetCategoryTree(Guid countryId);
         List<Category> GetCategoryAsTreeStructure(Guid countryId);
     }
