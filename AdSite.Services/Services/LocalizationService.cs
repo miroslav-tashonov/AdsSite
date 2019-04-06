@@ -59,7 +59,6 @@ namespace AdSite.Services
                 CountryId = entity.CountryId
             };
 
-
             return _repository.Add(localization);
         }
 

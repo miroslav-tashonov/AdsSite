@@ -23,11 +23,20 @@ namespace AdSite.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            Guid countryId = _countryService.Get();
+            var viewModel = new CategoryFilterComponentViewModel();
 
-            var categories = _categoryService.GetCategoryTree(countryId);
-            var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
-            var viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
+            try
+            {
+                Guid countryId = _countryService.Get();
+
+                var categories = _categoryService.GetCategoryTree(countryId);
+                var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
+                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
 
             return View(viewModel);
         }

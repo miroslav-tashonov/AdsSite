@@ -50,7 +50,7 @@ namespace AdSite.Controllers
 
                 return View(_languageService.GetAll(columnName, searchString, countryId));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }
@@ -71,11 +71,11 @@ namespace AdSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid countryId = _countryService.Get();
-                AuditedEntityMapper<LanguageCreateModel>.FillCountryEntityField(entity, countryId);
-
                 try
                 {
+                    Guid countryId = _countryService.Get();
+                    AuditedEntityMapper<LanguageCreateModel>.FillCountryEntityField(entity, countryId);
+
                     bool statusResult = _languageService.Add(entity);
                     if (statusResult)
                     {
@@ -114,7 +114,7 @@ namespace AdSite.Controllers
                     return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }

@@ -88,11 +88,11 @@ namespace AdSite.Controllers
                 string currentUser = HttpContext?.User?.Identity?.Name;
                 if (!String.IsNullOrEmpty(currentUser))
                 {
-                    Guid countryId = _countryService.Get();
-                    AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
-
                     try
                     {
+                        Guid countryId = _countryService.Get();
+                        AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
+
                         bool statusResult = _cityService.Add(entity);
                         if (statusResult)
                         {

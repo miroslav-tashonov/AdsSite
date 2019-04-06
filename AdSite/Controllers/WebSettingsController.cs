@@ -84,10 +84,10 @@ namespace AdSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid countryId = _countryService.Get();
-
                 try
                 {
+                    Guid countryId = _countryService.Get();
+                
                     bool statusResult = _webSettingsService.CreateWebSettingsForCountry(webSettings, countryId);
                     if (statusResult)
                     {

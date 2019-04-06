@@ -21,6 +21,7 @@ namespace AdSite.Models.Mappers
             return editModel;
         }
 
+
         public static LocalizationViewModel MapToLocalizationViewModel(Localization localization)
         {
             return new LocalizationViewModel()

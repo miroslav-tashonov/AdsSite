@@ -45,7 +45,7 @@ namespace AdSite.Controllers
                 var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
                 viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return NotFound().WithError(ex.Message);
@@ -64,11 +64,11 @@ namespace AdSite.Controllers
                 string currentUser = HttpContext?.User?.Identity?.Name;
                 if (!String.IsNullOrEmpty(currentUser))
                 {
-                    Guid countryId = _countryService.Get();
-                    AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
-
                     try
                     {
+                        Guid countryId = _countryService.Get();
+                        AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
+
                         bool statusResult = _categoryService.Add(entity);
                         if (statusResult)
                         {
