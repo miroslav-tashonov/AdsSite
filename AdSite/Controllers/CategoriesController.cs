@@ -19,6 +19,7 @@ namespace AdSite.Controllers
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
+        private Guid CountryId => _countryService.Get();
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_ERROR_USER_MUST_LOGIN => _localizationService.GetByKey("ErrorMessage_MustLogin", CultureId);
@@ -39,11 +40,8 @@ namespace AdSite.Controllers
             var viewModel = new CategoryFilterComponentViewModel();
             try
             {
-                Guid countryId = _countryService.Get();
-
-                var categories = _categoryService.GetCategoryTree(countryId);
-                var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
-                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
+                var jstree = _categoryService.GetCategoriesAsJSTree(CountryId);
+                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = jstree };
             }
             catch (Exception ex)
             {
@@ -66,8 +64,7 @@ namespace AdSite.Controllers
                 {
                     try
                     {
-                        Guid countryId = _countryService.Get();
-                        AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
+                        AuditedEntityMapper<CategoryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, CountryId);
 
                         bool statusResult = _categoryService.Add(entity);
                         if (statusResult)

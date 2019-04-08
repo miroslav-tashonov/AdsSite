@@ -1,9 +1,9 @@
 ﻿using AdSite.Models.CRUDModels.AuditedModels;
 using AdSite.Models.DatabaseModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace AdSite.Models.CRUDModels
 {
@@ -30,8 +30,25 @@ namespace AdSite.Models.CRUDModels
 
     public class AdCreateModel : AuditedEntityModel
     {
+        public AdCreateModel()
+        {
+            FilesAsListOfByteArray = new List<byte[]>();
+        }
+
         [Required]
         public string Name { get; set; }
+        public string Description { get; set; }
+        [Required]
+        public decimal Price { get; set; }
+
+        public Guid CategoryId { get; set; }
+        public Guid CityId { get; set; }
+        public Guid CountryId { get; set; }
+        public AdDetail AdDetail { get; set; }
+        public string OwnerId { get; set; }
+        public IEnumerable<IFormFile> Files { get; set; }
+        public List<byte[]> FilesAsListOfByteArray { get; set; }
+
     }
     public class AdEditModel : AuditedEntityModel
     {
@@ -40,6 +57,13 @@ namespace AdSite.Models.CRUDModels
 
         [Required]
         public string Name { get; set; }
+        [Required]
+        public decimal Price { get; set; }
+
+        public Guid CategoryId { get; set; }
+        public Guid CityId { get; set; }
+        public AdDetail AdDetail { get; set; }
+        public string OwnerId { get; set; }
     }
 
 }

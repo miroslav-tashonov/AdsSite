@@ -29,9 +29,8 @@ namespace AdSite.ViewComponents
             {
                 Guid countryId = _countryService.Get();
 
-                var categories = _categoryService.GetCategoryTree(countryId);
-                var mappedJSTreeCategories = JSTreeViewModelMapper.MapToJSTreeViewModel(categories);
-                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = mappedJSTreeCategories };
+                var jstree = _categoryService.GetCategoriesAsJSTree(countryId);
+                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = jstree };
             }
             catch(Exception ex)
             {

@@ -15,6 +15,11 @@ namespace AdSite.Models.Mappers
 
             editModel.ID = entity.ID;
             editModel.Name = entity.Name;
+            editModel.OwnerId = entity.OwnerId;
+            editModel.Price = entity.Price;
+            editModel.CategoryId = entity.CategoryID;
+            editModel.CityId = entity.CityID;
+
 
             return editModel;
         }
@@ -23,6 +28,7 @@ namespace AdSite.Models.Mappers
         {
             return new AdViewModel()
             {
+                ID = entity.ID,
                 Name = entity.Name,
             };
         }
@@ -38,6 +44,7 @@ namespace AdSite.Models.Mappers
                     viewModelList.Add(
                         new AdViewModel()
                         {
+                            ID = entity.ID,
                             Name = entity.Name,
                         }
                     );

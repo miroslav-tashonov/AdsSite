@@ -24,6 +24,7 @@ namespace AdSite.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
 
+        private Guid CountryId => _countryService.Get();
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
 
@@ -42,14 +43,12 @@ namespace AdSite.Controllers
         // GET: WebSettings/Details
         public async Task<IActionResult> Details()
         {
-            Guid countryId = _countryService.Get();
-
-            if (!WebSettingsExistsForCountry(countryId))
+            if (!WebSettingsExistsForCountry(CountryId))
             {
                 return RedirectToAction(nameof(Create));
             }
 
-            var webSettings = _webSettingsService.GetWebSettingsForCountry(countryId);
+            var webSettings = _webSettingsService.GetWebSettingsForCountry(CountryId);
 
             return View(webSettings);
         }
@@ -57,14 +56,12 @@ namespace AdSite.Controllers
         // GET: WebSettings/Edit
         public async Task<IActionResult> Edit()
         {
-            Guid countryId = _countryService.Get();
-
-            if (!WebSettingsExistsForCountry(countryId))
+            if (!WebSettingsExistsForCountry(CountryId))
             {
                 return RedirectToAction(nameof(Create));
             }
 
-            var webSettings = _webSettingsService.GetWebSettingsForCountry(countryId);
+            var webSettings = _webSettingsService.GetWebSettingsForCountry(CountryId);
 
             return View(webSettings);
         }
@@ -86,9 +83,7 @@ namespace AdSite.Controllers
             {
                 try
                 {
-                    Guid countryId = _countryService.Get();
-                
-                    bool statusResult = _webSettingsService.CreateWebSettingsForCountry(webSettings, countryId);
+                    bool statusResult = _webSettingsService.CreateWebSettingsForCountry(webSettings, CountryId);
                     if (statusResult)
                     {
                         return RedirectToAction(nameof(Details)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
@@ -116,15 +111,13 @@ namespace AdSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid countryId = _countryService.Get();
-
                 try
                 {
-                    _webSettingsService.UpdateWebSettingsForCountry(webSettings, countryId);
+                    _webSettingsService.UpdateWebSettingsForCountry(webSettings, CountryId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WebSettingsExistsForCountry(countryId))
+                    if (!WebSettingsExistsForCountry(CountryId))
                     {
                         _logger.LogError(LOCALIZATION_ERROR_NOT_FOUND);
                         return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);

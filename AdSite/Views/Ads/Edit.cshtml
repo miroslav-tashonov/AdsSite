@@ -14,6 +14,28 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label class="control-label"><localize name="Ad_Field_Price"></localize></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><localize name="Ad_Fields_City"></localize></label>
+                <select asp-for="CityId"
+                        class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.Cities,"Id", "Name"))"></select>
+
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"><localize name="Ad_Fields_Category"></localize></label>
+                <select asp-for="CategoryId"
+                        class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.Categories,"Id", "Name"))"></select>
+
+            </div>
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>

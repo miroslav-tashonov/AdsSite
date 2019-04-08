@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190326123119_init")]
+    [Migration("20190408173310_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,6 +173,8 @@ namespace AdSite.Data.Migrations
 
                     b.Property<string>("CreatedBy");
 
+                    b.Property<byte[]>("File");
+
                     b.Property<DateTime>("ModifiedAt");
 
                     b.Property<string>("ModifiedBy");
@@ -296,20 +298,21 @@ namespace AdSite.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("CountryID");
+                    b.Property<Guid>("CountryId");
 
-                    b.Property<Guid?>("LanguageID");
+                    b.Property<Guid>("LanguageId");
 
                     b.Property<string>("LocalizationKey")
                         .IsRequired();
 
-                    b.Property<string>("LocalizationValue");
+                    b.Property<string>("LocalizationValue")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CountryID");
+                    b.HasIndex("CountryId");
 
-                    b.HasIndex("LanguageID");
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Localizations");
                 });
@@ -521,13 +524,14 @@ namespace AdSite.Data.Migrations
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Localization", b =>
                 {
-                    b.HasOne("AdSite.Models.DatabaseModels.Country")
+                    b.HasOne("AdSite.Models.DatabaseModels.Country", "Country")
                         .WithMany("Localizations")
-                        .HasForeignKey("CountryID");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AdSite.Models.DatabaseModels.Language", "Language")
                         .WithMany()
-                        .HasForeignKey("LanguageID")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

@@ -75,6 +75,31 @@ namespace AdSite.Extensions
             }
         }
 
+        public static async Task CreateDefaultCountry(IServiceProvider serviceProvider)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
+            logger.LogInformation("adding default country");
+
+            try
+            {
+                var _countryService = serviceProvider.GetService<ICountryService>();
+                if (!_countryService.Exist(new Guid("9B0CBFD6-0070-4285-B353-F13189BD2291")))
+                {
+                    if (!_countryService.Add())
+                    {
+                        logger.LogInformation("Country cannot be added .");
+                        throw new Exception("Country cannot be added .");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogInformation("Country cannot be added ." + ex.Message);
+                throw new Exception("Country cannot be added ." + ex.Message);
+            }
+        }
+
+
         public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
         {
             var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();

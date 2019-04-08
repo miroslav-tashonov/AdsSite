@@ -16,9 +16,18 @@ namespace AdSite.Data.Repositories
 
     public class CountryRepository : ICountryRepository
     {
+        private readonly ApplicationDbContext _context;
+
+        public CountryRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public bool Add(Country entity)
         {
-            throw new NotImplementedException();
+            
+            _context.Add(entity);
+            return SaveChangesResult();
         }
 
         public bool Delete(Guid id)
@@ -28,7 +37,7 @@ namespace AdSite.Data.Repositories
 
         public bool Exists(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Countries.Any(e => e.ID == id);
         }
 
         public Country Get(Guid id)
@@ -48,5 +57,23 @@ namespace AdSite.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public bool SaveChangesResult()
+        {
+            try
+            {
+                var result = _context.SaveChangesAsync();
+                if (result.Result == 0)
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return true;
+        }
+
     }
 }

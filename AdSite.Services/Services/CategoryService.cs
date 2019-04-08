@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdSite.Models.Mappers;
+using AdSite.Mappers;
+using AdSite.Models.Models.AdSiteViewModels;
 
 namespace AdSite.Services
 {
@@ -16,8 +19,9 @@ namespace AdSite.Services
         bool Delete(Guid id);
         bool Add(CategoryCreateModel category);
         bool Update(CategoryEditModel category);
-        List<Category> GetCategoryTree(Guid countryId);
+        List<JSTreeViewModel> GetCategoriesAsJSTree(Guid countryId);
         List<Category> GetCategoryAsTreeStructure(Guid countryId);
+        List<LookupViewModel> GetAllAsLookup(Guid countryId);
     }
 
 
@@ -98,13 +102,28 @@ namespace AdSite.Services
             return _repository.Exists(id);
         }
 
-        public List<Category> GetCategoryTree(Guid countryId)
+        public List<JSTreeViewModel> GetCategoriesAsJSTree(Guid countryId)
         {
-            return _repository.GetCategoryTree(countryId);
+            var viewModel = new List<JSTreeViewModel>();
+
+            try
+            {
+                var entities = _repository.GetCategoryTree(countryId);
+                viewModel = JSTreeViewModelMapper.MapToJSTreeViewModel(entities);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return viewModel;
         }
 
         public List<Category> GetCategoryAsTreeStructure(Guid countryId)
         {
+
+
+
             return _repository.GetCategoryAsTreeStructure(countryId);
         }
         
@@ -123,6 +142,11 @@ namespace AdSite.Services
             category.ModifiedBy = entity.ModifiedBy;
 
             return _repository.Update(category);
+        }
+
+        public List<LookupViewModel> GetAllAsLookup(Guid countryId)
+        {
+            return CategoryMapper.MapToLookupViewModel(_repository.GetAll(countryId));
         }
 
 

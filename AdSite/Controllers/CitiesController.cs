@@ -19,6 +19,7 @@ namespace AdSite.Controllers
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
+        private Guid CountryId => _countryService.Get();
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
@@ -61,9 +62,7 @@ namespace AdSite.Controllers
 
             try
             {
-                Guid countryId = _countryService.Get();
-
-                return View(_cityService.GetCities(columnName, searchString, countryId));
+                return View(_cityService.GetCities(columnName, searchString, CountryId));
             }
             catch (Exception ex)
             {
@@ -90,8 +89,7 @@ namespace AdSite.Controllers
                 {
                     try
                     {
-                        Guid countryId = _countryService.Get();
-                        AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, countryId);
+                        AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, CountryId);
 
                         bool statusResult = _cityService.Add(entity);
                         if (statusResult)

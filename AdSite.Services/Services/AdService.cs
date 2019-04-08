@@ -46,13 +46,40 @@ namespace AdSite.Services
 
         public bool Add(AdCreateModel entity)
         {
+            List<AdDetailPicture> pictures = new List<AdDetailPicture>();
+            if(entity.FilesAsListOfByteArray != null && entity.FilesAsListOfByteArray.Count > 0)
+                foreach (var file in entity.FilesAsListOfByteArray)
+                {
+                    pictures.Add(new AdDetailPicture
+                    {
+                        File = file,
+                        CreatedBy = entity.CreatedBy,
+                        CreatedAt = entity.CreatedAt,
+                        ModifiedAt = entity.ModifiedAt,
+                        ModifiedBy = entity.ModifiedBy,
+                    });
+                }
+
             Ad ad = new Ad
             {
                 Name = entity.Name,
+                CategoryID = entity.CategoryId,
+                CityID = entity.CityId,
+                OwnerId = entity.OwnerId,
                 CreatedBy = entity.CreatedBy,
                 CreatedAt = entity.CreatedAt,
                 ModifiedAt = entity.ModifiedAt,
                 ModifiedBy = entity.ModifiedBy,
+                CountryID = entity.CountryId,
+                AdDetail = new AdDetail
+                {
+                    Description = entity.Description,
+                    CreatedBy = entity.CreatedBy,
+                    CreatedAt = entity.CreatedAt,
+                    ModifiedAt = entity.ModifiedAt,
+                    ModifiedBy = entity.ModifiedBy,
+                    AdDetailPictures = pictures
+                }
             };
 
 
@@ -140,6 +167,14 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
             }
 
+            ad.OwnerId = entity.OwnerId;
+            ad.CityID = entity.CityId;
+            ad.CategoryID = entity.CategoryId;
+
+            ad.ModifiedAt = entity.ModifiedAt;
+            ad.ModifiedBy = entity.ModifiedBy;
+
+            ad.Price = entity.Price;
             ad.Name = entity.Name;
             ad.ModifiedAt = entity.ModifiedAt;
             ad.ModifiedBy = entity.ModifiedBy;

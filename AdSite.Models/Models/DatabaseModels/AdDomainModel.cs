@@ -18,6 +18,7 @@ namespace AdSite.Models.DatabaseModels
         public Guid CategoryID { get; set; }
         public Guid CityID { get; set; }
         public Guid CountryID { get; set; }
+        public string OwnerId { get; set; }
 
         public Category Category { get; set; }
         public City City { get; set; }

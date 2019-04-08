@@ -9,6 +9,9 @@ namespace AdSite.Models.CRUDModels
     {
         #region Foreign Keys
         public AdDetail AdDetail { get; set; }
+
+
+
         #endregion
 
     }

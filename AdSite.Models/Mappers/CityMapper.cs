@@ -30,6 +30,24 @@ namespace AdSite.Models.Mappers
             };
         }
 
+        public static List<LookupViewModel> MapToLookupViewModel(List<City> cities)
+        {
+            var listViewModel = new List<LookupViewModel>();
+            if (cities != null && cities.Count > 0)
+            {
+                foreach (City city in cities)
+                {
+                    var viewModel = new LookupViewModel();
+
+                    viewModel.Id = city.ID;
+                    viewModel.Name = city.Name;
+
+                    listViewModel.Add(viewModel);
+                }
+            }
+            return listViewModel;
+        }
+
         public static List<CityViewModel> MapToCityViewModel(List<City> entities)
         {
             List<CityViewModel> viewModelList = new List<CityViewModel>();

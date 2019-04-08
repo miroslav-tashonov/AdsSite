@@ -27,6 +27,7 @@ namespace AdSite.Controllers
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
+        private Guid CountryId => _countryService.Get();
         private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
@@ -70,9 +71,7 @@ namespace AdSite.Controllers
 
             try
             {
-                Guid countryId = _countryService.Get();
-
-                return View(_localizationService.GetAll(columnName, searchString, countryId));
+                return View(_localizationService.GetAll(columnName, searchString, CountryId));
             }
             catch (Exception ex)
             {
@@ -86,8 +85,7 @@ namespace AdSite.Controllers
         {
             try
             {
-                Guid countryId = _countryService.Get();
-                ViewBag.Languages = _languageService.GetAllAsLookup(countryId);
+                ViewBag.Languages = _languageService.GetAllAsLookup(CountryId);
 
                 return View();
             }
@@ -107,8 +105,7 @@ namespace AdSite.Controllers
             {
                 try
                 {
-                    Guid countryId = _countryService.Get();
-                    AuditedEntityMapper<LocalizationCreateModel>.FillCountryEntityField(entity, countryId);
+                    AuditedEntityMapper<LocalizationCreateModel>.FillCountryEntityField(entity, CountryId);
 
                     bool statusResult = _localizationService.Add(entity);
                     if (statusResult)
@@ -127,6 +124,7 @@ namespace AdSite.Controllers
                 }
             }
 
+            ViewBag.Languages = _languageService.GetAllAsLookup(CountryId);
             return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);
 
         }
@@ -142,8 +140,7 @@ namespace AdSite.Controllers
 
             try
             {
-                Guid countryId = _countryService.Get();
-                ViewBag.Languages = _languageService.GetAllAsLookup(countryId);
+                ViewBag.Languages = _languageService.GetAllAsLookup(CountryId);
             }
             catch (Exception ex)
             {
@@ -186,6 +183,8 @@ namespace AdSite.Controllers
                 return RedirectToAction(nameof(Details), new { id = entity.Id }).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
             }
 
+            ViewBag.Languages = _languageService.GetAllAsLookup(CountryId);
+
             return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);
         }
 
@@ -215,7 +214,7 @@ namespace AdSite.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
             try

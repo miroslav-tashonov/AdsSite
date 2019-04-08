@@ -20,6 +20,7 @@ namespace AdSite.Controllers
         private readonly ICountryService _countryService;
         private readonly ILogger _logger;
 
+        private Guid CountryId => _countryService.Get();
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
         private readonly string ERROR_URL = "/Error/404";
@@ -46,9 +47,7 @@ namespace AdSite.Controllers
 
             try
             {
-                Guid countryId = _countryService.Get();
-
-                return View(_languageService.GetAll(columnName, searchString, countryId));
+                return View(_languageService.GetAll(columnName, searchString, CountryId));
             }
             catch (Exception ex)
             {
@@ -73,8 +72,7 @@ namespace AdSite.Controllers
             {
                 try
                 {
-                    Guid countryId = _countryService.Get();
-                    AuditedEntityMapper<LanguageCreateModel>.FillCountryEntityField(entity, countryId);
+                    AuditedEntityMapper<LanguageCreateModel>.FillCountryEntityField(entity, CountryId);
 
                     bool statusResult = _languageService.Add(entity);
                     if (statusResult)
@@ -103,9 +101,7 @@ namespace AdSite.Controllers
         {
             try
             {
-                Guid countryId = _countryService.Get();
-
-                bool deleteResult = _languageService.Delete(id, countryId);
+                bool deleteResult = _languageService.Delete(id, CountryId);
                 if (deleteResult)
                     return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                 else

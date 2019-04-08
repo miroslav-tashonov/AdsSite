@@ -21,6 +21,7 @@ namespace AdSite.Services
         List<CityViewModel> GetCities(string columnName, string searchString, Guid countryId);
         CityViewModel GetCityAsViewModel(Guid cityId);
         CityEditModel GetCityAsEditModel(Guid cityId);
+        List<LookupViewModel> GetAllAsLookup(Guid countryId);
     }
 
 
@@ -137,6 +138,12 @@ namespace AdSite.Services
 
             return CityMapper.MapToCityViewModel(entity);
         }
+
+        public List<LookupViewModel> GetAllAsLookup(Guid countryId)
+        {
+            return CityMapper.MapToLookupViewModel(_repository.GetAll(countryId));
+        }
+
         public bool Update(CityEditModel entity)
         {
             City city = _repository.Get(entity.ID);
