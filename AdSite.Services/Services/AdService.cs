@@ -19,6 +19,7 @@ namespace AdSite.Services
         bool Update(AdEditModel ad);
         List<AdViewModel> GetAds(Guid countryId);
         List<AdViewModel> GetAds(string columnName, string searchString, Guid countryId);
+        List<AdGridViewModel> GetAdGridModel(Guid countryId);
         AdViewModel GetAdAsViewModel(Guid adId);
         AdEditModel GetAdAsEditModel(Guid adId);
     }
@@ -151,7 +152,7 @@ namespace AdSite.Services
 
         public AdViewModel GetAdAsViewModel(Guid id)
         {
-            var entity = _repository.Get(id);
+            var entity = _repository.GetAdWithDetails(id);
             if (entity == null)
             {
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
@@ -159,6 +160,18 @@ namespace AdSite.Services
 
             return AdMapper.MapToAdViewModel(entity);
         }
+
+        public List<AdGridViewModel> GetAdGridModel(Guid countryId)
+        {
+            var entities = _repository.GetAdGrid(countryId);
+            if (entities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+
+            return AdMapper.MapToAdGridModel(entities);
+        }
+
         public bool Update(AdEditModel entity)
         {
             Ad ad = _repository.Get(entity.ID);

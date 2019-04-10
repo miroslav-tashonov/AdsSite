@@ -13,7 +13,6 @@ namespace AdSite.Models.CRUDModels
         public string Name { get; set; }
         public decimal Price { get; set; }
 
-        //todo: property for Main Picture
 
         public Category Category { get; set; }
         public City City { get; set; }
@@ -26,6 +25,22 @@ namespace AdSite.Models.CRUDModels
         ApplicationUser ModifiedBy { get; set; }
         ApplicationUser CreatedBy { get; set; }
     }
+
+
+    public class AdGridViewModel
+    {
+        public Guid ID { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Description{ get; set; }
+        public byte[] MainPicture { get; set; }
+
+
+        public Category Category { get; set; }
+        public City City { get; set; }        
+        public ApplicationUser Owner { get; set; }
+    }
+
 
 
     public class AdCreateModel : AuditedEntityModel

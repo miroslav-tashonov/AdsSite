@@ -90,7 +90,7 @@
             <div class="container header-middle-cont">
                 <div class="toplogo">
                     <a href="index.html">
-                        <img src="~/images/logo.png" alt="AllStore - MultiConcept eCommerce Template">
+                        <img src="~/img/logo.png" alt="AllStore - MultiConcept eCommerce Template">
                     </a>
                 </div>
                 <div class="shop-menu">
@@ -111,7 +111,9 @@
                             </a>
                         </li>
 
-                        @await Html.PartialAsync("_LoginPartial")
+                        <li>
+                            @await Html.PartialAsync("_LoginPartial")
+                        </li>
 
                         <li>
                             @await Html.PartialAsync("_SelectLanguagePartial")

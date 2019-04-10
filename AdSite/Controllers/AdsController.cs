@@ -75,7 +75,7 @@ namespace AdSite.Controllers
 
             try
             {
-                return View(_adService.GetAds(columnName, searchString, CountryId));
+                return View(_adService.GetAdGridModel(CountryId));
             }
             catch (Exception ex)
             {

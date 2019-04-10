@@ -1,27 +1,218 @@
 ﻿@model AdSite.Models.CRUDModels.AdViewModel
 @using AdSite.Views.Shared;
 
-
-<h2><localize name="General_Details"></localize></h2>
-
-<h4><localize name="Ad_Entity"></localize></h4>
-
+@section Scripts {
+    <script src="~/js/jquery.bxslider.min.js" asp-append-version="true"></script>
+}
+<br />
 <hr />
+<main>
+    <section class="container">
 
-<div class="center-block">
-    <dl class="dl-horizontal">
-        <dt>
-            <localize name="Ad_Field_Name"></localize>
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-</div>
 
+        <h1 class="main-ttl"><span>@Html.DisplayFor(model => model.Name)</span></h1>
+        <!-- Single Product - start -->
+        <div class="prod-wrap">
+
+            <!-- Product Images -->
+            <div class="prod-slider-wrap">
+                <div class="prod-slider">
+                    <div class="bx-wrapper" style="max-width: 100%;">
+                        <div class="bx-viewport" style="width: 100%; overflow: hidden; position: relative;">
+                            <ul class="prod-slider-car">
+                                @if (Model.AdDetail != null && Model.AdDetail.AdDetailPictures != null)
+                                {
+                                    @foreach (var picture in Model.AdDetail.AdDetailPictures)
+                                    {
+                                        <li>
+                                            <a data-fancybox-group="product" class="fancy-img">
+                                                <img src="data:image;base64,@System.Convert.ToBase64String(picture.File)" />
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div><div class="bx-controls bx-has-controls-direction"></div>
+                    </div>
+                </div>
+                <div class="prod-thumbs">
+                    <div class="bx-wrapper" style="max-width: 25032px; margin: 0px auto;">
+                        <div class="bx-viewport" style="width: 100%; overflow: hidden; position: relative; height: 102px;">
+                            <ul class="prod-thumbs-car">
+                                @if (Model.AdDetail != null && Model.AdDetail.AdDetailPictures != null)
+                                {
+                                    int counter = 0;
+                                    @foreach (var picture in Model.AdDetail.AdDetailPictures)
+                                    {
+                                        <li>
+                                            <a data-slide-index="@counter" href="#" class="">
+                                                <img src="data:image;base64,@System.Convert.ToBase64String(picture.File)" />
+                                            </a>
+                                        </li>
+
+                                        counter++;
+                                    }
+                                }
+                            </ul>
+                        </div><div class="bx-controls bx-has-controls-direction"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Description/Info -->
+            <div class="prod-cont">
+                <div class="prod-info">
+                    <p class="prod-price">
+                        <b class="item_current_price">$ @Model.Price</b>
+                    </p>
+                </div>
+                <ul class="prod-i-props">
+                    <li>
+                        <b>Owner Name</b> <i class='fa fa-user'></i> @Model.Owner?.UserName
+                    </li>
+                    <li>
+                        <b>Owner Number</b> <i class='fa fa-phone'></i> @Model.Owner?.PhoneNumber
+                    </li>
+                    <li>
+                        <b>Owner Mail</b> <i class='fa fa-envelope'></i> @Model.Owner?.Email
+                    </li>
+                    <li>
+                        <b>City</b> <i class="fa fa-fort-awesome"></i> @Model.City?.Name
+                    </li>
+                    <li>
+                        <b>Category</b> <i class="fa fa-folder-open"></i> @Model.Category?.Name
+                    </li>
+                </ul>
+
+                <div class="prod-cont-txt">
+                    @Html.DisplayFor(model => model.AdDetail.Description)
+                </div>
+                <p class="prod-actions">
+                    <a href="#" class="prod-favorites"><i class="fa fa-heart"></i> Wishlist</a>
+                </p>
+            </div>
+
+            <!-- Product Tabs -->
+            <div class="prod-tabs-wrap">
+                <ul class="prod-tabs">
+                    <li><a data-prodtab-num="1" class="active" href="#" data-prodtab="#prod-tab-1">@Html.DisplayName(Model.AdDetail?.Description)</a></li>
+                </ul>
+                <div class="prod-tab-cont">
+                    <p data-prodtab-num="1" class="prod-tab-mob active" data-prodtab="#prod-tab-1">@Html.DisplayName(Model.AdDetail?.Description)</p>
+                    <div class="prod-tab stylization" id="prod-tab-1">
+                        @if (Model.AdDetail != null)
+                        {
+                            @Html.DisplayFor(model => model.AdDetail.Description)
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Single Product - end -->
+        <!-- Related Products - start -->
+        <div class="prod-related">
+            <h2><span>Related products</span></h2>
+            <div class="prod-related-car" id="prod-related-car">
+
+                <div class="flex-viewport" style="overflow: hidden; position: relative;">
+                    <ul class="slides" style="width: 1000%; transition-duration: 0s; transform: translate3d(-228px, 0px, 0px);">
+                        <li class="prod-rel-wrap clone" aria-hidden="true" style="width: 228px; margin-right: 0px; float: left; display: block;">
+                            <div class="prod-rel">
+                                <a href="product.html" class="prod-rel-img">
+                                    <img src="http://placehold.it/300x416" alt="Maxime molestias necessitatibus nobis" draggable="false">
+                                </a>
+                                <div class="prod-rel-cont">
+                                    <h3><a href="product.html">Maxime molestias necessitatibus nobis</a></h3>
+                                    <p class="prod-rel-price">
+                                        <b>$95</b>
+                                    </p>
+                                    <div class="prod-rel-actions">
+                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
+                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
+                                        <p class="prod-i-addwrap">
+                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="prod-rel">
+                                <a href="product.html" class="prod-rel-img">
+                                    <img src="http://placehold.it/300x480" alt="Facilis illum" draggable="false">
+                                </a>
+                                <div class="prod-rel-cont">
+                                    <h3><a href="product.html">Facilis illum</a></h3>
+                                    <p class="prod-rel-price">
+                                        <b>$150</b>
+                                    </p>
+                                    <div class="prod-rel-actions">
+                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
+                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
+                                        <p class="prod-i-addwrap">
+                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li class="prod-rel-wrap flex-active-slide" data-thumb-alt="" style="width: 228px; margin-right: 0px; float: left; display: block;">
+                            <div class="prod-rel">
+                                <a href="product.html" class="prod-rel-img">
+                                    <img src="http://placehold.it/300x311" alt="Adipisci aperiam commodi" draggable="false">
+                                </a>
+                                <div class="prod-rel-cont">
+                                    <h3><a href="product.html">Adipisci aperiam commodi</a></h3>
+                                    <p class="prod-rel-price">
+                                        <b>$59</b>
+                                    </p>
+                                    <div class="prod-rel-actions">
+                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
+                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
+                                        <p class="prod-i-addwrap">
+                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="prod-rel-wrap" data-thumb-alt="" style="width: 228px; margin-right: 0px; float: left; display: block;">
+                            <div class="prod-rel">
+                                <a href="product.html" class="prod-rel-img">
+                                    <img src="http://placehold.it/378x300" alt="Sunt temporibus velit" draggable="false">
+                                </a>
+                                <div class="prod-rel-cont">
+                                    <h3><a href="product.html">Sunt temporibus velit</a></h3>
+                                    <p class="prod-rel-price">
+                                        <b>$115</b>
+                                    </p>
+                                    <div class="prod-rel-actions">
+                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
+                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
+                                        <p class="prod-i-addwrap">
+                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div><ol class="flex-control-nav flex-control-paging"><li><a href="#" class="flex-active">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li></ol><ul class="flex-direction-nav"><li class="flex-nav-prev"><a class="flex-prev" href="#">Previous</a></li><li class="flex-nav-next"><a class="flex-next" href="#">Next</a></li></ul>
+            </div>
+        </div>
+        <!-- Related Products - end -->
+
+    </section>
+</main>
 <br />
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-default"><localize name="General_Edit"></localize></a> |
+    @if (User.IsInRole("Users"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-default"><localize name="General_Edit"></localize></a>
+    }
     <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
 </div>

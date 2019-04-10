@@ -9,6 +9,8 @@ namespace AdSite.Data.Repositories
     public interface IAdRepository : IRepository<Ad>
     {
         List<Ad> GetByAdName(string searchString, Guid countryId);
+        Ad GetAdWithDetails(Guid id);
+        List<Ad> GetAdGrid(Guid countryId);
     }
 
     public class AdRepository : IAdRepository
@@ -62,6 +64,38 @@ namespace AdSite.Data.Repositories
 
             return result;
         }
+
+        public Ad GetAdWithDetails(Guid id)
+        {
+            var ad = _context.Ads.Where(q => q.ID == id)?.Include(o => o.Owner).Include(i => i.AdDetail)?.ThenInclude(t => t.AdDetailPictures)?.FirstOrDefaultAsync();
+            var result = ad.Result;
+            if (result == null)
+            {
+                throw new Exception();
+            }
+
+            return result;
+        }
+
+        public List<Ad> GetAdGrid(Guid countryId)
+        {
+            var ads = _context.Ads.Include(c => c.City)
+                .Where(c => c.CountryID == countryId)
+                .Include(c => c.Category)
+                .Include(o => o.Owner)
+                .Include(i => i.AdDetail)
+                ?.ThenInclude(t => t.AdDetailPictures)
+                .ToListAsync();
+
+            var result = ads.Result;
+            if (result == null)
+            {
+                throw new Exception();
+            }
+
+            return result;
+        }
+
 
         public List<Ad> GetAll(Guid countryId)
         {

@@ -2,6 +2,7 @@
 using AdSite.Models.DatabaseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AdSite.Models.Mappers
@@ -30,8 +31,41 @@ namespace AdSite.Models.Mappers
             {
                 ID = entity.ID,
                 Name = entity.Name,
+                AdDetail = entity.AdDetail,
+                Price = entity.Price
             };
         }
+
+        public static List<AdGridViewModel> MapToAdGridModel(List<Ad> entities)
+        {
+            List<AdGridViewModel> adGrid = new List<AdGridViewModel>();
+
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    var mainPicture = entity.AdDetail?.AdDetailPictures?.FirstOrDefault()?.File;
+                    var description = entity.AdDetail?.Description;
+
+                    adGrid.Add(
+                        new AdGridViewModel()
+                        {
+                            ID = entity.ID,
+                            Name = entity.Name,
+                            Price = entity.Price,
+                            City = entity.City,
+                            Category = entity.Category,
+                            Owner = entity.Owner,
+                            MainPicture = mainPicture,
+                            Description = description
+                        }
+                    );
+                }
+            }
+
+            return adGrid;
+        }
+
 
         public static List<AdViewModel> MapToAdViewModel(List<Ad> entities)
         {
