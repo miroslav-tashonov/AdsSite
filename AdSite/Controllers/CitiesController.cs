@@ -18,7 +18,7 @@ namespace AdSite.Controllers
         private readonly ILogger<CitiesController> _logger;
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly int SERVER_ERROR_CODE = 500;
+        private const int SERVER_ERROR_CODE = 500;
         private Guid CountryId => _countryService.Get();
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);

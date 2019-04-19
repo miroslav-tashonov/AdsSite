@@ -23,10 +23,9 @@ namespace AdSite.Extensions
             logger.LogInformation("adding customs roles");
 
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationIdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             string[] roleNames = {
-                Enum.GetName(typeof(UserRole) ,UserRole.Admin),
+                Enum.GetName(typeof(UserRole), UserRole.Admin),
                 Enum.GetName(typeof(UserRole), UserRole.User),
                 Enum.GetName(typeof(UserRole), UserRole.Viewer)
             };

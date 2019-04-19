@@ -51,7 +51,6 @@ namespace AdSite.Extensions
             tempData[Alerts] = JsonConvert.SerializeObject(alerts);
         }
 
-        // helper methods to simplify the creation of the AlertDecoratorResult types
         public static ActionResult WithSuccess(this ActionResult result, string message)
         {
             return new AlertDecoratorResult(result, "success", message);

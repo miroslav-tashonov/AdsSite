@@ -20,7 +20,7 @@ namespace AdSite.Services
         bool Add(CategoryCreateModel category);
         bool Update(CategoryEditModel category);
         List<JSTreeViewModel> GetCategoriesAsJSTree(Guid countryId);
-        List<Category> GetCategoryAsTreeStructure(Guid countryId);
+        List<CategoryViewModel> GetCategoryAsTreeStructure(Guid countryId);
         List<LookupViewModel> GetAllAsLookup(Guid countryId);
     }
 
@@ -65,7 +65,7 @@ namespace AdSite.Services
             //first recursively delete all child nodes
             try
             {
-                RecursivelyDeleteCategoryNodes(id);
+                _repository.RecursivelyDeleteCategoryNodes(id);
             }
             catch(Exception ex)
             {
@@ -80,22 +80,7 @@ namespace AdSite.Services
             return true;
         }
 
-        private void RecursivelyDeleteCategoryNodes(Guid id)
-        {
-            var entity = _repository.Get(id);
-            if (entity != null)
-            {
-                if (entity.Children != null && entity.Children.Any())
-                {
-                    foreach (var children in entity.Children.ToList())
-                    {
-                        RecursivelyDeleteCategoryNodes(children.ID);
-                    }
-                }
-
-                _repository.Delete(entity.ID);
-            }
-        }
+        
 
         public bool Exists(Guid id)
         {
@@ -119,12 +104,9 @@ namespace AdSite.Services
             return viewModel;
         }
 
-        public List<Category> GetCategoryAsTreeStructure(Guid countryId)
+        public List<CategoryViewModel> GetCategoryAsTreeStructure(Guid countryId)
         {
-
-
-
-            return _repository.GetCategoryAsTreeStructure(countryId);
+            return CategoryMapper.MapToViewModel(_repository.GetCategoryAsTreeStructure(countryId));
         }
         
         public bool Update(CategoryEditModel entity)

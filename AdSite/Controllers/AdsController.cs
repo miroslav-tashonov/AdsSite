@@ -1,4 +1,5 @@
 ﻿using AdSite.Extensions;
+using AdSite.Helpers;
 using AdSite.Mappers;
 using AdSite.Models;
 using AdSite.Models.CRUDModels;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -25,7 +27,9 @@ namespace AdSite.Controllers
 
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly int SERVER_ERROR_CODE = 500;
+        private const int SERVER_ERROR_CODE = 500;
+        private const int FIRST_PAGE_NUMBER = 1;
+        private const int PAGE_SIZE = 3;
         private string CurrentUserId => _userManager.GetUserId(User);
         private Guid CountryId => _countryService.Get();
 
@@ -66,8 +70,13 @@ namespace AdSite.Controllers
             }
         }
 
-        public IActionResult Index(string columnName, string searchString)
+        public IActionResult Index(string columnName, string searchString, int? pageNumber, Guid? categoryId)
         {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                pageNumber = FIRST_PAGE_NUMBER;
+            }
+
             searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
             columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
             ViewData["CurrentFilter"] = searchString;
@@ -75,17 +84,39 @@ namespace AdSite.Controllers
 
             try
             {
-                return View(_adService.GetAdGridModel(CountryId));
+                int numberOfThePage = pageNumber ?? FIRST_PAGE_NUMBER;
+                int count;
+
+                var pageModel = new PageModel()
+                {
+                    ColumnName = columnName,
+                    SearchString = searchString,
+                    CountryId = CountryId,
+                    PageSize = PAGE_SIZE,
+                    PageIndex = numberOfThePage
+                };
+
+                List<AdGridViewModel> items = new List<AdGridViewModel>();
+                if (categoryId == null)
+                {
+                    items = _adService.GetPageForAdGrid(pageModel, out count);
+                }
+                else
+                {
+                    items = _adService.GetPageForAdGridByCategory(pageModel, (Guid)categoryId, out count);
+                }
+
+                return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, PAGE_SIZE));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return NotFound(ex.Message).WithError(ex.Message);
             }
+
         }
 
 
-        // GET: Ads/Create
         public IActionResult Create()
         {
             try
@@ -102,7 +133,6 @@ namespace AdSite.Controllers
             }
         }
 
-        // POST: Ads/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([FromForm]AdCreateModel entity)
@@ -118,7 +148,7 @@ namespace AdSite.Controllers
                         entity.OwnerId = CurrentUserId;
 
                         #region File Map
-                        //need to map files in controller because of aspnet core assembly dependency present
+                        //need to map files in controller because aspnet core assembly is present in project
                         if (entity.Files != null)
                         {
                             foreach (var file in entity.Files)
@@ -162,8 +192,6 @@ namespace AdSite.Controllers
 
         }
 
-
-        // GET: Ads/Edit/Guid
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -196,7 +224,6 @@ namespace AdSite.Controllers
             }
         }
 
-        // POST: Ads/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit([FromForm]AdEditModel entity)
@@ -243,8 +270,6 @@ namespace AdSite.Controllers
 
         }
 
-
-        // GET: Ads/Delete/5
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -262,7 +287,6 @@ namespace AdSite.Controllers
         }
 
 
-        // POST: Ads/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
@@ -288,6 +312,11 @@ namespace AdSite.Controllers
         private bool AdExists(Guid id)
         {
             return _adService.Exists(id);
+        }
+
+        private int AdCount()
+        {
+            return _adService.Count();
         }
     }
 }

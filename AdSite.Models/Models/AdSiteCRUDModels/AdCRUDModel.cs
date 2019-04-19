@@ -41,6 +41,19 @@ namespace AdSite.Models.CRUDModels
         public ApplicationUser Owner { get; set; }
     }
 
+    public class AdGridPagedModel
+    {
+        public Guid ID { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Description { get; set; }
+        public byte[] MainPicture { get; set; }
+
+
+        public Category Category { get; set; }
+        public City City { get; set; }
+        public ApplicationUser Owner { get; set; }
+    }
 
 
     public class AdCreateModel : AuditedEntityModel

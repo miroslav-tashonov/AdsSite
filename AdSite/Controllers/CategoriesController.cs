@@ -7,9 +7,11 @@ using Microsoft.Extensions.Logging;
 using AdSite.Mappers;
 using System.Threading;
 using AdSite.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdSite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -37,11 +39,11 @@ namespace AdSite.Controllers
         // GET: Categories/Details
         public IActionResult Details()
         {
-            var viewModel = new CategoryFilterComponentViewModel();
+            var viewModel = new CategoryTreeViewModel();
             try
             {
                 var jstree = _categoryService.GetCategoriesAsJSTree(CountryId);
-                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = jstree };
+                viewModel = new CategoryTreeViewModel { CategoriesAsTree = jstree };
             }
             catch (Exception ex)
             {

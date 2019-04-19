@@ -1,71 +1,40 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace AdSite.Mappers
 {
     public static class AuditedEntityMapper<T>
     {
-
         public static void FillCreateAuditedEntityFields(T entity, string currentUser, Guid countryId)
         {
             DateTime currentTime = DateTime.Now;
 
-            Type entityType = entity.GetType();
-
-            PropertyInfo fieldPropertyInfo = entityType.GetProperty("CreatedBy");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property CreatedBy not found"));
-            fieldPropertyInfo.SetValue(entity, currentUser, null);
-
-            fieldPropertyInfo = entityType.GetProperty("ModifiedBy");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property ModifiedBy not found"));
-            fieldPropertyInfo.SetValue(entity, currentUser, null);
-
-            fieldPropertyInfo = entityType.GetProperty("CreatedAt");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property CreatedAt not found"));
-            fieldPropertyInfo.SetValue(entity, currentTime, null);
-
-            fieldPropertyInfo = entityType.GetProperty("ModifiedAt");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property ModifiedAt not found"));
-            fieldPropertyInfo.SetValue(entity, currentTime, null);
-
-            fieldPropertyInfo = entityType.GetProperty("CountryId");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property CountryId not found"));
-            fieldPropertyInfo.SetValue(entity, countryId, null);
+            SetPropertyInfoValue(entity, currentUser, "CreatedBy");
+            SetPropertyInfoValue(entity, currentUser, "ModifiedBy");
+            SetPropertyInfoValue(entity, currentTime, "CreatedAt");
+            SetPropertyInfoValue(entity, currentTime, "ModifiedAt");
+            SetPropertyInfoValue(entity, countryId, "CountryId");
         }
 
         public static void FillModifyAuditedEntityFields(T entity, string currentUser)
         {
             DateTime currentTime = DateTime.Now;
 
-            Type entityType = entity.GetType();
-            PropertyInfo fieldPropertyInfo = entityType.GetProperty("ModifiedBy");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property not found"));
-            fieldPropertyInfo.SetValue(entity, currentUser, null);
-
-            fieldPropertyInfo = entityType.GetProperty("ModifiedAt");
-            if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property not found"));
-            fieldPropertyInfo.SetValue(entity, currentTime, null);
+            SetPropertyInfoValue(entity, currentUser, "ModifiedBy");
+            SetPropertyInfoValue(entity, currentTime, "ModifiedAt");
         }
 
         public static void FillCountryEntityField(T entity, Guid countryId)
         {
-            Type entityType = entity.GetType();
+            SetPropertyInfoValue(entity, countryId, "CountryId");
+        }
 
-            PropertyInfo fieldPropertyInfo = entityType.GetProperty("CountryId");
+        private static void SetPropertyInfoValue(T entity, object value, string fieldName)
+        {
+            PropertyInfo fieldPropertyInfo = entity.GetType()?.GetProperty(fieldName);
             if (fieldPropertyInfo == null)
-                throw new Exception(string.Format("Property CountryId not found"));
-            fieldPropertyInfo.SetValue(entity, countryId, null);
+                throw new Exception($"Property {fieldName} not found");
+            fieldPropertyInfo.SetValue(entity, value);
         }
     }
 }

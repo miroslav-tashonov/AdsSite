@@ -1,8 +1,10 @@
-﻿@model IEnumerable<AdSite.Models.CRUDModels.AdGridViewModel>
+﻿@model PaginatedList<AdSite.Models.CRUDModels.AdGridViewModel>
 @using AdSite.Views.Shared;
+@using AdSite.Helpers;
 
 @{
-    string name = @Html.DisplayNameFor(model => model.Name);
+    //todo ne smee first ovde
+    string name = @Html.DisplayNameFor(model => model.First().Name);
     string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
         "<option selected>" + name + "</option>" :
         "<option>" + name + "</option>";
@@ -46,73 +48,111 @@
     <section class="container">
         <!--Loading ad category filters -->
         <div class="section-sb">
-
+            <div class="section-sb-current">
+                <h3><a href="catalog-list.html">Categories <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
+                <ul class="section-sb-list" id="section-sb-list">
+                    @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true });
+                </ul>
+            </div>
         </div>
 
         <!--Loading ad section -->
-        <div class="prod-items section-items">
+        <div class="section-cont">
+            <div class="prod-items section-items">
 
-            @foreach (var gridAd in Model)
-            {
-            <div class="prodlist-i">
-                <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
-                    @if (gridAd.MainPicture != null)
-                    {
-                        <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
-                    }
-                    else
-                    {
-                        <img src='http://placehold.it/300x311' />
-                    }
-                </a>
-                <div class="prodlist-i-cont">
-                    <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
-                    <div class="prodlist-i-txt">
-                        @gridAd.Description
+                @foreach (var gridAd in Model)
+                {
+                    <div class="prodlist-i">
+                        <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
+                            @if (gridAd.MainPicture != null)
+                            {
+                                <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
+                            }
+                            else
+                            {
+                                <img src='http://placehold.it/300x311' />
+                            }
+                        </a>
+                        <div class="prodlist-i-cont">
+                            <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
+                            <div class="prodlist-i-txt">
+                                @gridAd.Description
+                            </div>
+                            <div class="prodlist-i-action">
+                                <span class="prodlist-i-price">
+                                    <b>$ @gridAd.Price</b>
+                                </span>
+                            </div>
+                            <p class="prodlist-i-info">
+                                <a href="#" class="prodlist-i-favorites"><i class="fa fa-heart"></i> Add to wishlist</a>
+                            </p>
+                        </div>
+
+                        <div class="prodlist-i-props-wrap">
+                            <ul class="prodlist-i-props">
+                                <li>
+                                    <b>Owner Name</b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
+                                </li>
+                                <li>
+                                    <b>Owner Number</b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
+                                </li>
+                                <li>
+                                    <b>Owner Mail</b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
+                                </li>
+                                <li>
+                                    <b>City</b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
+                                </li>
+                                <li>
+                                    <b>Category</b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
-                    <div class="prodlist-i-action">
-                        <span class="prodlist-i-price">
-                            <b>$ @gridAd.Price</b>
-                        </span>
-                    </div>
-                    <p class="prodlist-i-info">
-                        <a href="#" class="prodlist-i-favorites"><i class="fa fa-heart"></i> Add to wishlist</a>
-                    </p>
-                </div>
-
-                <div class="prodlist-i-props-wrap">
-                    <ul class="prodlist-i-props">
-                        <li>
-                            <b>Owner Name</b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
-                        </li>
-                        <li>
-                            <b>Owner Number</b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
-                        </li>
-                        <li>
-                            <b>Owner Mail</b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
-                        </li>
-                        <li>
-                            <b>City</b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
-                        </li>
-                        <li>
-                            <b>Category</b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
-                        </li>
-                    </ul>
-                </div>
-
+                }
             </div>
-            }
         </div>
 
 
-        <ul class="pagi">
-            <li class="active"><span>1</span></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li class="pagi-next"><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
-        </ul>
+        @if (Model.TotalPages > 0)
+        {
+            int counter = Model.PagesBefore;
+            int forwardCounter = 1;
+            <ul class="pagi">
+                @while (counter > 0)
+                {
+                    <li>
+                        <a asp-action="Index"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-pageNumber="@(Model.PageIndex-counter)"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]">
+                            @(Model.PageIndex - counter)
+                        </a>
+                    </li>
+                    counter = counter - 1;
+                }
 
+                <li class="active">
+                    <a>
+                        @Model.PageIndex
+                    </a>
+                </li>
+
+                @while (forwardCounter <= Model.PagesLeft)
+                {
+                    <li>
+                        <a asp-action="Index"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-pageNumber="@(Model.PageIndex+forwardCounter)"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]">
+                            @(Model.PageIndex + forwardCounter)
+                        </a>
+                    </li>
+                    forwardCounter = forwardCounter + 1;
+                }
+
+            </ul>
+        }
 
     </section>
 </main>

@@ -1,5 +1,4 @@
 ﻿using AdSite.Models.DatabaseModels;
-using AdSite.Models.Models.AdSiteViewModels;
 using AdSite.Models.CRUDModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AdSite.Mappers;
 
 namespace AdSite.ViewComponents
 {
@@ -15,27 +13,23 @@ namespace AdSite.ViewComponents
     {
         private readonly ICategoryService _categoryService;
         private readonly ICountryService _countryService;
+
         public CategoriesFilterViewComponent(ICategoryService categoryService, ICountryService countryService)
         {
             _categoryService = categoryService;
             _countryService = countryService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(ICollection<CategoryViewModel> categories, bool isFirstCall, Guid selectedCategoryId)
         {
-            var viewModel = new CategoryFilterComponentViewModel();
-
-            try
+            if (isFirstCall)
             {
                 Guid countryId = _countryService.Get();
 
-                var jstree = _categoryService.GetCategoriesAsJSTree(countryId);
-                viewModel = new CategoryFilterComponentViewModel { ComponentCategories = jstree };
+                categories = _categoryService.GetCategoryAsTreeStructure(countryId);
             }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+
+            var viewModel = new CategoryFilterViewModel { IsFirst = isFirstCall, ComponentCategories = categories };
 
             return View(viewModel);
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace AdSite.Services
@@ -14,12 +15,14 @@ namespace AdSite.Services
     public interface IAdService
     {
         bool Exists(Guid id);
+        int Count();
         bool Delete(Guid id);
         bool Add(AdCreateModel ad);
         bool Update(AdEditModel ad);
         List<AdViewModel> GetAds(Guid countryId);
-        List<AdViewModel> GetAds(string columnName, string searchString, Guid countryId);
         List<AdGridViewModel> GetAdGridModel(Guid countryId);
+        List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count);
+        List<AdGridViewModel> GetPageForAdGridByCategory(PageModel pageModel, Guid categoryId, out int count);
         AdViewModel GetAdAsViewModel(Guid adId);
         AdEditModel GetAdAsEditModel(Guid adId);
     }
@@ -106,6 +109,11 @@ namespace AdSite.Services
             return _repository.Exists(id);
         }
 
+        public int Count()
+        {
+            return _repository.Count();
+        }
+
         public List<AdViewModel> GetAds(Guid countryId)
         {
             var entities = _repository.GetAll(countryId);
@@ -117,27 +125,6 @@ namespace AdSite.Services
             return AdMapper.MapToAdViewModel(entities);
         }
 
-        public List<AdViewModel> GetAds(string columnName, string searchString, Guid countryId)
-        {
-            List<Ad> entities;
-
-            switch (columnName.ToLower())
-            {
-                case "name":
-                    entities = _repository.GetByAdName(searchString, countryId);
-                    break;
-                default:
-                    entities = _repository.GetAll(countryId);
-                    break;
-            }
-
-            if (entities == null)
-            {
-                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
-            }
-
-            return AdMapper.MapToAdViewModel(entities);
-        }
 
         public AdEditModel GetAdAsEditModel(Guid id)
         {
@@ -171,6 +158,64 @@ namespace AdSite.Services
 
             return AdMapper.MapToAdGridModel(entities);
         }
+
+        public List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count)
+        {
+            List<Ad> sourceEntities;
+            switch (pageModel.ColumnName.ToLower())
+            {
+                case "name":
+                    sourceEntities = _repository.GetAdGrid(pageModel.SearchString, pageModel.CountryId);
+                    break;
+                default:
+                    sourceEntities = _repository.GetAdGrid(pageModel.CountryId);
+                    break;
+            }
+
+            if (sourceEntities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+            count = sourceEntities.Count;
+
+            var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);
+            if (entities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+
+            return AdMapper.MapToAdGridModel(entities);
+        }
+
+
+        public List<AdGridViewModel> GetPageForAdGridByCategory(PageModel pageModel, Guid categoryId, out int count)
+        {
+            List<Ad> sourceEntities;
+            switch (pageModel.ColumnName.ToLower())
+            {
+                case "name":
+                    sourceEntities = _repository.GetAdGridByCategory(pageModel.SearchString, categoryId, pageModel.CountryId);
+                    break;
+                default:
+                    sourceEntities = _repository.GetAdGridByCategory(categoryId, pageModel.CountryId);
+                    break;
+            }
+
+            if (sourceEntities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+            count = sourceEntities.Count;
+
+            var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);
+            if (entities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+
+            return AdMapper.MapToAdGridModel(entities);
+        }
+
 
         public bool Update(AdEditModel entity)
         {

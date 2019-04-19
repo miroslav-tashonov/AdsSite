@@ -15,6 +15,8 @@ namespace AdSite.Data.Repositories
         List<Category> GetCategoryTree(Guid countryId);
         List<Category> GetCategoryAsTreeStructure(Guid countryId);
         bool SaveChangesResult();
+
+        void RecursivelyDeleteCategoryNodes(Guid id);
     }
 
     public class CategoryRepository : ICategoryRepository
@@ -100,6 +102,23 @@ namespace AdSite.Data.Repositories
                 throw ex;
             }
             return true;
+        }
+
+        public void RecursivelyDeleteCategoryNodes(Guid id)
+        {
+            var entity = Get(id);
+            if (entity != null)
+            {
+                if (entity.Children != null && entity.Children.Any())
+                {
+                    foreach (var children in entity.Children.ToList())
+                    {
+                        RecursivelyDeleteCategoryNodes(children.ID);
+                    }
+                }
+
+                Delete(entity.ID);
+            }
         }
 
         public List<Category> GetCategoryTree(Guid countryId)

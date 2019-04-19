@@ -11,21 +11,31 @@ namespace AdSite.Models.CRUDModels
     {
         public CategoryComponentViewModel()
         {
-            ComponentCategories = new List<Category>();
+            ComponentCategories = new List<CategoryViewModel>();
         }
 
         public bool IsFirst{ get; set; }
-        public ICollection<Category> ComponentCategories { get; set; }
-
+        public ICollection<CategoryViewModel> ComponentCategories { get; set; }
     }
 
-    public class CategoryFilterComponentViewModel
+    public class CategoryFilterViewModel
     {
-        public CategoryFilterComponentViewModel()
+        public CategoryFilterViewModel()
         {
-            ComponentCategories = new List<JSTreeViewModel>();
+            ComponentCategories = new List<CategoryViewModel>();
         }
-        public ICollection<JSTreeViewModel> ComponentCategories { get; set; }
 
+        public bool IsFirst { get; set; }
+        public ICollection<CategoryViewModel> ComponentCategories { get; set; }
+    }
+
+
+    public class CategoryTreeViewModel
+    {
+        public CategoryTreeViewModel()
+        {
+            CategoriesAsTree = new List<JSTreeViewModel>();
+        }
+        public ICollection<JSTreeViewModel> CategoriesAsTree { get; set; }
     }
 }
