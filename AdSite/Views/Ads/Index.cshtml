@@ -119,6 +119,19 @@
             int counter = Model.PagesBefore;
             int forwardCounter = 1;
             <ul class="pagi">
+
+                @if (Model.PageIndex - Model.PagesBefore > 1)
+                {
+                    <li class="pagi-prev">
+                        <a asp-action="Index"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-pageNumber="@( 1 )"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]">
+                            <i class="fa fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                }
+
                 @while (counter > 0)
                 {
                     <li>
@@ -149,6 +162,18 @@
                         </a>
                     </li>
                     forwardCounter = forwardCounter + 1;
+                }
+
+                @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
+                {
+                    <li class="pagi-next">
+                        <a asp-action="Index"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-pageNumber="@(Model.TotalPages)"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]">
+                            <i class="fa fa-angle-double-right"></i>
+                        </a>
+                    </li>
                 }
 
             </ul>

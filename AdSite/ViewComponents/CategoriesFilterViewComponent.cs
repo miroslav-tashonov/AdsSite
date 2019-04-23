@@ -20,7 +20,7 @@ namespace AdSite.ViewComponents
             _countryService = countryService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(ICollection<CategoryViewModel> categories, bool isFirstCall, Guid selectedCategoryId)
+        public async Task<IViewComponentResult> InvokeAsync(ICollection<CategoryViewModel> categories, bool isFirstCall)
         {
             if (isFirstCall)
             {
