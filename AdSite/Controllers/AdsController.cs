@@ -70,7 +70,7 @@ namespace AdSite.Controllers
             }
         }
 
-        public IActionResult Index(string columnName, string searchString, int? pageNumber, Guid? categoryId)
+        public IActionResult Index(string columnName, string searchString, string sortColumn, int? pageNumber, Guid? categoryId)
         {
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -79,8 +79,10 @@ namespace AdSite.Controllers
 
             searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
             columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
+            sortColumn = String.IsNullOrEmpty(sortColumn) ? String.Empty : sortColumn;
             ViewData["CurrentFilter"] = searchString;
             ViewData["CurrentColumn"] = columnName;
+            ViewData["SortColumn"] = sortColumn;
 
             try
             {
@@ -91,6 +93,7 @@ namespace AdSite.Controllers
                 {
                     ColumnName = columnName,
                     SearchString = searchString,
+                    SortColumn = sortColumn,
                     CountryId = CountryId,
                     PageSize = PAGE_SIZE,
                     PageIndex = numberOfThePage
@@ -115,6 +118,48 @@ namespace AdSite.Controllers
             }
 
         }
+
+
+        public IActionResult MyAds(string columnName, string searchString, string sortColumn, int? pageNumber)
+        {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                pageNumber = FIRST_PAGE_NUMBER;
+            }
+
+            searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
+            columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
+            sortColumn = String.IsNullOrEmpty(sortColumn) ? String.Empty : sortColumn;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentColumn"] = columnName;
+            ViewData["SortColumn"] = sortColumn;
+
+            try
+            {
+                int numberOfThePage = pageNumber ?? FIRST_PAGE_NUMBER;
+                int count;
+
+                var pageModel = new PageModel()
+                {
+                    ColumnName = columnName,
+                    SearchString = searchString,
+                    SortColumn = sortColumn,
+                    CountryId = CountryId,
+                    PageSize = PAGE_SIZE,
+                    PageIndex = numberOfThePage
+                };
+
+                var items = _adService.GetPageForMyAdsGrid(pageModel, CurrentUserId, out count);
+
+                return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, PAGE_SIZE));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return NotFound(ex.Message).WithError(ex.Message);
+            }
+        }
+
 
 
         public IActionResult Create()
@@ -254,7 +299,7 @@ namespace AdSite.Controllers
                         }
                     }
 
-                    return RedirectToAction(nameof(Details), new { id = entity.ID }).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
+                    return RedirectToAction(nameof(MyAds)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
                 }
                 else
                 {
@@ -306,7 +351,7 @@ namespace AdSite.Controllers
                 return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
             }
 
-            return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
+            return RedirectToAction(nameof(MyAds)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
         }
 
         private bool AdExists(Guid id)

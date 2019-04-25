@@ -367,6 +367,24 @@ namespace AdSite.Data.Migrations
                     b.ToTable("WebSettings");
                 });
 
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Wishlist", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AdId");
+
+                    b.Property<string>("OwnerId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AdId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Wishlists");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -557,6 +575,19 @@ namespace AdSite.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Wishlist", b =>
+                {
+                    b.HasOne("AdSite.Models.DatabaseModels.Ad", "Ad")
+                        .WithMany()
+                        .HasForeignKey("AdId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AdSite.Models.ApplicationUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

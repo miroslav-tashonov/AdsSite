@@ -107,9 +107,9 @@ namespace AdSite.Extensions
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             //todo hide credentials 
-            if (!userManager.Users.Any(u => u.UserName == "admin"))
+            if (!userManager.Users.Any(u => u.UserName == "admin@email.com"))
             {
-                var user = new ApplicationUser { UserName = "admin", Email = "admin@email.com" };
+                var user = new ApplicationUser { LockoutEnabled = false, EmailConfirmed = true, UserName = "admin@email.com", Email = "admin@email.com" };
                 var result = await userManager.CreateAsync(user, "Admin123!");
                 if (result.Succeeded)
                 {

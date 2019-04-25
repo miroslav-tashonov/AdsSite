@@ -32,6 +32,9 @@ namespace AdSite.Models.Mappers
                 ID = entity.ID,
                 Name = entity.Name,
                 AdDetail = entity.AdDetail,
+                Owner = entity.Owner,
+                Category = entity.Category,
+                City = entity.City,
                 Price = entity.Price
             };
         }

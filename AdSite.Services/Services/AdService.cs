@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace AdSite.Services
@@ -22,6 +21,7 @@ namespace AdSite.Services
         List<AdViewModel> GetAds(Guid countryId);
         List<AdGridViewModel> GetAdGridModel(Guid countryId);
         List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count);
+        List<AdGridViewModel> GetPageForMyAdsGrid(PageModel pageModel, string ownerIdentifier, out int count);
         List<AdGridViewModel> GetPageForAdGridByCategory(PageModel pageModel, Guid categoryId, out int count);
         AdViewModel GetAdAsViewModel(Guid adId);
         AdEditModel GetAdAsEditModel(Guid adId);
@@ -31,21 +31,21 @@ namespace AdSite.Services
 
     public class AdService : IAdService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAdRepository _repository;
         private readonly ILocalizationRepository _localizationRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly ILogger _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private string LOCALIZATION_AD_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_Ad_Not_Found", CultureId);
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
-        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ILogger<AdService> logger, UserManager<ApplicationUser> userManager)
+        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ICategoryRepository categoryRepository, ILogger<AdService> logger)
         {
             _localizationRepository = localizationRepository;
+            _categoryRepository = categoryRepository;
             _repository = repository;
             _logger = logger;
-            _userManager = userManager;
         }
 
         public bool Add(AdCreateModel entity)
@@ -176,6 +176,36 @@ namespace AdSite.Services
             {
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
+            sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
+            count = sourceEntities.Count;
+
+            var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);
+            if (entities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+
+            return AdMapper.MapToAdGridModel(entities);
+        }
+
+        public List<AdGridViewModel> GetPageForMyAdsGrid(PageModel pageModel, string ownerIdentifier, out int count)
+        {
+            List<Ad> sourceEntities;
+            switch (pageModel.ColumnName.ToLower())
+            {
+                case "name":
+                    sourceEntities = _repository.GetMyAdsGrid(pageModel.SearchString, ownerIdentifier, pageModel.CountryId);
+                    break;
+                default:
+                    sourceEntities = _repository.GetMyAdsGrid(String.Empty, ownerIdentifier, pageModel.CountryId);
+                    break;
+            }
+
+            if (sourceEntities == null)
+            {
+                throw new Exception(LOCALIZATION_AD_NOT_FOUND);
+            }
+            sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
             count = sourceEntities.Count;
 
             var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);
@@ -191,13 +221,14 @@ namespace AdSite.Services
         public List<AdGridViewModel> GetPageForAdGridByCategory(PageModel pageModel, Guid categoryId, out int count)
         {
             List<Ad> sourceEntities;
+            var categoryIds = _categoryRepository.GetSubcategoriesIdForCategory(categoryId, pageModel.CountryId);
             switch (pageModel.ColumnName.ToLower())
             {
                 case "name":
-                    sourceEntities = _repository.GetAdGridByCategory(pageModel.SearchString, categoryId, pageModel.CountryId);
+                    sourceEntities = _repository.GetAdGridByCategory(pageModel.SearchString, categoryIds, pageModel.CountryId);
                     break;
                 default:
-                    sourceEntities = _repository.GetAdGridByCategory(categoryId, pageModel.CountryId);
+                    sourceEntities = _repository.GetAdGridByCategory(categoryIds, pageModel.CountryId);
                     break;
             }
 
@@ -205,6 +236,7 @@ namespace AdSite.Services
             {
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
+            sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
             count = sourceEntities.Count;
 
             var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);

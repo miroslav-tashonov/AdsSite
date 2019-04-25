@@ -21,6 +21,7 @@ namespace AdSite.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<Localization> Localizations { get; set; }
         public DbSet<Language> Languages{ get; set; }
+        public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<WebSettings> WebSettings { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

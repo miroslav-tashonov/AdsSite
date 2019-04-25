@@ -1,0 +1,42 @@
+﻿@model IEnumerable<AdSite.Models.CRUDModels.WishlistViewModel>
+@using AdSite.Views.Shared;
+
+@{
+    AdminNavPages.AddActivePage(ViewContext, UsersNavPages.MyWishlist);
+}
+
+@await Html.PartialAsync("_UsersNavigationPartial")
+
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <localize name="Wishlist_Fields_Id"></localize>
+            </th>
+            <th>
+                <localize name="Wishlist_Fields_AdId"></localize>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdId)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn-link"><localize name="General_Delete"></localize></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />

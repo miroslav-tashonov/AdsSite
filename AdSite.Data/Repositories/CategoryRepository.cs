@@ -14,8 +14,8 @@ namespace AdSite.Data.Repositories
     {
         List<Category> GetCategoryTree(Guid countryId);
         List<Category> GetCategoryAsTreeStructure(Guid countryId);
+        List<Guid> GetSubcategoriesIdForCategory(Guid categoryId, Guid countryId);
         bool SaveChangesResult();
-
         void RecursivelyDeleteCategoryNodes(Guid id);
     }
 
@@ -23,7 +23,7 @@ namespace AdSite.Data.Repositories
     {
 
         private readonly ApplicationDbContext _context;
-
+        
         public CategoryRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -48,7 +48,7 @@ namespace AdSite.Data.Repositories
 
                 _context.Categories.Remove(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -129,6 +129,13 @@ namespace AdSite.Data.Repositories
         public List<Category> GetCategoryAsTreeStructure(Guid countryId)
         {
             return _context.Categories.Include(i => i.Children).AsEnumerable().Where(p => p.Parent == null && p.CountryId == countryId).ToList();
+        }
+
+        public List<Guid> GetSubcategoriesIdForCategory(Guid categoryId, Guid countryId)
+        {
+            var items = _context.Categories.Where(c => c.ID == categoryId && c.CountryId == countryId).Include(i => i.Children).AsEnumerable().ToList();
+
+            return items.Select(g => g.ID).ToList();
         }
     }
 }

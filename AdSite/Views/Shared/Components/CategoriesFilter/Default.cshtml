@@ -11,6 +11,9 @@
             <li class="categ-1 has_child">
                 <a asp-action="Index"
                    asp-route-categoryId="@category.ID"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sortColumn="@ViewData["SortColumn"]"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    role="button"
                    aria-expanded="true"
                    class="@(category.ID == categoryId ? "active-category" : String.Empty )">
@@ -29,6 +32,9 @@
             <li class="categ-1">
                 <a asp-action="Index"
                    asp-route-categoryId="@category.ID"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-sortColumn="@ViewData["SortColumn"]"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    role="button"
                    aria-expanded="true"
                    class="@(category.ID == categoryId ? "active-category" : String.Empty )">

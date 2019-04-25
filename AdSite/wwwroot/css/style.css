@@ -1311,14 +1311,20 @@ body {
 	letter-spacing: 2px;
 }
 h1.main-ttl {
-	font-size: 22px;
-	margin: 0 0 35px;
+    font-size: 22px;
+    margin: 0 0 35px;
+    display: inline-block;
 }
 .main-ttl span {
 	position: relative;
 	display: inline-block;
 	padding: 0 0 8px;
 }
+
+.main-ttl-actions{
+    float:right;
+}
+
 .main-ttl span:before {
 	display: block;
 	position: absolute;
@@ -2712,6 +2718,16 @@ ul.b-crumbs {
 	margin: 0 0 30px;
 	min-height: 170px;
 }
+
+.prod-items .prodlist-inline{
+    display:inline-block;
+    width:88%;
+}
+
+.prod-items .prodlist-inline-actions {
+    float:right;
+}
+
 .prod-items .prodlist-i:after {
 	clear: both;
 	display: block;

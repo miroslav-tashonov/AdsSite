@@ -21,6 +21,7 @@ namespace AdSite.Services
         bool Update(CategoryEditModel category);
         List<JSTreeViewModel> GetCategoriesAsJSTree(Guid countryId);
         List<CategoryViewModel> GetCategoryAsTreeStructure(Guid countryId);
+        List<Guid> GetSubcategoriesIdForCategory(Guid categoryId, Guid countryId);
         List<LookupViewModel> GetAllAsLookup(Guid countryId);
     }
 
@@ -108,7 +109,12 @@ namespace AdSite.Services
         {
             return CategoryMapper.MapToViewModel(_repository.GetCategoryAsTreeStructure(countryId));
         }
-        
+
+        public List<Guid> GetSubcategoriesIdForCategory(Guid categoryId, Guid countryId)
+        {
+            return _repository.GetSubcategoriesIdForCategory(categoryId, countryId);
+        }
+
         public bool Update(CategoryEditModel entity)
         {
             Guid? parent = entity.ParentId;

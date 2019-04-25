@@ -96,6 +96,15 @@ namespace AdSite.Data
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Wishlist>()
+                .HasOne(owner => owner.Owner)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Wishlist>()
+                .HasOne(ad => ad.Ad)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

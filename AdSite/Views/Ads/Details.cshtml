@@ -1,5 +1,6 @@
 ﻿@model AdSite.Models.CRUDModels.AdViewModel
 @using AdSite.Views.Shared;
+@inject UserManager<ApplicationUser> UserManager
 
 @section Scripts {
     <script src="~/js/jquery.bxslider.min.js" asp-append-version="true"></script>
@@ -8,9 +9,16 @@
 <hr />
 <main>
     <section class="container">
-
-
         <h1 class="main-ttl"><span>@Html.DisplayFor(model => model.Name)</span></h1>
+
+        @if (User.IsInRole("User") && UserManager.GetUserId(User) == Model.Owner.Id)
+        {
+            <div style="float:right;">
+                <a asp-action="Edit" asp-route-id="@Model.ID"> <localize name="General_Edit"></localize> <i class="fa fa-edit fa-2x"></i> </a>
+                <a asp-action="Delete" asp-route-id="@Model.ID"> <localize name="General_Delete"></localize> <i class="fa fa-trash fa-2x"></i> </a>
+            </div>
+        }
+
         <!-- Single Product - start -->
         <div class="prod-wrap">
 

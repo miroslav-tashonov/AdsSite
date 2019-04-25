@@ -1,6 +1,12 @@
 ﻿@model PaginatedList<AdSite.Models.CRUDModels.AdGridViewModel>
 @using AdSite.Views.Shared;
 @using AdSite.Helpers;
+@{
+    UsersNavPages.AddActivePage(ViewContext, UsersNavPages.MyAds);
+}
+@await Html.PartialAsync("_UsersNavigationPartial")
+
+
 
 @{
     Guid categoryId = (String.IsNullOrEmpty(Context.Request.Query["categoryId"]) ? Guid.Empty : Guid.Parse(Context.Request.Query["categoryId"]));
@@ -9,42 +15,19 @@
     string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
         "<option selected>" + name + "</option>" :
         "<option>" + name + "</option>";
-
-    string sortCheapest = "Cheapest";
-    string selectedCheapest = ViewData["SortColumn"]?.ToString() == sortCheapest ?
-        "<option selected>" + sortCheapest + "</option>" :
-        "<option>" + sortCheapest + "</option>";
-
-    string sortPriciest = "Priciest";
-    string selectedPriciest = ViewData["SortColumn"]?.ToString() == sortPriciest ?
-        "<option selected>" + sortPriciest + "</option>" :
-        "<option>" + sortPriciest + "</option>";
-
-    string sortLatest = "Latest";
-    string selectedLatest = ViewData["SortColumn"]?.ToString() == sortLatest ?
-        "<option selected>" + sortLatest + "</option>" :
-        "<option>" + sortLatest + "</option>";
-
 }
 
 <br />
 
-<form asp-action="Index" asp-route-categoryId="@categoryId" method="get">
+<form asp-action="MyAds" method="get">
     <div class="form-actions no-color row">
         <div class="col-sm-5">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <localize name="General_FindBy"></localize>
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-8">
                 <select name="ColumnName" class="form-control">
                     @Html.Raw(selectedName)
-                </select>
-            </div>
-            <div class="col-sm-5">
-                <select name="SortColumn" class="form-control">
-                    @Html.Raw(selectedCheapest)
-                    @Html.Raw(selectedPriciest)
-                    @Html.Raw(selectedLatest)
                 </select>
             </div>
         </div>
@@ -64,23 +47,12 @@
 
 <main>
     <section class="container">
-        <!--Loading ad category filters -->
-        <div class="section-sb">
-            <div class="section-sb-current">
-                <h3><a href="catalog-list.html">Categories <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
-                <ul class="section-sb-list" id="section-sb-list">
-                    @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true });
-                </ul>
-            </div>
-        </div>
-
-        <!--Loading ad section -->
         <div class="section-cont">
             <div class="prod-items section-items">
 
                 @foreach (var gridAd in Model)
                 {
-                    <div class="prodlist-i">
+                    <div class="prodlist-i prodlist-inline">
                         <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
                             @if (gridAd.MainPicture != null)
                             {
@@ -101,31 +73,12 @@
                                     <b>$ @gridAd.Price</b>
                                 </span>
                             </div>
-                            <p class="prodlist-i-info">
-                                <a href="#" class="prodlist-i-favorites"><i class="fa fa-heart"></i> Add to wishlist</a>
-                            </p>
                         </div>
 
-                        <div class="prodlist-i-props-wrap">
-                            <ul class="prodlist-i-props">
-                                <li>
-                                    <b><localize name="Owner_Username"></localize></b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
-                                </li>
-                                <li>
-                                    <b><localize name="Owner_Phone"></localize></b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
-                                </li>
-                                <li>
-                                    <b><localize name="Owner_Mail"></localize></b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
-                                </li>
-                                <li>
-                                    <b><localize name="City_Entity"></localize></b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
-                                </li>
-                                <li>
-                                    <b><localize name="Category_Entity"></localize></b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
-                                </li>
-                            </ul>
-                        </div>
-
+                    </div>
+                    <div class="prodlist-inline-actions">
+                        <a asp-action="Edit" asp-route-id="@gridAd.ID"> <i class="fa fa-edit fa-2x"></i> </a>
+                        <a asp-action="Delete" asp-route-id="@gridAd.ID"> <i class="fa fa-trash fa-2x"></i> </a>
                     </div>
                 }
             </div>
@@ -134,7 +87,7 @@
 
         @if (Model.TotalPages > 1)
         {
-            
+
             int counter = Model.PagesBefore;
             int forwardCounter = 1;
             <ul class="pagi">
@@ -142,8 +95,7 @@
                 @if (Model.PageIndex - Model.PagesBefore > 1)
                 {
                     <li class="pagi-prev">
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
+                        <a asp-action="MyAds"
                            asp-route-currentFilter="@ViewData["CurrentFilter"]"
                            asp-route-sortOrder="@ViewData["CurrentSort"]"
                            asp-route-sortColumn="@ViewData["SortColumn"]"
@@ -156,8 +108,7 @@
                 @while (counter > 0)
                 {
                     <li>
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
+                        <a asp-action="MyAds"
                            asp-route-currentFilter="@ViewData["CurrentFilter"]"
                            asp-route-sortColumn="@ViewData["SortColumn"]"
                            asp-route-sortOrder="@ViewData["CurrentSort"]"
@@ -177,8 +128,7 @@
                 @while (forwardCounter <= Model.PagesLeft)
                 {
                     <li>
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
+                        <a asp-action="MyAds"
                            asp-route-currentFilter="@ViewData["CurrentFilter"]"
                            asp-route-sortOrder="@ViewData["CurrentSort"]"
                            asp-route-sortColumn="@ViewData["SortColumn"]"
@@ -192,8 +142,7 @@
                 @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
                 {
                     <li class="pagi-next">
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
+                        <a asp-action="MyAds"
                            asp-route-currentFilter="@ViewData["CurrentFilter"]"
                            asp-route-sortColumn="@ViewData["SortColumn"]"
                            asp-route-sortOrder="@ViewData["CurrentSort"]"

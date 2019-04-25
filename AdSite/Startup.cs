@@ -162,29 +162,32 @@ namespace AdSite
             string defaultLanguage = Configuration["DefaultLanguage:Value"];
             var languageService = serviceProvider.GetService<ILanguageService>();
             var countryService = serviceProvider.GetService<ICountryService>();
-
-            Guid countryId = countryService.Get();
-            var languages = languageService.GetAll(countryId);
-
-            List<CultureInfo> supportedCultures = new List<CultureInfo>();
-            foreach (var language in languages)
+            try
             {
-                try
-                {
-                    supportedCultures.Add(new CultureInfo(language.CultureId));
-                }
-                catch (Exception ex)
-                {
+                Guid countryId = countryService.Get();
+                var languages = languageService.GetAll(countryId);
 
+                List<CultureInfo> supportedCultures = new List<CultureInfo>();
+                foreach (var language in languages)
+                {
+                    try
+                    {
+                        supportedCultures.Add(new CultureInfo(language.CultureId));
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
                 }
+
+                services.Configure<RequestLocalizationOptions>(options =>
+                {
+                    options.DefaultRequestCulture = new RequestCulture(culture: defaultLanguage, uiCulture: defaultLanguage);
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+                });
             }
-
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture(culture: defaultLanguage, uiCulture: defaultLanguage);
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
-            });
+            catch { }
         }
 
         private RequestLocalizationOptions BuildLocalizationOptions(ILanguageService languageService, ICountryService countryService)
