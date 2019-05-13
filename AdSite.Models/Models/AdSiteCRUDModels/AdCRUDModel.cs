@@ -12,7 +12,7 @@ namespace AdSite.Models.CRUDModels
         public Guid ID { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-
+        public bool IsInWishlist { get; set; }
 
         public Category Category { get; set; }
         public City City { get; set; }
@@ -32,9 +32,9 @@ namespace AdSite.Models.CRUDModels
         public Guid ID { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public string Description{ get; set; }
+        public string Description { get; set; }
         public byte[] MainPicture { get; set; }
-
+        public bool IsInWishlist {get; set;}
 
         public Category Category { get; set; }
         public City City { get; set; }        

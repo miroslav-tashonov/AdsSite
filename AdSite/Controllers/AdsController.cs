@@ -22,6 +22,7 @@ namespace AdSite.Controllers
         private readonly ICategoryService _categoryService;
         private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
+        private readonly IWishlistService _wishlistService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<AdsController> _logger;
 
@@ -42,8 +43,9 @@ namespace AdSite.Controllers
         private string LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT => _localizationService.GetByKey("ErrorMessage_OnlyOwnerCanEdit", CultureId);
         private string LOCALIZATION_ERROR_CONCURENT_EDIT => _localizationService.GetByKey("ErrorMessage_ConcurrentEdit", CultureId);
 
-        public AdsController(IAdService adService, ICityService cityService, ICategoryService categoryService, ICountryService countryService, ILocalizationService localizationService, UserManager<ApplicationUser> userManager, ILogger<AdsController> logger)
+        public AdsController(IAdService adService, ICityService cityService, IWishlistService wishlistService, ICategoryService categoryService, ICountryService countryService, ILocalizationService localizationService, UserManager<ApplicationUser> userManager, ILogger<AdsController> logger)
         {
+            _wishlistService = wishlistService; 
             _adService = adService;
             _cityService = cityService;
             _categoryService = categoryService;
@@ -61,7 +63,9 @@ namespace AdSite.Controllers
 
             try
             {
-                return View(_adService.GetAdAsViewModel((Guid)id));
+                var viewModel = _adService.GetAdAsViewModel((Guid)id);
+                viewModel.IsInWishlist = _wishlistService.IsInWishlist((Guid)id, CurrentUserId);
+                return View(viewModel);
             }
             catch (Exception ex)
             {
@@ -96,7 +100,8 @@ namespace AdSite.Controllers
                     SortColumn = sortColumn,
                     CountryId = CountryId,
                     PageSize = PAGE_SIZE,
-                    PageIndex = numberOfThePage
+                    PageIndex = numberOfThePage,
+                    CurrentUser = CurrentUserId
                 };
 
                 List<AdGridViewModel> items = new List<AdGridViewModel>();
@@ -146,7 +151,8 @@ namespace AdSite.Controllers
                     SortColumn = sortColumn,
                     CountryId = CountryId,
                     PageSize = PAGE_SIZE,
-                    PageIndex = numberOfThePage
+                    PageIndex = numberOfThePage,
+                    CurrentUser = CurrentUserId
                 };
 
                 var items = _adService.GetPageForMyAdsGrid(pageModel, CurrentUserId, out count);

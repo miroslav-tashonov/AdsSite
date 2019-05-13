@@ -14,8 +14,9 @@ namespace AdSite.Services
     public interface IWishlistService
     {
         bool Exists(Guid id);
-        bool Delete(Guid id);
-        bool Add(Guid adId, string currentUserId);
+        bool Delete(Guid adId, string currentUserId);
+        bool Add(Guid adId, string currentUserId, Guid countryId);
+        bool IsInWishlist(Guid adId, string userId);
         List<WishlistViewModel> GetMyWishlist(string ownerId, Guid countryId);
     }
 
@@ -39,23 +40,28 @@ namespace AdSite.Services
             _userManager = userManager;
         }
 
-        public bool Add(Guid adId, string currentUserId)
+        public bool Add(Guid adId, string currentUserId, Guid countryId)
         {
             Wishlist wishlist = new Wishlist
             {
                 AdId = adId,
-                OwnerId = currentUserId
+                OwnerId = currentUserId,
+                CountryId = countryId
             };
 
-
-            return _repository.Add(wishlist);
+            if (!_repository.Exists(adId, currentUserId))
+            {
+                return _repository.Add(wishlist);
+            }
+            else
+                return false;
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(Guid adId, string currentUserID)
         {
             try
             {
-                return _repository.Delete(id);
+                return _repository.Delete(adId, currentUserID);
             }
             catch (Exception ex)
             {
@@ -68,6 +74,11 @@ namespace AdSite.Services
         public bool Exists(Guid id)
         {
             return _repository.Exists(id);
+        }
+
+        public bool IsInWishlist(Guid adId, string userId)
+        {
+            return _repository.Exists(adId, userId);
         }
 
 

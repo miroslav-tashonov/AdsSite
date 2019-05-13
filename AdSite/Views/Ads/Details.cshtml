@@ -96,7 +96,24 @@
                     @Html.DisplayFor(model => model.AdDetail.Description)
                 </div>
                 <p class="prod-actions">
-                    <a href="#" class="prod-favorites"><i class="fa fa-heart"></i> Wishlist</a>
+                    @if (Model.IsInWishlist)
+                    {
+                        <a asp-action="Delete"
+                           asp-controller="Wishlist"
+                           asp-route-adId=@Model.ID
+                           class="prodlist-i-favorites">
+                            <i class="fa fa-heart" style="color: crimson"></i><localize name="General_DeleteFromWishlist"></localize>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Create"
+                           asp-controller="Wishlist"
+                           asp-route-adId=@Model.ID
+                           class="prodlist-i-favorites">
+                            <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
+                        </a>
+                    }
                 </p>
             </div>
 

@@ -102,7 +102,24 @@
                                 </span>
                             </div>
                             <p class="prodlist-i-info">
-                                <a href="#" class="prodlist-i-favorites"><i class="fa fa-heart"></i> Add to wishlist</a>
+                                @if (gridAd.IsInWishlist)
+                                {
+                                    <a asp-action="Delete"
+                                       asp-controller="Wishlist"
+                                       asp-route-adId=@gridAd.ID
+                                       class="prodlist-i-favorites">
+                                        <i class="fa fa-heart" style="color: crimson"></i><localize name="General_DeleteFromWishlist"></localize>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Create"
+                                       asp-controller="Wishlist"
+                                       asp-route-adId=@gridAd.ID
+                                       class="prodlist-i-favorites">
+                                        <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
+                                    </a>
+                                }
                             </p>
                         </div>
 

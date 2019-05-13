@@ -32,6 +32,7 @@ namespace AdSite.Services
     public class AdService : IAdService
     {
         private readonly IAdRepository _repository;
+        private readonly IWishlistService _wishlistService ;
         private readonly ILocalizationRepository _localizationRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ILogger _logger;
@@ -40,8 +41,9 @@ namespace AdSite.Services
         private string LOCALIZATION_AD_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_Ad_Not_Found", CultureId);
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
-        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ICategoryRepository categoryRepository, ILogger<AdService> logger)
+        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ICategoryRepository categoryRepository, IWishlistService wishlistService, ILogger<AdService> logger)
         {
+            _wishlistService = wishlistService;
             _localizationRepository = localizationRepository;
             _categoryRepository = categoryRepository;
             _repository = repository;
@@ -185,7 +187,14 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
 
-            return AdMapper.MapToAdGridModel(entities);
+            var list = AdMapper.MapToAdGridModel(entities);
+
+            foreach (var ad in list)
+            {
+                ad.IsInWishlist = _wishlistService.IsInWishlist(ad.ID, pageModel.CurrentUser);
+            }
+
+            return list;
         }
 
         public List<AdGridViewModel> GetPageForMyAdsGrid(PageModel pageModel, string ownerIdentifier, out int count)
@@ -214,7 +223,14 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
 
-            return AdMapper.MapToAdGridModel(entities);
+            var list = AdMapper.MapToAdGridModel(entities);
+
+            foreach (var ad in list)
+            {
+                ad.IsInWishlist = _wishlistService.IsInWishlist(ad.ID, pageModel.CurrentUser);
+            }
+
+            return list;
         }
 
 
@@ -245,7 +261,12 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
 
-            return AdMapper.MapToAdGridModel(entities);
+            var list = AdMapper.MapToAdGridModel(entities);
+            foreach(var ad in list)
+            {
+                ad.IsInWishlist = _wishlistService.IsInWishlist(ad.ID, pageModel.CurrentUser);
+            }
+            return list;
         }
 
 

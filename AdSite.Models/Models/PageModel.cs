@@ -11,6 +11,7 @@ namespace AdSite.Models
         public string SearchString { get; set; }
         public string SortColumn { get; set; }
         public Guid CountryId { get; set; }
+        public string CurrentUser { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
     }

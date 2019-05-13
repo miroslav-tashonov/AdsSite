@@ -105,6 +105,11 @@ namespace AdSite.Data
                 .HasOne(ad => ad.Ad)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Wishlist>()
+                .HasOne(country => country.Country)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

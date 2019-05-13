@@ -155,6 +155,8 @@ namespace AdSite
             services.AddTransient<ICityRepository, CityRepository>();
             services.AddTransient<IAdService, AdService>();
             services.AddTransient<IAdRepository, AdRepository>();
+            services.AddTransient<IWishlistService, WishlistService>();
+            services.AddTransient<IWishlistRepository, WishlistRepository>();
         }
 
         private void RegisterSupportedLanguages(IServiceCollection services, ServiceProvider serviceProvider)

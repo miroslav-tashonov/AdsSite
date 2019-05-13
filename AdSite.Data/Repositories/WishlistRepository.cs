@@ -9,6 +9,9 @@ namespace AdSite.Data.Repositories
     public interface IWishlistRepository : IRepository<Wishlist>
     {
         List<Wishlist> GetAll(string ownerId, Guid countryId);
+        bool Delete(Guid adId, string ownerId);
+
+        bool Exists(Guid adId, string ownerId);
     }
 
     public class WishlistRepository : IWishlistRepository
@@ -22,6 +25,27 @@ namespace AdSite.Data.Repositories
         public bool Add(Wishlist entity)
         {
             _context.Add(entity);
+            return SaveChangesResult();
+        }
+
+        public bool Delete(Guid adId, string currentUserId)
+        {
+            try
+            {
+                var wishlist = _context.Wishlists.FirstOrDefaultAsync(m => m.AdId == adId && m.OwnerId == currentUserId);
+                var result = wishlist.Result;
+                if (result == null)
+                {
+                    throw new Exception();
+                }
+
+                _context.Wishlists.Remove(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             return SaveChangesResult();
         }
 
@@ -49,6 +73,11 @@ namespace AdSite.Data.Repositories
         public bool Exists(Guid id)
         {
             return _context.Wishlists.Any(e => e.ID == id);
+        }
+
+        public bool Exists(Guid adId, string userId)
+        {
+            return _context.Wishlists.Any(e => e.AdId == adId && e.OwnerId == userId);
         }
 
         public Wishlist Get(Guid id)
