@@ -48,7 +48,7 @@ namespace AdSite.Controllers
                 return RedirectToAction(nameof(Create));
             }
 
-            var webSettings = _webSettingsService.GetWebSettingsForCountry(CountryId);
+            var webSettings = _webSettingsService.GetWebSettingsViewModelForCountry(CountryId);
 
             return View(webSettings);
         }
@@ -61,7 +61,7 @@ namespace AdSite.Controllers
                 return RedirectToAction(nameof(Create));
             }
 
-            var webSettings = _webSettingsService.GetWebSettingsForCountry(CountryId);
+            var webSettings = _webSettingsService.GetWebSettingsEditModelForCountry(CountryId);
 
             return View(webSettings);
         }

@@ -12,6 +12,7 @@ namespace AdSite.Data.Repositories
 
     public interface ICategoryRepository : IRepository<Category>
     {
+        Guid? GetCategoryParentId(Guid categoryId);
         List<Category> GetCategoryTree(Guid countryId);
         List<Category> GetCategoryAsTreeStructure(Guid countryId);
         List<Guid> GetSubcategoriesIdForCategory(Guid categoryId, Guid countryId);
@@ -23,7 +24,7 @@ namespace AdSite.Data.Repositories
     {
 
         private readonly ApplicationDbContext _context;
-        
+
         public CategoryRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -133,9 +134,37 @@ namespace AdSite.Data.Repositories
 
         public List<Guid> GetSubcategoriesIdForCategory(Guid categoryId, Guid countryId)
         {
-            var items = _context.Categories.Where(c => c.ID == categoryId && c.CountryId == countryId).Include(i => i.Children).AsEnumerable().ToList();
+            var items = _context.Categories.Include(i => i.Children).AsEnumerable().Where(c => c.ID == categoryId && c.CountryId == countryId).ToList();
 
-            return items.Select(g => g.ID).ToList();
+            return RecursivelyGetChildrenGuids(items);
+        }
+
+        private List<Guid> RecursivelyGetChildrenGuids(List<Category> items)
+        {
+            var categoriesList = new List<Guid>();
+
+            foreach (var item in items)
+            {
+                categoriesList.Add(item.ID);
+                if (item.Children != null && item.Children.Count > 0)
+                {
+                    categoriesList.AddRange(RecursivelyGetChildrenGuids(item.Children.ToList()));
+                }
+            }
+
+            return categoriesList;
+        }
+
+        public Guid? GetCategoryParentId(Guid categoryId)
+        {
+            var category = _context.Categories.FirstOrDefaultAsync(m => m.ID == categoryId);
+            var result = category.Result;
+            if (result == null)
+            {
+                throw new Exception();
+            }
+
+            return result.ParentId;
         }
     }
 }

@@ -1,10 +1,16 @@
 ﻿@model AdSite.Models.CRUDModels.AdViewModel
 @using AdSite.Views.Shared;
+@using Microsoft.AspNetCore.Html;
 @inject UserManager<ApplicationUser> UserManager
-
 @section Scripts {
     <script src="~/js/jquery.bxslider.min.js" asp-append-version="true"></script>
 }
+
+@{
+    const int NUMBER_OF_RELATED_ADS = 3;
+    int relatedAdsCounter = 0;
+}
+
 <br />
 <hr />
 <main>
@@ -137,93 +143,46 @@
         <!-- Single Product - end -->
         <!-- Related Products - start -->
         <div class="prod-related">
-            <h2><span>Related products</span></h2>
+            <h2><span>Related Ads</span></h2>
             <div class="prod-related-car" id="prod-related-car">
-
                 <div class="flex-viewport" style="overflow: hidden; position: relative;">
                     <ul class="slides" style="width: 1000%; transition-duration: 0s; transform: translate3d(-228px, 0px, 0px);">
-                        <li class="prod-rel-wrap clone" aria-hidden="true" style="width: 228px; margin-right: 0px; float: left; display: block;">
-                            <div class="prod-rel">
-                                <a href="product.html" class="prod-rel-img">
-                                    <img src="http://placehold.it/300x416" alt="Maxime molestias necessitatibus nobis" draggable="false">
-                                </a>
-                                <div class="prod-rel-cont">
-                                    <h3><a href="product.html">Maxime molestias necessitatibus nobis</a></h3>
-                                    <p class="prod-rel-price">
-                                        <b>$95</b>
-                                    </p>
-                                    <div class="prod-rel-actions">
-                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
-                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
-                                        <p class="prod-i-addwrap">
-                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                        @for (int i = 0; i < (Model.RelatedAds.Count / NUMBER_OF_RELATED_ADS); i++)
+                        {
+                            <li class="prod-rel-wrap clone" aria-hidden="true" style="width: 228px; margin-right: 0px; float: left; display: block;">
+                                @for (int j = 0; j < NUMBER_OF_RELATED_ADS; j++)
+                                {
+                                    if (relatedAdsCounter < Model.RelatedAds.Count)
+                                    {
+                                        <div class="prod-rel">
+                                            <a class="prod-rel-img" asp-action="Details" asp-route-id="@Model.RelatedAds[relatedAdsCounter].ID">
+                                                @if (Model.RelatedAds[relatedAdsCounter].MainPicture != null)
+                                                {
+                                                    <img src='data:image;base64,@System.Convert.ToBase64String(Model.RelatedAds[relatedAdsCounter].MainPicture)' />
+                                                }
+                                                else
+                                                {
+                                                    <img src='~/img/300x311.png' />
+                                                }
+                                            </a>
+                                            <div class="prod-rel-cont">
+                                                <h3><a asp-action="Details" asp-route-id="@Model.RelatedAds[relatedAdsCounter].ID">@Model.RelatedAds[relatedAdsCounter].Name</a></h3>
+                                                <div class="prodlist-i-txt">
+                                                    @Model.RelatedAds[relatedAdsCounter].Description
+                                                </div>
+                                                <div class="prod-rel-actions">
+                                                    <span class="prod-rel-price">
+                                                        <b>$ @Model.RelatedAds[relatedAdsCounter].Price</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
 
-
-
-                            <div class="prod-rel">
-                                <a href="product.html" class="prod-rel-img">
-                                    <img src="http://placehold.it/300x480" alt="Facilis illum" draggable="false">
-                                </a>
-                                <div class="prod-rel-cont">
-                                    <h3><a href="product.html">Facilis illum</a></h3>
-                                    <p class="prod-rel-price">
-                                        <b>$150</b>
-                                    </p>
-                                    <div class="prod-rel-actions">
-                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
-                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
-                                        <p class="prod-i-addwrap">
-                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </li>
-                        <li class="prod-rel-wrap flex-active-slide" data-thumb-alt="" style="width: 228px; margin-right: 0px; float: left; display: block;">
-                            <div class="prod-rel">
-                                <a href="product.html" class="prod-rel-img">
-                                    <img src="http://placehold.it/300x311" alt="Adipisci aperiam commodi" draggable="false">
-                                </a>
-                                <div class="prod-rel-cont">
-                                    <h3><a href="product.html">Adipisci aperiam commodi</a></h3>
-                                    <p class="prod-rel-price">
-                                        <b>$59</b>
-                                    </p>
-                                    <div class="prod-rel-actions">
-                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
-                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
-                                        <p class="prod-i-addwrap">
-                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="prod-rel-wrap" data-thumb-alt="" style="width: 228px; margin-right: 0px; float: left; display: block;">
-                            <div class="prod-rel">
-                                <a href="product.html" class="prod-rel-img">
-                                    <img src="http://placehold.it/378x300" alt="Sunt temporibus velit" draggable="false">
-                                </a>
-                                <div class="prod-rel-cont">
-                                    <h3><a href="product.html">Sunt temporibus velit</a></h3>
-                                    <p class="prod-rel-price">
-                                        <b>$115</b>
-                                    </p>
-                                    <div class="prod-rel-actions">
-                                        <a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
-                                        <a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
-                                        <p class="prod-i-addwrap">
-                                            <a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                                    relatedAdsCounter++;
+                                }
+                            </li>
+                        }
                     </ul>
                 </div><ol class="flex-control-nav flex-control-paging"><li><a href="#" class="flex-active">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li></ol><ul class="flex-direction-nav"><li class="flex-nav-prev"><a class="flex-prev" href="#">Previous</a></li><li class="flex-nav-next"><a class="flex-next" href="#">Next</a></li></ul>
             </div>
@@ -235,9 +194,5 @@
 <br />
 
 <div>
-    @if (User.IsInRole("Users"))
-    {
-        <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-default"><localize name="General_Edit"></localize></a>
-    }
     <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
 </div>

@@ -24,6 +24,34 @@ namespace AdSite.Models.Mappers
             };
         }
 
+        public static WebSettingsEditModel MapToWebSettingsEditModel(WebSettings entity)
+        {
+            return new WebSettingsEditModel()
+            {
+                ID = entity.ID,
+                Phone = entity.Phone,
+                Email = entity.Email,
+                FacebookSocialLink = entity.FacebookSocialLink,
+                InstagramSocialLink = entity.InstagramSocialLink,
+                TwitterSocialLink = entity.TwitterSocialLink,
+                GooglePlusSocialLink = entity.GooglePlusSocialLink,
+                VKSocialLink = entity.VKSocialLink
+            };
+        }
+
+        public static WebSettingsCreateModel MapToWebSettingsCreateModel(WebSettings entity)
+        {
+            return new WebSettingsCreateModel()
+            {
+                Phone = entity.Phone,
+                Email = entity.Email,
+                FacebookSocialLink = entity.FacebookSocialLink,
+                InstagramSocialLink = entity.InstagramSocialLink,
+                TwitterSocialLink = entity.TwitterSocialLink,
+                GooglePlusSocialLink = entity.GooglePlusSocialLink,
+                VKSocialLink = entity.VKSocialLink
+            };
+        }
 
     }
 }

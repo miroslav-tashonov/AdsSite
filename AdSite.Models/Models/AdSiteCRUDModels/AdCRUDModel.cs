@@ -14,6 +14,7 @@ namespace AdSite.Models.CRUDModels
         public decimal Price { get; set; }
         public bool IsInWishlist { get; set; }
 
+        public List<AdGridViewModel> RelatedAds { get; set; }
         public Category Category { get; set; }
         public City City { get; set; }
         public Country Country { get; set; }

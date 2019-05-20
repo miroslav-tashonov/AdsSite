@@ -16,7 +16,9 @@ namespace AdSite.Services
     {
         bool CreateWebSettingsForCountry(WebSettingsCreateModel category, Guid countryId);
         bool UpdateWebSettingsForCountry(WebSettingsEditModel category, Guid countryId);
-        WebSettingsViewModel GetWebSettingsForCountry(Guid countryId);
+        WebSettingsViewModel GetWebSettingsViewModelForCountry(Guid countryId);
+        WebSettingsCreateModel GetWebSettingsCreateModelForCountry(Guid countryId);
+        WebSettingsEditModel GetWebSettingsEditModelForCountry(Guid countryId);
         bool WebSettingsExistForCountry(Guid countryId);
     }
 
@@ -40,13 +42,31 @@ namespace AdSite.Services
             _userManager = userManager;
         }
 
-        public WebSettingsViewModel GetWebSettingsForCountry(Guid countryId)
+        public WebSettingsViewModel GetWebSettingsViewModelForCountry(Guid countryId)
         {
             var entity = _repository.GetWebSettingsForCountry(countryId);
             if (entity == null)
                 throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
 
             return WebSettingsMapper.MapToWebSettingsViewModel(entity);
+        }
+
+        public WebSettingsCreateModel GetWebSettingsCreateModelForCountry(Guid countryId)
+        {
+            var entity = _repository.GetWebSettingsForCountry(countryId);
+            if (entity == null)
+                throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
+
+            return WebSettingsMapper.MapToWebSettingsCreateModel(entity);
+        }
+
+        public WebSettingsEditModel GetWebSettingsEditModelForCountry(Guid countryId)
+        {
+            var entity = _repository.GetWebSettingsForCountry(countryId);
+            if (entity == null)
+                throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
+
+            return WebSettingsMapper.MapToWebSettingsEditModel(entity);
         }
 
         public bool WebSettingsExistForCountry(Guid countryId)

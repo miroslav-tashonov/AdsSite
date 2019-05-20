@@ -3,7 +3,9 @@
 @using AdSite.Helpers;
 
 @{
-    Guid categoryId = (String.IsNullOrEmpty(Context.Request.Query["categoryId"]) ? Guid.Empty : Guid.Parse(Context.Request.Query["categoryId"]));
+    Guid? categoryId = (String.IsNullOrEmpty(Context.Request.Query["categoryId"]) ? (Guid?)null : Guid.Parse(Context.Request.Query["categoryId"]));
+
+    string categoryAttribute = "asp-route-categoryId='@categoryId'";
 
     string name = @Html.DisplayNameFor(model => model.FirstOrDefault().Name);
     string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
@@ -208,6 +210,7 @@
 
                 @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
                 {
+
                     <li class="pagi-next">
                         <a asp-action="Index"
                            asp-route-categoryId="@categoryId"

@@ -7,22 +7,32 @@ using Microsoft.AspNetCore.Mvc;
 using AdSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using AdSite.Services;
+using Microsoft.Extensions.Logging;
 
 namespace AdSite.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILocalizationService _localizationService;
-        public HomeController(ILocalizationService localizationService)
+        private readonly IWebSettingsService _webSettingsService;
+        private readonly ICountryService _countryService;
+        private readonly ILogger<HomeController> _logger;
+
+        private Guid CountryId => _countryService.Get();
+
+        public HomeController(ILocalizationService localizationService, IWebSettingsService webSettingsService, ICountryService countryService, ILogger<HomeController> logger)
         {
             _localizationService = localizationService;
+            _webSettingsService = webSettingsService;
+            _countryService = countryService;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-        [Authorize(Roles=("Admin"))]
+        [Authorize(Roles = ("Admin"))]
         public IActionResult AdminPanel()
         {
             return View("_AdminNavigationPartial");
@@ -36,9 +46,7 @@ namespace AdSite.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            return View("Contact");
         }
 
         public IActionResult Error()

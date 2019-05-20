@@ -64,7 +64,7 @@ namespace AdSite.Controllers
                 try
                 {
                     bool statusResult = _wishlistService.Add(adId, CurrentUserId, CountryId);
-                    
+
                     if (statusResult)
                     {
                         return Redirect(referer).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);

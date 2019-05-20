@@ -37,6 +37,8 @@ namespace AdSite.Services
         private readonly ICategoryRepository _categoryRepository;
         private readonly ILogger _logger;
 
+        private Guid CurrentAdId;
+        private const int NUMBER_OF_RELATED_ADS = 9;
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private string LOCALIZATION_AD_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_Ad_Not_Found", CultureId);
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
@@ -69,6 +71,7 @@ namespace AdSite.Services
             Ad ad = new Ad
             {
                 Name = entity.Name,
+                Price = entity.Price,
                 CategoryID = entity.CategoryId,
                 CityID = entity.CityId,
                 OwnerId = entity.OwnerId,
@@ -141,13 +144,19 @@ namespace AdSite.Services
 
         public AdViewModel GetAdAsViewModel(Guid id)
         {
+            CurrentAdId = id;
             var entity = _repository.GetAdWithDetails(id);
             if (entity == null)
             {
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
+            
 
-            return AdMapper.MapToAdViewModel(entity);
+            var adViewModel = AdMapper.MapToAdViewModel(entity);
+
+            adViewModel.RelatedAds = LoadRelatedAdsForCategories(entity.CategoryID);
+
+            return adViewModel ;
         }
 
         public List<AdGridViewModel> GetAdGridModel(Guid countryId)
@@ -267,6 +276,29 @@ namespace AdSite.Services
                 ad.IsInWishlist = _wishlistService.IsInWishlist(ad.ID, pageModel.CurrentUser);
             }
             return list;
+        }
+
+
+        private List<AdGridViewModel> LoadRelatedAdsForCategories(Guid currentCategoryId)
+        {
+            var relatedAds = RecursivelyLoadRelatedAdsForCategory(currentCategoryId);
+
+            return AdMapper.MapToAdGridModel(relatedAds);
+        }
+
+        //if there arent enough ads in current category, get ads from parent category
+        private List<Ad> RecursivelyLoadRelatedAdsForCategory( Guid categoryId)
+        {
+            var relatedAds = _repository.GetRelatedAdsForCategoryExceptCurrentAd(CurrentAdId, categoryId);
+            if(relatedAds != null && relatedAds.Count < NUMBER_OF_RELATED_ADS)
+            {
+                Guid? parentCategoryId = _categoryRepository.GetCategoryParentId(categoryId);
+                if (parentCategoryId != null && parentCategoryId != Guid.Empty)
+                {
+                    relatedAds.AddRange( RecursivelyLoadRelatedAdsForCategory((Guid)parentCategoryId) );
+                }
+            }
+            return relatedAds;
         }
 
 

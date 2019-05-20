@@ -6,23 +6,21 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <li>
-    <a href="index.html">
+    <a asp-action="Index"
+       asp-controller="Home">
         <localize name="Layouts_Home"></localize>
     </a>
 </li>
 <li>
-    <a href="catalog-list.html">
+    <a asp-action="Index"
+       asp-controller="Ads">
         <localize name="Layouts_AllAds"></localize>
     </a>
 </li>
 <li>
-    <a href="catalog-list.html">
-        <localize name="Layouts_AboutUs"></localize>
-    </a>
-</li>
-<li>
-    <a href="catalog-list.html">
-        <localize name="Layouts_Help"></localize>
+    <a asp-action="Contact"
+       asp-controller="Home">
+        <localize name="Layouts_ContactUs"></localize>
     </a>
 </li>
 

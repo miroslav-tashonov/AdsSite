@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
-    <title>AllStore - MultiConcept eCommerce Template</title>
+    <title>Ad Site</title>
 
     <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700ii%7CRoboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic" rel="stylesheet">
 
@@ -31,6 +31,21 @@
     <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js" asp-append-version="true"></script>
     <script src="~/lib/toastr.js/toastr.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $('#facebookLink').attr("href", function () { return $('#webSettingFacebook').text().trim(); });
+            $('#facebookFooterLink').attr("href", function () { return $('#webSettingFacebook').text().trim(); });
+            $('#instagramLink').attr("href", function () { return $('#webSettingInstagram').text().trim(); });
+            $('#instagramFooterLink').attr("href", function () { return $('#webSettingInstagram').text().trim(); });
+            $('#vkLink').attr("href", function () { return $('#webSettingVK').text().trim(); });
+            $('#vkFooterLink').attr("href", function () { return $('#webSettingVK').text().trim(); });
+            $('#googlePlusLink').attr("href", function () { return $('#webSettingTwitter').text().trim(); });
+            $('#googlePlusFooterLink').attr("href", function () { return $('#webSettingTwitter').text().trim(); });
+            $('#twitterLink').attr("href", function () { return $('#webSettingGooglePlus').text().trim(); });
+            $('#twitterFooterLink').attr("href", function () { return $('#webSettingGooglePlus').text().trim(); });
+        });
+    </script>
+
     @await Html.PartialAsync("_Alerts")
 
     <!-- jQuery plugins/scripts - start -->
@@ -39,7 +54,7 @@
 
 </head>
 <body>
-    
+
     <!-- Header - start -->
     <header class="header">
 
@@ -48,36 +63,54 @@
             <div class="container">
                 <ul class="contactinfo nav nav-pills">
                     <li>
-                        <i class='fa fa-phone'></i> +7 777 123 1575
+                        <i class='fa fa-phone'></i> <webSettings setting-name="Phone"></webSettings>
                     </li>
                     <li>
-                        <i class="fa fa-envelope"></i> admin@real-web.pro
+                        <i class="fa fa-envelope"></i> <webSettings setting-name="Email"></webSettings>
                     </li>
                 </ul>
                 <!-- Social links -->
+                <div style="display:none">
+                    <div id="webSettingFacebook">
+                        <webSettings setting-name="facebook"></webSettings>
+                    </div>
+                    <div id="webSettingInstagram">
+                        <webSettings setting-name="instagram"></webSettings>
+                    </div>
+                    <div id="webSettingVK">
+                        <webSettings setting-name="vk"></webSettings>
+                    </div>
+                    <div id="webSettingTwitter">
+                        <webSettings setting-name="twitter"></webSettings>
+                    </div>
+                    <div id="webSettingGooglePlus">
+                        <webSettings setting-name="googleplus"></webSettings>
+                    </div>
+                </div>
+
                 <ul class="social-icons nav navbar-nav">
                     <li>
-                        <a href="http://facebook.com" rel="nofollow" target="_blank">
+                        <a href="" id="facebookLink" rel="nofollow" target="_blank">
                             <i class="fa fa-facebook"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="http://google.com" rel="nofollow" target="_blank">
+                        <a id="googlePlusLink" rel="nofollow" target="_blank">
                             <i class="fa fa-google-plus"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="http://twitter.com" rel="nofollow" target="_blank">
+                        <a id="twitterLink" rel="nofollow" target="_blank">
                             <i class="fa fa-twitter"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="http://vk.com" rel="nofollow" target="_blank">
+                        <a id="vkLink" rel="nofollow" target="_blank">
                             <i class="fa fa-vk"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="http://instagram.com" rel="nofollow" target="_blank">
+                        <a id="instagramLink" rel="nofollow" target="_blank">
                             <i class="fa fa-instagram"></i>
                         </a>
                     </li>
@@ -89,27 +122,23 @@
         <div class="header-middle">
             <div class="container header-middle-cont">
                 <div class="toplogo">
-                    <a href="index.html">
-                        <img src="~/img/logo.png" alt="AllStore - MultiConcept eCommerce Template">
+                    <a href="#">
+                        <img src="~/img/logo-c.png">
                     </a>
                 </div>
                 <div class="shop-menu">
                     <ul>
-
-                        <li>
-                            <a href="wishlist.html">
-                                <i class="fa fa-heart"></i>
-                                <span class="shop-menu-ttl">Wishlist</span>
-                                (<span id="topbar-favorites">1</span>)
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="compare.html">
-                                <i class="fa fa-bar-chart"></i>
-                                <span class="shop-menu-ttl">Compare</span> (5)
-                            </a>
-                        </li>
+                        @if (User.IsInRole("User"))
+                        {
+                            <li>
+                                <a asp-action="Index"
+                                   asp-controller="Wishlist">
+                                    <i class="fa fa-heart"></i>
+                                    <span class="shop-menu-ttl"><localize name="Wishlist_Name"></localize> </span>
+                                    (<span id="topbar-favorites">1</span>)
+                                </a>
+                            </li>
+                        }
 
                         <li>
                             @await Html.PartialAsync("_LoginPartial")
@@ -131,7 +160,7 @@
 
                     <!-- Catalog menu - start -->
                     <div class="topcatalog">
-                        <a class="topcatalog-btn" href="catalog-list.html"><span>All</span> catalog</a>
+                        <a class="topcatalog-btn" href="catalog-list.html"><span><localize name="Ads_AllAds"></localize></span></a>
                         <ul class="topcatalog-list">
                             @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true });
                         </ul>
@@ -170,59 +199,51 @@
             <div class="row">
                 <div class="f-menu">
                     <h3>
-                        About us
+                        <localize name="Layouts_AboutUs"></localize>
                     </h3>
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="active"><a href="index.html">Home</a></li>
-                        <li><a href="catalog-list.html">Catalog</a></li>
-                        <li><a href="elements.html">Elements</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="contacts.html">Contacts</a></li>
+                        <li><a asp-action="Index" asp-controller="Home"><localize name="Layouts_Home"></localize></a></li>
+                        <li><a asp-action="Index" asp-controller="Ads"><localize name="Layouts_Ads"></localize></a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_Contact"></localize></a></li>
                     </ul>
                 </div>
                 <div class="f-menu">
                     <h3>
-                        Shop
+                        <localize name="Layouts_Ads"></localize>
                     </h3>
                     <ul class="nav nav-pills nav-stacked">
-                        <li><a href="catalog-list.html">Women</a></li>
-                        <li><a href="catalog-list.html">Men</a></li>
-                        <li><a href="catalog-list.html">Kids</a></li>
-                        <li><a href="catalog-list.html">Shoes</a></li>
-                        <li><a href="catalog-list.html">Accessories</a></li>
+                        <li><a asp-action="Index" asp-controller="Ads"><localize name="Layouts_Cars"></localize></a></li>
+                        <li><a asp-action="Index" asp-controller="Ads"><localize name="Layouts_Houses"></localize></a></li>
+                        <li><a asp-action="Index" asp-controller="Ads"><localize name="Layouts_Computers"></localize></a></li>
                     </ul>
                 </div>
                 <div class="f-menu">
                     <h3>
-                        Information
+                        <localize name="Layouts_Information"></localize>
                     </h3>
                     <ul class="nav nav-pills nav-stacked">
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="blog.html">News</a></li>
-                        <li><a href="reviews.html">Reviews</a></li>
-                        <li><a href="blog.html">Articles</a></li>
-                        <li><a href="contacts.html">Contacts</a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_Location"></localize></a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_Address"></localize></a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_Phone"></localize></a></li>
                     </ul>
                 </div>
                 <div class="f-menu">
                     <h3>
-                        Pages
+                        <localize name="Layouts_Pages"></localize>
                     </h3>
                     <ul class="nav nav-pills nav-stacked">
-                        <li><a href="contacts.html">About us</a></li>
-                        <li><a href="contacts.html">Delivery</a></li>
-                        <li><a href="contacts.html">Guarantees</a></li>
-                        <li><a href="contacts.html">Contacts</a></li>
-                        <li><a href="404.html">Page 404</a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_AboutUs"></localize></a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_Contact"></localize></a></li>
+                        <li><a asp-action="Contact" asp-controller="Home"><localize name="Layouts_Map"></localize></a></li>
                     </ul>
                 </div>
                 <div class="f-subscribe">
-                    <h3>Subscribe to news</h3>
+                    <h3><localize name="Layouts_SubscribeMessage"></localize></h3>
                     <form class="f-subscribe-form" action="#">
                         <input placeholder="Your e-mail" type="text">
                         <button type="submit"><i class="fa fa-paper-plane"></i></button>
                     </form>
-                    <p>Enter your email address if you want to receive our newsletter. Subscribe now!</p>
+                    <p><localize name="Layouts_SubscribeEmailMessage"></localize></p>
                 </div>
             </div>
         </div>
@@ -232,33 +253,33 @@
                 <div class="row">
                     <ul class="social-icons nav navbar-nav">
                         <li>
-                            <a href="http://facebook.com/" rel="nofollow" target="_blank">
+                            <a id="facebookFooterLink" rel="nofollow" target="_blank">
                                 <i class="fa fa-facebook"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="http://google.com/" rel="nofollow" target="_blank">
+                            <a id="googlePlusFooterLink" rel="nofollow" target="_blank">
                                 <i class="fa fa-google-plus"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="http://twitter.com/" rel="nofollow" target="_blank">
+                            <a id="twitterFooterLink" rel="nofollow" target="_blank">
                                 <i class="fa fa-twitter"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="http://vk.com/" rel="nofollow" target="_blank">
+                            <a id="vkFooterLink" rel="nofollow" target="_blank">
                                 <i class="fa fa-vk"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="http://instagram.com/" rel="nofollow" target="_blank">
+                            <a id="instagramFooterLink" rel="nofollow" target="_blank">
                                 <i class="fa fa-instagram"></i>
                             </a>
                         </li>
                     </ul>
                     <div class="footer-copyright">
-                        <i><a href="https://themeforest.net/user/real-web?ref=real-web">Real-Web</a></i> © Copyright 2017
+                        <i><a href="">Tashonov</a></i> © Copyright
                     </div>
                 </div>
             </div>

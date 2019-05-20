@@ -17,12 +17,15 @@ namespace AdSite.Data.Repositories
         List<Ad> GetAdGridByCategory(List<Guid> categoryIds, Guid countryId);
         List<Ad> GetAdGridByCategory(string searchString, List<Guid> categoryId, Guid countryId);
         List<Ad> OrderAdsByColumn(List<Ad> entities, string sortColumn);
+        List<Ad> GetRelatedAdsForCategoryExceptCurrentAd(Guid currentAdId, Guid currentCategoryId);
         int Count();
     }
 
     public class AdRepository : IAdRepository
     {
         private readonly ApplicationDbContext _context;
+        private const int NUMBER_OF_RELATED_ADS = 9;
+
         public AdRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -239,7 +242,17 @@ namespace AdSite.Data.Repositories
             return ads.Result;
         }
 
+        public List<Ad> GetRelatedAdsForCategoryExceptCurrentAd(Guid currentAdId, Guid currentCategoryId)
+        {
+            var ads = _context.Ads
+                .Where(ad => ad.CategoryID == currentCategoryId && ad.ID != currentAdId)
+                .Take(NUMBER_OF_RELATED_ADS)
+                .Include(i => i.AdDetail)
+                ?.ThenInclude(t => t.AdDetailPictures)
+                .ToListAsync();
 
+            return ads.Result;
+        }
 
         public bool Update(Ad entity)
         {
