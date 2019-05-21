@@ -39,6 +39,7 @@ namespace AdSite.Models.Mappers
             };
         }
 
+
         public static List<AdGridViewModel> MapToAdGridModel(List<Ad> entities)
         {
             List<AdGridViewModel> adGrid = new List<AdGridViewModel>();
@@ -65,6 +66,23 @@ namespace AdSite.Models.Mappers
                     );
                 }
             }
+
+            return adGrid;
+        }
+
+
+        public static WishlistAdGridModel MapToWishlistAdGridModel(Ad entity)
+        {
+            var mainPicture = entity.AdDetail?.AdDetailPictures?.FirstOrDefault()?.File;
+
+            WishlistAdGridModel adGrid =
+                new WishlistAdGridModel()
+                {
+                    ID = entity.ID,
+                    Name = entity.Name,
+                    Price = entity.Price,
+                    MainPicture = mainPicture
+                };
 
             return adGrid;
         }

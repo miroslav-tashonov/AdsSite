@@ -11,7 +11,7 @@ namespace AdSite.Models.CRUDModels
     {
         public Guid ID { get; set; }
 
-        public Guid AdId { get; set; }
+        public WishlistAdGridModel Ad { get; set; }
     }
 
 }

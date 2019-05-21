@@ -7,6 +7,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AdSite.Models.CRUDModels
 {
+    public class WishlistAdGridModel
+    {
+        public Guid ID { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public byte[] MainPicture { get; set; }
+    }
+
+
     public class AdViewModel
     {
         public Guid ID { get; set; }

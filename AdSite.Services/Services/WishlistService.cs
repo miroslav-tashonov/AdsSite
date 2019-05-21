@@ -26,15 +26,17 @@ namespace AdSite.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWishlistRepository _repository;
+        private readonly IAdService _adService;
         private readonly ILocalizationRepository _localizationRepository;
         private readonly ILogger _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
-        public WishlistService(IWishlistRepository repository, ILocalizationRepository localizationRepository, ILogger<WishlistService> logger, UserManager<ApplicationUser> userManager)
+        public WishlistService(IWishlistRepository repository, ILocalizationRepository localizationRepository, IAdService adService, ILogger<WishlistService> logger, UserManager<ApplicationUser> userManager)
         {
             _localizationRepository = localizationRepository;
+            _adService = adService;
             _repository = repository;
             _logger = logger;
             _userManager = userManager;
@@ -84,7 +86,15 @@ namespace AdSite.Services
 
         public List<WishlistViewModel> GetMyWishlist(string ownerId, Guid countryId)
         {
-            return WishlistMapper.MapToWishlistViewModel(_repository.GetAll(ownerId, countryId));
+            List<WishlistViewModel> listViewModel = new List<WishlistViewModel>();
+            var wishlists = _repository.GetAll(ownerId, countryId);
+
+            foreach (var wishlist in wishlists)
+            {
+                listViewModel.Add( WishlistMapper.MapToWishlistViewModel( wishlist, _adService.GetAdAsAdWishlistGridModel(wishlist.AdId) ));
+            }
+
+            return listViewModel;
         }
 
     }

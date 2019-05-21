@@ -19,8 +19,7 @@ namespace AdSite.Models.Mappers
                     viewModelList.Add(
                         new WishlistViewModel()
                         {
-                            ID = entity.ID,
-                            AdId = entity.AdId
+                            ID = entity.ID
                         }
                     );
                 }
@@ -28,5 +27,19 @@ namespace AdSite.Models.Mappers
 
             return viewModelList;
         }
+
+        public static WishlistViewModel MapToWishlistViewModel(Wishlist entity, WishlistAdGridModel ad)
+        {
+            WishlistViewModel viewModel = new WishlistViewModel();
+            viewModel = new WishlistViewModel()
+            {
+                ID = entity.ID,
+                Ad = ad
+            };
+
+            return viewModel;
+        }
+
     }
+
 }

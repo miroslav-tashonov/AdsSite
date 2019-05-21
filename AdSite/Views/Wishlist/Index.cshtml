@@ -7,36 +7,29 @@
 
 @await Html.PartialAsync("_UsersNavigationPartial")
 
-
 <br />
+<section class="container">
+    <div class="section-cont section-full">
+        <div class="prod-items section-items">
+            @foreach (var item in Model)
+            {
+                <div class="prod-i">
+                    <div class="prod-i-top">
+                        <a asp-action="Details" asp-controller="Ads" asp-route-id="@item.Ad.ID" class="prod-i-img"><!-- NO SPACE --><img src='data:image;base64,@System.Convert.ToBase64String(item.Ad.MainPicture)' /><!-- NO SPACE --></a>
+                        <p class="prod-i-info">
+                            <a asp-action="Delete" asp-route-id="@item.Ad.ID" class="prod-i-favorites center-favorites"><span><localize name="Wishlist_RemoveMessage"></localize></span><i class="fa fa-remove"></i></a>
+                        </p>
+                    </div>
+                    <h3>
+                        <a asp-action="Details" asp-controller="Ads" asp-route-id="@item.Ad.ID">@item.Ad.Name</a>
+                    </h3>
+                    <p class="prod-i-price">
+                        <b>@item.Ad.Price</b>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <localize name="Wishlist_Fields_Id"></localize>
-            </th>
-            <th>
-                <localize name="Wishlist_Fields_AdId"></localize>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AdId)
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn-link"><localize name="General_Delete"></localize></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 <br />
