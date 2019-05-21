@@ -8,16 +8,16 @@ namespace AdSite.Models.Mappers
 {
     public static class WishlistMapper
     {
-        public static List<WishlistViewModel> MapToWishlistViewModel(List<Wishlist> entities)
+        public static List<WishlistGridModel> MapToWishlistGridModel(List<Wishlist> entities)
         {
-            List<WishlistViewModel> viewModelList = new List<WishlistViewModel>();
+            List<WishlistGridModel> viewModelList = new List<WishlistGridModel>();
 
             if (entities != null && entities.Count > 0)
             {
                 foreach (var entity in entities)
                 {
                     viewModelList.Add(
-                        new WishlistViewModel()
+                        new WishlistGridModel()
                         {
                             ID = entity.ID
                         }
@@ -28,10 +28,10 @@ namespace AdSite.Models.Mappers
             return viewModelList;
         }
 
-        public static WishlistViewModel MapToWishlistViewModel(Wishlist entity, WishlistAdGridModel ad)
+        public static WishlistGridModel MapToWishlistGridModel(Wishlist entity, WishlistAdGridModel ad)
         {
-            WishlistViewModel viewModel = new WishlistViewModel();
-            viewModel = new WishlistViewModel()
+            WishlistGridModel viewModel = new WishlistGridModel();
+            viewModel = new WishlistGridModel()
             {
                 ID = entity.ID,
                 Ad = ad

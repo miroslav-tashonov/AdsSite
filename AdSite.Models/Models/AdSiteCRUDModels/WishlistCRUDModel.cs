@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AdSite.Models.CRUDModels
 {
-    public class WishlistViewModel
+    public class WishlistGridModel
     {
         public Guid ID { get; set; }
 

@@ -17,7 +17,7 @@ namespace AdSite.Services
         bool Delete(Guid adId, string currentUserId);
         bool Add(Guid adId, string currentUserId, Guid countryId);
         bool IsInWishlist(Guid adId, string userId);
-        List<WishlistViewModel> GetMyWishlist(string ownerId, Guid countryId);
+        List<WishlistGridModel> GetMyWishlist(string ownerId, Guid countryId);
     }
 
 
@@ -84,17 +84,17 @@ namespace AdSite.Services
         }
 
 
-        public List<WishlistViewModel> GetMyWishlist(string ownerId, Guid countryId)
+        public List<WishlistGridModel> GetMyWishlist(string ownerId, Guid countryId)
         {
-            List<WishlistViewModel> listViewModel = new List<WishlistViewModel>();
+            List<WishlistGridModel> listGridModel = new List<WishlistGridModel>();
             var wishlists = _repository.GetAll(ownerId, countryId);
 
             foreach (var wishlist in wishlists)
             {
-                listViewModel.Add( WishlistMapper.MapToWishlistViewModel( wishlist, _adService.GetAdAsAdWishlistGridModel(wishlist.AdId) ));
+                listGridModel.Add( WishlistMapper.MapToWishlistGridModel( wishlist, _adService.GetAdAsAdWishlistGridModel(wishlist.AdId) ));
             }
 
-            return listViewModel;
+            return listGridModel;
         }
 
     }
