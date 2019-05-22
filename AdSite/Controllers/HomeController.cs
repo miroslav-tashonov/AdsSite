@@ -49,6 +49,12 @@ namespace AdSite.Controllers
             return View("Contact");
         }
 
+        public IActionResult Verifications()
+        {
+            return View("Verifications");
+        }
+
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

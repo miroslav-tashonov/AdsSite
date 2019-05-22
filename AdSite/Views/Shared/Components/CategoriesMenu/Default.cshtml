@@ -5,10 +5,7 @@
     @foreach (var category in Model.ComponentCategories)
     {
         <li>
-            <a data-toggle="collapse" asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@category.ID"
-               data-target="#@category.ID"
-               aria-controls="@category.ID"
-               role="button" aria-expanded="true">
+            <a asp-controller="Ads" asp-action="Index" asp-route-categoryId="@category.ID">
                 @category.Name
             </a>
 

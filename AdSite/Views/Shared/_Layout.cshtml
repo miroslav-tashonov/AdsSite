@@ -122,7 +122,7 @@
         <div class="header-middle">
             <div class="container header-middle-cont">
                 <div class="toplogo">
-                    <a href="#">
+                    <a asp-controller="Home" asp-action="Index">
                         <img src="~/img/logo-c.png">
                     </a>
                 </div>
@@ -162,7 +162,7 @@
                     <div class="topcatalog">
                         <a class="topcatalog-btn" href="catalog-list.html"><span><localize name="Ads_AllAds"></localize></span></a>
                         <ul class="topcatalog-list">
-                            @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true });
+                            @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true })
                         </ul>
                     </div>
                     <!-- Catalog menu - end -->

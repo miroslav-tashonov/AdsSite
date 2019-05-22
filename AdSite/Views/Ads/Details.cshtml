@@ -17,14 +17,21 @@
     <section class="container">
         <h1 class="main-ttl"><span>@Html.DisplayFor(model => model.Name)</span></h1>
 
-        @if (User.IsInRole("User") && UserManager.GetUserId(User) == Model.Owner.Id)
-        {
-            <div style="float:right;">
+        <div style="float:right;">
+
+            <a> <localize name="General_ShareOnFacebook"></localize> <i class="fa fa-facebook-f fa-2x"></i> </a>
+            <a onclick="window.print();"> <localize name="General_Print"></localize> <i class="fa fa-print fa-2x"></i> </a>
+            @if (User.IsInRole("User") && UserManager.GetUserId(User) == Model.Owner.Id)
+            {
                 <a asp-action="Edit" asp-route-id="@Model.ID"> <localize name="General_Edit"></localize> <i class="fa fa-edit fa-2x"></i> </a>
                 <a asp-action="Delete" asp-route-id="@Model.ID"> <localize name="General_Delete"></localize> <i class="fa fa-trash fa-2x"></i> </a>
-            </div>
-        }
+            }
+            <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+            <div style="color: cadetblue;"> <localize name="Ads_AdCreatedDate"></localize> : @Model.CreatedAt.ToUniversalTime() </div>
 
+        </div>
+
+        
         <!-- Single Product - start -->
         <div class="prod-wrap">
 
@@ -82,24 +89,27 @@
                 </div>
                 <ul class="prod-i-props">
                     <li>
-                        <b>Owner Name</b> <i class='fa fa-user'></i> @Model.Owner?.UserName
+                        <b><localize name="Ads_OwnerName"></localize></b> <i class='fa fa-user'></i> @Model.Owner?.UserName
                     </li>
                     <li>
-                        <b>Owner Number</b> <i class='fa fa-phone'></i> @Model.Owner?.PhoneNumber
+                        <b><localize name="Ads_OwnerNumber"></localize></b> <i class='fa fa-phone'></i> @Model.Owner?.PhoneNumber
                     </li>
                     <li>
-                        <b>Owner Mail</b> <i class='fa fa-envelope'></i> @Model.Owner?.Email
+                        <b><localize name="Ads_OwnerMail"></localize></b> <i class='fa fa-envelope'></i> @Model.Owner?.Email
                     </li>
                     <li>
-                        <b>City</b> <i class="fa fa-fort-awesome"></i> @Model.City?.Name
+                        <b><localize name="Ads_City"></localize></b> <i class="fa fa-fort-awesome"></i> @Model.City?.Name
                     </li>
                     <li>
-                        <b>Category</b> <i class="fa fa-folder-open"></i> @Model.Category?.Name
+                        <b><localize name="Ads_Category"></localize></b> <i class="fa fa-folder-open"></i> @Model.Category?.Name
                     </li>
                 </ul>
 
                 <div class="prod-cont-txt">
-                    @Html.DisplayFor(model => model.AdDetail.Description)
+                    @if (Model.AdDetail != null)
+                    {
+                        @Html.DisplayFor(model => model.AdDetail.Description)
+                    }
                 </div>
                 <p class="prod-actions">
                     @if (Model.IsInWishlist)
@@ -123,27 +133,11 @@
                 </p>
             </div>
 
-            <!-- Product Tabs -->
-            <div class="prod-tabs-wrap">
-                <ul class="prod-tabs">
-                    <li><a data-prodtab-num="1" class="active" href="#" data-prodtab="#prod-tab-1">@Html.DisplayName(Model.AdDetail?.Description)</a></li>
-                </ul>
-                <div class="prod-tab-cont">
-                    <p data-prodtab-num="1" class="prod-tab-mob active" data-prodtab="#prod-tab-1">@Html.DisplayName(Model.AdDetail?.Description)</p>
-                    <div class="prod-tab stylization" id="prod-tab-1">
-                        @if (Model.AdDetail != null)
-                        {
-                            @Html.DisplayFor(model => model.AdDetail.Description)
-                        }
-                    </div>
-                </div>
-            </div>
-
         </div>
         <!-- Single Product - end -->
         <!-- Related Products - start -->
         <div class="prod-related">
-            <h2><span>Related Ads</span></h2>
+            <h2><span> <localize name="Ads_RelatedAds"></localize></span></h2>
             <div class="prod-related-car" id="prod-related-car">
                 <div class="flex-viewport" style="overflow: hidden; position: relative;">
                     <ul class="slides" style="width: 1000%; transition-duration: 0s; transform: translate3d(-228px, 0px, 0px);">
@@ -192,7 +186,3 @@
     </section>
 </main>
 <br />
-
-<div>
-    <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
-</div>

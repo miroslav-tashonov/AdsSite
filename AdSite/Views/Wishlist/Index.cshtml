@@ -2,7 +2,7 @@
 @using AdSite.Views.Shared;
 
 @{
-    AdminNavPages.AddActivePage(ViewContext, UsersNavPages.MyWishlist);
+    UsersNavPages.AddActivePage(ViewContext, UsersNavPages.MyWishlist);
 }
 
 @await Html.PartialAsync("_UsersNavigationPartial")

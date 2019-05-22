@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using AdSite.Data;
-using AdSite.Extensions;
+﻿using AdSite.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
+using System;
+using System.IO;
 
 
 namespace AdSite
@@ -45,7 +41,7 @@ namespace AdSite
                     NLog.LogManager.Shutdown();
                 }
             }
-            
+
             host.Run();
 
         }
@@ -75,6 +71,6 @@ namespace AdSite
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
                 })
                 .UseNLog()// NLog: setup NLog for Dependency injection
-                .Build();  
+                .Build();
     }
 }

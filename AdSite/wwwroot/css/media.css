@@ -897,6 +897,9 @@
         width: 100%;
         padding: 0 0 50px;
     }
+    .section-cont-full {
+        width: 100% !important;
+    }
     .section-sb .section-filter .section-filter-toggle {
         display: block;
     }

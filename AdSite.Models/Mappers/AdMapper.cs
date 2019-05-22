@@ -35,7 +35,8 @@ namespace AdSite.Models.Mappers
                 Owner = entity.Owner,
                 Category = entity.Category,
                 City = entity.City,
-                Price = entity.Price
+                Price = entity.Price,
+                CreatedAt = entity.CreatedAt
             };
         }
 

@@ -42,13 +42,7 @@
                     @Html.Raw(selectedName)
                 </select>
             </div>
-            <div class="col-sm-5">
-                <select name="SortColumn" class="form-control">
-                    @Html.Raw(selectedCheapest)
-                    @Html.Raw(selectedPriciest)
-                    @Html.Raw(selectedLatest)
-                </select>
-            </div>
+
         </div>
 
         <div class="col-sm-5">
@@ -58,6 +52,14 @@
             <div class="col-sm-2" style="padding-left:0px; padding-right:0px">
                 <button type="submit" class="form-control"> <i class="fa fa-search"></i> </button>
             </div>
+        </div>
+
+        <div class="col-sm-2">
+            <select name="SortColumn" class="form-control" onchange="this.form.submit();">
+                @Html.Raw(selectedCheapest)
+                @Html.Raw(selectedPriciest)
+                @Html.Raw(selectedLatest)
+            </select>
         </div>
     </div>
 </form>
@@ -71,7 +73,7 @@
             <div class="section-sb-current">
                 <h3><a href="catalog-list.html">Categories <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
                 <ul class="section-sb-list" id="section-sb-list">
-                    @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true });
+                    @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true })
                 </ul>
             </div>
         </div>

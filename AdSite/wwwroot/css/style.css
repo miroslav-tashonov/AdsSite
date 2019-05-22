@@ -1342,7 +1342,7 @@ h1.main-ttl {
 	bottom: 0;
 	height: 2px;
 	left: 0;
-	width: 60px;
+	width: 100%;
 	background: #373d54;
 }
 .maincont-ct .main-ttl {
@@ -4129,6 +4129,9 @@ ul.b-crumbs {
 	float: left;
 	width: 75%;
 	padding: 0 0 50px 30px;
+}
+.section-cont-full {
+    width: 100% !important;
 }
 .section-cont .section-top {
 	margin: 0 0 6px;
