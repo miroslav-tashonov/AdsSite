@@ -2,6 +2,7 @@
 using AdSite.Mappers;
 using AdSite.Models.CRUDModels;
 using AdSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using System.Threading;
 
 namespace AdSite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CitiesController : Controller
     {
         private readonly ICityService _cityService;

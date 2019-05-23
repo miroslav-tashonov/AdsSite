@@ -4,6 +4,7 @@ using AdSite.Mappers;
 using AdSite.Models;
 using AdSite.Models.CRUDModels;
 using AdSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using System.Threading;
 
 namespace AdSite.Controllers
 {
+    [Authorize(Roles = "User, Admin")]
     public class AdsController : Controller
     {
         private readonly IAdService _adService;
@@ -54,6 +56,8 @@ namespace AdSite.Controllers
             _userManager = userManager;
             _logger = logger;
         }
+
+        [AllowAnonymous]
         public IActionResult Details(Guid? id)
         {
             if (id == null)
@@ -74,6 +78,7 @@ namespace AdSite.Controllers
             }
         }
 
+        [AllowAnonymous]
         public IActionResult Index(string columnName, string searchString, string sortColumn, int? pageNumber, Guid? categoryId)
         {
             if (!String.IsNullOrEmpty(searchString))

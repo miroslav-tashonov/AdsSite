@@ -15,9 +15,11 @@ using AdSite.Mappers;
 using System.Threading;
 using AdSite.Models.CRUDModels;
 using AdSite.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdSite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class LocalizationsController : Controller
     {
         private readonly ILocalizationService _localizationService;

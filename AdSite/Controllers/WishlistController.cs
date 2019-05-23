@@ -1,6 +1,7 @@
 ﻿using AdSite.Extensions;
 using AdSite.Models;
 using AdSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using System.Threading;
 
 namespace AdSite.Controllers
 {
+    [Authorize(Roles = ("User, Admin"))]
     public class WishlistController : Controller
     {
         private readonly IWishlistService _wishlistService;
@@ -109,6 +111,7 @@ namespace AdSite.Controllers
             return Redirect(referer).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
         }
 
+        [AllowAnonymous]
         private bool WishlistExists(Guid id)
         {
             return _wishlistService.Exists(id);

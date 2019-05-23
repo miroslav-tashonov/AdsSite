@@ -49,6 +49,7 @@ namespace AdSite.Controllers
             return View("Contact");
         }
 
+        [Authorize(Roles = ("User"))]
         public IActionResult Verifications()
         {
             return View("Verifications");

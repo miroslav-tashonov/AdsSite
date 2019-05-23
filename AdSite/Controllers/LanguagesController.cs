@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using AdSite.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdSite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class LanguagesController : Controller
     {
         private readonly ILanguageService _languageService;
@@ -122,6 +124,7 @@ namespace AdSite.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             int lcid;
