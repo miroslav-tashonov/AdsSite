@@ -22,7 +22,7 @@ namespace AdSite.Services
         List<AdGridViewModel> GetAdGridModel(Guid countryId);
         List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count);
         List<AdGridViewModel> GetPageForMyAdsGrid(PageModel pageModel, string ownerIdentifier, out int count);
-        List<AdGridViewModel> GetPageForAdGridByCategory(PageModel pageModel, Guid categoryId, out int count);
+        List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel , out int count);
         AdViewModel GetAdAsViewModel(Guid adId);
         WishlistAdGridModel GetAdAsAdWishlistGridModel(Guid adId);
         AdEditModel GetAdAsEditModel(Guid adId);
@@ -35,6 +35,7 @@ namespace AdSite.Services
         private readonly IAdRepository _repository;
         private readonly IWishlistRepository _wishlistRepository ;
         private readonly ILocalizationRepository _localizationRepository;
+        private readonly ICityRepository _cityRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ILogger _logger;
 
@@ -44,11 +45,12 @@ namespace AdSite.Services
         private string LOCALIZATION_AD_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_Ad_Not_Found", CultureId);
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
-        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ICategoryRepository categoryRepository, IWishlistRepository wishlistRepository, ILogger<AdService> logger)
+        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ICategoryRepository categoryRepository, ICityRepository cityRepository, IWishlistRepository wishlistRepository, ILogger<AdService> logger)
         {
             _wishlistRepository = wishlistRepository;
             _localizationRepository = localizationRepository;
             _categoryRepository = categoryRepository;
+            _cityRepository = cityRepository;
             _repository = repository;
             _logger = logger;
         }
@@ -255,17 +257,24 @@ namespace AdSite.Services
         }
 
 
-        public List<AdGridViewModel> GetPageForAdGridByCategory(PageModel pageModel, Guid categoryId, out int count)
+        public List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel, out int count)
         {
+            //bussiness rule : retrieve subcategories for current category and apply to filtering 
+            List<Guid> categoryIds = new List<Guid>();
+            if (filterModel.CategoryId != null && filterModel.CategoryId != Guid.Empty)
+            {
+                categoryIds = _categoryRepository.GetSubcategoriesIdForCategory((Guid)filterModel.CategoryId, pageModel.CountryId);
+            }
+
+            FilterRepositoryModel repositoryModel = FilterModelMapper.MapToFilterRepositoryModel(filterModel, categoryIds, pageModel.CountryId);
             List<Ad> sourceEntities;
-            var categoryIds = _categoryRepository.GetSubcategoriesIdForCategory(categoryId, pageModel.CountryId);
             switch (pageModel.ColumnName.ToLower())
             {
                 case "name":
-                    sourceEntities = _repository.GetAdGridByCategory(pageModel.SearchString, categoryIds, pageModel.CountryId);
+                    sourceEntities = _repository.GetAdGridByFilters(pageModel.SearchString, repositoryModel);
                     break;
                 default:
-                    sourceEntities = _repository.GetAdGridByCategory(categoryIds, pageModel.CountryId);
+                    sourceEntities = _repository.GetAdGridByFilters(repositoryModel);
                     break;
             }
 

@@ -1,0 +1,22 @@
+﻿@model AdSite.Models.CRUDModels.CitiesFilterViewModel
+@{
+    Guid? categoryId = (String.IsNullOrEmpty(Context.Request.Query["categoryId"]) ? (Guid?)null : Guid.Parse(Context.Request.Query["categoryId"]));
+}
+
+<div class="section-filter-fields">
+    @if (Model.ComponentCities != null && Model.ComponentCities.Any())
+    {
+        @foreach (var city in Model.ComponentCities)
+        {
+            <p class="section-filter-field">
+                <input asp-action="Index" asp-controller="Ads"
+                       asp-route-categoryId="@categoryId"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-sortColumn="@ViewData["SortColumn"]"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]" id="@city.Id" value="@city.Id" type="checkbox" name="cityIds" onchange="this.form.submit();" />
+                <label class="section-filter-checkbox" for="@city.Id">@city.Name</label>
+            </p>
+        }
+
+    }
+</div>

@@ -8,6 +8,8 @@ namespace AdSite.Helpers
 {
     public class PaginatedList<T> : List<T>
     {
+        public const int NUMBER_OF_PAGES_PER_SIDE = 5;
+
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
 
@@ -40,8 +42,8 @@ namespace AdSite.Helpers
             get
             {
                 return 
-                    (TotalPages - PageIndex > 5) ? 
-                    5 + ((PageIndex - 1 > 5) ? 0 : PageIndex - 1) : 
+                    (TotalPages - PageIndex > NUMBER_OF_PAGES_PER_SIDE) ?
+                    NUMBER_OF_PAGES_PER_SIDE + ((PageIndex - 1 > NUMBER_OF_PAGES_PER_SIDE) ? 0 : PageIndex - 1) : 
                     TotalPages - PageIndex ;
             }
         }
@@ -50,8 +52,8 @@ namespace AdSite.Helpers
         {
             get
             {
-                return (PageIndex - 1 > 5 ) ? 
-                    5 + ((TotalPages - PageIndex > 5) ? 0 : TotalPages-PageIndex) : 
+                return (PageIndex - 1 > NUMBER_OF_PAGES_PER_SIDE) ?
+                    NUMBER_OF_PAGES_PER_SIDE + ((TotalPages - PageIndex > NUMBER_OF_PAGES_PER_SIDE) ? 0 : TotalPages-PageIndex) : 
                     PageIndex-1; 
             }
         }

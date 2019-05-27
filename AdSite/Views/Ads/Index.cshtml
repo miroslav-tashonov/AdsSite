@@ -29,9 +29,14 @@
 
 }
 
+@section Scripts {
+    <script src="~/js/ion.rangeSlider.min.js" asp-append-version="true"></script>
+    <script src="~/js/plugins.js"></script>
+}
+
 <br />
 
-<form asp-action="Index" asp-route-categoryId="@categoryId" method="get">
+<form method="get">
     <div class="form-actions no-color row">
         <div class="col-sm-5">
             <div class="col-sm-3">
@@ -42,7 +47,6 @@
                     @Html.Raw(selectedName)
                 </select>
             </div>
-
         </div>
 
         <div class="col-sm-5">
@@ -62,173 +66,193 @@
             </select>
         </div>
     </div>
-</form>
 
-<br />
 
-<main>
-    <section class="container">
-        <!--Loading ad category filters -->
-        <div class="section-sb">
-            <div class="section-sb-current">
-                <h3><a href="catalog-list.html">Categories <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
-                <ul class="section-sb-list" id="section-sb-list">
-                    @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true })
-                </ul>
+    <br />
+
+    <main>
+        <section class="container">
+
+            <div class="section-sb">
+                <!--Loading ad category filters -->
+                <div class="section-sb-current">
+                    <h3><a href="catalog-list.html"><localize name="Category_Entity"></localize> <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
+                    <ul class="section-sb-list" id="section-sb-list">
+                        @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true })
+                    </ul>
+                </div>
+
+                <div class="section-filter">
+                    <div class="section-filter-cont">
+
+                        <!--Price Filter-->
+                        <div class="section-filter-price">
+                            <div class="range-slider section-filter-price" data-min="0" data-max="1000" data-from="0" data-to="1000" data-prefix="$" data-grid="false"></div>
+                        </div>
+
+                        <!--Cities Filter-->
+                        <div class="section-filter-item opened">
+                            <p class="section-filter-ttl"><localize name="City_Entity"></localize> <i class="fa fa-angle-down"></i></p>
+                            @await Component.InvokeAsync("CitiesFilter", new { isFirstCall = true })
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
 
-        <!--Loading ad section -->
-        <div class="section-cont">
-            <div class="prod-items section-items">
 
-                @foreach (var gridAd in Model)
-                {
-                    <div class="prodlist-i">
-                        <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
-                            @if (gridAd.MainPicture != null)
-                            {
-                                <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
-                            }
-                            else
-                            {
-                                <img src='~/img/300x311.png' />
-                            }
-                        </a>
-                        <div class="prodlist-i-cont">
-                            <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
-                            <div class="prodlist-i-txt">
-                                @gridAd.Description
-                            </div>
-                            <div class="prodlist-i-action">
-                                <span class="prodlist-i-price">
-                                    <b>$ @gridAd.Price</b>
-                                </span>
-                            </div>
-                            <p class="prodlist-i-info">
-                                @if (gridAd.IsInWishlist)
+
+            <!--Loading ad section -->
+            <div class="section-cont">
+                <div class="prod-items section-items">
+
+                    @foreach (var gridAd in Model)
+                    {
+                        <div class="prodlist-i">
+                            <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
+                                @if (gridAd.MainPicture != null)
                                 {
-                                    <a asp-action="Delete"
-                                       asp-controller="Wishlist"
-                                       asp-route-adId=@gridAd.ID
-                                       class="prodlist-i-favorites">
-                                        <i class="fa fa-heart" style="color: crimson"></i><localize name="General_DeleteFromWishlist"></localize>
-                                    </a>
+                                    <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
                                 }
                                 else
                                 {
-                                    <a asp-action="Create"
-                                       asp-controller="Wishlist"
-                                       asp-route-adId=@gridAd.ID
-                                       class="prodlist-i-favorites">
-                                        <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
-                                    </a>
+                                    <img src='~/img/300x311.png' />
                                 }
-                            </p>
-                        </div>
+                            </a>
+                            <div class="prodlist-i-cont">
+                                <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
+                                <div class="prodlist-i-txt">
+                                    @gridAd.Description
+                                </div>
+                                <div class="prodlist-i-action">
+                                    <span class="prodlist-i-price">
+                                        <b>$ @gridAd.Price</b>
+                                    </span>
+                                </div>
+                                <p class="prodlist-i-info">
+                                    @if (gridAd.IsInWishlist)
+                                    {
+                                        <a asp-action="Delete"
+                                           asp-controller="Wishlist"
+                                           asp-route-adId=@gridAd.ID
+                                           class="prodlist-i-favorites">
+                                            <i class="fa fa-heart" style="color: crimson"></i><localize name="General_DeleteFromWishlist"></localize>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Create"
+                                           asp-controller="Wishlist"
+                                           asp-route-adId=@gridAd.ID
+                                           class="prodlist-i-favorites">
+                                            <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
+                                        </a>
+                                    }
+                                </p>
+                            </div>
 
-                        <div class="prodlist-i-props-wrap">
-                            <ul class="prodlist-i-props">
-                                <li>
-                                    <b><localize name="Owner_Username"></localize></b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
-                                </li>
-                                <li>
-                                    <b><localize name="Owner_Phone"></localize></b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
-                                </li>
-                                <li>
-                                    <b><localize name="Owner_Mail"></localize></b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
-                                </li>
-                                <li>
-                                    <b><localize name="City_Entity"></localize></b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
-                                </li>
-                                <li>
-                                    <b><localize name="Category_Entity"></localize></b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
-                                </li>
-                            </ul>
-                        </div>
+                            <div class="prodlist-i-props-wrap">
+                                <ul class="prodlist-i-props">
+                                    <li>
+                                        <b><localize name="Owner_Username"></localize></b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
+                                    </li>
+                                    <li>
+                                        <b><localize name="Owner_Phone"></localize></b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
+                                    </li>
+                                    <li>
+                                        <b><localize name="Owner_Mail"></localize></b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
+                                    </li>
+                                    <li>
+                                        <b><localize name="City_Entity"></localize></b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
+                                    </li>
+                                    <li>
+                                        <b><localize name="Category_Entity"></localize></b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
+                                    </li>
+                                </ul>
+                            </div>
 
-                    </div>
-                }
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
 
 
-        @if (Model.TotalPages > 1)
-        {
-            
-            int counter = Model.PagesBefore;
-            int forwardCounter = 1;
-            <ul class="pagi">
+            @if (Model.TotalPages > 1)
+            {
 
-                @if (Model.PageIndex - Model.PagesBefore > 1)
-                {
-                    <li class="pagi-prev">
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
-                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                           asp-route-sortOrder="@ViewData["CurrentSort"]"
-                           asp-route-sortColumn="@ViewData["SortColumn"]"
-                           asp-route-pageNumber="@( 1 )">
-                            <i class="fa fa-angle-double-left"></i>
+                int counter = Model.PagesBefore;
+                int forwardCounter = 1;
+                <ul class="pagi">
+
+                    @if (Model.PageIndex - Model.PagesBefore > 1)
+                    {
+                        <li class="pagi-prev">
+                            <a asp-action="Index"
+                               asp-route-categoryId="@categoryId"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-sortOrder="@ViewData["CurrentSort"]"
+                               asp-route-sortColumn="@ViewData["SortColumn"]"
+                               asp-route-pageNumber="@( 1 )">
+                                <i class="fa fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @while (counter > 0)
+                    {
+                        <li>
+                            <a asp-action="Index"
+                               asp-route-categoryId="@categoryId"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-sortColumn="@ViewData["SortColumn"]"
+                               asp-route-sortOrder="@ViewData["CurrentSort"]"
+                               asp-route-pageNumber="@(Model.PageIndex-counter)">
+                                @(Model.PageIndex - counter)
+                            </a>
+                        </li>
+                        counter = counter - 1;
+                    }
+
+                    <li class="active">
+                        <a>
+                            @Model.PageIndex
                         </a>
                     </li>
-                }
 
-                @while (counter > 0)
-                {
-                    <li>
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
-                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                           asp-route-sortColumn="@ViewData["SortColumn"]"
-                           asp-route-sortOrder="@ViewData["CurrentSort"]"
-                           asp-route-pageNumber="@(Model.PageIndex-counter)">
-                            @(Model.PageIndex - counter)
-                        </a>
-                    </li>
-                    counter = counter - 1;
-                }
+                    @while (forwardCounter <= Model.PagesLeft)
+                    {
+                        <li>
+                            <a asp-action="Index"
+                               asp-route-categoryId="@categoryId"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-sortOrder="@ViewData["CurrentSort"]"
+                               asp-route-sortColumn="@ViewData["SortColumn"]"
+                               asp-route-pageNumber="@(Model.PageIndex+forwardCounter)">
+                                @(Model.PageIndex + forwardCounter)
+                            </a>
+                        </li>
+                        forwardCounter = forwardCounter + 1;
+                    }
 
-                <li class="active">
-                    <a>
-                        @Model.PageIndex
-                    </a>
-                </li>
+                    @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
+                    {
 
-                @while (forwardCounter <= Model.PagesLeft)
-                {
-                    <li>
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
-                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                           asp-route-sortOrder="@ViewData["CurrentSort"]"
-                           asp-route-sortColumn="@ViewData["SortColumn"]"
-                           asp-route-pageNumber="@(Model.PageIndex+forwardCounter)">
-                            @(Model.PageIndex + forwardCounter)
-                        </a>
-                    </li>
-                    forwardCounter = forwardCounter + 1;
-                }
+                        <li class="pagi-next">
+                            <a asp-action="Index"
+                               asp-route-categoryId="@categoryId"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-sortColumn="@ViewData["SortColumn"]"
+                               asp-route-sortOrder="@ViewData["CurrentSort"]"
+                               asp-route-pageNumber="@(Model.TotalPages)">
+                                <i class="fa fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    }
 
-                @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
-                {
+                </ul>
+            }
 
-                    <li class="pagi-next">
-                        <a asp-action="Index"
-                           asp-route-categoryId="@categoryId"
-                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                           asp-route-sortColumn="@ViewData["SortColumn"]"
-                           asp-route-sortOrder="@ViewData["CurrentSort"]"
-                           asp-route-pageNumber="@(Model.TotalPages)">
-                            <i class="fa fa-angle-double-right"></i>
-                        </a>
-                    </li>
-                }
-
-            </ul>
-        }
-
-    </section>
-</main>
-
+        </section>
+    </main>
+</form>
 <br />

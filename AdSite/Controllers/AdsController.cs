@@ -37,6 +37,8 @@ namespace AdSite.Controllers
         private Guid CountryId => _countryService.Get();
 
 
+
+
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
         private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
@@ -79,7 +81,14 @@ namespace AdSite.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(string columnName, string searchString, string sortColumn, int? pageNumber, Guid? categoryId)
+        public IActionResult Index(string columnName, 
+            string searchString, 
+            string sortColumn, 
+            int? pageNumber, 
+            Guid? categoryId, 
+            List<Guid> cityIds, 
+            int minPrice, 
+            int maxPrice)
         {
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -89,6 +98,7 @@ namespace AdSite.Controllers
             searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
             columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
             sortColumn = String.IsNullOrEmpty(sortColumn) ? String.Empty : sortColumn;
+            
             ViewData["CurrentFilter"] = searchString;
             ViewData["CurrentColumn"] = columnName;
             ViewData["SortColumn"] = sortColumn;
@@ -109,14 +119,22 @@ namespace AdSite.Controllers
                     CurrentUser = CurrentUserId
                 };
 
+                var filterModel = new FilterModel()
+                {
+                    CategoryId = categoryId,
+                    CityIds = cityIds,
+                    MinimumPrice = minPrice,
+                    MaximumPrice = maxPrice
+                };
+
                 List<AdGridViewModel> items = new List<AdGridViewModel>();
-                if (categoryId == null)
+                if (categoryId == null && cityIds == null)
                 {
                     items = _adService.GetPageForAdGrid(pageModel, out count);
                 }
                 else
                 {
-                    items = _adService.GetPageForAdGridByCategory(pageModel, (Guid)categoryId, out count);
+                    items = _adService.GetPageForAdGridByFilter(pageModel, filterModel, out count);
                 }
 
                 return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, PAGE_SIZE));

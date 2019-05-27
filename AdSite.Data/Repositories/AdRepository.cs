@@ -1,4 +1,5 @@
-﻿using AdSite.Models.DatabaseModels;
+﻿using AdSite.Models;
+using AdSite.Models.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace AdSite.Data.Repositories
         List<Ad> GetAdGrid(Guid countryId);
         List<Ad> GetAdGrid(string searchString, Guid countryId);
         List<Ad> GetMyAdsGrid(string searchString, string ownerIdentifier, Guid countryId);
-        List<Ad> GetAdGridByCategory(List<Guid> categoryIds, Guid countryId);
-        List<Ad> GetAdGridByCategory(string searchString, List<Guid> categoryId, Guid countryId);
+        List<Ad> GetAdGridByFilters(FilterRepositoryModel model);
+        List<Ad> GetAdGridByFilters(string searchString, FilterRepositoryModel model);
         List<Ad> OrderAdsByColumn(List<Ad> entities, string sortColumn);
         List<Ad> GetRelatedAdsForCategoryExceptCurrentAd(Guid currentAdId, Guid currentCategoryId);
         int Count();
@@ -137,48 +138,73 @@ namespace AdSite.Data.Repositories
             return result;
         }
 
-        public List<Ad> GetAdGridByCategory(List<Guid> categoryIds, Guid countryId)
+        public List<Ad> GetAdGridByFilters(FilterRepositoryModel filterModel)
         {
             var ads = _context.Ads.Include(c => c.Category)
-                .Where(c => categoryIds.Contains(c.CategoryID) && c.CountryID == countryId)
-                .Include(c => c.City)
-                .Include(o => o.Owner)
-                .Include(i => i.AdDetail)
-                ?.ThenInclude(t => t.AdDetailPictures)
-                .ToListAsync();
+                    .Where(c => c.Price <= filterModel.MaximumPrice
+                    && c.Price >= filterModel.MinimumPrice
+                    && c.CountryID == filterModel.CountryId)
+                    .Include(c => c.City)
+                    .Include(o => o.Owner)
+                    .Include(i => i.AdDetail)
+                    ?.ThenInclude(t => t.AdDetailPictures)
+                    .ToList();
 
-            var result = ads.Result;
-            if (result == null)
+            List<Ad> items = new List<Ad>();
+            if (filterModel.CityIds.Count > 0)
+            {
+                ads = ads.Where(c => filterModel.CityIds.Contains(c.CityID))
+                    .ToList();
+            }
+            if (filterModel.CategoryIds.Count > 0)
+            {
+                ads = ads.Where(c => filterModel.CategoryIds.Contains(c.CategoryID)).ToList();
+            }
+
+            if (ads == null)
             {
                 throw new Exception();
             }
 
-            return result;
+            return ads;
+        }
+
+        public List<Ad> GetAdGridByFilters(string searchString, FilterRepositoryModel filterModel)
+        {
+            var ads = _context.Ads.Include(c => c.Category)
+                    .Where(c => c.Price <= filterModel.MaximumPrice
+                    && c.Price >= filterModel.MinimumPrice
+                    && c.CountryID == filterModel.CountryId
+                    && c.Name.Contains(searchString))
+                    .Include(c => c.City)
+                    .Include(o => o.Owner)
+                    .Include(i => i.AdDetail)
+                    ?.ThenInclude(t => t.AdDetailPictures)
+                    .ToList();
+
+            List<Ad> items = new List<Ad>();
+            if (filterModel.CityIds.Count > 0)
+            {
+                ads = ads.Where(c => filterModel.CityIds.Contains(c.CityID))
+                    .ToList();
+            }
+            if (filterModel.CategoryIds.Count > 0)
+            {
+                ads = ads.Where(c => filterModel.CategoryIds.Contains(c.CategoryID)).ToList();
+            }
+
+            if (ads == null)
+            {
+                throw new Exception();
+            }
+
+            return ads;
         }
 
         public List<Ad> GetMyAdsGrid(string searchString, string ownerIdentifier, Guid countryId)
         {
             var ads = _context.Ads.Include(c => c.Category)
                 .Where(c => c.OwnerId.Equals(ownerIdentifier) && c.CountryID == countryId && c.Name.Contains(searchString))
-                .Include(c => c.City)
-                .Include(o => o.Owner)
-                .Include(i => i.AdDetail)
-                ?.ThenInclude(t => t.AdDetailPictures)
-                .ToListAsync();
-
-            var result = ads.Result;
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
-            return result;
-        }
-
-        public List<Ad> GetAdGridByCategory(string searchString, List<Guid> categoryIds, Guid countryId)
-        {
-            var ads = _context.Ads.Include(c => c.Category)
-                .Where(c => categoryIds.Contains(c.CategoryID) && c.CountryID == countryId && c.Name.Contains(searchString))
                 .Include(c => c.City)
                 .Include(o => o.Owner)
                 .Include(i => i.AdDetail)

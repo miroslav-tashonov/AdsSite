@@ -4,34 +4,32 @@
             <li class="flex-active-slide" data-thumb-alt="" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;">
                 <img src="img/slider/slide1.jpg" alt="" draggable="false">
                 <div class="fr-slider-cont">
-                    <h3>MEGA SALE -30%</h3>
-                    <p>Winter collection for women's. <br>We all have choices for you. Check it out!</p>
+                    <h3><localize name="General_DiscountPercentage"></localize></h3>
+                    <p>
+                        <localize name="General_DiscountMessage1"></localize>  
+                        <br>
+                        <localize name="General_DiscountMessage2"></localize>
+                    </p>
                     <p class="fr-slider-more-wrap">
-                        <a class="fr-slider-more" href="#">View collection</a>
+                        <a class="fr-slider-more" asp-controller="Account" asp-action="Index"><localize name="General_ButtonCreate"></localize></a>
                     </p>
                 </div>
             </li>
             <li data-thumb-alt="" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;" class="">
                 <img src="img/slider/slide1.jpg" alt="" draggable="false">
                 <div class="fr-slider-cont">
-                    <h3>NEW COLLECTION</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.<br>Aliquam consequuntur dolorem doloribus fuga harum</p>
-                    <p class="fr-slider-more-wrap">
-                        <a class="fr-slider-more" href="#">Shopping now</a>
+                    <h3><localize name="General_AdLeader"></localize></h3>
+                    <p>
+                        <localize name="General_AdLeaderMessage1"></localize>
+                        <br> 
+                        <localize name="General_AdLeaderMessage2"></localize>
                     </p>
-                </div>
-            </li>
-            <li data-thumb-alt="" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;" class="">
-                <img src="img/slider/slide1.jpg" alt="" draggable="false">
-                <div class="fr-slider-cont">
-                    <h3>SUMMER TRENDS</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.<br>Aliquam consequuntur dolorem doloribus fuga harum</p>
                     <p class="fr-slider-more-wrap">
-                        <a class="fr-slider-more" href="#">Start shopping</a>
+                        <a class="fr-slider-more" asp-controller="Ads" asp-action="Index"><localize name="General_ButtonFindAd"></localize></a>
                     </p>
                 </div>
             </li>
         </ul>
-        <ol class="flex-control-nav flex-control-paging"><li><a href="#" class="flex-active">1</a></li><li><a href="#" class="">2</a></li><li><a href="#" class="">3</a></li></ol>
+        
     </div>
 </div>

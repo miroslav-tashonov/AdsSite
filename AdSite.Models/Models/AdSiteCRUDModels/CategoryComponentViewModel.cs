@@ -38,4 +38,5 @@ namespace AdSite.Models.CRUDModels
         }
         public ICollection<JSTreeViewModel> CategoriesAsTree { get; set; }
     }
+
 }
