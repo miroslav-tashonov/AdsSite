@@ -27,6 +27,8 @@ namespace AdSite.Models.CRUDModels
 
         public bool IsFirst { get; set; }
         public ICollection<CategoryViewModel> ComponentCategories { get; set; }
+
+        public Guid? SelectedCategoryId { get; set; }
     }
 
 

@@ -20,7 +20,7 @@ namespace AdSite.ViewComponents
             _countryService = countryService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(ICollection<CategoryViewModel> categories, bool isFirstCall)
+        public async Task<IViewComponentResult> InvokeAsync(ICollection<CategoryViewModel> categories, bool isFirstCall, Guid? selectedCategoryId)
         {
             if (isFirstCall)
             {
@@ -29,7 +29,7 @@ namespace AdSite.ViewComponents
                 categories = _categoryService.GetCategoryAsTreeStructure(countryId);
             }
 
-            var viewModel = new CategoryFilterViewModel { IsFirst = isFirstCall, ComponentCategories = categories };
+            var viewModel = new CategoryFilterViewModel { IsFirst = isFirstCall, ComponentCategories = categories, SelectedCategoryId = selectedCategoryId };
 
             return View(viewModel);
         }

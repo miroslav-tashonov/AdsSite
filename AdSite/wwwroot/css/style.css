@@ -1431,54 +1431,64 @@ ul.b-crumbs {
 	display: inline-block;
 	margin: 0 0 10px 0;
 }
-.pagi li:first-child a,
-.pagi li:first-child span {
-	border-bottom-left-radius: 0;
-	border-top-left-radius: 0;
-	margin-left: 0;
-}
-.pagi li:last-child a,
-.pagi li:last-child span {
-	border-bottom-right-radius: 0;
-	border-top-right-radius: 0;
-}
-.pagi .active a,
-.pagi .active span,
-.pagi .active a:hover,
-.pagi .active span:hover,
-.pagi .active a:focus,
-.pagi .active span:focus {
-	background-color: #313b54;
-	color: #fff;
-	cursor: default;
-	z-index: 2;
-}
-.pagi li a,
-.pagi li span {
-	font-size: 14px;
-	font-weight: 500;
-	border: none;
-	float: left;
-	line-height: 1.42857;
-	margin-left: -1px;
-	padding: 0 12px;
-	position: relative;
-	text-decoration: none;
-	margin-right: 8px;
-	color: #313b54;
-	background: #eff1fa;
-	border-radius: 0;
-	line-height: 32px;
-	height: 32px;
-}
-.pagi li a:hover {
-	background: #313b54;
-	color: #fff;
-}
-.pagi li.pagi-prev a,
-.pagi li.pagi-next a {
-	font-size: 16px;
-}
+    .pagi li:first-child a,
+    .pagi li:first-child input,
+    .pagi li:first-child span {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        margin-left: 0;
+    }
+    .pagi li:last-child a,
+    .pagi li:last-child input,
+    .pagi li:last-child span {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .pagi .active a,
+    .pagi .active input,
+    .pagi .active span,
+    .pagi .active a:hover,
+    .pagi .active input:hover,
+    .pagi .active span:hover,
+    .pagi .active a:focus,
+    .pagi .active input:focus,
+    .pagi .active span:focus {
+        background-color: #313b54;
+        color: #fff;
+        cursor: default;
+        z-index: 2;
+    }
+    .pagi li a,
+    .pagi li input,
+    .pagi li span {
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        float: left;
+        line-height: 1.42857;
+        margin-left: -1px;
+        padding: 0 12px;
+        position: relative;
+        text-decoration: none;
+        margin-right: 8px;
+        color: #313b54;
+        background: #eff1fa;
+        border-radius: 0;
+        line-height: 32px;
+        height: 32px;
+    }
+        .pagi li a:hover,
+        .pagi li input:hover
+        {
+            background: #313b54;
+            color: #fff;
+        }
+    .pagi li.pagi-prev a,
+    .pagi li.pagi-prev input,
+    .pagi li.pagi-next a,
+    .pagi li.pagi-next input{
+        font-size: 16px;
+    }
 /*----------------------------------
 6 - Pagination
 ----------------------------------*/
@@ -3712,13 +3722,15 @@ ul.b-crumbs {
 .section-sb-current > ul > li > a {
 	padding: 0;
 }
-.section-sb-current > ul > li > a > .categ-1-label {
-	padding: 10px 15px;
-	display: block;
-}
-.section-sb-current > ul > li > a > .categ-1-label:hover {
-	background: #f8fafc;
-}
+    .section-sb-current > ul > li > a > .categ-1-label,
+    .section-sb-current > ul > li > input > .categ-1-label {
+        padding: 10px 15px;
+        display: block;
+    }
+        .section-sb-current > ul > li > input > .categ-1-label:hover,
+        .section-sb-current > ul > li > a > .categ-1-label:hover {
+            background: #f8fafc;
+        }
 .section-sb-current ul li.active > a {
 	font-weight: 500;
 }
@@ -3733,9 +3745,10 @@ ul.b-crumbs {
 .section-sb-current > ul > li:first-child {
 	border-top: none;
 }
-.section-sb-current > ul > li > a {
-	display: block;
-}
+    .section-sb-current > ul > li > a,
+    .section-sb-current > ul > li > input {
+        display: block;
+    }
 .section-sb-current > ul > li > ul {
 	position: relative;
 	padding: 4px 0;
@@ -3766,12 +3779,14 @@ ul.b-crumbs {
 	padding: 5px 16px 5px 16px;
 	display: block;
 }
-.section-sb-current > ul > li ul li.has_child > a {
-	padding-right: 35px;
-}
-.section-sb-current > ul > li ul li a:hover {
-	color: #3a89cf;
-}
+    .section-sb-current > ul > li ul li.has_child > a,
+    .section-sb-current > ul > li ul li.has_child > input {
+        padding-right: 35px;
+    }
+    .section-sb-current > ul > li ul li a:hover,
+    .section-sb-current > ul > li ul li input:hover {
+        color: #3a89cf;
+    }
 .section-sb-toggle {
 	width: 35px;
 	height: 29px;

@@ -3,10 +3,6 @@
 @using AdSite.Helpers;
 
 @{
-    Guid? categoryId = (String.IsNullOrEmpty(Context.Request.Query["categoryId"]) ? (Guid?)null : Guid.Parse(Context.Request.Query["categoryId"]));
-
-    string categoryAttribute = "asp-route-categoryId='@categoryId'";
-
     string name = @Html.DisplayNameFor(model => model.FirstOrDefault().Name);
     string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
         "<option selected>" + name + "</option>" :
@@ -36,7 +32,7 @@
 
 <br />
 
-<form method="get">
+<form id="form" method="post" asp-action="Index">
     <div class="form-actions no-color row">
         <div class="col-sm-5">
             <div class="col-sm-3">
@@ -76,9 +72,9 @@
             <div class="section-sb">
                 <!--Loading ad category filters -->
                 <div class="section-sb-current">
-                    <h3><a href="catalog-list.html"><localize name="Category_Entity"></localize> <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
+                    <h3><a><localize name="Category_Entity"></localize> <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
                     <ul class="section-sb-list" id="section-sb-list">
-                        @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true })
+                        @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true, selectedCategoryId = ViewData["CategoryId"] })
                     </ul>
                 </div>
 
@@ -93,7 +89,7 @@
                         <!--Cities Filter-->
                         <div class="section-filter-item opened">
                             <p class="section-filter-ttl"><localize name="City_Entity"></localize> <i class="fa fa-angle-down"></i></p>
-                            @await Component.InvokeAsync("CitiesFilter", new { isFirstCall = true })
+                            @await Component.InvokeAsync("CitiesFilter", new { isFirstCall = true, cityIds = ViewData["CityIds"] })
                         </div>
                     </div>
                 </div>
@@ -187,28 +183,27 @@
                     @if (Model.PageIndex - Model.PagesBefore > 1)
                     {
                         <li class="pagi-prev">
-                            <a asp-action="Index"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                               asp-route-sortOrder="@ViewData["CurrentSort"]"
-                               asp-route-sortColumn="@ViewData["SortColumn"]"
-                               asp-route-pageNumber="@( 1 )">
+                            <input asp-action="Index" asp-controller="Ads" 
+                               type="submit" value="@(Model.PageIndex - counter)"
+                                   name="PageNumber" 
+                                   id="@(Model.PageIndex - counter)"
+                                   onclick="this.form.submit();"
+                                   class="form-control"
+                                   />
                                 <i class="fa fa-angle-double-left"></i>
-                            </a>
                         </li>
                     }
 
                     @while (counter > 0)
                     {
                         <li>
-                            <a asp-action="Index"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                               asp-route-sortColumn="@ViewData["SortColumn"]"
-                               asp-route-sortOrder="@ViewData["CurrentSort"]"
-                               asp-route-pageNumber="@(Model.PageIndex-counter)">
-                                @(Model.PageIndex - counter)
-                            </a>
+                            <input asp-action="Index" asp-controller="Ads" 
+                                   type="submit" value="@(Model.PageIndex - counter)"
+                                   name="PageNumber"
+                                   id="@(Model.PageIndex - counter)"
+                                   onclick="this.form.submit();"
+                                   class="form-control"
+                                   />
                         </li>
                         counter = counter - 1;
                     }
@@ -222,14 +217,15 @@
                     @while (forwardCounter <= Model.PagesLeft)
                     {
                         <li>
-                            <a asp-action="Index"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                               asp-route-sortOrder="@ViewData["CurrentSort"]"
-                               asp-route-sortColumn="@ViewData["SortColumn"]"
-                               asp-route-pageNumber="@(Model.PageIndex+forwardCounter)">
-                                @(Model.PageIndex + forwardCounter)
-                            </a>
+                            <input 
+                                   asp-action="Index" asp-controller="Ads" 
+                                   type="submit" 
+                                   value="@(Model.PageIndex + forwardCounter)" 
+                                   name="PageNumber"
+                                   id="@(Model.PageIndex + forwardCounter)"
+                                   onclick="this.form.submit();"
+                                   class="form-control"
+                                   />
                         </li>
                         forwardCounter = forwardCounter + 1;
                     }
@@ -238,14 +234,15 @@
                     {
 
                         <li class="pagi-next">
-                            <a asp-action="Index"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                               asp-route-sortColumn="@ViewData["SortColumn"]"
-                               asp-route-sortOrder="@ViewData["CurrentSort"]"
-                               asp-route-pageNumber="@(Model.TotalPages)">
+                            <input asp-action="Index" asp-controller="Ads" 
+                                   type="submit" 
+                                   value="@(Model.PageIndex - counter)"
+                                   name="PageNumber"
+                                   id="@(Model.PageIndex - counter)"
+                                   onclick="this.form.submit();"
+                                   class="form-control"
+                                   />
                                 <i class="fa fa-angle-double-right"></i>
-                            </a>
                         </li>
                     }
 

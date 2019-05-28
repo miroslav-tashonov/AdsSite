@@ -20,8 +20,9 @@ namespace AdSite.ViewComponents
             _countryService = countryService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(ICollection<LookupViewModel> cities, bool isFirstCall)
+        public async Task<IViewComponentResult> InvokeAsync(ICollection<LookupViewModel> cities, bool isFirstCall, List<Guid> cityIds)
         {
+            cityIds = (cityIds == null) ? new List<Guid>() : cityIds;
             if (isFirstCall)
             {
                 Guid countryId = _countryService.Get();
@@ -29,7 +30,7 @@ namespace AdSite.ViewComponents
                 cities = _cityService.GetAllAsLookup(countryId);
             }
 
-            var viewModel = new CitiesFilterViewModel { IsFirst = isFirstCall, ComponentCities = cities };
+            var viewModel = new CitiesFilterViewModel() { IsFirst = isFirstCall, ComponentCities = cities, CityIds = cityIds };
 
             return View(viewModel);
         }

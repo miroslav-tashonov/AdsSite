@@ -12,10 +12,13 @@ namespace AdSite.Models.CRUDModels
         public CitiesFilterViewModel()
         {
             ComponentCities = new List<LookupViewModel>();
+            CityIds = new List<Guid>();
         }
 
         public bool IsFirst { get; set; }
         public ICollection<LookupViewModel> ComponentCities { get; set; }
+
+        public List<Guid> CityIds { get; set; }
     }
 
 }

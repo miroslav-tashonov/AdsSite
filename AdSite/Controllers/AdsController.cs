@@ -81,38 +81,34 @@ namespace AdSite.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(string columnName, 
-            string searchString, 
-            string sortColumn, 
-            int? pageNumber, 
-            Guid? categoryId, 
-            List<Guid> cityIds, 
-            int minPrice, 
-            int maxPrice)
+        public IActionResult Index([FromForm]PageQueryModel queryModel)
         {
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(queryModel.SearchString))
             {
-                pageNumber = FIRST_PAGE_NUMBER;
+                queryModel.PageNumber = FIRST_PAGE_NUMBER;
             }
 
-            searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
-            columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
-            sortColumn = String.IsNullOrEmpty(sortColumn) ? String.Empty : sortColumn;
-            
-            ViewData["CurrentFilter"] = searchString;
-            ViewData["CurrentColumn"] = columnName;
-            ViewData["SortColumn"] = sortColumn;
+            queryModel.CategoryId = (queryModel.CategoryId == Guid.Empty || queryModel.CategoryId == null) ? null : queryModel.CategoryId;
+            queryModel.SearchString = String.IsNullOrEmpty(queryModel.SearchString) ? String.Empty : queryModel.SearchString;
+            queryModel.ColumnName = String.IsNullOrEmpty(queryModel.ColumnName) ? String.Empty : queryModel.ColumnName;
+            queryModel.SortColumn = String.IsNullOrEmpty(queryModel.SortColumn) ? String.Empty : queryModel.SortColumn;
+
+            ViewData["CityIds"] = queryModel.CityIds;
+            ViewData["CategoryId"] = queryModel.CategoryId;
+            ViewData["CurrentFilter"] = queryModel.SearchString;
+            ViewData["CurrentColumn"] = queryModel.ColumnName;
+            ViewData["SortColumn"] = queryModel.SortColumn;
 
             try
             {
-                int numberOfThePage = pageNumber ?? FIRST_PAGE_NUMBER;
+                int numberOfThePage = queryModel.PageNumber ?? FIRST_PAGE_NUMBER;
                 int count;
 
                 var pageModel = new PageModel()
                 {
-                    ColumnName = columnName,
-                    SearchString = searchString,
-                    SortColumn = sortColumn,
+                    ColumnName = queryModel.ColumnName,
+                    SearchString = queryModel.SearchString,
+                    SortColumn = queryModel.SortColumn,
                     CountryId = CountryId,
                     PageSize = PAGE_SIZE,
                     PageIndex = numberOfThePage,
@@ -121,14 +117,14 @@ namespace AdSite.Controllers
 
                 var filterModel = new FilterModel()
                 {
-                    CategoryId = categoryId,
-                    CityIds = cityIds,
-                    MinimumPrice = minPrice,
-                    MaximumPrice = maxPrice
+                    CategoryId = queryModel.CategoryId,
+                    CityIds = queryModel.CityIds,
+                    MinimumPrice = queryModel.MinPrice,
+                    MaximumPrice = queryModel.MaxPrice
                 };
 
                 List<AdGridViewModel> items = new List<AdGridViewModel>();
-                if (categoryId == null && cityIds == null)
+                if (queryModel.CategoryId == null && queryModel.CityIds == null)
                 {
                     items = _adService.GetPageForAdGrid(pageModel, out count);
                 }

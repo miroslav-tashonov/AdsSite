@@ -2,45 +2,47 @@
 
 @if (Model.ComponentCategories != null && Model.ComponentCategories.Any())
 {
-    Guid categoryId = (String.IsNullOrEmpty(Context.Request.Query["categoryId"]) ? Guid.Empty : Guid.Parse(Context.Request.Query["categoryId"]));
-
     @foreach (var category in Model.ComponentCategories)
     {
         @if (category.Children != null && category.Children.Count > 0)
         {
             <li class="categ-1 has_child">
-                <a asp-action="Index"
-                   asp-route-categoryId="@category.ID"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   asp-route-sortColumn="@ViewData["SortColumn"]"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   role="button"
+                <a role="button"
                    aria-expanded="true"
-                   class="@(category.ID == categoryId ? "active-category" : String.Empty )">
+                   class="@(category.ID == Model.SelectedCategoryId ? "active-category" : String.Empty )"
+                   id="@category.ID" value="@category.ID"
+                   onclick="submitModel('@category.ID'); return false;"
+                   >
                     <span class="categ-1-label">
                         @category.Name
                     </span>
                     <span class="section-sb-toggle opened"><span class="section-sb-ico"></span></span>
                 </a>
                 <ul style="display:block">
-                    @await Component.InvokeAsync("CategoriesFilter", new { categories = category.Children, isFirstCall = false })
+                    @await Component.InvokeAsync("CategoriesFilter", new { categories = category.Children, isFirstCall = false, selectedCategoryId = Model.SelectedCategoryId })
                 </ul>
             </li>
         }
         else
         {
             <li class="categ-1">
-                <a asp-action="Index"
-                   asp-route-categoryId="@category.ID"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   asp-route-sortColumn="@ViewData["SortColumn"]"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   role="button"
+                <a role="button"
                    aria-expanded="true"
-                   class="@(category.ID == categoryId ? "active-category" : String.Empty )">
+                   class="@(category.ID == Model.SelectedCategoryId ? "active-category" : String.Empty )"
+                   id="@category.ID" value="@category.ID" 
+                   onclick="submitModel('@category.ID'); return false;">
                     <span class="categ-1-label">@category.Name</span>
                 </a>
             </li>
         }
     }
+
+    <input type="hidden" name="CategoryId" id="hiddenCategoryId"  value="@Model.SelectedCategoryId"/>
+    <script>
+    function submitModel(categoryId)
+    {
+        document.getElementById('hiddenCategoryId').value = categoryId ;
+        document.getElementById('form').submit();
+    }
+    </script>
 }
