@@ -21,6 +21,15 @@ namespace AdSite.Helpers
             this.AddRange(items);
         }
 
+        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize, int maximumPrice)
+        {
+            MaximumPrice = maximumPrice;
+            PageIndex = pageIndex;
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+            this.AddRange(items);
+        }
+
         public bool HasPreviousPage
         {
             get
@@ -58,9 +67,16 @@ namespace AdSite.Helpers
             }
         }
 
-        public static PaginatedList<T> CreatePageAsync( List<T> items, int count, int pageIndex, int pageSize)
+        public int MaximumPrice { get; set; }
+
+        public static PaginatedList<T> CreatePageAsync(List<T> items, int count, int pageIndex, int pageSize)
         {
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+
+        public static PaginatedList<T> CreatePageAsync( List<T> items, int count, int pageIndex, int pageSize, int maximumPrice)
+        {
+            return new PaginatedList<T>(items, count, pageIndex, pageSize, maximumPrice);
         }
     }
 }

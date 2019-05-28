@@ -20,9 +20,9 @@ namespace AdSite.Services
         bool Update(AdEditModel ad);
         List<AdViewModel> GetAds(Guid countryId);
         List<AdGridViewModel> GetAdGridModel(Guid countryId);
-        List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count);
+        List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count, out int maxPrice);
         List<AdGridViewModel> GetPageForMyAdsGrid(PageModel pageModel, string ownerIdentifier, out int count);
-        List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel , out int count);
+        List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel , out int count, out int maxPrice);
         AdViewModel GetAdAsViewModel(Guid adId);
         WishlistAdGridModel GetAdAsAdWishlistGridModel(Guid adId);
         AdEditModel GetAdAsEditModel(Guid adId);
@@ -184,7 +184,7 @@ namespace AdSite.Services
             return AdMapper.MapToAdGridModel(entities);
         }
 
-        public List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count)
+        public List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count, out int maxPrice)
         {
             List<Ad> sourceEntities;
             switch (pageModel.ColumnName.ToLower())
@@ -202,6 +202,7 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
             sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
+            maxPrice = (int)_repository.GetMaximumPriceForAd(sourceEntities);
             count = sourceEntities.Count;
 
             var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);
@@ -257,7 +258,7 @@ namespace AdSite.Services
         }
 
 
-        public List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel, out int count)
+        public List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel, out int count, out int maxPrice)
         {
             //bussiness rule : retrieve subcategories for current category and apply to filtering 
             List<Guid> categoryIds = new List<Guid>();
@@ -283,6 +284,7 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
             sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
+            maxPrice = (int)_repository.GetMaximumPriceForAd(sourceEntities);
             count = sourceEntities.Count;
 
             var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);

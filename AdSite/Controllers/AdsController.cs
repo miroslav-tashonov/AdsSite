@@ -93,6 +93,8 @@ namespace AdSite.Controllers
             queryModel.ColumnName = String.IsNullOrEmpty(queryModel.ColumnName) ? String.Empty : queryModel.ColumnName;
             queryModel.SortColumn = String.IsNullOrEmpty(queryModel.SortColumn) ? String.Empty : queryModel.SortColumn;
 
+            ViewData["MinimumPrice"] = queryModel.MinPriceValue;
+            ViewData["MaximumPrice"] = queryModel.MaxPriceValue;
             ViewData["CityIds"] = queryModel.CityIds;
             ViewData["CategoryId"] = queryModel.CategoryId;
             ViewData["CurrentFilter"] = queryModel.SearchString;
@@ -102,7 +104,7 @@ namespace AdSite.Controllers
             try
             {
                 int numberOfThePage = queryModel.PageNumber ?? FIRST_PAGE_NUMBER;
-                int count;
+                int count, maxPrice;
 
                 var pageModel = new PageModel()
                 {
@@ -119,21 +121,13 @@ namespace AdSite.Controllers
                 {
                     CategoryId = queryModel.CategoryId,
                     CityIds = queryModel.CityIds,
-                    MinimumPrice = queryModel.MinPrice,
-                    MaximumPrice = queryModel.MaxPrice
+                    MinimumPrice = queryModel.MinPriceValue,
+                    MaximumPrice = queryModel.MaxPriceValue
                 };
 
-                List<AdGridViewModel> items = new List<AdGridViewModel>();
-                if (queryModel.CategoryId == null && queryModel.CityIds == null)
-                {
-                    items = _adService.GetPageForAdGrid(pageModel, out count);
-                }
-                else
-                {
-                    items = _adService.GetPageForAdGridByFilter(pageModel, filterModel, out count);
-                }
+                List<AdGridViewModel> items = _adService.GetPageForAdGridByFilter(pageModel, filterModel, out count, out maxPrice);
 
-                return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, PAGE_SIZE));
+                return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, PAGE_SIZE, maxPrice));
             }
             catch (Exception ex)
             {

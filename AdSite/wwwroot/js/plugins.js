@@ -276,7 +276,7 @@ $(window).load(function () {
 				max: range_slider.data('max'),
 				from: range_slider.data('from'),
 				to: range_slider.data('to'),
-				prefix: range_slider.data('prefix')
+                prefix: range_slider.data('prefix')
 			});
 		});
 	}

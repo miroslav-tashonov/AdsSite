@@ -5,23 +5,23 @@
 @{
     string name = @Html.DisplayNameFor(model => model.FirstOrDefault().Name);
     string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
-        "<option selected>" + name + "</option>" :
-        "<option>" + name + "</option>";
+    "<option selected>" + name + "</option>" :
+    "<option>" + name + "</option>";
 
     string sortCheapest = "Cheapest";
     string selectedCheapest = ViewData["SortColumn"]?.ToString() == sortCheapest ?
-        "<option selected>" + sortCheapest + "</option>" :
-        "<option>" + sortCheapest + "</option>";
+    "<option selected>" + sortCheapest + "</option>" :
+    "<option>" + sortCheapest + "</option>";
 
     string sortPriciest = "Priciest";
     string selectedPriciest = ViewData["SortColumn"]?.ToString() == sortPriciest ?
-        "<option selected>" + sortPriciest + "</option>" :
-        "<option>" + sortPriciest + "</option>";
+    "<option selected>" + sortPriciest + "</option>" :
+    "<option>" + sortPriciest + "</option>";
 
     string sortLatest = "Latest";
     string selectedLatest = ViewData["SortColumn"]?.ToString() == sortLatest ?
-        "<option selected>" + sortLatest + "</option>" :
-        "<option>" + sortLatest + "</option>";
+    "<option selected>" + sortLatest + "</option>" :
+    "<option>" + sortLatest + "</option>";
 
 }
 
@@ -29,6 +29,28 @@
     <script src="~/js/ion.rangeSlider.min.js" asp-append-version="true"></script>
     <script src="~/js/plugins.js"></script>
 }
+
+
+<script>
+    $(document).ready(function () {
+        $(".price-slider").ionRangeSlider({
+            type: "double",
+            grid: $(this).data('grid'),
+            min: $(this).data('min'),
+            max: $(this).data('max'),
+            from: $(this).data('from'),
+            to: $(this).data('to'),
+            prefix: $(this).data('prefix'),
+            onFinish: function (data) {
+                $("#minPriceValue").val(data.from);
+                $("#maxPriceValue").val(data.to);
+
+                $('#form').submit();
+            }
+        });
+    });
+
+/**/</script>
 
 <br />
 
@@ -83,8 +105,11 @@
 
                         <!--Price Filter-->
                         <div class="section-filter-price">
-                            <div class="range-slider section-filter-price" data-min="0" data-max="1000" data-from="0" data-to="1000" data-prefix="$" data-grid="false"></div>
+                            <div id="priceSlider" class="price-slider section-filter-price" data-min="0" data-max="@(Model.MaximumPrice)" data-from="@ViewData["MinimumPrice"]" data-to="@ViewData["MaximumPrice"]" data-prefix="$" data-grid="false"></div>
                         </div>
+
+                        <input type="hidden" id="minPriceValue" name="minPriceValue" />
+                        <input type="hidden" id="maxPriceValue" name="maxPriceValue" value="@(Model.MaximumPrice)" />
 
                         <!--Cities Filter-->
                         <div class="section-filter-item opened">
@@ -183,27 +208,25 @@
                     @if (Model.PageIndex - Model.PagesBefore > 1)
                     {
                         <li class="pagi-prev">
-                            <input asp-action="Index" asp-controller="Ads" 
-                               type="submit" value="@(Model.PageIndex - counter)"
-                                   name="PageNumber" 
+                            <input asp-action="Index" asp-controller="Ads"
+                                   type="submit" value="@(Model.PageIndex - counter)"
+                                   name="PageNumber"
                                    id="@(Model.PageIndex - counter)"
                                    onclick="this.form.submit();"
-                                   class="form-control"
-                                   />
-                                <i class="fa fa-angle-double-left"></i>
+                                   class="form-control" />
+                            <i class="fa fa-angle-double-left"></i>
                         </li>
                     }
 
                     @while (counter > 0)
                     {
                         <li>
-                            <input asp-action="Index" asp-controller="Ads" 
+                            <input asp-action="Index" asp-controller="Ads"
                                    type="submit" value="@(Model.PageIndex - counter)"
                                    name="PageNumber"
                                    id="@(Model.PageIndex - counter)"
                                    onclick="this.form.submit();"
-                                   class="form-control"
-                                   />
+                                   class="form-control" />
                         </li>
                         counter = counter - 1;
                     }
@@ -217,15 +240,13 @@
                     @while (forwardCounter <= Model.PagesLeft)
                     {
                         <li>
-                            <input 
-                                   asp-action="Index" asp-controller="Ads" 
-                                   type="submit" 
-                                   value="@(Model.PageIndex + forwardCounter)" 
+                            <input asp-action="Index" asp-controller="Ads"
+                                   type="submit"
+                                   value="@(Model.PageIndex + forwardCounter)"
                                    name="PageNumber"
                                    id="@(Model.PageIndex + forwardCounter)"
                                    onclick="this.form.submit();"
-                                   class="form-control"
-                                   />
+                                   class="form-control" />
                         </li>
                         forwardCounter = forwardCounter + 1;
                     }
@@ -234,15 +255,14 @@
                     {
 
                         <li class="pagi-next">
-                            <input asp-action="Index" asp-controller="Ads" 
-                                   type="submit" 
+                            <input asp-action="Index" asp-controller="Ads"
+                                   type="submit"
                                    value="@(Model.PageIndex - counter)"
                                    name="PageNumber"
                                    id="@(Model.PageIndex - counter)"
                                    onclick="this.form.submit();"
-                                   class="form-control"
-                                   />
-                                <i class="fa fa-angle-double-right"></i>
+                                   class="form-control" />
+                            <i class="fa fa-angle-double-right"></i>
                         </li>
                     }
 

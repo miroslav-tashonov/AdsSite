@@ -15,7 +15,7 @@ namespace AdSite.Models
 
         public Guid? CategoryId { get; set; }
         public List<Guid> CityIds { get; set; }
-        public int MinPrice { get; set; }
-        public int MaxPrice { get; set; }
+        public int MinPriceValue { get; set; }
+        public int MaxPriceValue { get; set; }
     }
 }
