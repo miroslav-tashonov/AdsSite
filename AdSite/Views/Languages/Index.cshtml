@@ -4,15 +4,16 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Languages);
 
-    string languageName = @Html.DisplayNameFor(model => model.LanguageName);
-    string selectedLanguageName = ViewData["CurrentColumn"]?.ToString() == languageName ?
-        "<option selected>" + languageName + "</option>" :
-        "<option>" + languageName + "</option>";
-
-    string languageShortName = @Html.DisplayNameFor(model => model.LanguageShortName);
-    string selectedLanguageShortName = ViewData["CurrentColumn"]?.ToString() == languageShortName ?
-        "<option selected>" + languageShortName + "</option>" :
-        "<option>" + languageShortName + "</option>";
+    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.LanguageName), @Html.DisplayNameFor(model => model.LanguageShortName) };
+    List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
+                };
+            });
 }
 
 @await Html.PartialAsync("_AdminNavigationPartial")
@@ -43,9 +44,7 @@
                 <localize name="General_FindBy"></localize>
             </div>
             <div class="col-sm-8">
-                <select name="ColumnName" class="form-control">
-                    @Html.Raw(selectedLanguageName)
-                    @Html.Raw(selectedLanguageShortName)
+                <select name="ColumnName" class="form-control" asp-items="columnListItems">
                 </select>
             </div>
         </div>

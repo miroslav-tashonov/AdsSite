@@ -4,15 +4,16 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
 
-    string name = @Html.DisplayNameFor(model => model.Name);
-    string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
-        "<option selected>" + name + "</option>" :
-        "<option>" + name + "</option>";
-
-    string postCode = @Html.DisplayNameFor(model => model.Postcode);
-    string selectedPostcode = ViewData["CurrentColumn"]?.ToString() == postCode ?
-        "<option selected>" + postCode + "</option>" :
-        "<option>" + postCode + "</option>";
+    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Postcode) };
+    List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
+                };
+            });
 }
 
 @await Html.PartialAsync("_AdminNavigationPartial")
@@ -30,10 +31,7 @@
                 <localize name="General_FindBy"></localize>
             </div>
             <div class="col-sm-8">
-                <select name="ColumnName" class="form-control">
-                    @Html.Raw(selectedName)
-                    @Html.Raw(selectedPostcode)
-                </select>
+                <select name="ColumnName" class="form-control" asp-items="columnListItems"></select>
             </div>
         </div>
 

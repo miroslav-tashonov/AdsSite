@@ -3,26 +3,29 @@
 @using AdSite.Helpers;
 
 @{
-    string name = @Html.DisplayNameFor(model => model.FirstOrDefault().Name);
-    string selectedName = ViewData["CurrentColumn"]?.ToString() == name ?
-    "<option selected>" + name + "</option>" :
-    "<option>" + name + "</option>";
+    //todo localize sort string values
+    List<string> sortValues = new List<string>{ "Cheapest", "Priciest", "Latest" };
+    List<SelectListItem> sortListItems = sortValues.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = ViewData["SortColumn"]?.ToString() == a.ToString()
+                };
+            });
 
-    string sortCheapest = "Cheapest";
-    string selectedCheapest = ViewData["SortColumn"]?.ToString() == sortCheapest ?
-    "<option selected>" + sortCheapest + "</option>" :
-    "<option>" + sortCheapest + "</option>";
 
-    string sortPriciest = "Priciest";
-    string selectedPriciest = ViewData["SortColumn"]?.ToString() == sortPriciest ?
-    "<option selected>" + sortPriciest + "</option>" :
-    "<option>" + sortPriciest + "</option>";
-
-    string sortLatest = "Latest";
-    string selectedLatest = ViewData["SortColumn"]?.ToString() == sortLatest ?
-    "<option selected>" + sortLatest + "</option>" :
-    "<option>" + sortLatest + "</option>";
-
+    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.FirstOrDefault().Name) };
+    List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
+                };
+            });
 }
 
 @section Scripts {
@@ -40,6 +43,7 @@
             max: $(this).data('max'),
             from: $(this).data('from'),
             to: $(this).data('to'),
+            to_min: 1,
             prefix: $(this).data('prefix'),
             onFinish: function (data) {
                 $("#minPriceValue").val(data.from);
@@ -56,32 +60,38 @@
 
 <form id="form" method="post" asp-action="Index">
     <div class="form-actions no-color row">
-        <div class="col-sm-5">
-            <div class="col-sm-3">
+        <div class="col-sm-4">
+            <div class="col-sm-5">
                 <localize name="General_FindBy"></localize>
             </div>
-            <div class="col-sm-5">
-                <select name="ColumnName" class="form-control">
-                    @Html.Raw(selectedName)
+            <div class="col-sm-6">
+                <select name="ColumnName" class="form-control" asp-items="columnListItems">
                 </select>
             </div>
+
+
         </div>
 
         <div class="col-sm-5">
-            <div class="col-sm-10" style="padding-left:0px; padding-right:0px">
+            <div class="col-sm-10 no-padding">
                 <input type="text" name="SearchString" value="@ViewData["currentFilter"]" class="form-control" />
             </div>
-            <div class="col-sm-2" style="padding-left:0px; padding-right:0px">
+            <div class="col-sm-2 no-padding">
                 <button type="submit" class="form-control"> <i class="fa fa-search"></i> </button>
             </div>
         </div>
 
-        <div class="col-sm-2">
-            <select name="SortColumn" class="form-control" onchange="this.form.submit();">
-                @Html.Raw(selectedCheapest)
-                @Html.Raw(selectedPriciest)
-                @Html.Raw(selectedLatest)
-            </select>
+        <div class="col-sm-3 no-padding-right">
+            <div class="col-sm-8">
+                <select name="SortColumn" class="form-control" asp-items="sortListItems" onchange="this.form.submit();">
+                </select>
+            </div>
+            <div class="col-sm-4 no-padding-right">
+                <select name="PageSize"
+                        class="form-control"
+                        asp-items="@(Model.GetPageSizes(ViewData["PageSize"]?.ToString()))"
+                        onchange="this.form.submit();"></select>
+            </div>
         </div>
     </div>
 

@@ -5,6 +5,9 @@
 }
 @await Html.PartialAsync("_UsersNavigationPartial")
 
+@section Scripts {
+    <script src="~/extendedJs/fileUpload.js"></script>
+}
 
 <h2><localize name="Ad_CreateNew"></localize></h2>
 
@@ -51,7 +54,12 @@
             <div class="form-group">
                 <div class="col-md-10">
                     <p><localize name="Ad_Fields_Upload"></localize></p>
-                    <input type="file" name="files" multiple />
+                    <span class="btn btn-success fileinput-button">
+                        <span><localize name="Ad_SelectAttachment"></localize></span>
+                        <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif,"><br />
+                    </span>
+                    <output id="Filelist"></output>
+
                 </div>
             </div>
 
@@ -62,4 +70,3 @@
         </form>
     </div>
 </div>
-

@@ -57,43 +57,7 @@ namespace AdSite.Services
 
         public bool Add(AdCreateModel entity)
         {
-            List<AdDetailPicture> pictures = new List<AdDetailPicture>();
-            if(entity.FilesAsListOfByteArray != null && entity.FilesAsListOfByteArray.Count > 0)
-                foreach (var file in entity.FilesAsListOfByteArray)
-                {
-                    pictures.Add(new AdDetailPicture
-                    {
-                        File = file,
-                        CreatedBy = entity.CreatedBy,
-                        CreatedAt = entity.CreatedAt,
-                        ModifiedAt = entity.ModifiedAt,
-                        ModifiedBy = entity.ModifiedBy,
-                    });
-                }
-
-            Ad ad = new Ad
-            {
-                Name = entity.Name,
-                Price = entity.Price,
-                CategoryID = entity.CategoryId,
-                CityID = entity.CityId,
-                OwnerId = entity.OwnerId,
-                CreatedBy = entity.CreatedBy,
-                CreatedAt = entity.CreatedAt,
-                ModifiedAt = entity.ModifiedAt,
-                ModifiedBy = entity.ModifiedBy,
-                CountryID = entity.CountryId,
-                AdDetail = new AdDetail
-                {
-                    Description = entity.Description,
-                    CreatedBy = entity.CreatedBy,
-                    CreatedAt = entity.CreatedAt,
-                    ModifiedAt = entity.ModifiedAt,
-                    ModifiedBy = entity.ModifiedBy,
-                    AdDetailPictures = pictures
-                }
-            };
-
+            var ad = AdMapper.MapAdFromAdCreateModel(entity);
 
             return _repository.Add(ad);
         }
@@ -136,7 +100,7 @@ namespace AdSite.Services
 
         public AdEditModel GetAdAsEditModel(Guid id)
         {
-            var entity = _repository.Get(id);
+            var entity = _repository.GetAdWithDetails(id);
             if (entity == null)
             {
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
@@ -260,7 +224,7 @@ namespace AdSite.Services
 
         public List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel, out int count, out int maxPrice)
         {
-            //bussiness rule : retrieve subcategories for current category and apply to filtering 
+            //business rule : retrieve subcategories for current category and apply to filtering 
             List<Guid> categoryIds = new List<Guid>();
             if (filterModel.CategoryId != null && filterModel.CategoryId != Guid.Empty)
             {
@@ -333,17 +297,7 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
             }
 
-            ad.OwnerId = entity.OwnerId;
-            ad.CityID = entity.CityId;
-            ad.CategoryID = entity.CategoryId;
-
-            ad.ModifiedAt = entity.ModifiedAt;
-            ad.ModifiedBy = entity.ModifiedBy;
-
-            ad.Price = entity.Price;
-            ad.Name = entity.Name;
-            ad.ModifiedAt = entity.ModifiedAt;
-            ad.ModifiedBy = entity.ModifiedBy;
+            ad = AdMapper.MapAdFromAdEditModel(entity, ad);
 
             return _repository.Update(ad);
         }

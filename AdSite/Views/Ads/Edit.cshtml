@@ -1,13 +1,17 @@
 ﻿@model AdSite.Models.CRUDModels.AdEditModel
 @using AdSite.Views.Shared;
 
+@section Scripts {
+    <script src="~/extendedJs/fileUpload.js"></script>
+}
+
 <h2><localize name="Ad_Edit"></localize></h2>
 
 <br />
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label"><localize name="Ad_Field_Name"></localize> </label>
@@ -36,6 +40,19 @@
                         asp-items="@(new SelectList(@ViewBag.Categories,"Id", "Name"))"></select>
 
             </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <p><localize name="Ad_Fields_Upload"></localize></p>
+                    <span class="btn btn-success fileinput-button">
+                        <span><localize name="Ad_SelectAttachment"></localize></span>
+                        <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif,"><br />
+                    </span>
+                    <output id="Filelist"></output>
+
+                </div>
+            </div>
+
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
@@ -43,9 +60,5 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-
 </div>
 

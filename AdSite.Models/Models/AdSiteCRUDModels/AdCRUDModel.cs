@@ -87,18 +87,28 @@ namespace AdSite.Models.CRUDModels
     }
     public class AdEditModel : AuditedEntityModel
     {
-        [Required]
-        public Guid ID { get; set; }
+        public AdEditModel()
+        {
+            FilesAsListOfByteArray = new List<byte[]>();
+            AdDetail = new AdDetail();
+        }
 
         [Required]
+        public Guid ID { get; set; }
+        [Required]
         public string Name { get; set; }
+        public string Description { get; set; }
         [Required]
         public decimal Price { get; set; }
 
+        public string OwnerId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid CityId { get; set; }
         public AdDetail AdDetail { get; set; }
-        public string OwnerId { get; set; }
+
+        public IEnumerable<IFormFile> Files { get; set; }
+        public List<byte[]> FilesAsListOfByteArray { get; set; }
+        
     }
 
 }

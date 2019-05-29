@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,24 @@ namespace AdSite.Helpers
     {
         public const int NUMBER_OF_PAGES_PER_SIDE = 5;
 
+        private List<int> PageSizesList { get { return new List<int> { 5, 10, 20 }; } }
+
         public int PageIndex { get; private set; }
+
+        public List<SelectListItem> GetPageSizes(string selectedPageSize)
+        {
+            return PageSizesList.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = selectedPageSize == a.ToString()
+                };
+            });
+        }
+
+
         public int TotalPages { get; private set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)

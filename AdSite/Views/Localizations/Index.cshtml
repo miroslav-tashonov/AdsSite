@@ -4,15 +4,16 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Localizations);
 
-    string localizationKey = @Html.DisplayNameFor(model => model.LocalizationKey);
-    string selectedLocalizationKey = ViewData["CurrentColumn"]?.ToString() == localizationKey ?
-        "<option selected>" + localizationKey + "</option>" :
-        "<option>" + localizationKey + "</option>";
-
-    string localizationValue = @Html.DisplayNameFor(model => model.LocalizationValue);
-    string selectedLocalizationValue = ViewData["CurrentColumn"]?.ToString() == localizationValue ?
-        "<option selected>" + localizationValue + "</option>" :
-        "<option>" + localizationValue + "</option>";
+    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.LocalizationKey), @Html.DisplayNameFor(model => model.LocalizationValue) };
+    List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
+                };
+            });
 }
 
 @await Html.PartialAsync("_AdminNavigationPartial")
@@ -30,9 +31,7 @@
                 <localize name="General_FindBy"></localize>
             </div>
             <div class="col-sm-8">
-                <select name="ColumnName" class="form-control">
-                    @Html.Raw(selectedLocalizationKey)
-                    @Html.Raw(selectedLocalizationValue)
+                <select name="ColumnName" class="form-control" asp-items="columnListItems">
                 </select>
             </div>
         </div>

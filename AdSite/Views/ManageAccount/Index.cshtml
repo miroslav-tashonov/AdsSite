@@ -4,15 +4,16 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.ManageUsers);
 
-    string username = @Html.DisplayNameFor(model => model.UserName);
-    string selectedUsername = ViewData["CurrentColumn"]?.ToString() == username ?
-        "<option selected>" + username + "</option>" :
-        "<option>" + username + "</option>";
-
-    string email = @Html.DisplayNameFor(model => model.Email);
-    string selectedEmail = ViewData["CurrentColumn"]?.ToString() == email ?
-        "<option selected>" + email + "</option>" :
-        "<option>" + email + "</option>";
+    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.UserName), @Html.DisplayNameFor(model => model.Email) };
+    List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
+                };
+            });
 }
 
 @await Html.PartialAsync("_AdminNavigationPartial")
@@ -30,9 +31,7 @@
                 <localize name="General_FindBy"></localize>
             </div>
             <div class="col-sm-8">
-                <select name="ColumnName" class="form-control">
-                    @Html.Raw(selectedUsername)
-                    @Html.Raw(selectedEmail)
+                <select name="ColumnName" class="form-control" asp-items="columnListItems">
                 </select>
             </div>
         </div>

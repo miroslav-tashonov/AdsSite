@@ -32,6 +32,7 @@ namespace AdSite.Controllers
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private const int SERVER_ERROR_CODE = 500;
         private const int FIRST_PAGE_NUMBER = 1;
+        private const int DEFAULT_PAGE_SIZE = 10;
         private const int PAGE_SIZE = 3;
         private string CurrentUserId => _userManager.GetUserId(User);
         private Guid CountryId => _countryService.Get();
@@ -93,17 +94,10 @@ namespace AdSite.Controllers
             queryModel.ColumnName = String.IsNullOrEmpty(queryModel.ColumnName) ? String.Empty : queryModel.ColumnName;
             queryModel.SortColumn = String.IsNullOrEmpty(queryModel.SortColumn) ? String.Empty : queryModel.SortColumn;
 
-            ViewData["MinimumPrice"] = queryModel.MinPriceValue;
-            ViewData["MaximumPrice"] = queryModel.MaxPriceValue;
-            ViewData["CityIds"] = queryModel.CityIds;
-            ViewData["CategoryId"] = queryModel.CategoryId;
-            ViewData["CurrentFilter"] = queryModel.SearchString;
-            ViewData["CurrentColumn"] = queryModel.ColumnName;
-            ViewData["SortColumn"] = queryModel.SortColumn;
-
             try
             {
                 int numberOfThePage = queryModel.PageNumber ?? FIRST_PAGE_NUMBER;
+                int defaultPageSize = queryModel.PageSize ?? DEFAULT_PAGE_SIZE;
                 int count, maxPrice;
 
                 var pageModel = new PageModel()
@@ -112,7 +106,7 @@ namespace AdSite.Controllers
                     SearchString = queryModel.SearchString,
                     SortColumn = queryModel.SortColumn,
                     CountryId = CountryId,
-                    PageSize = PAGE_SIZE,
+                    PageSize = defaultPageSize,
                     PageIndex = numberOfThePage,
                     CurrentUser = CurrentUserId
                 };
@@ -127,7 +121,16 @@ namespace AdSite.Controllers
 
                 List<AdGridViewModel> items = _adService.GetPageForAdGridByFilter(pageModel, filterModel, out count, out maxPrice);
 
-                return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, PAGE_SIZE, maxPrice));
+                ViewData["MinimumPrice"] = queryModel.MinPriceValue;
+                ViewData["MaximumPrice"] = queryModel.MaxPriceValue == 0 ? maxPrice : queryModel.MaxPriceValue;
+                ViewData["CityIds"] = queryModel.CityIds;
+                ViewData["CategoryId"] = queryModel.CategoryId;
+                ViewData["CurrentFilter"] = queryModel.SearchString;
+                ViewData["CurrentColumn"] = queryModel.ColumnName;
+                ViewData["SortColumn"] = queryModel.SortColumn;
+                ViewData["PageSize"] = queryModel.PageSize;
+
+                return View(PaginatedList<AdGridViewModel>.CreatePageAsync(items, count, numberOfThePage, defaultPageSize, maxPrice));
             }
             catch (Exception ex)
             {
@@ -269,14 +272,13 @@ namespace AdSite.Controllers
                 ViewBag.Categories = _categoryService.GetAllAsLookup(CountryId);
 
                 var ad = _adService.GetAdAsEditModel((Guid)id);
-                if (ad.OwnerId != CurrentUserId)
-                {
-                    return StatusCode(SERVER_ERROR_CODE).WithError(LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT);
-                }
-
                 if (ad == null)
                 {
                     return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
+                }
+                if (ad.OwnerId != CurrentUserId)
+                {
+                    return StatusCode(SERVER_ERROR_CODE).WithError(LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT);
                 }
 
                 return View(ad);
@@ -299,6 +301,22 @@ namespace AdSite.Controllers
                 {
                     AuditedEntityMapper<AdEditModel>.FillModifyAuditedEntityFields(entity, currentUser);
                     entity.OwnerId = CurrentUserId;
+
+                    #region File Map
+                    //need to map files in controller because aspnet core assembly is present in project
+                    if (entity.Files != null)
+                    {
+                        foreach (var file in entity.Files)
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                file.CopyTo(memoryStream);
+                                entity.FilesAsListOfByteArray.Add(memoryStream.ToArray());
+                            }
+                        }
+                    }
+                    //
+                    #endregion
 
                     try
                     {

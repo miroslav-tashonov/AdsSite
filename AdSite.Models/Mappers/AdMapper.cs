@@ -20,7 +20,7 @@ namespace AdSite.Models.Mappers
             editModel.Price = entity.Price;
             editModel.CategoryId = entity.CategoryID;
             editModel.CityId = entity.CityID;
-
+            editModel.AdDetail.AdDetailPictures = entity.AdDetail.AdDetailPictures;
 
             return editModel;
         }
@@ -40,6 +40,83 @@ namespace AdSite.Models.Mappers
             };
         }
 
+        public static Ad MapAdFromAdCreateModel(AdCreateModel entity)
+        {
+            List<AdDetailPicture> pictures = new List<AdDetailPicture>();
+            if (entity.FilesAsListOfByteArray != null && entity.FilesAsListOfByteArray.Count > 0)
+                foreach (var file in entity.FilesAsListOfByteArray)
+                {
+                    pictures.Add(new AdDetailPicture
+                    {
+                        File = file,
+                        CreatedBy = entity.CreatedBy,
+                        CreatedAt = entity.CreatedAt,
+                        ModifiedAt = entity.ModifiedAt,
+                        ModifiedBy = entity.ModifiedBy,
+                    });
+                }
+
+            Ad ad = new Ad
+            {
+                Name = entity.Name,
+                Price = entity.Price,
+                CategoryID = entity.CategoryId,
+                CityID = entity.CityId,
+                OwnerId = entity.OwnerId,
+                CreatedBy = entity.CreatedBy,
+                CreatedAt = entity.CreatedAt,
+                ModifiedAt = entity.ModifiedAt,
+                ModifiedBy = entity.ModifiedBy,
+                CountryID = entity.CountryId,
+                AdDetail = new AdDetail
+                {
+                    Description = entity.Description,
+                    CreatedBy = entity.CreatedBy,
+                    CreatedAt = entity.CreatedAt,
+                    ModifiedAt = entity.ModifiedAt,
+                    ModifiedBy = entity.ModifiedBy,
+                    AdDetailPictures = pictures
+                }
+            };
+
+            return ad;
+        }
+
+        public static Ad MapAdFromAdEditModel(AdEditModel entity, Ad existingAd)
+        {
+            List<AdDetailPicture> pictures = new List<AdDetailPicture>();
+            if (entity.FilesAsListOfByteArray != null && entity.FilesAsListOfByteArray.Count > 0)
+                foreach (var file in entity.FilesAsListOfByteArray)
+                {
+                    pictures.Add(new AdDetailPicture
+                    {
+                        File = file,
+                        CreatedBy = entity.CreatedBy,
+                        CreatedAt = entity.CreatedAt,
+                        ModifiedAt = entity.ModifiedAt,
+                        ModifiedBy = entity.ModifiedBy,
+                    });
+                }
+
+            existingAd.OwnerId = entity.OwnerId;
+            existingAd.CityID = entity.CityId;
+            existingAd.CategoryID = entity.CategoryId;
+
+            existingAd.ModifiedAt = entity.ModifiedAt;
+            existingAd.ModifiedBy = entity.ModifiedBy;
+
+            existingAd.Price = entity.Price;
+            existingAd.Name = entity.Name;
+            existingAd.ModifiedAt = entity.ModifiedAt;
+            existingAd.ModifiedBy = entity.ModifiedBy;
+
+            existingAd.AdDetail.ModifiedAt = entity.ModifiedAt;
+            existingAd.AdDetail.ModifiedBy = entity.ModifiedBy;
+            existingAd.AdDetail.AdDetailPictures = pictures;
+
+            return existingAd;
+        }
+
 
         public static List<AdGridViewModel> MapToAdGridModel(List<Ad> entities)
         {
@@ -49,6 +126,7 @@ namespace AdSite.Models.Mappers
             {
                 foreach (var entity in entities)
                 {
+                    //todo: should the user select the main picture ?
                     var mainPicture = entity.AdDetail?.AdDetailPictures?.FirstOrDefault()?.File;
                     var description = entity.AdDetail?.Description;
 
