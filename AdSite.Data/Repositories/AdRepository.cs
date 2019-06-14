@@ -41,14 +41,16 @@ namespace AdSite.Data.Repositories
 
         public decimal GetMaximumPriceForAd(List<Ad> entities)
         {
-            var maxResult = _context.Ads.MaxAsync(m => m.Price);
-            var result = maxResult.Result;
-            if (result == null)
+            decimal maxResult = 0;
+            if (entities != null && entities.Count() > 0)
             {
-                throw new Exception();
+                maxResult = entities.Max(m => m.Price);
+                if (maxResult == null)
+                {
+                    throw new Exception();
+                }
             }
-
-            return result;
+            return maxResult;
         }
 
         public bool Delete(Guid id)
