@@ -1,9 +1,9 @@
 <b>Installation requirements</b>
 
-Visual Studio 2017 or 2019
-Integrated SQL in Visual studio or standalone SQL Server instance
-Asp.net core 2.2 SDK
-Powershell 3.0 (optional-needed for easier database creation)
+Visual Studio 2017 or 2019<br/>
+Integrated SQL in Visual studio or standalone SQL Server instance<br/>
+Asp.net core 2.2 SDK<br/>
+Powershell 3.0 (optional-needed for easier database creation)<br/>
 
 
 <b>Installation steps</b>
