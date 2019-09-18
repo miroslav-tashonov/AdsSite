@@ -74,11 +74,12 @@ namespace AdSite.Models.CRUDModels
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
+        [Range(0.0, Double.MaxValue)]
         public decimal Price { get; set; }
-
+        [Required]
         public Guid CategoryId { get; set; }
+        [Required]
         public Guid CityId { get; set; }
-        public Guid CountryId { get; set; }
         public AdDetail AdDetail { get; set; }
         public string OwnerId { get; set; }
         public IEnumerable<IFormFile> Files { get; set; }

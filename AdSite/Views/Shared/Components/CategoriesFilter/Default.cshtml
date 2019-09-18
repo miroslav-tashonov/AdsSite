@@ -41,8 +41,10 @@
     <script>
     function submitModel(categoryId)
     {
-        document.getElementById('hiddenCategoryId').value = categoryId ;
-        document.getElementById('form').submit();
+        if (!$(event.target).hasClass('section-sb-toggle')) {
+            document.getElementById('hiddenCategoryId').value = categoryId;
+            document.getElementById('form').submit();
+        }
     }
     </script>
 }

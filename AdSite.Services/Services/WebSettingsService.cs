@@ -46,7 +46,7 @@ namespace AdSite.Services
         {
             var entity = _repository.GetWebSettingsForCountry(countryId);
             if (entity == null)
-                throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
+                entity = new WebSettings();
 
             return WebSettingsMapper.MapToWebSettingsViewModel(entity);
         }
@@ -55,7 +55,7 @@ namespace AdSite.Services
         {
             var entity = _repository.GetWebSettingsForCountry(countryId);
             if (entity == null)
-                throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
+                entity = new WebSettings();
 
             return WebSettingsMapper.MapToWebSettingsCreateModel(entity);
         }
@@ -64,7 +64,7 @@ namespace AdSite.Services
         {
             var entity = _repository.GetWebSettingsForCountry(countryId);
             if (entity == null)
-                throw new Exception(LOCALIZATION_WEBSETTINGS_NOT_FOUND);
+                entity = new WebSettings();
 
             return WebSettingsMapper.MapToWebSettingsEditModel(entity);
         }
