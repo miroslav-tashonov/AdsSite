@@ -4,7 +4,7 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
 
-    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Postcode) };
+    List<string> columnValues = new List<string> { @Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Postcode) };
     List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
             {
                 return new SelectListItem()
@@ -18,8 +18,14 @@
 
 @await Html.PartialAsync("_AdminNavigationPartial")
 
+<script type="text/javascript">
+    $('#btnCreateCity').click(function () {
+        $(this).load('~/modalJS/Cities/Create.html');
+    });
+</script>
+
 <p>
-    <a class="btn btn-primary" asp-action="Create"><localize name="City_CreateNew"></localize></a>
+    <a asp-action="Create" class="btn btn-primary"><localize name="City_CreateNew"></localize></a>
 </p>
 
 <br />

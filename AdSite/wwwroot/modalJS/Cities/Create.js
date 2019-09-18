@@ -1,17 +1,6 @@
-﻿@model AdSite.Models.CRUDModels.CityCreateModel
-@using AdSite.Views.Shared;
-@{
-    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
-}
-@await Html.PartialAsync("_AdminNavigationPartial")
-
-<h2><localize name="City_CreateNew"></localize></h2>
-
-<br />
-
-<div class="container">
+﻿<div class="container">
     <div class="modal fade" tabindex="-1" id="loginModal"
-         data-keyboard="false" data-backdrop="static">
+        data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,20 +37,5 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#loginModal").modal('show');
-    });
-</script>
-
-
-
-
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $("#loginModal").modal('show');
-    });
-
-    $("#btnHideModal").click(function () {
-        $("#loginModal").modal('hide');
     });
 </script>

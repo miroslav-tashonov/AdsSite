@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace AdSite.Controllers
@@ -137,7 +138,6 @@ namespace AdSite.Controllers
                 _logger.LogError(ex, ex.Message);
                 return NotFound(ex.Message).WithError(ex.Message);
             }
-
         }
 
 
@@ -181,8 +181,6 @@ namespace AdSite.Controllers
                 return NotFound(ex.Message).WithError(ex.Message);
             }
         }
-
-
 
         public IActionResult Create()
         {
@@ -281,6 +279,9 @@ namespace AdSite.Controllers
                     return StatusCode(SERVER_ERROR_CODE).WithError(LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT);
                 }
 
+                string serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(ad.AdDetail.AdDetailPictures.Select( f => f.File).ToList());
+                ad.SerializedAdDetailsPictures = serializedString;
+                
                 return View(ad);
             }
             catch (Exception ex)

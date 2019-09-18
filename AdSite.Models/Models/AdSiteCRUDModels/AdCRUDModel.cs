@@ -82,7 +82,9 @@ namespace AdSite.Models.CRUDModels
         public AdDetail AdDetail { get; set; }
         public string OwnerId { get; set; }
         public IEnumerable<IFormFile> Files { get; set; }
+        public string MainPictureFile { get; set; }
         public List<byte[]> FilesAsListOfByteArray { get; set; }
+        public byte[] MainPictureThumbnail { get; set; }
 
     }
     public class AdEditModel : AuditedEntityModel
@@ -107,8 +109,12 @@ namespace AdSite.Models.CRUDModels
         public AdDetail AdDetail { get; set; }
 
         public IEnumerable<IFormFile> Files { get; set; }
+        public string MainPictureFile{ get; set; }
         public List<byte[]> FilesAsListOfByteArray { get; set; }
-        
+        public byte[] MainPictureThumbnail { get; set; }
+
+        public string SerializedAdDetailsPictures { get; set; }
+        public string SerializedMainPicture { get; set; }
     }
 
 }

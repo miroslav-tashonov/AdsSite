@@ -9,7 +9,7 @@ namespace AdSite.Models.DatabaseModels
     {
         [Required]
         public string Description { get; set; }
-        
+        public byte[] MainPictureThumbnailFile { get; set; }
 
         #region Foreign Keys
         public Guid AdID { get; set; }

@@ -84,7 +84,7 @@ namespace AdSite.Data.Repositories
 
         public Ad Get(Guid id)
         {
-            var ad = _context.Ads.FirstOrDefaultAsync(m => m.ID == id);
+            var ad = _context.Ads?.Include(c => c.AdDetail).FirstOrDefaultAsync(m => m.ID == id);
             var result = ad.Result;
             if (result == null)
             {

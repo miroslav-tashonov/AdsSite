@@ -12,5 +12,8 @@ namespace AdSite.Models.DatabaseModels
         #endregion
 
         public byte[] File { get; set; }
+        public string Name { get; set; }
+        public bool IsMainPicture { get; set; }
+        public string Type { get; set; }
     }
 }

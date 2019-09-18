@@ -20,6 +20,12 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label"><localize name="Ad_Field_Description"></localize> </label>
+                <input asp-for="AdDetail.Description" class="form-control" />
+                <span asp-validation-for="AdDetail.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label"><localize name="Ad_Field_Price"></localize></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
@@ -42,16 +48,25 @@
             </div>
 
             <div class="form-group">
+                <label class="control-label">Please select the main thumbnail picture. This picture will be shown on ads timeline. </label>
+
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-10">
                     <p><localize name="Ad_Fields_Upload"></localize></p>
                     <span class="btn btn-success fileinput-button">
                         <span><localize name="Ad_SelectAttachment"></localize></span>
-                        <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif,"><br />
+                        <br />
+                        <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif," />
                     </span>
                     <output id="Filelist"></output>
 
                 </div>
             </div>
+
+            <input id="MainPictureFile" asp-for="MainPictureFile" class="form-control" type="hidden" />
+            <input id="Pictures" asp-for="SerializedAdDetailsPictures" class="form-control" type="hidden" />
 
             <input type="hidden" asp-for="ID" />
             <div class="form-group">

@@ -3,6 +3,7 @@ using AdSite.Models;
 using AdSite.Models.CRUDModels;
 using AdSite.Models.DatabaseModels;
 using AdSite.Models.Mappers;
+using AdSite.Services.Wrappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
@@ -57,7 +58,27 @@ namespace AdSite.Services
 
         public bool Add(AdCreateModel entity)
         {
-            var ad = AdMapper.MapAdFromAdCreateModel(entity);
+            #region Pictures Manipulation
+            List<AdDetailPicture> pictures = new List<AdDetailPicture>();
+            if (entity.FilesAsListOfByteArray != null && entity.FilesAsListOfByteArray.Count > 0)
+            {
+                foreach (var file in entity.FilesAsListOfByteArray)
+                {
+                    pictures.Add(new AdDetailPicture
+                    {
+                        File = file,
+                        CreatedBy = entity.CreatedBy,
+                        CreatedAt = entity.CreatedAt,
+                        ModifiedAt = entity.ModifiedAt,
+                        ModifiedBy = entity.ModifiedBy,
+                    });
+                }
+
+                entity.MainPictureThumbnail = MagiskImageWrapper.MakeThumbnailImage(System.Convert.FromBase64String(entity.MainPictureFile));
+            }
+            #endregion
+
+            var ad = AdMapper.MapAdFromAdCreateModel(entity, pictures);
 
             return _repository.Add(ad);
         }
@@ -297,6 +318,8 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
             }
 
+
+            entity.MainPictureThumbnail = MagiskImageWrapper.MakeThumbnailImage(System.Convert.FromBase64String(entity.MainPictureFile));
             ad = AdMapper.MapAdFromAdEditModel(entity, ad);
 
             return _repository.Update(ad);

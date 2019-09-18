@@ -148,6 +148,8 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired();
 
+                    b.Property<byte[]>("MainPictureThumbnailFile");
+
                     b.Property<DateTime>("ModifiedAt");
 
                     b.Property<string>("ModifiedBy");

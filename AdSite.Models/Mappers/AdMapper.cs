@@ -20,7 +20,7 @@ namespace AdSite.Models.Mappers
             editModel.Price = entity.Price;
             editModel.CategoryId = entity.CategoryID;
             editModel.CityId = entity.CityID;
-            editModel.AdDetail.AdDetailPictures = entity.AdDetail.AdDetailPictures;
+            editModel.AdDetail.AdDetailPictures = entity.AdDetail?.AdDetailPictures;
 
             return editModel;
         }
@@ -40,22 +40,8 @@ namespace AdSite.Models.Mappers
             };
         }
 
-        public static Ad MapAdFromAdCreateModel(AdCreateModel entity)
+        public static Ad MapAdFromAdCreateModel(AdCreateModel entity, List<AdDetailPicture> pictures)
         {
-            List<AdDetailPicture> pictures = new List<AdDetailPicture>();
-            if (entity.FilesAsListOfByteArray != null && entity.FilesAsListOfByteArray.Count > 0)
-                foreach (var file in entity.FilesAsListOfByteArray)
-                {
-                    pictures.Add(new AdDetailPicture
-                    {
-                        File = file,
-                        CreatedBy = entity.CreatedBy,
-                        CreatedAt = entity.CreatedAt,
-                        ModifiedAt = entity.ModifiedAt,
-                        ModifiedBy = entity.ModifiedBy,
-                    });
-                }
-
             Ad ad = new Ad
             {
                 Name = entity.Name,
@@ -70,7 +56,8 @@ namespace AdSite.Models.Mappers
                 CountryID = entity.CountryId,
                 AdDetail = new AdDetail
                 {
-                    Description = entity.Description,
+                    MainPictureThumbnailFile = entity.MainPictureThumbnail,
+                    Description = entity.AdDetail.Description,
                     CreatedBy = entity.CreatedBy,
                     CreatedAt = entity.CreatedAt,
                     ModifiedAt = entity.ModifiedAt,
@@ -113,6 +100,7 @@ namespace AdSite.Models.Mappers
             existingAd.AdDetail.ModifiedAt = entity.ModifiedAt;
             existingAd.AdDetail.ModifiedBy = entity.ModifiedBy;
             existingAd.AdDetail.AdDetailPictures = pictures;
+            existingAd.AdDetail.MainPictureThumbnailFile = entity.MainPictureThumbnail;
 
             return existingAd;
         }
@@ -126,8 +114,7 @@ namespace AdSite.Models.Mappers
             {
                 foreach (var entity in entities)
                 {
-                    //todo: should the user select the main picture ?
-                    var mainPicture = entity.AdDetail?.AdDetailPictures?.FirstOrDefault()?.File;
+                    var mainPicture = entity.AdDetail?.MainPictureThumbnailFile;
                     var description = entity.AdDetail?.Description;
 
                     adGrid.Add(
@@ -152,7 +139,7 @@ namespace AdSite.Models.Mappers
 
         public static WishlistAdGridModel MapToWishlistAdGridModel(Ad entity)
         {
-            var mainPicture = entity.AdDetail?.AdDetailPictures?.FirstOrDefault()?.File;
+            var mainPicture = entity.AdDetail?.MainPictureThumbnailFile;
 
             WishlistAdGridModel adGrid =
                 new WishlistAdGridModel()

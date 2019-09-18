@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190513101830_updated")]
-    partial class updated
+    [Migration("20190804213445_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -149,6 +149,8 @@ namespace AdSite.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired();
+
+                    b.Property<byte[]>("MainPictureThumbnailFile");
 
                     b.Property<DateTime>("ModifiedAt");
 

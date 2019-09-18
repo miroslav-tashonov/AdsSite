@@ -11,6 +11,7 @@ ul.id = "imgList";
 
 function init() {
     document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+    handleFileLoad(JSON.parse("[" + $("#Pictures").val() + "]"));
 }
 
 function handleFileSelect(e) {
@@ -30,6 +31,17 @@ function handleFileSelect(e) {
     }
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 }
+
+function handleFileLoad(files) {
+    if (files === undefined || files.length == 0) return;
+    debugger;
+    var mainPicture = JSON.parse($("#MainPicture").val());
+    for (var i = 0, f; f = files[0][i]; i++) {
+        RenderThumbnailOnLoad(f, mainPicture);
+        FillAttachmentOnLoad(f)
+    }
+}
+
 
 jQuery(function ($) {
     $('div').on('click', '.img-wrap .close', function () {
@@ -53,6 +65,25 @@ jQuery(function ($) {
     });
 }
 )
+
+jQuery(function ($) {
+    $('div').on('click', '.img-wrap', function () {
+        $(".img-wrap").each(function () {
+            $(this).removeClass("selectedThumbnail");
+            $('.check').remove();
+        });
+
+        if (!$(this).hasClass("selectedThumbnail")) {
+            $(this).addClass('selectedThumbnail');
+            $(this).append("<span class='check'>&#10004;</span>");
+
+            const imgSrc = $(this).find('img').attr('src');
+            $("#MainPictureFile").val(imgSrc.substring(imgSrc.indexOf("base64") + 7, imgSrc.length));
+        }
+    });
+}
+)
+
 
 function ApplyFileValidationRules(readerEvt) {
     if (CheckFileType(readerEvt.type) == false) {
@@ -121,9 +152,17 @@ function CheckFilesCount(AttachmentArray) {
 function RenderThumbnail(e, readerEvt) {
     var li = document.createElement('li');
     ul.appendChild(li);
-    li.innerHTML = ['<div class="img-wrap"> <span class="close">&times;</span>' +
-        '<img class="thumb" src="', e.target.result, '" title="', escape(readerEvt.name), '" data-id="',
-    readerEvt.name, '"/>' + '</div>'].join('');
+    if (AttachmentArray.length == 0) {
+        li.innerHTML = ['<div class="img-wrap selectedThumbnail"> <span class="check">&#10004;</span> <span class="close">&times;</span>' +
+            '<img class="thumb" src="', e.target.result, '"/>' + '</div>'].join('');
+
+        //todo SOLID!!
+        $("#MainPictureFile").val(e.target.result.substring(e.target.result.indexOf("base64") + 7, e.target.result.length));
+    }
+    else {
+        li.innerHTML = ['<div class="img-wrap"> <span class="close">&times;</span>' +
+            '<img class="thumb" src="', e.target.result, '"/>' + '</div>'].join('');
+    }
 
     var div = document.createElement('div');
     div.className = "FileNameCaptionStyle";
@@ -131,6 +170,44 @@ function RenderThumbnail(e, readerEvt) {
     div.innerHTML = [readerEvt.name].join('');
     document.getElementById('Filelist').insertBefore(ul, null);
 }
+
+function RenderThumbnailOnLoad(file, mainPicture) {
+    var li = document.createElement('li');
+    ul.appendChild(li);
+
+    
+    if (file == mainPicture) {
+        li.innerHTML = ['<div class="img-wrap selectedThumbnail"> <span class="check">&#10004;</span> <span class="close">&times;</span>' +
+            '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id=""/>' + '</div>'].join('');
+    }
+    else {
+        li.innerHTML = ['<div class="img-wrap"> <span class="close">&times;</span>' +
+            '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id=""/>' + '</div>'].join('');
+    }
+
+
+    var div = document.createElement('div');
+    div.className = "FileNameCaptionStyle";
+    li.appendChild(div);
+    div.innerHTML = '';
+    document.getElementById('Filelist').insertBefore(ul, null);
+}
+
+function FillAttachmentOnLoad(file) {
+    AttachmentArray[arrCounter] =
+        {
+            AttachmentType: 1,
+            ObjectType: 1,
+            FileName: "1",
+            FileDescription: "Attachment",
+            NoteText: "",
+            MimeType: 'png',
+            Content: file,
+            FileSizeInBytes: file.length,
+        };
+    arrCounter = arrCounter + 1;
+}
+
 
 function FillAttachmentArray(e, readerEvt) {
     AttachmentArray[arrCounter] =

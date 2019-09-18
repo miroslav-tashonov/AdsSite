@@ -4,7 +4,7 @@
 
 @{
     //todo localize sort string values
-    List<string> sortValues = new List<string>{ "Cheapest", "Priciest", "Latest" };
+    List<string> sortValues = new List<string> { "Cheapest", "Priciest", "Latest" };
     List<SelectListItem> sortListItems = sortValues.ConvertAll(a =>
             {
                 return new SelectListItem()
@@ -16,7 +16,7 @@
             });
 
 
-    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.FirstOrDefault().Name) };
+    List<string> columnValues = new List<string> { @Html.DisplayNameFor(model => model.FirstOrDefault().Name) };
     List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
             {
                 return new SelectListItem()
@@ -31,6 +31,7 @@
 @section Scripts {
     <script src="~/js/ion.rangeSlider.min.js" asp-append-version="true"></script>
     <script src="~/js/plugins.js"></script>
+    <script src="~/extendedJs/fileUpload.js"></script>
 }
 
 
@@ -65,8 +66,7 @@
                 <localize name="General_FindBy"></localize>
             </div>
             <div class="col-sm-6">
-                <select name="ColumnName" class="form-control" asp-items="columnListItems">
-                </select>
+                <select name="ColumnName" class="form-control" asp-items="columnListItems"></select>
             </div>
 
 
@@ -83,8 +83,7 @@
 
         <div class="col-sm-3 no-padding-right">
             <div class="col-sm-8">
-                <select name="SortColumn" class="form-control" asp-items="sortListItems" onchange="this.form.submit();">
-                </select>
+                <select name="SortColumn" class="form-control" asp-items="sortListItems" onchange="this.form.submit();"></select>
             </div>
             <div class="col-sm-4 no-padding-right">
                 <select name="PageSize"

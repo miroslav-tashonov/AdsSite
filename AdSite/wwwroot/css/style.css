@@ -107,6 +107,21 @@ ul.thumb-Images li {
         border-radius: 50%;
     }
 
+    .img-wrap .check {
+        position: absolute;
+        bottom: 8px;
+        left: 2px;
+        z-index: 100;
+        background-color: #266A2E;
+        padding: 5px 2px 2px;
+        color: #000;
+        font-weight: bolder;
+        cursor: pointer;
+        font-size: 23px;
+        line-height: 10px;
+        border-radius: 50%;
+    }
+
     .img-wrap:hover .close {
         opacity: 1;
         background-color: #ff0000;
@@ -116,6 +131,10 @@ ul.thumb-Images li {
     font-size: 12px;
 }
 
+.selectedThumbnail {
+    border: 9px solid #266A2E;
+    border-width: thick;
+}
 
 /*----------------------------------
 1 - Reset
