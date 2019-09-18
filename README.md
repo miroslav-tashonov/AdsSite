@@ -1,9 +1,10 @@
 <b>Installation requirements</b>
 
-Visual Studio 2017/2019 or VS Code<<br/>
+Visual Studio 2017/2019 or VS Code<br/>
 Integrated SQL in Visual studio (windows only) or standalone SQL Server instance on Mac, Windows or Linux<br/>
-Asp.net core 2.2 SDK<br/>
-Powershell 3.0 (optional-needed for easier database creation)<br/>
+Asp.net core 2.2 SDK<br/><br/>
+
+Optional: Powershell 3.0 <br/>
 
 
 <b>Installation steps</b>
