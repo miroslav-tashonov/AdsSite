@@ -18,12 +18,12 @@ Optional: Powershell 3.0 <br/>
 
 
 3. Create Database using Visual studio's Package manager console commands (need to have powershell 3.0 in Windows)
-As default project in PMC you'll need to set AdSite.Data and than execute following commands
+As default project in PMC you'll need to set AdSite.Data and than execute the following commands
 
 &nbsp;&nbsp;&nbsp;&nbsp;Add-Migration init</br>
 &nbsp;&nbsp;&nbsp;&nbsp;Update-Database
 
-, or otherwise create the database manually with name AdSite
+or otherwise create the database manually with name AdSite
 
 4. Execute project 
 
