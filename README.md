@@ -25,7 +25,7 @@ As default project in PMC you'll need to set AdSite.Data and than execute the fo
 
 or otherwise create the database manually with name AdSite
 
-4. Execute project 
+4. Execute or host the project (execute via IISExpress, host with Kestrel)
 
 5. In order to login as an administrator use the following credentials:
 
