@@ -6,29 +6,43 @@
 
 @await Html.PartialAsync("_AdminNavigationPartial")
 
-<h3><localize name="General_DeleteMessage"></localize></h3>
-<div>
-    <h4><localize name="Account_Entity"></localize></h4>
-    <hr />
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-action="Index">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="General_DeleteMessage"></localize></h4>
+                </div>
+                <div class="modal-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.UserName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Email)
+                        </dd>
+                    </dl>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <button type="submit" value="Delete" class="btn btn-default"><localize name="General_Delete"></localize></button> |
-        <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
-    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" value="Delete" class="btn btn-default"><localize name="General_Delete"></localize></button> |
+                        <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

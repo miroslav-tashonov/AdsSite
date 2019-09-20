@@ -6,54 +6,68 @@
 
 @await Html.PartialAsync("_AdminNavigationPartial")
 
-<h2><localize name="General_Edit"></localize></h2>
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-controller="Home" asp-action="Index">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="WebSettings_Edit"></localize></h4>
+                </div>
+                <form asp-action="Edit">
+                    <div class="modal-body">
+                        <div asp-validation-summary="m" class="text-danger"></div>
+                        <input type="hidden" asp-for="id" />
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_Phone"></localize></label>
+                            <input asp-for="p" class="form-control" />
+                            <span asp-validation-for="p" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_Email"></localize></label>
+                            <input asp-for="E" class="form-control" />
+                            <span asp-validation-for="E" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_FacebookSocialLink"></localize></label>
+                            <input asp-for="F" class="form-control" />
+                            <span asp-validation-for="F" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_InstagramSocialLink"></localize></label>
+                            <input asp-for="i" class="form-control" />
+                            <span asp-validation-for="i" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_TwitterSocialLink"></localize></label>
+                            <input asp-for="odelExpressionPro" class="form-control" />
+                            <span asp-validation-for="odelExpressionPro" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_GooglePlusSocialLink"></localize></label>
+                            <input asp-for="odelExpressionProvid" class="form-control" />
+                            <span asp-validation-for="odelExpressionProvid" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="WebSettings_Fields_VKSocialLink"></localize></label>
+                            <input asp-for="v" class="form-control" />
+                            <span asp-validation-for="v" class="text-danger"></span>
+                        </div>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_Phone"></localize></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-default"><localize name="General_BackToHomepage"></localize></a>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_Email"></localize></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_FacebookSocialLink"></localize></label>
-                <input asp-for="FacebookSocialLink" class="form-control" />
-                <span asp-validation-for="FacebookSocialLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_InstagramSocialLink"></localize></label>
-                <input asp-for="InstagramSocialLink" class="form-control" />
-                <span asp-validation-for="InstagramSocialLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_TwitterSocialLink"></localize></label>
-                <input asp-for="TwitterSocialLink" class="form-control" />
-                <span asp-validation-for="TwitterSocialLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_GooglePlusSocialLink"></localize></label>
-                <input asp-for="GooglePlusSocialLink" class="form-control" />
-                <span asp-validation-for="GooglePlusSocialLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="WebSettings_Fields_VKSocialLink"></localize></label>
-                <input asp-for="VKSocialLink" class="form-control" />
-                <span asp-validation-for="VKSocialLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
-                <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

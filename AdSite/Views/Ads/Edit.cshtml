@@ -9,71 +9,83 @@
 
 <br />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label class="control-label"><localize name="Ad_Field_Name"></localize> </label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label"><localize name="Ad_Field_Description"></localize> </label>
-                <input asp-for="AdDetail.Description" class="form-control" />
-                <span asp-validation-for="AdDetail.Description" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label"><localize name="Ad_Field_Price"></localize></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label"><localize name="Ad_Fields_City"></localize></label>
-                <select asp-for="CityId"
-                        class="form-control"
-                        asp-items="@(new SelectList(@ViewBag.Cities,"Id", "Name"))"></select>
-
-            </div>
-
-            <div class="form-group">
-                <label class="control-label"><localize name="Ad_Fields_Category"></localize></label>
-                <select asp-for="CategoryId"
-                        class="form-control"
-                        asp-items="@(new SelectList(@ViewBag.Categories,"Id", "Name"))"></select>
-
-            </div>
-
-            <div class="form-group">
-                <label class="control-label">Please select the main thumbnail picture. This picture will be shown on ads timeline. </label>
-
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-10">
-                    <p><localize name="Ad_Fields_Upload"></localize></p>
-                    <span class="btn btn-success fileinput-button">
-                        <span><localize name="Ad_SelectAttachment"></localize></span>
-                        <br />
-                        <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif," />
-                    </span>
-                    <output id="Filelist"></output>
-
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-action="MyAds">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="Ad_Edit"></localize></h4>
                 </div>
-            </div>
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div class="modal-body">
 
-            <input id="MainPictureFile" asp-for="MainPictureFile" class="form-control" type="hidden" />
-            <input id="Pictures" asp-for="SerializedAdDetailsPictures" class="form-control" type="hidden" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Ad_Field_Name"></localize> </label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
 
-            <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
-                <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Ad_Field_Description"></localize> </label>
+                            <input asp-for="AdDetail.Description" class="form-control" />
+                            <span asp-validation-for="AdDetail.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Ad_Field_Price"></localize></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Ad_Fields_City"></localize></label>
+                            <select asp-for="CityId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(@ViewBag.Cities,"Id", "Name"))"></select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Ad_Fields_Category"></localize></label>
+                            <select asp-for="CategoryId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(@ViewBag.Categories,"Id", "Name"))"></select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Please select the main thumbnail picture. This picture will be shown on ads timeline. </label>
+
+                        </div>
+
+                        <div class="form-group">
+                                <p><localize name="Ad_Fields_Upload"></localize></p>
+                                <span class="btn btn-success fileinput-button">
+                                    <span><localize name="Ad_SelectAttachment"></localize></span>
+                                    <br />
+                                    <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif," />
+                                </span>
+                                <output id="Filelist"></output>
+
+                        </div>
+                        <div class="form-group">
+                            <input id="MainPictureFile" asp-for="MainPictureFile" class="form-control" type="hidden" />
+                            <input id="Pictures" asp-for="SerializedAdDetailsPictures" class="form-control" type="hidden" />
+
+                            <input type="hidden" asp-for="ID" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
+                        <a asp-action="MyAds" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-

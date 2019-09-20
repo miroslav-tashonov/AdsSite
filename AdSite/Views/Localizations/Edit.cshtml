@@ -10,37 +10,53 @@
 
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label class="control-label"><localize name="Localization_Fields_LocalizationKey"></localize></label>
-                <input asp-for="LocalizationKey" class="form-control" />
-                <span asp-validation-for="LocalizationKey" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="Localization_Fields_LocalizationValue"></localize></label>
-                <input asp-for="LocalizationValue" class="form-control" />
-                <span asp-validation-for="LocalizationValue" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label"><localize name="Language_Fields_LanguageName"></localize></label>
-                <select asp-for="LanguageId"
-                        class="form-control"
-                        asp-items="@(new SelectList(@ViewBag.Languages,"Id", "Name"))"></select>
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-action="Index">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="Localization_Edit"></localize></h4>
+                </div>
+                <form asp-action="Edit">
+                    <div class="modal-body">
 
-            </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Localization_Fields_LocalizationKey"></localize></label>
+                            <input asp-for="LocalizationKey" class="form-control" />
+                            <span asp-validation-for="LocalizationKey" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Localization_Fields_LocalizationValue"></localize></label>
+                            <input asp-for="LocalizationValue" class="form-control" />
+                            <span asp-validation-for="LocalizationValue" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><localize name="Language_Fields_LanguageName"></localize></label>
+                            <select asp-for="LanguageId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(@ViewBag.Languages,"Id", "Name"))"></select>
 
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
-                <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+                        </div>
+                        <input type="hidden" asp-for="Id" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default"><localize name="General_Save"></localize></button>
+                        <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+                    </div>
+                </form>
+            
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

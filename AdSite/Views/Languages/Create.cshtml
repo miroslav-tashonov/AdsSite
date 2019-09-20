@@ -18,28 +18,42 @@
 
 <h2><localize name="Language_CreateNew"></localize></h2>
 
-<h4></h4>
-<hr />
-<div class="row">
-    <div class="col-md-4 center-block">
-        <form id="selectLanguage" asp-controller="Languages"
-              asp-action="Create" method="post" class="form-horizontal" role="form">
 
-            <label class="control-label"><localize name="Languages_Entity"></localize></label>
-            <br />
-            <br />
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-action="Index">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="Language_CreateNew"></localize></h4>
+                </div>
+                <form id="selectLanguage" asp-controller="Languages"
+                      asp-action="Create" method="post" class="form-horizontal" role="form">
+                    <div class="modal-body">
 
-            <select asp-for="CultureId" class="createSelectpicker form-group" name="CultureId">
-                <options asp-items="createCultureItems" selected-item-enabled="false" />
-            </select>
 
-            <br />
-            <br />
-            <div class="form-group">
-                <button type="submit" class="btn btn-default"><localize name="Language_AddLanguage"></localize> </button>
-                <button asp-action="Index" class="btn btn-default" onclick="window.history.back();"><localize name="General_BackToList"></localize></button>
+                        <label class="control-label"><localize name="Languages_Entity"></localize></label>
+                        <br />
+                        <br />
+
+                        <select asp-for="CultureId" class="createSelectpicker form-group" name="CultureId">
+                            <options asp-items="createCultureItems" selected-item-enabled="false" />
+                        </select>
+
+                        <br />
+                        <br />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default"><localize name="Language_AddLanguage"></localize> </button>
+                        <button asp-action="Index" class="btn btn-default" onclick="window.history.back();"><localize name="General_BackToList"></localize></button>
+                    </div>
+                </form>
+
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -48,4 +62,5 @@
         $('.createSelectpicker').selectpicker();
     });
 </script>
+
 

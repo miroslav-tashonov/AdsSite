@@ -1,27 +1,40 @@
 ﻿@model AdSite.Models.CRUDModels.AdViewModel
 @using AdSite.Views.Shared;
 
-<h3><localize name="General_DeleteMessage"></localize></h3>
-<div>
-    <h4><localize name="Ad_Entity"></localize></h4>
-    <hr />
 
-    <div class="center-block">
-        <dl class="dl-horizontal">
-            <dt>
-                <localize name="Ad_Field_Name"></localize>
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-        </dl>
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-action="MyAds">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="General_DeleteMessage"></localize></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="center-block">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                <localize name="Ad_Field_Name"></localize>
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Name)
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <br />
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="ID" />
+                        <button type="submit" value="Delete" class="btn btn-default"><localize name="General_Delete"></localize></button> |
+                        <a asp-action="MyAds" class="btn btn-default"><localize name="General_BackToList"></localize></a>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <br />
-
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ID" />
-        <button type="submit" value="Delete" class="btn btn-default"><localize name="General_Delete"></localize></button> |
-        <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
-    </form>
 </div>

@@ -5,8 +5,6 @@
 }
 @await Html.PartialAsync("_AdminNavigationPartial")
 
-<h2><localize name="City_CreateNew"></localize></h2>
-
 <br />
 
 <div class="container">
@@ -15,14 +13,13 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <a type="button" class="close" asp-action="Index">
                         ×
-                    </button>
+                    </a>
                     <h4 class="modal-title"><localize name="City_CreateNew"></localize></h4>
                 </div>
                 <form asp-action="Create">
                     <div class="modal-body">
-
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <label class="control-label"><localize name="City_Field_Name"></localize></label>
@@ -45,23 +42,6 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#loginModal").modal('show');
-    });
+<script src="~/js/login.js">
 </script>
 
-
-
-
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $("#loginModal").modal('show');
-    });
-
-    $("#btnHideModal").click(function () {
-        $("#loginModal").modal('hide');
-    });
-</script>

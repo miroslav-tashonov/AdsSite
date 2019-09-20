@@ -35,13 +35,13 @@ namespace AdSite.Controllers
         [Authorize(Roles = ("Admin"))]
         public IActionResult AdminPanel()
         {
-            return View("_AdminNavigationPartial");
+            return RedirectToAction("Index", "ManageAccount"); 
         }
 
         [Authorize(Roles = ("User"))]
         public IActionResult UsersPanel()
         {
-            return View("_UsersNavigationPartial");
+            return RedirectToAction("MyAds", "Ads");
         }
 
         public IActionResult Contact()
