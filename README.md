@@ -26,3 +26,10 @@ As default project in PMC you'll need to set AdSite.Data and than execute the fo
 or otherwise create the database manually with name AdSite
 
 4. Execute or host the project (execute via IISExpress, host with Kestrel)
+<br/>
+<br/>
+
+<b>Following use case diagram shows how different roles can use the system</b>
+<br/>
+<br/>
+![alt text](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/ad-site-usecase.jpg) 
