@@ -5,7 +5,11 @@
     @foreach (var category in Model.ComponentCategories)
     {
         <li>
-            <a asp-controller="Ads" asp-action="Index" asp-route-categoryId="@category.ID">
+            <a name="CategoryId"
+               asp-controller="Ads"
+               asp-action="Index"
+               asp-route-categoryId="@category.ID"
+               onclick="submitModel('@category.ID'); return false;">
                 @category.Name
             </a>
 
@@ -20,4 +24,13 @@
 
         </li>
     }
+
+    <input type="hidden" name="CategoryId" id="hiddenMenuCategoryId" value="" />
+    <script>
+        function submitModel(categoryId) {
+            document.getElementById('hiddenMenuCategoryId').value = categoryId;
+            document.getElementById('form').submit();
+        }
+    </script>
+
 }

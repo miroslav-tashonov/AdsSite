@@ -64,16 +64,17 @@
                         </div>
 
                         <div class="form-group">
-                                <p><localize name="Ad_Fields_Upload"></localize></p>
-                                <span class="btn btn-success fileinput-button">
-                                    <span><localize name="Ad_SelectAttachment"></localize></span>
-                                    <br />
-                                    <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif," />
-                                </span>
-                                <output id="Filelist"></output>
-
+                            <p><localize name="Ad_Fields_Upload"></localize></p>
+                            <span class="btn btn-success fileinput-button">
+                                <span><localize name="Ad_SelectAttachment"></localize></span>
+                                <br />
+                                <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif," />
+                            </span>
+                            <br />
                         </div>
+                        
                         <div class="form-group">
+                            <output id="Filelist"></output>
                             <input id="MainPictureFile" asp-for="MainPictureFile" class="form-control" type="hidden" />
                             <input id="Pictures" asp-for="SerializedAdDetailsPictures" class="form-control" type="hidden" />
 

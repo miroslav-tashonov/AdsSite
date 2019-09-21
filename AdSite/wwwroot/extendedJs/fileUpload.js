@@ -34,8 +34,7 @@ function handleFileSelect(e) {
 
 function handleFileLoad(files) {
     if (files === undefined || files.length == 0) return;
-    debugger;
-    var mainPicture = JSON.parse($("#MainPicture").val());
+    var mainPicture = JSON.parse($("#MainPictureFile").val());
     for (var i = 0, f; f = files[0][i]; i++) {
         RenderThumbnailOnLoad(f, mainPicture);
         FillAttachmentOnLoad(f)
@@ -175,7 +174,7 @@ function RenderThumbnailOnLoad(file, mainPicture) {
     var li = document.createElement('li');
     ul.appendChild(li);
 
-    
+    debugger;
     if (file == mainPicture) {
         li.innerHTML = ['<div class="img-wrap selectedThumbnail"> <span class="check">&#10004;</span> <span class="close">&times;</span>' +
             '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id=""/>' + '</div>'].join('');

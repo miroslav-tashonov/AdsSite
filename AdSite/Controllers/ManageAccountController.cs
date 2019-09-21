@@ -19,6 +19,7 @@ namespace AdSite.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger _logger;
+        private readonly IEmailSender _emailSender;
         private readonly ILocalizationService _localizationService;
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
@@ -32,11 +33,13 @@ namespace AdSite.Controllers
         public ManageAccountController(
             UserManager<ApplicationUser> userManager,
             ILogger<AccountController> logger,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _logger = logger;
             _localizationService = localizationService;
+            _emailSender = emailSender;
         }
 
 
@@ -159,6 +162,64 @@ namespace AdSite.Controllers
             }
 
             return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
+        }
+
+
+        [HttpGet]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("User created a new account with password.");
+
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
+                        _logger.LogInformation("User created a new account with password.");
+                        return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Failed to add user to role. Deleting user");
+                        result = await _userManager.DeleteAsync(user);
+                        if (!result.Succeeded)
+                        {
+                            _logger.LogInformation("Failed to delete user after being unable to be added to role.");
+                            throw new Exception("Failed to delete user after being unable to be added to role.");
+                        }
+
+                    }
+                }
+                AddErrors(result);
+            }
+
+            return View(model);
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
         }
 
 

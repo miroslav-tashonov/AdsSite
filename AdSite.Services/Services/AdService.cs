@@ -187,7 +187,7 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
             sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
-            maxPrice = (int)_repository.GetMaximumPriceForAd(sourceEntities);
+            maxPrice = (int)_repository.GetMaximumPriceForAd();
             count = sourceEntities.Count;
 
             var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);
@@ -269,7 +269,7 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
             sourceEntities = _repository.OrderAdsByColumn(sourceEntities, pageModel.SortColumn);
-            maxPrice = (int)_repository.GetMaximumPriceForAd(sourceEntities);
+            maxPrice = (int)_repository.GetMaximumPriceForAd();
             count = sourceEntities.Count;
 
             var entities = _repository.GetAdPage(sourceEntities, pageModel.PageIndex, pageModel.PageSize);

@@ -1,0 +1,49 @@
+﻿@model RegisterViewModel
+@using AdSite.Views.Shared;
+@{
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.ManageUsers);
+}
+
+@await Html.PartialAsync("_AdminNavigationPartial")
+<div class="container">
+    <div class="modal fade" tabindex="-1" id="loginModal"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="button" class="close" asp-action="Index">
+                        ×
+                    </a>
+                    <h4 class="modal-title"><localize name="Account_CreateNew"></localize></h4>
+                </div>
+                <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                    <div class="modal-body">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

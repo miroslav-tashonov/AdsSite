@@ -62,16 +62,17 @@
                             <label class="control-label">Please select the main thumbnail picture. This picture will be shown on ads timeline. </label>
 
                         </div>
-
+                        
                         <div class="form-group">
-                                <p><localize name="Ad_Fields_Upload"></localize></p>
-                                <span class="btn btn-success fileinput-button control-label">
-                                    <span><localize name="Ad_SelectAttachment"></localize></span>
-                                    <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif,"><br />
-                                </span>
-                                <output id="Filelist"></output>
+                            <p><localize name="Ad_Fields_Upload"></localize></p>
+                            <span class="btn btn-success fileinput-button control-label">
+                                <span><localize name="Ad_SelectAttachment"></localize></span>
+                                <input type="file" name="files" id="files" multiple accept="image/jpeg, image/png, image/gif,"><br />
+                            </span>
+                            <br />
                         </div>
                         <div class="form-group">
+                            <output id="Filelist"></output>
                             <input id="MainPictureFile" asp-for="MainPictureFile" class="form-control" type="hidden" />
                         </div>
                     </div>

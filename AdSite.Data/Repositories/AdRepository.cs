@@ -18,7 +18,7 @@ namespace AdSite.Data.Repositories
         List<Ad> GetAdGridByFilters(FilterRepositoryModel model);
         List<Ad> GetAdGridByFilters(string searchString, FilterRepositoryModel model);
         List<Ad> OrderAdsByColumn(List<Ad> entities, string sortColumn);
-        decimal GetMaximumPriceForAd(List<Ad> entities);
+        decimal GetMaximumPriceForAd();
         List<Ad> GetRelatedAdsForCategoryExceptCurrentAd(Guid currentAdId, Guid currentCategoryId);
         int Count();
     }
@@ -39,17 +39,15 @@ namespace AdSite.Data.Repositories
             return SaveChangesResult();
         }
 
-        public decimal GetMaximumPriceForAd(List<Ad> entities)
+        public decimal GetMaximumPriceForAd()
         {
             decimal maxResult = 0;
-            if (entities != null && entities.Count() > 0)
+            maxResult = _context.Ads.Max(m => m.Price);
+            if (maxResult == null)
             {
-                maxResult = entities.Max(m => m.Price);
-                if (maxResult == null)
-                {
-                    throw new Exception();
-                }
+                throw new Exception();
             }
+
             return maxResult;
         }
 
@@ -57,7 +55,7 @@ namespace AdSite.Data.Repositories
         {
             try
             {
-                var entity = _context.Ads.FirstOrDefaultAsync(m => m.ID == id );
+                var entity = _context.Ads.FirstOrDefaultAsync(m => m.ID == id);
                 var result = entity.Result;
                 if (result == null)
                 {

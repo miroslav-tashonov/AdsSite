@@ -280,7 +280,9 @@ namespace AdSite.Controllers
                 }
 
                 string serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(ad.AdDetail.AdDetailPictures.Select( f => f.File).ToList());
+                string mainPicture = Newtonsoft.Json.JsonConvert.SerializeObject(ad.MainPictureThumbnail);
                 ad.SerializedAdDetailsPictures = serializedString;
+                ad.MainPictureFile = mainPicture;
                 
                 return View(ad);
             }

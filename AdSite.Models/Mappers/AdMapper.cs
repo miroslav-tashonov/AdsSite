@@ -14,6 +14,9 @@ namespace AdSite.Models.Mappers
         {
             var editModel = new AdEditModel();
 
+            var mainPicture = entity.AdDetail?.MainPictureThumbnailFile;
+            var description = entity.AdDetail?.Description;
+
             editModel.ID = entity.ID;
             editModel.Name = entity.Name;
             editModel.OwnerId = entity.OwnerId;
@@ -21,6 +24,8 @@ namespace AdSite.Models.Mappers
             editModel.CategoryId = entity.CategoryID;
             editModel.CityId = entity.CityID;
             editModel.AdDetail.AdDetailPictures = entity.AdDetail?.AdDetailPictures;
+            editModel.MainPictureThumbnail = mainPicture;
+            editModel.Description = description;
 
             return editModel;
         }
