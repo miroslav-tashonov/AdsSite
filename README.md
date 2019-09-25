@@ -35,7 +35,7 @@ or otherwise create the database manually with name AdSite
 ![alt text](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/ad-site-usecase.jpg) 
 
 
-<b>Following ER diagram represents the database schema</b>
+<b>Entity Relationship of the database</b>
 <br/>
 <br/>
 ![alt text](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) 
