@@ -4,7 +4,7 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Localizations);
 
-    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.LocalizationKey), @Html.DisplayNameFor(model => model.LocalizationValue) };
+    List<string> columnValues = new List<string>{ Html.DisplayNameFor(model => model.LocalizationKey), @Html.DisplayNameFor(model => model.LocalizationValue) };
     List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
             {
                 return new SelectListItem()

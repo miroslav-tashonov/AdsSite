@@ -16,7 +16,7 @@
             });
 
 
-    List<string> columnValues = new List<string> { @Html.DisplayNameFor(model => model.FirstOrDefault().Name) };
+    List<string> columnValues = new List<string> { Html.DisplayNameFor(model => model.FirstOrDefault().Name) };
     List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
             {
                 return new SelectListItem()

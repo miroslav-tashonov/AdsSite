@@ -42,10 +42,10 @@ namespace AdSite.Data.Repositories
         public decimal GetMaximumPriceForAd()
         {
             decimal maxResult = 0;
-            maxResult = _context.Ads.Max(m => m.Price);
-            if (maxResult == null)
+
+            if (_context.Ads.Any())
             {
-                throw new Exception();
+                maxResult = _context.Ads.Max(p => p.Price);
             }
 
             return maxResult;

@@ -4,16 +4,17 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Languages);
 
-    List<string> columnValues = new List<string>{ @Html.DisplayNameFor(model => model.LanguageName), @Html.DisplayNameFor(model => model.LanguageShortName) };
-    List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
-            {
-                return new SelectListItem()
-                {
-                    Text = a.ToString(),
-                    Value = a.ToString(),
-                    Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
-                };
-            });
+    List<string> columnValues = new List<string>
+    { Html.DisplayNameFor(model => model.LanguageName), @Html.DisplayNameFor(model => model.LanguageShortName) };
+            List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
+                    {
+                        return new SelectListItem()
+                        {
+                            Text = a.ToString(),
+                            Value = a.ToString(),
+                            Selected = ViewData["CurrentColumn"]?.ToString() == a.ToString()
+                        };
+                    });
 }
 
 @await Html.PartialAsync("_AdminNavigationPartial")
@@ -75,20 +76,20 @@
     </thead>
     <tbody>
         @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LanguageName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LanguageShortName)
-                </td>
-                <td>
-                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" onsubmit="return confirm($('#deleteMessage').text());">
-                        <button type="submit" class="btn-link"><localize name="General_Delete"></localize></button>
-                    </form>
-                </td>
-            </tr>
-        }
+                                {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LanguageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LanguageShortName)
+            </td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@item.ID" method="post" onsubmit="return confirm($('#deleteMessage').text());">
+                    <button type="submit" class="btn-link"><localize name="General_Delete"></localize></button>
+                </form>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>

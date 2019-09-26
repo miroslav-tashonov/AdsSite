@@ -4,7 +4,7 @@
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
 
-    List<string> columnValues = new List<string> { @Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Postcode) };
+    List<string> columnValues = new List<string> { Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Postcode) };
     List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
             {
                 return new SelectListItem()

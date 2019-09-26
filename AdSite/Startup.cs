@@ -46,17 +46,17 @@ namespace AdSite
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddAuthentication()
-                .AddGoogle(googleOptions =>
-                {
-                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                })
-                .AddFacebook(facebookOptions =>
-                {
-                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                });
+            services.AddAuthentication();
+                //.AddGoogle(googleOptions =>
+                //{
+                //    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                //    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                //})
+                //.AddFacebook(facebookOptions =>
+                //{
+                //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                //});
 
             #region Configure Users Access 
             services.Configure<IdentityOptions>(options =>
@@ -96,7 +96,8 @@ namespace AdSite
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddMvc().AddNewtonsoftJson();
 
             RegisterApplicationServices(services);
 
@@ -106,17 +107,11 @@ namespace AdSite
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILanguageService languageService, ICountryService countryService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILanguageService languageService, ICountryService countryService)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseHsts();
+
             app.UseSession();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
@@ -124,15 +119,18 @@ namespace AdSite
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors();
+
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapRazorPages();
             });
         }
 
