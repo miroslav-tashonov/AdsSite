@@ -14,7 +14,13 @@ Optional: Powershell 3.0 <br/>
 
 1. Clone the repository from https://github.com/miroslav-tashonov/AdsSite 
 2. Build and clean the project, make sure asp.net core 3.0 sdk is installed in this step 
-3. Create Database using Visual studio's Package manager console commands (need to have powershell 3.0 in Windows)
+3. Enter admin credentials used later for login to the site:
+<br/>
+Create Database via sql scripts located on ~\AdsSite\AdSite.Data\Scripts\
+execute 1.Create_Database.sql
+execute 2.Import_Script.sql
+
+Create Database using Visual studio's Package manager console commands (need to have powershell 3.0 in Windows)
 As default project in PMC you'll need to set AdSite.Data and than execute the following commands
 
 &nbsp;&nbsp;&nbsp;&nbsp;Add-Migration init</br>
