@@ -3,6 +3,9 @@
 Visual Studio 2017/2019 or VS Code<br/>
 Integrated SQL in Visual studio (windows only) or standalone SQL Server instance on Mac, Windows or Linux<br/>
 Asp.net core 3.0 SDK<br/><br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;<b>Windows</b>: https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-windows-x64-installer </br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<b>Mac</b>: https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-macos-x64-installer </br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<b>Linux</b>: https://dotnet.microsoft.com/download/linux-package-manager/rhel7/sdk-3.0.100 </br>
 
 Optional: Powershell 3.0 <br/>
 
@@ -11,12 +14,6 @@ Optional: Powershell 3.0 <br/>
 
 1. Clone the repository from https://github.com/miroslav-tashonov/AdsSite 
 2. Build and clean the project, make sure asp.net core 3.0 sdk is installed in this step 
-
-  &nbsp;&nbsp;&nbsp;&nbsp;<b>Windows</b>: https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-windows-x64-installer </br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<b>Mac</b>: https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-macos-x64-installer </br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<b>Linux</b>: https://dotnet.microsoft.com/download/linux-package-manager/rhel7/sdk-3.0.100 </br>
-
-
 3. Create Database using Visual studio's Package manager console commands (need to have powershell 3.0 in Windows)
 As default project in PMC you'll need to set AdSite.Data and than execute the following commands
 
