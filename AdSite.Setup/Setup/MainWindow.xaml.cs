@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿//using LibGit2Sharp;
+using LibGit2Sharp;
 using System;
 using System.Data.SqlClient;
 using System.Windows;
@@ -42,6 +43,11 @@ namespace Setup
             var cloneOptions = new CloneOptions();
             cloneOptions.IsBare = false;
             cloneOptions.Checkout = true;
+            cloneOptions.CertificateCheck += delegate (Certificate certificate, bool valid, string host)
+            {
+                return true;
+            };
+
             try
             {
                 Repository.Clone(sourceUrl, workingDir, cloneOptions);
