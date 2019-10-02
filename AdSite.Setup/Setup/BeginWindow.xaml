@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Setup"
         mc:Ignorable="d"
-        Title="Before you begin" Height="349" Width="536">
+        Title="Before you begin" Height="382" Width="536">
     <Grid Margin="0,0,10,0">
-        <Button Content="Next" HorizontalAlignment="Left" Margin="405,274,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.577,1.641" Width="101" Click="Button_Click"/>
+        <Button Content="Next" HorizontalAlignment="Left" Margin="388,303,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.577,1.641" Width="101" Click="Button_Click"/>
         <Label Content="Before you begin" HorizontalAlignment="Left" Margin="24,21,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.079,-0.114" FontSize="22" Background="White" Foreground="#FF23B8BF"/>
-        <Label HorizontalAlignment="Center" Margin="0,69,0,0" VerticalAlignment="Top" Height="190" Width="486">
-            <TextBlock Height="179" Width="476">
+        <Label HorizontalAlignment="Center" Margin="0,69,0,0" VerticalAlignment="Top" Height="205" Width="486">
+            <TextBlock Height="215" Width="476">
                 The wizard helps you create database, import required database tables, clone project  
                 <LineBreak/>
                 repository on desired location and create admin account used later to login to project
@@ -22,7 +22,7 @@
                 <LineBreak/>processing" toolset checked in installer is preferred for DB connection, or optionally you 
                 <LineBreak/>could use standalone MSSQL server instance). 
                 <LineBreak/>
-                Before you proceed please install visual studio. 
+                Before you proceed you are required to install visual studio. 
                 <Hyperlink NavigateUri="https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community" RequestNavigate="Hyperlink_RequestNavigate">
                     Download Visual Studio link
                 </Hyperlink>
@@ -30,7 +30,8 @@
                 <LineBreak/>
                 In addition asp.net core sdk 3.0 is also required. 
                 <LineBreak/>
-                Before you proceed please install asp net core sdk 3.0
+                Before you proceed you are required to install asp net core sdk 3.0
+                <LineBreak/>
                 <Hyperlink NavigateUri="https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-windows-x64-installer" RequestNavigate="Hyperlink_RequestNavigate_1">
                     Download Asp net core sdk 3.0
                 </Hyperlink>
