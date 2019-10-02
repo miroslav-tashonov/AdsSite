@@ -24,16 +24,12 @@ namespace Setup
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    var processInfo = new ProcessStartInfo("cmd.exe", "/c" + "\"" + repositoryPath + "\\build.bat" + "\"");
+                    var processInfo = new ProcessStartInfo("cmd.exe", "/c" + "\"" + repositoryPath + "\\AdSite.Setup\\build.bat" + "\"");
 
-                    processInfo.CreateNoWindow = true;
+                    processInfo.WorkingDirectory = repositoryPath + "\\";
                     processInfo.UseShellExecute = false;
-                    processInfo.RedirectStandardError = true;
-                    processInfo.RedirectStandardOutput = true;
 
                     var process = Process.Start(processInfo);
-
-                    process.Start();
                 }
 
             }

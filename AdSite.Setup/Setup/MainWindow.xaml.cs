@@ -103,7 +103,6 @@ namespace Setup
             ValidateNextButton();
         }
 
-
         public void ValidateNextButton()
         {
             System.Windows.Controls.Button nextButtion = (System.Windows.Controls.Button)this.FindName("NextButton");
