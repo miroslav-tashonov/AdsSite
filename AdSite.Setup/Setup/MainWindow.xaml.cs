@@ -96,11 +96,12 @@ namespace Setup
             System.Windows.Controls.TextBox SqlConnectionTextBox = (System.Windows.Controls.TextBox)this.FindName("SqlConnectionTextBox");
             System.Windows.Controls.TextBox CloneRepoTextBox = (System.Windows.Controls.TextBox)this.FindName("CloneRepoTextBox");
 
-            ImportSQL.ImportSQLScripts(SqlConnectionTextBox.Text, CloneRepoTextBox.Text);
-
-            Credentials credentialsWindow = new Credentials(SqlConnectionTextBox.Text, CloneRepoTextBox.Text);
-            credentialsWindow.Show();
-            this.Close();
+            if (ImportSQL.ImportSQLScripts(SqlConnectionTextBox.Text, CloneRepoTextBox.Text))
+            {
+                Credentials credentialsWindow = new Credentials(SqlConnectionTextBox.Text, CloneRepoTextBox.Text);
+                credentialsWindow.Show();
+                this.Close();
+            }
         }
 
         private void SqlConnectionTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

@@ -4,40 +4,25 @@ using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Security.Cryptography;
+using System.Windows;
 
 namespace Setup
 {
     public static class ImportSQL
     {
-        public static void ImportSQLScripts(string conString, string cloneRepoLocation)
+        public static bool ImportSQLScripts(string conString, string cloneRepoLocation)
         {
-            string[] fileScripts = new string[] { "1.Create_database.sql", "2.Import_script.sql", "3.Import_Roles.sql" };
+            bool isSuccessfull = true;
 
-            string connectionString = conString;
-            string filepath = cloneRepoLocation + "\\AdSite.Data\\Scripts\\";
-            try
+            if (CheckIfDatabaseExists(cloneRepoLocation, conString))
             {
-                foreach (string fileScript in fileScripts)
-                {
-                    if (File.Exists(filepath + fileScript))
-                    {
-                        FileInfo file = new FileInfo(filepath + fileScript);
-                        string script = file.OpenText().ReadToEnd();
-                        using (SqlConnection conn = new SqlConnection(connectionString))
-                        {
-                            Server server = new Server(new ServerConnection(conn));
+                string[] fileScripts = new string[] { "1.Create_database.sql", "2.Import_script.sql", "3.Import_Roles.sql" };
 
-                            server.ConnectionContext.ExecuteNonQuery(script);
-                        }
-                        file.OpenText().Close();
-                    }
-                }
-                System.Windows.MessageBox.Show("Import success ! ");
+                string connectionString = conString;
+                isSuccessfull = ImportScript(fileScripts, cloneRepoLocation, conString);
             }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message + "" + ex.StackTrace);
-            }
+
+            return isSuccessfull;
         }
 
         public static void ImportAdminCredentials(string conString, string username, string password)
@@ -118,6 +103,62 @@ namespace Setup
             Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
             Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
             return Convert.ToBase64String(dst);
+        }
+
+        public static bool CheckIfDatabaseExists(string cloneRepoLocation, string connectionString)
+        {
+            bool importSqlScripts = false;
+            using (SqlConnection cnn = new SqlConnection(connectionString + ";Database=AdSite"))
+            {
+                try
+                {
+                    cnn.Open();
+                    cnn.Close();
+
+                    if (MessageBox.Show("Database already exists, do you want to recreate the database?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        string[] fileScripts = new string[] { "4.Delete_Database.sql" };
+                        ImportScript(fileScripts, cloneRepoLocation, connectionString);
+                        importSqlScripts = true;
+                    }
+                    else
+                    {
+                        importSqlScripts = false;
+                    }
+                }
+                catch { }
+            }
+            return importSqlScripts;
+        }
+
+        public static bool ImportScript(string[] fileScripts, string cloneRepoLocation, string connectionString)
+        {
+            string filepath = cloneRepoLocation + "\\AdSite.Data\\Scripts\\";
+            try
+            {
+                foreach (string fileScript in fileScripts)
+                {
+                    if (File.Exists(filepath + fileScript))
+                    {
+                        FileInfo file = new FileInfo(filepath + fileScript);
+                        string script = file.OpenText().ReadToEnd();
+                        using (SqlConnection conn = new SqlConnection(connectionString))
+                        {
+                            Server server = new Server(new ServerConnection(conn));
+
+                            server.ConnectionContext.ExecuteNonQuery(script);
+                        }
+                        file.OpenText().Close();
+                    }
+                }
+                System.Windows.MessageBox.Show("Import success ! ");
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message + "" + ex.StackTrace);
+                return false;
+            }
+            return true;
         }
 
     }
