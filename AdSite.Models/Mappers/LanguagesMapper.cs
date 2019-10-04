@@ -28,6 +28,18 @@ namespace AdSite.Models.Mappers
             return listViewModel;
         }
 
+        public static LanguageViewModel MapToViewModel(Language language)
+        {
+            var viewModel = new LanguageViewModel();
+
+            viewModel.ID = language.ID;
+            viewModel.CultureId = language.CultureId;
+            viewModel.LanguageName = language.LanguageName;
+            viewModel.LanguageShortName = language.LanguageShortName;
+
+            return viewModel;
+        }
+
         public static List<LookupViewModel> MapToLookupViewModel(List<Language> languages)
         {
             var listViewModel = new List<LookupViewModel>();

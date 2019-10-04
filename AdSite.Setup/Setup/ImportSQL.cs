@@ -107,7 +107,7 @@ namespace Setup
 
         public static bool CheckIfDatabaseExists(string cloneRepoLocation, string connectionString)
         {
-            bool importSqlScripts = false;
+            bool importSqlScripts = true;
             using (SqlConnection cnn = new SqlConnection(connectionString + ";Database=AdSite"))
             {
                 try
@@ -117,8 +117,24 @@ namespace Setup
 
                     if (MessageBox.Show("Database already exists, do you want to recreate the database?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        string[] fileScripts = new string[] { "4.Delete_Database.sql" };
-                        ImportScript(fileScripts, cloneRepoLocation, connectionString);
+                        string alterQuery = "ALTER DATABASE [AdSite] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
+                        string query = "DROP DATABASE [AdSite];";
+                        using (SqlConnection conn = new SqlConnection(connectionString))
+                        {
+                            using (SqlCommand dataCommand = new SqlCommand(alterQuery, conn))
+                            {
+                                conn.Open();
+                                dataCommand.ExecuteNonQuery();
+                                conn.Close();
+                            }
+
+                            using (SqlCommand dataCommand = new SqlCommand(query, conn))
+                            {
+                                conn.Open();
+                                dataCommand.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                        }
                         importSqlScripts = true;
                     }
                     else

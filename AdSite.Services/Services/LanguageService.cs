@@ -23,7 +23,7 @@ namespace AdSite.Services
 
         List<LanguageViewModel> GetAll(Guid country);
         List<LanguageViewModel> GetAll(string columnName, string searchString, Guid country);
-
+        LanguageViewModel GetByCultureId(int lcid, Guid countryId);
         List<LookupViewModel> GetAllAsLookup(Guid country);
 
     }
@@ -155,6 +155,10 @@ namespace AdSite.Services
             return LanguagesMapper.MapToViewModel(_repository.GetAll(countryId));
         }
 
+        public LanguageViewModel GetByCultureId(int lcid, Guid countryId)
+        {
+            return LanguagesMapper.MapToViewModel(_repository.GetByCultureId(lcid, countryId));
+        }
 
         public List<LookupViewModel> GetAllAsLookup(Guid countryId)
         {

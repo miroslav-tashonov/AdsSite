@@ -13,7 +13,7 @@ namespace AdSite.Data.Repositories
     {
         bool Exists(int lcid, Guid countryId);
         int Count(Guid countryId);
-
+        Language GetByCultureId(int lcid, Guid countryId);
         List<Language> GetByLanguageName(string languageName, Guid countryId);
         List<Language> GetByLanguageShortName(string languageName, Guid countryId);
     }
@@ -85,6 +85,22 @@ namespace AdSite.Data.Repositories
             var languages = _context.Languages.Where(language => language.CountryId == countryId).ToListAsync();
 
             return languages.Result;
+        }
+
+        public Language GetByCultureId(int lcid, Guid countryId)
+        {
+            Language language = new Language();
+            if(_context.Languages.Any(language => language.CultureId == lcid && language.CountryId == countryId))
+            {
+                language = _context.Languages.FirstAsync(language => language.CultureId == lcid && 
+                            language.CountryId == countryId).GetAwaiter().GetResult();
+            }
+            else
+            {
+                throw new Exception("Language with cultureid "+ lcid +" is not found.");
+            }
+
+            return language;
         }
 
         public List<Language> GetByLanguageName(string languageName, Guid countryId)
