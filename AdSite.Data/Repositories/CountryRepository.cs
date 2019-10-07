@@ -11,7 +11,13 @@ namespace AdSite.Data.Repositories
 {
     public interface ICountryRepository : ICountryRepository<Country>
     {
+        Country Get(Guid countryId);
+        List<Country> GetAll();
+        List<Country> GetByCountryName(string searchString);
 
+        List<Country> GetByCountryPath(string searchString);
+
+        Country GetCountryByPath(string searchString);
     }
 
     public class CountryRepository : ICountryRepository
@@ -32,7 +38,23 @@ namespace AdSite.Data.Repositories
 
         public bool Delete(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var country = _context.Countries.FirstOrDefaultAsync(m => m.ID == id);
+                var result = country.Result;
+                if (result == null)
+                {
+                    throw new Exception();
+                }
+
+                _context.Countries.Remove(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return SaveChangesResult();
         }
 
         public bool Exists(Guid id)
@@ -42,20 +64,50 @@ namespace AdSite.Data.Repositories
 
         public Country Get(Guid id)
         {
-            return new Country()
+            var country = _context.Countries.FirstOrDefaultAsync(m => m.ID == id);
+            var result = country.Result;
+            if (result == null)
             {
-                ID = new Guid("9B0CBFD6-0070-4285-B353-F13189BD2291")
-            };
+                throw new Exception();
+            }
+
+            return result;
         }
 
         public List<Country> GetAll()
         {
-            throw new NotImplementedException();
+            var cities = _context.Countries.ToListAsync();
+
+            return cities.Result;
+        }
+
+        public List<Country> GetByCountryName(string searchString)
+        {
+            var countries = _context.Countries.Where(country => country.Name.Contains(searchString)).ToListAsync();
+
+            return countries.Result;
+        }
+
+        public List<Country> GetByCountryPath(string searchString)
+        {
+            var countries = _context.Countries.Where(country => country.Path.Contains(searchString)).ToListAsync();
+
+            return countries.Result;
+        }
+
+        public Country GetCountryByPath(string searchString)
+        {
+            Country country = new Country();
+            if (_context.Countries.Any(country => country.Path.ToLower() == searchString.ToLower()))
+                country = _context.Countries.Where(country => country.Path.ToLower() == searchString.ToLower()).First();
+
+            return country;
         }
 
         public bool Update(Country entity)
         {
-            throw new NotImplementedException();
+            _context.Update(entity);
+            return SaveChangesResult();
         }
 
         public bool SaveChangesResult()

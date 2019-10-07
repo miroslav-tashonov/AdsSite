@@ -11,6 +11,8 @@ namespace AdSite.ViewComponents
 {
     public class CitiesFilterViewComponent : ViewComponent
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ICityService _cityService;
         private readonly ICountryService _countryService;
 
@@ -25,7 +27,7 @@ namespace AdSite.ViewComponents
             cityIds = (cityIds == null) ? new List<Guid>() : cityIds;
             if (isFirstCall)
             {
-                Guid countryId = _countryService.Get();
+                Guid countryId = _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
                 cities = _cityService.GetAllAsLookup(countryId);
             }

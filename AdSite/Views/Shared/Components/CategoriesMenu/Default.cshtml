@@ -1,36 +1,43 @@
-﻿@model AdSite.Models.CRUDModels.CategoryComponentViewModel
+﻿@model AdSite.Models.CRUDModels.CategoryComponentViewModel;
 
-@if (Model.ComponentCategories != null && Model.ComponentCategories.Any())
-{
-    @foreach (var category in Model.ComponentCategories)
-    {
-        <li>
-            <a name="CategoryId"
-               asp-controller="Ads"
-               asp-action="Index"
-               asp-route-categoryId="@category.ID"
-               onclick="submitModel('@category.ID'); return false;">
-                @category.Name
-            </a>
-
-            @if (category.Children != null && category.Children.Count > 0)
+<form id="categoriesForm" method="post" asp-controller="Ads" asp-action="Index">
+    <div class="topcatalog">
+        <a class="topcatalog-btn"><span><localize name="Ads_AllAds"></localize></span></a>
+        <ul class="topcatalog-list">
+            @if (Model.ComponentCategories != null && Model.ComponentCategories.Any())
             {
-                <i class="fa fa-angle-right float-right"> </i>
-                <ul>
-                    @await Component.InvokeAsync("CategoriesMenu", new { categories = category.Children, isFirstCall = false })
-                </ul>
+                @foreach (var category in Model.ComponentCategories)
+                {
 
+                    <li>
+                        <a name="CategoryId"
+                           asp-controller="Ads"
+                           asp-action="Index"
+                           asp-route-categoryId="@category.ID"
+                           onclick="submitModel('@category.ID'); return false;">
+                            @category.Name
+                        </a>
+
+                        @if (category.Children != null && category.Children.Count > 0)
+                        {
+                            <i class="fa fa-angle-right float-right"> </i>
+                            <ul>
+                                @await Component.InvokeAsync("CategoriesMenu", new { categories = category.Children, isFirstCall = false })
+                            </ul>
+
+                        }
+
+                    </li>
+
+                }
             }
-
-        </li>
-    }
-
-    <input type="hidden" name="CategoryId" id="hiddenMenuCategoryId" value="" />
-    <script>
-        function submitModel(categoryId) {
-            document.getElementById('hiddenMenuCategoryId').value = categoryId;
-            document.getElementById('form').submit();
-        }
-    </script>
-
-}
+        </ul>
+        <input type="hidden" name="CategoryId" id="hiddenMenuCategoryId" value="" />
+        <script>
+            function submitModel(categoryId) {
+                document.getElementById('hiddenMenuCategoryId').value = categoryId;
+                document.getElementById('categoriesForm').submit();
+            }
+        </script>
+    </div>
+</form>

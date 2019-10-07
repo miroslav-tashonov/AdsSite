@@ -71,6 +71,10 @@ TABLE OF CONTENTS:
         cursor: pointer;
     }
 
+.panel-color {
+    background-color:antiquewhite;
+}
+
 .thumb {
     height: 80px;
     width: 100px;

@@ -12,6 +12,8 @@ namespace AdSite.Models.DatabaseModels
         public string Name { get; set; }
         [Required]
         public string Abbreviation { get; set; }
+        [Required]
+        public string Path { get; set; }
 
         #region Foreign Keys
         public ICollection<City> Cities { get; set; }

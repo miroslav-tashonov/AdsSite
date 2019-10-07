@@ -19,12 +19,14 @@ namespace AdSite.Controllers
     [Authorize(Roles = "Admin")]
     public class WebSettingsController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ICountryService _countryService;
         private readonly IWebSettingsService _webSettingsService;
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
 
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
 

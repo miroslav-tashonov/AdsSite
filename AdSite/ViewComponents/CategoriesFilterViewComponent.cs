@@ -11,6 +11,8 @@ namespace AdSite.ViewComponents
 {
     public class CategoriesFilterViewComponent : ViewComponent
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ICategoryService _categoryService;
         private readonly ICountryService _countryService;
 
@@ -24,7 +26,7 @@ namespace AdSite.ViewComponents
         {
             if (isFirstCall)
             {
-                Guid countryId = _countryService.Get();
+                Guid countryId = _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
                 categories = _categoryService.GetCategoryAsTreeStructure(countryId);
             }

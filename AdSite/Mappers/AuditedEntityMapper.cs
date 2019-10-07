@@ -5,6 +5,17 @@ namespace AdSite.Mappers
 {
     public static class AuditedEntityMapper<T>
     {
+
+        public static void FillCreateAuditedEntityFields(T entity, string currentUser)
+        {
+            DateTime currentTime = DateTime.Now;
+
+            SetPropertyInfoValue(entity, currentUser, "CreatedBy");
+            SetPropertyInfoValue(entity, currentUser, "ModifiedBy");
+            SetPropertyInfoValue(entity, currentTime, "CreatedAt");
+            SetPropertyInfoValue(entity, currentTime, "ModifiedAt");
+        }
+
         public static void FillCreateAuditedEntityFields(T entity, string currentUser, Guid countryId)
         {
             DateTime currentTime = DateTime.Now;

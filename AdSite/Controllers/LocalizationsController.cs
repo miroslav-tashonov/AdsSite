@@ -22,6 +22,8 @@ namespace AdSite.Controllers
     [Authorize(Roles = "Admin")]
     public class LocalizationsController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ILocalizationService _localizationService;
         private readonly ILanguageService _languageService;
         private readonly ICountryService _countryService;
@@ -29,7 +31,7 @@ namespace AdSite.Controllers
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);

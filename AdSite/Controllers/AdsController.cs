@@ -20,6 +20,8 @@ namespace AdSite.Controllers
     [Authorize(Roles = "User, Admin")]
     public class AdsController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly IAdService _adService;
         private readonly ICityService _cityService;
         private readonly ICategoryService _categoryService;
@@ -36,7 +38,7 @@ namespace AdSite.Controllers
         private const int DEFAULT_PAGE_SIZE = 10;
         private const int PAGE_SIZE = 3;
         private string CurrentUserId => _userManager.GetUserId(User);
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
 
 

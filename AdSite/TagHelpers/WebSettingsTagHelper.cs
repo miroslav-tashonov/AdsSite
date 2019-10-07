@@ -3,6 +3,7 @@
 namespace AdSite.TagHelpers
 {
     using AdSite.Services;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Razor.TagHelpers;
     using Microsoft.Extensions.Caching.Memory;
     using System.Text;
@@ -10,17 +11,21 @@ namespace AdSite.TagHelpers
     [HtmlTargetElement("webSettings")]
     public class WebSettingsTagHelper : TagHelper
     {
+        public string COUNTRY_ID = "CountryId";
         private readonly IWebSettingsService _webSettingsService;
         private readonly ICountryService _countryService;
         private IMemoryCache _cache;
+        private IHttpContextAccessor _contextAccessor;
 
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)_contextAccessor.HttpContext.Items[COUNTRY_ID]);
 
-        public WebSettingsTagHelper(IWebSettingsService webSettingsService, ICountryService countryService, IMemoryCache memoryCache)
+        public WebSettingsTagHelper(IWebSettingsService webSettingsService, ICountryService countryService,
+            IMemoryCache memoryCache, IHttpContextAccessor contextAccessor)
         {
             _webSettingsService = webSettingsService;
             _countryService = countryService;
             _cache = memoryCache;
+            _contextAccessor = contextAccessor;
         }
 
         public string SettingName { get; set; }

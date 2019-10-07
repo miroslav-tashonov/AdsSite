@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190926232406_new")]
-    partial class @new
+    [Migration("20191007113518_path")]
+    partial class path
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -343,6 +343,10 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

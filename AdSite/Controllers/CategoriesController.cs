@@ -14,6 +14,8 @@ namespace AdSite.Controllers
     [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ICategoryService _categoryService;
         private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
@@ -21,7 +23,7 @@ namespace AdSite.Controllers
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_ERROR_USER_MUST_LOGIN => _localizationService.GetByKey("ErrorMessage_MustLogin", CultureId);

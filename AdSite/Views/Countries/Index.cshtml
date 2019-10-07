@@ -1,10 +1,10 @@
-﻿@model IEnumerable<AdSite.Models.CRUDModels.CityViewModel>
+﻿@model IEnumerable<AdSite.Models.CRUDModels.CountryViewModel>
 @using AdSite.Views.Shared;
 
 @{
-    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Cities);
+    AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Countries);
 
-    List<string> columnValues = new List<string> { Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Postcode) };
+    List<string> columnValues = new List<string> { Html.DisplayNameFor(model => model.Name), @Html.DisplayNameFor(model => model.Path) };
     List<SelectListItem> columnListItems = columnValues.ConvertAll(a =>
             {
                 return new SelectListItem()
@@ -19,7 +19,7 @@
 @await Html.PartialAsync("_AdminNavigationPartial")
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><localize name="City_CreateNew"></localize></a>
+    <a asp-action="Create" class="btn btn-primary"><localize name="Country_CreateNew"></localize></a>
 </p>
 
 <br />
@@ -52,10 +52,13 @@
     <thead>
         <tr>
             <th>
-                <localize name="City_Field_Name"></localize>
+                <localize name="Country_Field_Name"></localize>
             </th>
             <th>
-                <localize name="City_Field_Postcode"></localize>
+                <localize name="Country_Field_Path"></localize>
+            </th>
+            <th>
+                <localize name="Country_Field_Abbreviation"></localize>
             </th>
             <th></th>
         </tr>
@@ -63,19 +66,22 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Postcode)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn-link"><localize name="General_Edit"></localize></a> |
-                    <a asp-action="Details" asp-route-id="@item.ID" class="btn-link"><localize name="General_Details"></localize></a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn-link"><localize name="General_Delete"></localize></a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Path)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Abbreviation)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID" class="btn-link"><localize name="General_Edit"></localize></a> |
+                <a asp-action="Details" asp-route-id="@item.ID" class="btn-link"><localize name="General_Details"></localize></a> |
+                <a asp-action="Delete" asp-route-id="@item.ID" class="btn-link"><localize name="General_Delete"></localize></a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

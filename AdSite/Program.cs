@@ -29,7 +29,7 @@ namespace AdSite
                     var configuration = services.GetRequiredService<IConfiguration>();
 
                     SeedExtension.CreateRoles(serviceProvider).Wait();
-                    SeedExtension.CreateDefaultCountry(serviceProvider).Wait();
+                    SeedExtension.CreateDefaultCountry(serviceProvider, configuration).Wait();
                     SeedExtension.CreateDefaultLanguage(serviceProvider, configuration).Wait();
                     SeedExtension.ImportLocalizations(serviceProvider, configuration).Wait();
                     SeedExtension.CreateAdminAccount(serviceProvider).Wait();

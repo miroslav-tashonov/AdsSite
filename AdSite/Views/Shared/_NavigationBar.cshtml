@@ -29,7 +29,7 @@
 {
     @if (User.IsInRole("User"))
     {
-        <li>
+        <li class="panel-color">
             <a asp-action="UsersPanel" asp-controller="Home">
                 <localize name="Layouts_UserPanel"></localize>
             </a>
@@ -37,7 +37,7 @@
     }
     @if (User.IsInRole("Admin"))
     {
-        <li>
+        <li class="panel-color">
             <a asp-action="AdminPanel" asp-controller="Home">
                 <localize name="Layouts_AdminPanel"></localize>
             </a>

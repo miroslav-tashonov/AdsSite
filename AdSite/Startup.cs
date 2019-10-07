@@ -15,6 +15,8 @@ using AdSite.Data.Repositories;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using AdSite.Models.Extensions;
+using AdSite.Helpers;
+using AdSite.Extensions;
 
 namespace AdSite
 {
@@ -35,28 +37,25 @@ namespace AdSite
             {
                 o.IdleTimeout = TimeSpan.FromSeconds(3600);
             });
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddAuthentication();
-                //.AddGoogle(googleOptions =>
-                //{
-                //    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                //    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                //})
-                //.AddFacebook(facebookOptions =>
-                //{
-                //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                //});
+            //.AddGoogle(googleOptions =>
+            //{
+            //    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+            //    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            //})
+            //.AddFacebook(facebookOptions =>
+            //{
+            //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+            //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            //});
 
             #region Configure Users Access 
             services.Configure<IdentityOptions>(options =>
@@ -95,128 +94,36 @@ namespace AdSite
             services.AddIdentity<ApplicationUser, ApplicationIdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            
             services.AddMvc().AddNewtonsoftJson();
 
-            RegisterApplicationServices(services);
-
+            StartupHelper.RegisterApplicationServices(services);
             //needed for setting languages that are currently in DB
-            var serviceProvider = services.BuildServiceProvider();
-            RegisterSupportedLanguages(services, serviceProvider);
+            StartupHelper.RegisterSupportedLanguages(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILanguageService languageService, ICountryService countryService)
+        public void Configure(IApplicationBuilder app, ILanguageService languageService, ICountryService countryService)
         {
-            app.UseDeveloperExceptionPage();
-            app.UseHsts();
-
-            app.UseSession();
-            app.UseStatusCodePagesWithReExecute("/Error/{0}");
-
-            app.UseRequestLocalization(BuildLocalizationOptions(languageService, countryService));
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseCors();
-
-            app.UseCookiePolicy();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            var countries = countryService.GetAll();
+            if (countries == null || countries.Count == 0)
             {
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                //endpoints.MapRazorPages();
-            });
-        }
+                throw new Exception("Countries list is empty");
+            }
 
-
-        //custom services registration
-        private void RegisterApplicationServices(IServiceCollection services)
-        {
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<ILocalizationService, LocalizationService>();
-            services.AddTransient<ILocalizationRepository, LocalizationRepository>();
-            services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<IWebSettingsService, WebSettingsService>();
-            services.AddTransient<IWebSettingsRepository, WebSettingsRepository>();
-            services.AddTransient<ICountryService, CountryService>();
-            services.AddTransient<ICountryRepository, CountryRepository>();
-            services.AddTransient<ILanguageService, LanguageService>();
-            services.AddTransient<ILanguageRepository, LanguageRepository>();
-            services.AddTransient<ICityService, CityService>();
-            services.AddTransient<ICityRepository, CityRepository>();
-            services.AddTransient<IAdService, AdService>();
-            services.AddTransient<IAdRepository, AdRepository>();
-            services.AddTransient<IWishlistService, WishlistService>();
-            services.AddTransient<IWishlistRepository, WishlistRepository>();
-        }
-
-        private void RegisterSupportedLanguages(IServiceCollection services, ServiceProvider serviceProvider)
-        {
-            string defaultLanguage = Configuration["DefaultLanguage:Value"];
-            var languageService = serviceProvider.GetService<ILanguageService>();
-            var countryService = serviceProvider.GetService<ICountryService>();
-            try
+            foreach (var country in countries)
             {
-                Guid countryId = countryService.Get();
-                var languages = languageService.GetAll(countryId);
-
-                List<CultureInfo> supportedCultures = new List<CultureInfo>();
-                foreach (var language in languages)
-                {
-                    try
+                Guid countryId = country.ID;
+                app.Map("/" + country.Path,
+                    app =>
                     {
-                        supportedCultures.Add(new CultureInfo(language.CultureId));
-                    }
-                    catch (Exception ex)
-                    {
+                        app.UseMiddleware<CountryMiddleware>(countryId);
 
+                        StartupHelper.MapSite(languageService, Configuration, app, countryId);
                     }
-                }
-
-                services.Configure<RequestLocalizationOptions>(options =>
-                {
-                    options.DefaultRequestCulture = new RequestCulture(culture: defaultLanguage, uiCulture: defaultLanguage);
-                    options.SupportedCultures = supportedCultures;
-                    options.SupportedUICultures = supportedCultures;
-                });
+                );
             }
-            catch { }
         }
 
-        private RequestLocalizationOptions BuildLocalizationOptions(ILanguageService languageService, ICountryService countryService)
-        {
-            try
-            {
-                string defaultLanguage = Configuration["DefaultLanguage:Value"];
-                Guid countryId = countryService.Get();
-                var languages = languageService.GetAll(countryId);
 
-                List<CultureInfo> supportedCultures = new List<CultureInfo>();
-                foreach (var language in languages)
-                {
-                    supportedCultures.Add(new CultureInfo(language.CultureId));
-                }
-
-                var options = new RequestLocalizationOptions
-                {
-                    DefaultRequestCulture = new RequestCulture(defaultLanguage),
-                    SupportedCultures = supportedCultures,
-                    SupportedUICultures = supportedCultures
-                };
-
-                return options;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
     }
 }

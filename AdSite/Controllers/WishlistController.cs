@@ -13,6 +13,8 @@ namespace AdSite.Controllers
     [Authorize(Roles = ("User, Admin"))]
     public class WishlistController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly IWishlistService _wishlistService;
         private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
@@ -21,7 +23,7 @@ namespace AdSite.Controllers
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private const int SERVER_ERROR_CODE = 500;
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private string CurrentUserId => _userManager.GetUserId(User);
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);

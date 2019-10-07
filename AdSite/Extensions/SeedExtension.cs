@@ -21,7 +21,15 @@ namespace AdSite.Extensions
         public static Dictionary<string, string> localizations = new Dictionary<string, string>()
         {
             #region Localization Key, Values
-                    {"General_Edit","Edit"},
+            {"Country_Details","Details" },
+            {"Country_Edit","Edit Country" },
+            
+            {"Country_Field_Name","Name" },
+            {"Country_Field_Path","Path" },
+            {"Country_Field_Abbreviation","Abbreviation" },
+            {"Country_CreateNew","New Region/Country" },
+            {"Countries_Entity","Countries" },
+        {"General_Edit","Edit"},
         {"General_Details","Details"},
         {"General_Delete","Delete"},
         {"General_FindBy","Find By"},
@@ -178,16 +186,20 @@ namespace AdSite.Extensions
                 var _languageService = serviceProvider.GetService<ILanguageService>();
                 var _countryService = serviceProvider.GetService<ICountryService>();
                 CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
-                Guid countryId = _countryService.Get();
-                if (!_languageService.Exists(defaultCultureInfo.LCID, countryId))
-                {
-                    LanguageCreateModel language = new LanguageCreateModel();
-                    language.CountryId = countryId;
-                    language.CultureId = defaultCultureInfo.LCID.ToString();
+                var countries = _countryService.GetAll();
+                if (countries != null)
+                    foreach (var country in countries)
+                    {
+                        if (_languageService.GetAll(country.ID).Count > 0)
+                        {
+                            LanguageCreateModel language = new LanguageCreateModel();
+                            language.CountryId = country.ID;
+                            language.CultureId = defaultCultureInfo.LCID.ToString();
 
-                    _languageService.Add(language);
+                            _languageService.Add(language);
 
-                }
+                        }
+                    }
             }
             catch (Exception ex)
             {
@@ -204,31 +216,34 @@ namespace AdSite.Extensions
             try
             {
                 var _countryService = serviceProvider.GetService<ICountryService>();
-                Guid countryId = _countryService.Get();
-                var _languageService = serviceProvider.GetService<ILanguageService>();
-                string defaultLanguage = configuration["DefaultLanguage:Value"];
-                CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
-                var language = _languageService.GetByCultureId(defaultCultureInfo.LCID, countryId);
-                var _localizationService = serviceProvider.GetService<ILocalizationService>();
-
-                var firstItemInDictionary = localizations.First();
-
-                if (!(_localizationService.GetByKey(firstItemInDictionary.Key, language.CultureId)
-                    == firstItemInDictionary.Value))
-                {
-                    foreach (KeyValuePair<string, string> localizationItem in localizations)
+                var countries = _countryService.GetAll();
+                if (countries != null)
+                    foreach (var country in countries)
                     {
-                        LocalizationCreateModel localization = new LocalizationCreateModel();
-                        localization.CountryId = countryId;
-                        localization.LanguageId = language.ID;
-                        localization.LocalizationKey = localizationItem.Key;
-                        localization.LocalizationValue = localizationItem.Value;
+                        var _languageService = serviceProvider.GetService<ILanguageService>();
+                        string defaultLanguage = configuration["DefaultLanguage:Value"];
+                        CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
+                        var language = _languageService.GetByCultureId(defaultCultureInfo.LCID, country.ID);
+                        var _localizationService = serviceProvider.GetService<ILocalizationService>();
 
-                        _localizationService.Add(localization);
+                        var firstItemInDictionary = localizations.First();
 
+                        if (!(_localizationService.GetByKey(firstItemInDictionary.Key, language.CultureId)
+                            == firstItemInDictionary.Value))
+                        {
+                            foreach (KeyValuePair<string, string> localizationItem in localizations)
+                            {
+                                LocalizationCreateModel localization = new LocalizationCreateModel();
+                                localization.CountryId = country.ID;
+                                localization.LanguageId = language.ID;
+                                localization.LocalizationKey = localizationItem.Key;
+                                localization.LocalizationValue = localizationItem.Value;
+
+                                _localizationService.Add(localization);
+
+                            }
+                        }
                     }
-                }
-
             }
             catch (Exception ex)
             {
@@ -237,7 +252,7 @@ namespace AdSite.Extensions
             }
         }
 
-        public static async Task CreateDefaultCountry(IServiceProvider serviceProvider)
+        public static async Task CreateDefaultCountry(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
             logger.LogInformation("adding default country");
@@ -245,9 +260,24 @@ namespace AdSite.Extensions
             try
             {
                 var _countryService = serviceProvider.GetService<ICountryService>();
-                if (!_countryService.Exist(new Guid("9B0CBFD6-0070-4285-B353-F13189BD2291")))
+                if (!_countryService.GetAll().Any())
                 {
-                    if (!_countryService.Add())
+                    string countryName = configuration["Country:Name"];
+                    string countryPath = configuration["Country:Path"];
+                    string countryAbbreviation = configuration["Country:Abbreviation"];
+
+                    CountryCreateModel countryCreateModel = new CountryCreateModel
+                    {
+                        Name = countryName,
+                        Path = countryPath,
+                        Abbreviation = countryAbbreviation,
+                        CreatedAt = DateTime.Now,
+                        ModifiedAt = DateTime.Now,
+                        CreatedBy = "seedadmin",
+                        ModifiedBy = "seedadmin",
+                    };
+
+                    if (!_countryService.Add(countryCreateModel))
                     {
                         logger.LogInformation("Country cannot be added .");
                         throw new Exception("Country cannot be added .");

@@ -13,12 +13,14 @@ namespace AdSite.Controllers
 {
     public class HomeController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ILocalizationService _localizationService;
         private readonly IWebSettingsService _webSettingsService;
         private readonly ICountryService _countryService;
         private readonly ILogger<HomeController> _logger;
 
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
         public HomeController(ILocalizationService localizationService, IWebSettingsService webSettingsService, ICountryService countryService, ILogger<HomeController> logger)
         {

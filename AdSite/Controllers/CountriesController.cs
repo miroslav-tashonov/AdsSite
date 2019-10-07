@@ -3,7 +3,6 @@ using AdSite.Mappers;
 using AdSite.Models.CRUDModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -13,18 +12,14 @@ using System.Threading;
 namespace AdSite.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class CitiesController : Controller
+    public class CountriesController : Controller
     {
-        string COUNTRY_ID = "CountryId";
-        
-        private readonly ICityService _cityService;
         private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
-        private readonly ILogger<CitiesController> _logger;
+        private readonly ILogger<CountriesController> _logger;
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private const int SERVER_ERROR_CODE = 500;
-        private Guid CountryId => _countryService.Get( (Guid)HttpContext.Items[COUNTRY_ID] );
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
@@ -33,9 +28,8 @@ namespace AdSite.Controllers
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
         private string LOCALIZATION_ERROR_CONCURENT_EDIT => _localizationService.GetByKey("ErrorMessage_ConcurrentEdit", CultureId);
 
-        public CitiesController(ICityService cityService, ICountryService countryService, ILocalizationService localizationService, ILogger<CitiesController> logger)
+        public CountriesController(ICountryService countryService, ILocalizationService localizationService, ILogger<CountriesController> logger)
         {
-            _cityService = cityService;
             _countryService = countryService;
             _localizationService = localizationService;
             _logger = logger;
@@ -49,7 +43,7 @@ namespace AdSite.Controllers
 
             try
             {
-                return View(_cityService.GetCityAsViewModel((Guid)id));
+                return View(_countryService.GetCountryAsViewModel((Guid)id));
             }
             catch (Exception ex)
             {
@@ -67,7 +61,7 @@ namespace AdSite.Controllers
 
             try
             {
-                return View(_cityService.GetCities(columnName, searchString, CountryId));
+                return View(_countryService.GetCountries(columnName, searchString));
             }
             catch (Exception ex)
             {
@@ -85,7 +79,7 @@ namespace AdSite.Controllers
         // POST: Cities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([FromForm]CityCreateModel entity)
+        public IActionResult Create([FromForm]CountryCreateModel entity)
         {
             if (ModelState.IsValid)
             {
@@ -94,9 +88,9 @@ namespace AdSite.Controllers
                 {
                     try
                     {
-                        AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(entity, currentUser, CountryId);
+                        AuditedEntityMapper<CountryCreateModel>.FillCreateAuditedEntityFields(entity, currentUser);
 
-                        bool statusResult = _cityService.Add(entity);
+                        bool statusResult = _countryService.Add(entity);
                         if (statusResult)
                         {
                             return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
@@ -130,7 +124,7 @@ namespace AdSite.Controllers
                 return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
-            var city = _cityService.GetCityAsEditModel((Guid)id);
+            var city = _countryService.GetCountryAsEditModel((Guid)id);
             if (city == null)
             {
                 return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
@@ -142,22 +136,22 @@ namespace AdSite.Controllers
         // POST: Cities/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromForm]CityEditModel entity)
+        public IActionResult Edit([FromForm]CountryEditModel entity)
         {
             if (ModelState.IsValid)
             {
                 string currentUser = HttpContext?.User?.Identity?.Name;
                 if (!String.IsNullOrEmpty(currentUser))
                 {
-                    AuditedEntityMapper<CityEditModel>.FillModifyAuditedEntityFields(entity, currentUser);
+                    AuditedEntityMapper<CountryEditModel>.FillModifyAuditedEntityFields(entity, currentUser);
 
                     try
                     {
-                        _cityService.Update(entity);
+                        _countryService.Update(entity);
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!CityExists(entity.ID))
+                        if (!CountryExists(entity.ID))
                         {
                             _logger.LogError(LOCALIZATION_ERROR_NOT_FOUND);
                             return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
@@ -189,13 +183,13 @@ namespace AdSite.Controllers
                 return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
-            var city = _cityService.GetCityAsViewModel((Guid)id);
-            if (city == null)
+            var country = _countryService.GetCountryAsViewModel((Guid)id);
+            if (country == null)
             {
                 return NotFound().WithError(LOCALIZATION_ERROR_NOT_FOUND);
             }
 
-            return View(city);
+            return View(country);
         }
 
 
@@ -211,7 +205,7 @@ namespace AdSite.Controllers
 
             try
             {
-                _cityService.Delete(id);
+                _countryService.Delete(id);
             }
             catch (Exception ex)
             {
@@ -222,9 +216,9 @@ namespace AdSite.Controllers
             return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
         }
 
-        private bool CityExists(Guid id)
+        private bool CountryExists(Guid id)
         {
-            return _cityService.Exists(id);
+            return _countryService.Exist(id);
         }
     }
 }

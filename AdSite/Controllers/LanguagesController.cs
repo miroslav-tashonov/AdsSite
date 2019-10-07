@@ -17,12 +17,14 @@ namespace AdSite.Controllers
     [Authorize(Roles = "Admin")]
     public class LanguagesController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
         private readonly ILanguageService _languageService;
         private readonly ILocalizationService _localizationService;
         private readonly ICountryService _countryService;
         private readonly ILogger _logger;
 
-        private Guid CountryId => _countryService.Get();
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
         private readonly string ERROR_URL = "/Error/404";
