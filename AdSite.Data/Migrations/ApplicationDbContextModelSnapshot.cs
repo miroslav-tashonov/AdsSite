@@ -430,7 +430,7 @@ namespace AdSite.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("UserRoleCountry");
+                    b.ToTable("UserRoleCountries");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.WebSettings", b =>

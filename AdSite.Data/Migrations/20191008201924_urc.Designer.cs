@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdSite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191007113518_path")]
-    partial class path
+    [Migration("20191008201924_urc")]
+    partial class urc
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -432,7 +432,7 @@ namespace AdSite.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("UserRoleCountry");
+                    b.ToTable("UserRoleCountries");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.WebSettings", b =>

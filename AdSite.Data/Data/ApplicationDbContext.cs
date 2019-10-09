@@ -23,6 +23,7 @@ namespace AdSite.Data
         public DbSet<Language> Languages{ get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<WebSettings> WebSettings { get; set; }
+        public DbSet<UserRoleCountry> UserRoleCountries { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

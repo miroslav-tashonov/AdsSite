@@ -33,6 +33,8 @@ namespace AdSite.Helpers
             services.AddTransient<IAdRepository, AdRepository>();
             services.AddTransient<IWishlistService, WishlistService>();
             services.AddTransient<IWishlistRepository, WishlistRepository>();
+            services.AddTransient<IUserRoleCountryRepository, UserRoleCountryRepository>();
+            services.AddTransient<IUserRoleCountryService, UserRoleCountryService>();
         }
 
         public static void RegisterSupportedLanguages(IServiceCollection services, IConfiguration Configuration)

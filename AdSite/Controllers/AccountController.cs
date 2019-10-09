@@ -15,6 +15,7 @@ using AdSite.Models.AccountViewModels;
 using AdSite.Services;
 using AdSite.Extensions;
 using AdSite.Models.Extensions;
+using AdSite.Models.CRUDModels;
 
 namespace AdSite.Controllers
 {
@@ -22,21 +23,34 @@ namespace AdSite.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
+        string COUNTRY_ID = "CountryId";
+
+        private readonly RoleManager<ApplicationIdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserRoleCountryService _userRoleCountryService;
+        private readonly ICountryService _countryService;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         private readonly int SERVER_ERROR_CODE = 500;
 
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
+
         public AccountController(
+            RoleManager<ApplicationIdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            IUserRoleCountryService userRoleCountryService,
+            ICountryService countryService,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
+            _roleManager = roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
+            _userRoleCountryService = userRoleCountryService;
+            _countryService = countryService;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -65,26 +79,42 @@ namespace AdSite.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
+                if(account == null)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    ModelState.AddModelError(string.Empty, "Account doesnt exist.");
+                    return View(model);
                 }
-                if (result.RequiresTwoFactor)
+
+                //custom check if account exist in current country/region 
+                if (_userRoleCountryService.Exists(account.Id, CountryId))
                 {
-                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToAction(nameof(Lockout));
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("User logged in.");
+                        return RedirectToLocal(returnUrl);
+                    }
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToAction(nameof(Lockout));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return View(model);
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "This login is invalid in this country.");
                     return View(model);
                 }
             }
@@ -233,6 +263,16 @@ namespace AdSite.Controllers
                     result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
                     if (result.Succeeded)
                     {
+                        var role = await _roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User));
+                        _userRoleCountryService.Add(
+                            new UserRoleCountryCreateModel
+                            {
+                                ApplicationUserId = user.Id,
+                                CountryId = CountryId,
+                                RoleId = role.Id
+                            }
+                            );
+
                         _logger.LogInformation("User created a new account with password.");
 
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -334,27 +374,46 @@ namespace AdSite.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
-                    if (result.Succeeded)
+                    try
                     {
-                        result = await _userManager.AddLoginAsync(user, info);
+                        result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
                         if (result.Succeeded)
                         {
-                            await _signInManager.SignInAsync(user, isPersistent: false);
-                            _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                            return RedirectToLocal(returnUrl);
+                            var role = await _roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User));
+
+                            _userRoleCountryService.Add(
+                                new UserRoleCountryCreateModel
+                                {
+                                    ApplicationUserId = user.Id,
+                                    CountryId = CountryId,
+                                    RoleId = role.Id
+                                }
+                                );
+
+                            result = await _userManager.AddLoginAsync(user, info);
+                            if (result.Succeeded)
+                            {
+                                await _signInManager.SignInAsync(user, isPersistent: false);
+                                _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                                return RedirectToLocal(returnUrl);
+                            }
+                        }
+                        else
+                        {
+                            _logger.LogInformation("Failed to add user to role. Deleting user");
+                            result = await _userManager.DeleteAsync(user);
+                            if (!result.Succeeded)
+                            {
+                                _logger.LogInformation("Failed to delete user after being unable to be added to role.");
+                                throw new Exception("Failed to delete user after being unable to be added to role.");
+                            }
+
                         }
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        _logger.LogInformation("Failed to add user to role. Deleting user");
-                        result = await _userManager.DeleteAsync(user);
-                        if (!result.Succeeded)
-                        {
-                            _logger.LogInformation("Failed to delete user after being unable to be added to role.");
-                            throw new Exception("Failed to delete user after being unable to be added to role.");
-                        }
-
+                        _userManager.DeleteAsync(user).GetAwaiter().GetResult();
+                        throw new Exception(ex.Message);
                     }
 
 
