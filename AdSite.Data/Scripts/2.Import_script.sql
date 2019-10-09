@@ -1,6 +1,4 @@
-﻿USE AdSite;
-
-IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -54,6 +52,7 @@ CREATE TABLE [adsite].[Countries] (
     [ModifiedAt] datetime2 NOT NULL,
     [Name] nvarchar(max) NOT NULL,
     [Abbreviation] nvarchar(max) NOT NULL,
+    [Path] nvarchar(max) NOT NULL,
     CONSTRAINT [PK_Countries] PRIMARY KEY ([ID])
 );
 
@@ -157,15 +156,15 @@ CREATE TABLE [adsite].[Languages] (
 
 GO
 
-CREATE TABLE [adsite].[UserRoleCountry] (
+CREATE TABLE [adsite].[UserRoleCountries] (
     [ID] uniqueidentifier NOT NULL,
     [ApplicationUserId] nvarchar(450) NULL,
     [CountryId] uniqueidentifier NOT NULL,
     [ApplicationIdentityRoleId] nvarchar(450) NULL,
-    CONSTRAINT [PK_UserRoleCountry] PRIMARY KEY ([ID]),
-    CONSTRAINT [FK_UserRoleCountry_AspNetRoles_ApplicationIdentityRoleId] FOREIGN KEY ([ApplicationIdentityRoleId]) REFERENCES [adsite].[AspNetRoles] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_UserRoleCountry_AspNetUsers_ApplicationUserId] FOREIGN KEY ([ApplicationUserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_UserRoleCountry_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE CASCADE
+    CONSTRAINT [PK_UserRoleCountries] PRIMARY KEY ([ID]),
+    CONSTRAINT [FK_UserRoleCountries_AspNetRoles_ApplicationIdentityRoleId] FOREIGN KEY ([ApplicationIdentityRoleId]) REFERENCES [adsite].[AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserRoleCountries_AspNetUsers_ApplicationUserId] FOREIGN KEY ([ApplicationUserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserRoleCountries_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE CASCADE
 );
 
 GO
@@ -345,15 +344,15 @@ CREATE INDEX [IX_Localizations_LanguageId] ON [adsite].[Localizations] ([Languag
 
 GO
 
-CREATE INDEX [IX_UserRoleCountry_ApplicationIdentityRoleId] ON [adsite].[UserRoleCountry] ([ApplicationIdentityRoleId]);
+CREATE INDEX [IX_UserRoleCountries_ApplicationIdentityRoleId] ON [adsite].[UserRoleCountries] ([ApplicationIdentityRoleId]);
 
 GO
 
-CREATE INDEX [IX_UserRoleCountry_ApplicationUserId] ON [adsite].[UserRoleCountry] ([ApplicationUserId]);
+CREATE INDEX [IX_UserRoleCountries_ApplicationUserId] ON [adsite].[UserRoleCountries] ([ApplicationUserId]);
 
 GO
 
-CREATE INDEX [IX_UserRoleCountry_CountryId] ON [adsite].[UserRoleCountry] ([CountryId]);
+CREATE INDEX [IX_UserRoleCountries_CountryId] ON [adsite].[UserRoleCountries] ([CountryId]);
 
 GO
 
@@ -374,4 +373,7 @@ CREATE INDEX [IX_Wishlists_OwnerId] ON [adsite].[Wishlists] ([OwnerId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20190926232406_new', N'3.0.0');
+VALUES (N'20191009195136_init', N'3.0.0');
+
+GO
+

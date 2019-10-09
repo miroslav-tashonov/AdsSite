@@ -197,7 +197,6 @@ namespace AdSite.Extensions
                             language.CultureId = defaultCultureInfo.LCID.ToString();
 
                             _languageService.Add(language);
-
                         }
                     }
             }
@@ -285,12 +284,13 @@ namespace AdSite.Extensions
 
                     var countries = _countryService.GetAll();
                     if (countries != null)
+                    {
                         foreach (var country in countries)
                         {
                             var _userRoleCountryService = serviceProvider.GetService<IUserRoleCountryService>();
                             _userRoleCountryService.UpdateAllEntitiesWithNullCountry(country.ID);
                         }
-
+                    }
                 }
             }
             catch (Exception ex)
