@@ -69,7 +69,7 @@ namespace AdSite.Controllers
             return View();
         }
 
-        
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -80,7 +80,7 @@ namespace AdSite.Controllers
             if (ModelState.IsValid)
             {
                 var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
-                if(account == null)
+                if (account == null)
                 {
                     ModelState.AddModelError(string.Empty, "Account doesnt exist.");
                     return View(model);
@@ -263,15 +263,7 @@ namespace AdSite.Controllers
                     result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
                     if (result.Succeeded)
                     {
-                        var role = await _roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User));
-                        _userRoleCountryService.Add(
-                            new UserRoleCountryCreateModel
-                            {
-                                ApplicationUserId = user.Id,
-                                CountryId = CountryId,
-                                RoleId = role.Id
-                            }
-                            );
+                        AddToUserRole(user);
 
                         _logger.LogInformation("User created a new account with password.");
 
@@ -287,7 +279,7 @@ namespace AdSite.Controllers
                     {
                         _logger.LogInformation("Failed to add user to role. Deleting user");
                         result = await _userManager.DeleteAsync(user);
-                        if(!result.Succeeded)
+                        if (!result.Succeeded)
                         {
                             _logger.LogInformation("Failed to delete user after being unable to be added to role.");
                             throw new Exception("Failed to delete user after being unable to be added to role.");
@@ -336,6 +328,20 @@ namespace AdSite.Controllers
                 return RedirectToAction(nameof(Login));
             }
 
+            var username = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var account = _userManager.FindByNameAsync(username).GetAwaiter().GetResult();
+            if (account == null)
+            {
+                ModelState.AddModelError(string.Empty, "Account doesnt exist.");
+                return RedirectToAction(nameof(Login));
+            }
+
+            //custom check if account exist in current country/region 
+            if (!_userRoleCountryService.Exists(account.Id, CountryId))
+            {
+                AddToUserRole(account);
+            }
+
             // Sign in the user with this external login provider if the user already has a login.
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
@@ -355,6 +361,7 @@ namespace AdSite.Controllers
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
             }
+
         }
 
         [HttpPost]
@@ -379,16 +386,7 @@ namespace AdSite.Controllers
                         result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
                         if (result.Succeeded)
                         {
-                            var role = await _roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User));
-
-                            _userRoleCountryService.Add(
-                                new UserRoleCountryCreateModel
-                                {
-                                    ApplicationUserId = user.Id,
-                                    CountryId = CountryId,
-                                    RoleId = role.Id
-                                }
-                                );
+                            AddToUserRole(user);
 
                             result = await _userManager.AddLoginAsync(user, info);
                             if (result.Succeeded)
@@ -410,7 +408,7 @@ namespace AdSite.Controllers
 
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         _userManager.DeleteAsync(user).GetAwaiter().GetResult();
                         throw new Exception(ex.Message);
@@ -553,6 +551,21 @@ namespace AdSite.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+        private void AddToUserRole(ApplicationUser user)
+        {
+            var role = _roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User))
+                .GetAwaiter().GetResult();
+
+            _userRoleCountryService.Add(
+                new UserRoleCountryCreateModel
+                {
+                    ApplicationUserId = user.Id,
+                    CountryId = CountryId,
+                    RoleId = role.Id
+                }
+                );
         }
 
         #endregion

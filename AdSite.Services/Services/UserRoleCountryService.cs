@@ -17,6 +17,7 @@ namespace AdSite.Services
         bool Delete(string userId, Guid countryId);
         bool Add(UserRoleCountryCreateModel category);
         bool Update(UserRoleCountryEditModel category);
+        bool UpdateAllEntitiesWithNullCountry(Guid countryId);
     }
 
 
@@ -32,7 +33,7 @@ namespace AdSite.Services
         private string LOCALIZATION_USERROLECOUNTRY_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_UserRoleCountry_Not_Found", CultureId);
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
-        public UserRoleCountryService(IUserRoleCountryRepository repository, ILocalizationRepository localizationRepository, 
+        public UserRoleCountryService(IUserRoleCountryRepository repository, ILocalizationRepository localizationRepository,
             ILogger<UserRoleCountryService> logger, UserManager<ApplicationUser> userManager)
         {
             _localizationRepository = localizationRepository;
@@ -87,10 +88,27 @@ namespace AdSite.Services
             return _repository.Update(tuple);
         }
 
+        //used on startup, method that updates accouts on setup 
+        public bool UpdateAllEntitiesWithNullCountry(Guid countryId)
+        {
+            var tuples = _repository.GetAllNullCountries();
+            if (tuples == null)
+            {
+                throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND);
+            }
+
+            foreach(var tuple in tuples)
+            {
+                tuple.CountryId = countryId;
+                _repository.Update(tuple);
+            }
+            return true;
+        }
+
         public List<UserRoleCountryGridModel> GetAll(Guid countryId)
         {
             List<UserRoleCountry> entities = _repository.GetAll(countryId);
-            
+
             if (entities == null)
             {
                 throw new Exception(LOCALIZATION_USERROLECOUNTRY_NOT_FOUND);

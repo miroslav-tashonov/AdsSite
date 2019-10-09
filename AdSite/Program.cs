@@ -32,7 +32,7 @@ namespace AdSite
                     SeedExtension.CreateDefaultCountry(serviceProvider, configuration).Wait();
                     SeedExtension.CreateDefaultLanguage(serviceProvider, configuration).Wait();
                     SeedExtension.ImportLocalizations(serviceProvider, configuration).Wait();
-                    SeedExtension.CreateAdminAccount(serviceProvider).Wait();
+                    //SeedExtension.CreateAdminAccount(serviceProvider).Wait();
                 }
                 catch (Exception exception)
                 {

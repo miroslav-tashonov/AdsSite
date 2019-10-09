@@ -13,6 +13,8 @@ namespace AdSite.Data.Repositories
     {
         public bool Delete(string userId, Guid countryId);
         bool Exists(string userId, Guid countryId);
+
+        List<UserRoleCountry> GetAllNullCountries();
     }
 
     public class UserRoleCountryRepository : IUserRoleCountryRepository
@@ -26,7 +28,7 @@ namespace AdSite.Data.Repositories
 
         public bool Add(UserRoleCountry entity)
         {
-            
+
             _context.Add(entity);
             return SaveChangesResult();
         }
@@ -35,9 +37,9 @@ namespace AdSite.Data.Repositories
         {
             try
             {
-                var urcs = _context.UserRoleCountries.Where(m => m.CountryId == countryId 
+                var urcs = _context.UserRoleCountries.Where(m => m.CountryId == countryId
                     && m.ApplicationUserId == userId).ToListAsync().GetAwaiter().GetResult();
-                
+
                 if (urcs == null)
                 {
                     throw new Exception();
@@ -103,6 +105,15 @@ namespace AdSite.Data.Repositories
         public List<UserRoleCountry> GetAll(Guid countryId)
         {
             var urcs = _context.UserRoleCountries.ToList();
+
+            return urcs;
+        }
+
+        public List<UserRoleCountry> GetAllNullCountries()
+        {
+            var urcs = _context.UserRoleCountries
+                .Where(urc => urc.CountryId == null || urc.CountryId == Guid.Empty)
+                .ToListAsync().GetAwaiter().GetResult();
 
             return urcs;
         }

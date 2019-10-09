@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AdSite.Data;
 using AdSite.Models;
 using AdSite.Services;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using AdSite.Data.Repositories;
-using System.Globalization;
-using Microsoft.AspNetCore.Localization;
-using AdSite.Models.Extensions;
 using AdSite.Helpers;
 using AdSite.Extensions;
 
@@ -45,17 +38,24 @@ namespace AdSite
             });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddAuthentication();
-            //.AddGoogle(googleOptions =>
-            //{
-            //    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-            //    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            //})
-            //.AddFacebook(facebookOptions =>
-            //{
-            //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-            //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            //});
+            try
+            {
+                services.AddAuthentication()
+                        .AddGoogle(googleOptions =>
+                        {
+                            googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                            googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                        })
+                        .AddFacebook(facebookOptions =>
+                        {
+                            facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                            facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                        });
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             #region Configure Users Access 
             services.Configure<IdentityOptions>(options =>

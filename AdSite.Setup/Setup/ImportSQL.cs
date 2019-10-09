@@ -79,6 +79,26 @@ namespace Setup
                         dataConnection.Close();
                     }
                 }
+
+                string insertUserRoleCountryQuery = "Use AdSite;  INSERT [adsite].[UserRoleCountries] ([ID], [ApplicationUserId], [CountryId], [ApplicationUserIdentityRoleId])";
+                insertUserRoleCountryQuery += " VALUES (@ID, @ApplicationUserId, @CountryId, @ApplicationIdentityRoleId) ";
+
+
+                using (SqlConnection dataConnection = new SqlConnection(conString))
+                {
+                    using (SqlCommand dataCommand = new SqlCommand(insertUserToAdminRoleQuery, dataConnection))
+                    {
+                        dataCommand.Parameters.AddWithValue("ID", Guid.NewGuid());
+                        dataCommand.Parameters.AddWithValue("ApplicationUserId", usernameGuid);
+                        dataCommand.Parameters.AddWithValue("ApplicationIdentityRoleId", new Guid("19151b2a-2a3e-4b55-a54b-835489bf5e42"));
+                        dataCommand.Parameters.AddWithValue("CountryId", DBNull.Value);
+
+                        dataConnection.Open();
+                        dataCommand.ExecuteNonQuery();
+                        dataConnection.Close();
+                    }
+                }
+
             }
             catch (Exception ex)
             {

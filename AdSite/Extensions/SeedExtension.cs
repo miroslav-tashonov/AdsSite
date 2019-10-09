@@ -23,7 +23,7 @@ namespace AdSite.Extensions
             #region Localization Key, Values
             {"Country_Details","Details" },
             {"Country_Edit","Edit Country" },
-            
+
             {"Country_Field_Name","Name" },
             {"Country_Field_Path","Path" },
             {"Country_Field_Abbreviation","Abbreviation" },
@@ -282,6 +282,15 @@ namespace AdSite.Extensions
                         logger.LogInformation("Country cannot be added .");
                         throw new Exception("Country cannot be added .");
                     }
+
+                    var countries = _countryService.GetAll();
+                    if (countries != null)
+                        foreach (var country in countries)
+                        {
+                            var _userRoleCountryService = serviceProvider.GetService<IUserRoleCountryService>();
+                            _userRoleCountryService.UpdateAllEntitiesWithNullCountry(country.ID);
+                        }
+
                 }
             }
             catch (Exception ex)
@@ -292,28 +301,28 @@ namespace AdSite.Extensions
         }
 
 
-        public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
-        {
-            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
-            logger.LogInformation("adding default language");
+        //public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
+        //{
+        //    var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
+        //    logger.LogInformation("adding default language");
 
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        //    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            //todo hide credentials 
-            if (!userManager.Users.Any(u => u.UserName == "admin@email.com"))
-            {
-                var user = new ApplicationUser { LockoutEnabled = false, EmailConfirmed = true, UserName = "admin@email.com", Email = "admin@email.com" };
-                var result = await userManager.CreateAsync(user, "Admin123!");
-                if (result.Succeeded)
-                {
-                    result = await userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.Admin));
-                    if (result.Succeeded)
-                    {
-                        logger.LogInformation("Admin created !!");
-                    }
-                }
-            }
-        }
+        //    //todo hide credentials 
+        //    if (!userManager.Users.Any(u => u.UserName == "admin@email.com"))
+        //    {
+        //        var user = new ApplicationUser { LockoutEnabled = false, EmailConfirmed = true, UserName = "admin@email.com", Email = "admin@email.com" };
+        //        var result = await userManager.CreateAsync(user, "Admin123!");
+        //        if (result.Succeeded)
+        //        {
+        //            result = await userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.Admin));
+        //            if (result.Succeeded)
+        //            {
+        //                logger.LogInformation("Admin created !!");
+        //            }
+        //        }
+        //    }
+        //}
     }
 
 }
