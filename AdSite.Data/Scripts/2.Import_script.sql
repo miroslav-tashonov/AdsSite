@@ -13,6 +13,8 @@ IF SCHEMA_ID(N'adsite') IS NULL EXEC(N'CREATE SCHEMA [adsite];');
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AspNetRoles]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetRoles] (
     [Id] nvarchar(450) NOT NULL,
     [Name] nvarchar(256) NULL,
@@ -20,9 +22,12 @@ CREATE TABLE [adsite].[AspNetRoles] (
     [ConcurrencyStamp] nvarchar(max) NULL,
     CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AspNetUsers]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetUsers] (
     [Id] nvarchar(450) NOT NULL,
     [UserName] nvarchar(256) NULL,
@@ -41,9 +46,13 @@ CREATE TABLE [adsite].[AspNetUsers] (
     [AccessFailedCount] int NOT NULL,
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
 );
+END;
 
 GO
 
+
+IF OBJECT_ID(N'[adsite].[Countries]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Countries] (
     [ID] uniqueidentifier NOT NULL,
     [CreatedBy] nvarchar(max) NULL,
@@ -55,9 +64,13 @@ CREATE TABLE [adsite].[Countries] (
     [Path] nvarchar(max) NOT NULL,
     CONSTRAINT [PK_Countries] PRIMARY KEY ([ID])
 );
+END;
 
 GO
 
+
+IF OBJECT_ID(N'[adsite].[AspNetRoleClaims]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetRoleClaims] (
     [Id] int NOT NULL IDENTITY,
     [RoleId] nvarchar(450) NOT NULL,
@@ -66,9 +79,12 @@ CREATE TABLE [adsite].[AspNetRoleClaims] (
     CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [adsite].[AspNetRoles] ([Id]) ON DELETE CASCADE
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AspNetUserClaims]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetUserClaims] (
     [Id] int NOT NULL IDENTITY,
     [UserId] nvarchar(450) NOT NULL,
@@ -77,9 +93,13 @@ CREATE TABLE [adsite].[AspNetUserClaims] (
     CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
+END;
 
 GO
 
+
+IF OBJECT_ID(N'[adsite].[AspNetUserLogins]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetUserLogins] (
     [LoginProvider] nvarchar(450) NOT NULL,
     [ProviderKey] nvarchar(450) NOT NULL,
@@ -88,9 +108,12 @@ CREATE TABLE [adsite].[AspNetUserLogins] (
     CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
     CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AspNetUserRoles]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetUserRoles] (
     [UserId] nvarchar(450) NOT NULL,
     [RoleId] nvarchar(450) NOT NULL,
@@ -98,9 +121,12 @@ CREATE TABLE [adsite].[AspNetUserRoles] (
     CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [adsite].[AspNetRoles] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AspNetUserTokens]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AspNetUserTokens] (
     [UserId] nvarchar(450) NOT NULL,
     [LoginProvider] nvarchar(450) NOT NULL,
@@ -109,9 +135,12 @@ CREATE TABLE [adsite].[AspNetUserTokens] (
     CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
     CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[Categories]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Categories] (
     [ID] uniqueidentifier NOT NULL,
     [CreatedBy] nvarchar(max) NULL,
@@ -126,9 +155,12 @@ CREATE TABLE [adsite].[Categories] (
     CONSTRAINT [FK_Categories_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Categories_Categories_ParentId] FOREIGN KEY ([ParentId]) REFERENCES [adsite].[Categories] ([ID]) ON DELETE NO ACTION
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[Cities]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Cities] (
     [ID] uniqueidentifier NOT NULL,
     [CreatedBy] nvarchar(max) NULL,
@@ -141,9 +173,11 @@ CREATE TABLE [adsite].[Cities] (
     CONSTRAINT [PK_Cities] PRIMARY KEY ([ID]),
     CONSTRAINT [FK_Cities_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE NO ACTION
 );
+END;
 
 GO
-
+IF OBJECT_ID(N'[adsite].[Languages]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Languages] (
     [ID] uniqueidentifier NOT NULL,
     [CultureId] int NOT NULL,
@@ -153,9 +187,11 @@ CREATE TABLE [adsite].[Languages] (
     CONSTRAINT [PK_Languages] PRIMARY KEY ([ID]),
     CONSTRAINT [FK_Languages_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE NO ACTION
 );
+END;
 
 GO
-
+IF OBJECT_ID(N'[adsite].[UserRoleCountries]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[UserRoleCountries] (
     [ID] uniqueidentifier NOT NULL,
     [ApplicationUserId] nvarchar(450) NULL,
@@ -166,9 +202,11 @@ CREATE TABLE [adsite].[UserRoleCountries] (
     CONSTRAINT [FK_UserRoleCountries_AspNetUsers_ApplicationUserId] FOREIGN KEY ([ApplicationUserId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_UserRoleCountries_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE CASCADE
 );
+END;
 
 GO
-
+IF OBJECT_ID(N'[adsite].[WebSettings]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[WebSettings] (
     [ID] uniqueidentifier NOT NULL,
     [Phone] nvarchar(max) NOT NULL,
@@ -182,9 +220,11 @@ CREATE TABLE [adsite].[WebSettings] (
     CONSTRAINT [PK_WebSettings] PRIMARY KEY ([ID]),
     CONSTRAINT [FK_WebSettings_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE NO ACTION
 );
+END;
 
 GO
-
+IF OBJECT_ID(N'[adsite].[Ads]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Ads] (
     [ID] uniqueidentifier NOT NULL,
     [CreatedBy] nvarchar(max) NULL,
@@ -203,9 +243,11 @@ CREATE TABLE [adsite].[Ads] (
     CONSTRAINT [FK_Ads_Countries_CountryID] FOREIGN KEY ([CountryID]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Ads_AspNetUsers_OwnerId] FOREIGN KEY ([OwnerId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE SET NULL
 );
-
+END;
 GO
 
+IF OBJECT_ID(N'[adsite].[Localizations]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Localizations] (
     [ID] uniqueidentifier NOT NULL,
     [LocalizationKey] nvarchar(max) NOT NULL,
@@ -216,9 +258,12 @@ CREATE TABLE [adsite].[Localizations] (
     CONSTRAINT [FK_Localizations_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE CASCADE,
     CONSTRAINT [FK_Localizations_Languages_LanguageId] FOREIGN KEY ([LanguageId]) REFERENCES [adsite].[Languages] ([ID]) ON DELETE NO ACTION
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AdDetails]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AdDetails] (
     [ID] uniqueidentifier NOT NULL,
     [CreatedBy] nvarchar(max) NULL,
@@ -231,9 +276,11 @@ CREATE TABLE [adsite].[AdDetails] (
     CONSTRAINT [PK_AdDetails] PRIMARY KEY ([ID]),
     CONSTRAINT [FK_AdDetails_Ads_AdID] FOREIGN KEY ([AdID]) REFERENCES [adsite].[Ads] ([ID]) ON DELETE CASCADE
 );
+END;
 
 GO
-
+IF OBJECT_ID(N'[adsite].[Wishlists]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[Wishlists] (
     [ID] uniqueidentifier NOT NULL,
     [OwnerId] nvarchar(450) NULL,
@@ -244,9 +291,12 @@ CREATE TABLE [adsite].[Wishlists] (
     CONSTRAINT [FK_Wishlists_Countries_CountryId] FOREIGN KEY ([CountryId]) REFERENCES [adsite].[Countries] ([ID]) ON DELETE CASCADE,
     CONSTRAINT [FK_Wishlists_AspNetUsers_OwnerId] FOREIGN KEY ([OwnerId]) REFERENCES [adsite].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
+END;
 
 GO
 
+IF OBJECT_ID(N'[adsite].[AdDetailPictures]') IS NULL
+BEGIN
 CREATE TABLE [adsite].[AdDetailPictures] (
     [ID] uniqueidentifier NOT NULL,
     [CreatedBy] nvarchar(max) NULL,
@@ -261,6 +311,7 @@ CREATE TABLE [adsite].[AdDetailPictures] (
     CONSTRAINT [PK_AdDetailPictures] PRIMARY KEY ([ID]),
     CONSTRAINT [FK_AdDetailPictures_AdDetails_AdDetailID] FOREIGN KEY ([AdDetailID]) REFERENCES [adsite].[AdDetails] ([ID]) ON DELETE CASCADE
 );
+END;
 
 GO
 

@@ -86,7 +86,7 @@ namespace Setup
 
                 using (SqlConnection dataConnection = new SqlConnection(conString))
                 {
-                    using (SqlCommand dataCommand = new SqlCommand(insertUserToAdminRoleQuery, dataConnection))
+                    using (SqlCommand dataCommand = new SqlCommand(insertUserRoleCountryQuery, dataConnection))
                     {
                         dataCommand.Parameters.AddWithValue("ID", Guid.NewGuid());
                         dataCommand.Parameters.AddWithValue("ApplicationUserId", usernameGuid);
