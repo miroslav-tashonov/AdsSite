@@ -1,4 +1,6 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿Use [AdSite];
+
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -314,9 +316,10 @@ CREATE TABLE [adsite].[AdDetailPictures] (
 END;
 
 GO
-
+If IndexProperty(Object_Id('[adsite].[AdDetailPictures]'), '[IX_AdDetailPictures_AdDetailID]', 'IndexId') Is Null
+Begin
 CREATE INDEX [IX_AdDetailPictures_AdDetailID] ON [adsite].[AdDetailPictures] ([AdDetailID]);
-
+end;
 GO
 
 CREATE UNIQUE INDEX [IX_AdDetails_AdID] ON [adsite].[AdDetails] ([AdID]);
