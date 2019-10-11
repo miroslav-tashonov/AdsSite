@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -12,12 +13,14 @@ namespace Setup
     public partial class Credentials : Window
     {
         public string filepath = String.Empty;
+        public List<Guid> CountryIds;
         public string connectionString = String.Empty;
         public System.Windows.Controls.TextBox Username;
         public System.Windows.Controls.PasswordBox Password;
 
-        public Credentials(string conString, string cloneRepoLocation)
+        public Credentials(string conString, string cloneRepoLocation, List<Guid> cntryIds)
         {
+            CountryIds = cntryIds;
             connectionString = conString;
             filepath = cloneRepoLocation;
 
@@ -47,8 +50,8 @@ namespace Setup
             try
             {
                 System.Windows.Controls.Button NextButton = (System.Windows.Controls.Button)this.FindName("NextButton");
-                ImportSQL.ImportAdminCredentials(connectionString, username, password);
-                MessageBox.Show("Success!");
+                ImportSQL.ImportAdminCredentials(connectionString, username, password, CountryIds);
+                MessageBox.Show("Success! Administrator account created for all countries/sites.");
 
                 NextButton.IsEnabled = true;
 

@@ -9,6 +9,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="CountrySetup.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Credentials.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -17,6 +20,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="CountrySetup.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Credentials.xaml">
       <SubType>Designer</SubType>
     </Page>

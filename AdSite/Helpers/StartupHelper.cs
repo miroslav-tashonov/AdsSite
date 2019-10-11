@@ -14,8 +14,10 @@ namespace AdSite.Helpers
     {
 
         //custom services registration
-        public static void RegisterApplicationServices(IServiceCollection services)
+        public static void RegisterApplicationServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IConfiguration>(configuration);
+
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ILocalizationService, LocalizationService>();
             services.AddTransient<ILocalizationRepository, LocalizationRepository>();

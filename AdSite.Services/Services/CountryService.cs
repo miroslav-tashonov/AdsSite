@@ -9,12 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using AdSite.Models.Mappers;
 using System.Threading;
+using Microsoft.AspNetCore.Builder;
 
 namespace AdSite.Services
 {
     public interface ICountryService
     {
         Guid Get(Guid countryId);
+        CountryViewModel GetByCountryPath(string path);
         List<CountryViewModel> GetAll();
         CountryViewModel GetCountryAsViewModel(Guid id);
         List<CountryViewModel> GetCountries(string columnName, string searchString);
@@ -30,9 +32,9 @@ namespace AdSite.Services
     public class CountryService : ICountryService
     {
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private string LOCALIZATION_COUNTRY_NOT_FOUND => 
+        private string LOCALIZATION_COUNTRY_NOT_FOUND =>
             _localizationRepository.GetLocalizationValue("Localization_City_Not_Found", CultureId);
-        private string LOCALIZATION_GENERAL_NOT_FOUND => 
+        private string LOCALIZATION_GENERAL_NOT_FOUND =>
             _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
 
@@ -49,6 +51,11 @@ namespace AdSite.Services
 
         public bool Add(CountryCreateModel entity)
         {
+            if(GetByCountryPath(entity.Path).Path.Length > 0)
+            {
+                throw new Exception("Country path already exist");
+            }
+
             Country country = new Country
             {
                 Name = entity.Name,
@@ -60,7 +67,6 @@ namespace AdSite.Services
                 ModifiedBy = entity.ModifiedBy
             };
 
-
             return _repository.Add(country);
         }
 
@@ -71,12 +77,12 @@ namespace AdSite.Services
 
         public List<CountryViewModel> GetAll()
         {
-            return CountryMapper.MapToCountryViewModel( _repository.GetAll() );
+            return CountryMapper.MapToCountryViewModel(_repository.GetAll());
         }
 
         public CountryViewModel GetByCountryPath(string path)
         {
-            return CountryMapper.MapToCountryViewModel(_repository.GetCountryByPath(path) );
+            return CountryMapper.MapToCountryViewModel(_repository.GetCountryByPath(path));
         }
 
         public CountryViewModel GetCountryAsViewModel(Guid id)
@@ -133,6 +139,11 @@ namespace AdSite.Services
 
         public bool Update(CountryEditModel entity)
         {
+            if (GetByCountryPath(entity.Path).Path.Length > 0)
+            {
+                throw new Exception("Country path already exist");
+            }
+
             Country country = _repository.Get(entity.ID);
             if (country == null)
             {

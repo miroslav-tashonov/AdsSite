@@ -13,8 +13,6 @@ namespace AdSite.Data.Repositories
     {
         public bool Delete(string userId, Guid countryId);
         bool Exists(string userId, Guid countryId);
-
-        List<UserRoleCountry> GetAllNullCountries();
     }
 
     public class UserRoleCountryRepository : IUserRoleCountryRepository
@@ -108,16 +106,6 @@ namespace AdSite.Data.Repositories
 
             return urcs;
         }
-
-        public List<UserRoleCountry> GetAllNullCountries()
-        {
-            var urcs = _context.UserRoleCountries
-                .Where(urc => urc.CountryId == null || urc.CountryId == Guid.Empty)
-                .ToListAsync().GetAwaiter().GetResult();
-
-            return urcs;
-        }
-
 
         public bool Update(UserRoleCountry entity)
         {

@@ -17,7 +17,6 @@ namespace AdSite.Services
         bool Delete(string userId, Guid countryId);
         bool Add(UserRoleCountryCreateModel category);
         bool Update(UserRoleCountryEditModel category);
-        bool UpdateAllEntitiesWithNullCountry(Guid countryId);
     }
 
 
@@ -86,23 +85,6 @@ namespace AdSite.Services
             tuple.ApplicationIdentityRoleId = entity.RoleId;
 
             return _repository.Update(tuple);
-        }
-
-        //used on startup, method that updates accouts on setup 
-        public bool UpdateAllEntitiesWithNullCountry(Guid countryId)
-        {
-            var tuples = _repository.GetAllNullCountries();
-            if (tuples == null)
-            {
-                throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND);
-            }
-
-            foreach(var tuple in tuples)
-            {
-                tuple.CountryId = countryId;
-                _repository.Update(tuple);
-            }
-            return true;
         }
 
         public List<UserRoleCountryGridModel> GetAll(Guid countryId)

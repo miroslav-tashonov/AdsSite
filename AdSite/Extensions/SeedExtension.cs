@@ -220,26 +220,32 @@ namespace AdSite.Extensions
                     foreach (var country in countries)
                     {
                         var _languageService = serviceProvider.GetService<ILanguageService>();
-                        string defaultLanguage = configuration["DefaultLanguage:Value"];
-                        CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
-                        var language = _languageService.GetByCultureId(defaultCultureInfo.LCID, country.ID);
-                        var _localizationService = serviceProvider.GetService<ILocalizationService>();
-
-                        var firstItemInDictionary = localizations.First();
-
-                        if (!(_localizationService.GetByKey(firstItemInDictionary.Key, language.CultureId)
-                            == firstItemInDictionary.Value))
+                        foreach(var countryLanguage in _languageService.GetAll(country.ID))
                         {
-                            foreach (KeyValuePair<string, string> localizationItem in localizations)
+                            
+                            string defaultLanguage = configuration["DefaultLanguage:Value"];
+                            CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
+                            if (countryLanguage.CultureId == defaultCultureInfo.LCID)
                             {
-                                LocalizationCreateModel localization = new LocalizationCreateModel();
-                                localization.CountryId = country.ID;
-                                localization.LanguageId = language.ID;
-                                localization.LocalizationKey = localizationItem.Key;
-                                localization.LocalizationValue = localizationItem.Value;
+                                var language = _languageService.GetByCultureId(defaultCultureInfo.LCID, country.ID);
+                                var _localizationService = serviceProvider.GetService<ILocalizationService>();
+                                var firstItemInDictionary = localizations.First();
 
-                                _localizationService.Add(localization);
+                                if (!(_localizationService.GetByKey(firstItemInDictionary.Key, language.CultureId)
+                                    == firstItemInDictionary.Value))
+                                {
+                                    foreach (KeyValuePair<string, string> localizationItem in localizations)
+                                    {
+                                        LocalizationCreateModel localization = new LocalizationCreateModel();
+                                        localization.CountryId = country.ID;
+                                        localization.LanguageId = language.ID;
+                                        localization.LocalizationKey = localizationItem.Key;
+                                        localization.LocalizationValue = localizationItem.Value;
 
+                                        _localizationService.Add(localization);
+
+                                    }
+                                }
                             }
                         }
                     }
@@ -280,16 +286,6 @@ namespace AdSite.Extensions
                     {
                         logger.LogInformation("Country cannot be added .");
                         throw new Exception("Country cannot be added .");
-                    }
-
-                    var countries = _countryService.GetAll();
-                    if (countries != null)
-                    {
-                        foreach (var country in countries)
-                        {
-                            var _userRoleCountryService = serviceProvider.GetService<IUserRoleCountryService>();
-                            _userRoleCountryService.UpdateAllEntitiesWithNullCountry(country.ID);
-                        }
                     }
                 }
             }

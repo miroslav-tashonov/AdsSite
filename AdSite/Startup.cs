@@ -96,7 +96,7 @@ namespace AdSite
                 .AddDefaultTokenProviders();
             services.AddMvc().AddNewtonsoftJson();
 
-            StartupHelper.RegisterApplicationServices(services);
+            StartupHelper.RegisterApplicationServices(services, Configuration);
             //needed for setting languages that are currently in DB
             StartupHelper.RegisterSupportedLanguages(services, Configuration);
         }

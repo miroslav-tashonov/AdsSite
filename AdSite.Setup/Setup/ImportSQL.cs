@@ -1,6 +1,7 @@
 ﻿using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Security.Cryptography;
@@ -25,7 +26,7 @@ namespace Setup
             return isSuccessfull;
         }
 
-        public static void ImportAdminCredentials(string conString, string username, string password)
+        public static void ImportAdminCredentials(string conString, string username, string password, List<Guid> countryIds)
         {
             try
             {
@@ -80,7 +81,7 @@ namespace Setup
                     }
                 }
 
-                string insertUserRoleCountryQuery = "Use AdSite;  INSERT [adsite].[UserRoleCountries] ([ID], [ApplicationUserId], [CountryId], [ApplicationUserIdentityRoleId])";
+                string insertUserRoleCountryQuery = "Use AdSite;  INSERT [adsite].[UserRoleCountries] ([ID], [ApplicationUserId], [CountryId], [ApplicationIdentityRoleId])";
                 insertUserRoleCountryQuery += " VALUES (@ID, @ApplicationUserId, @CountryId, @ApplicationIdentityRoleId) ";
 
 
@@ -88,14 +89,17 @@ namespace Setup
                 {
                     using (SqlCommand dataCommand = new SqlCommand(insertUserRoleCountryQuery, dataConnection))
                     {
-                        dataCommand.Parameters.AddWithValue("ID", Guid.NewGuid());
-                        dataCommand.Parameters.AddWithValue("ApplicationUserId", usernameGuid);
-                        dataCommand.Parameters.AddWithValue("ApplicationIdentityRoleId", new Guid("19151b2a-2a3e-4b55-a54b-835489bf5e42"));
-                        dataCommand.Parameters.AddWithValue("CountryId", DBNull.Value);
+                        foreach (Guid countryId in countryIds)
+                        {
+                            dataCommand.Parameters.AddWithValue("ID", Guid.NewGuid());
+                            dataCommand.Parameters.AddWithValue("ApplicationUserId", usernameGuid);
+                            dataCommand.Parameters.AddWithValue("ApplicationIdentityRoleId", new Guid("19151b2a-2a3e-4b55-a54b-835489bf5e42"));
+                            dataCommand.Parameters.AddWithValue("CountryId", countryId);
 
-                        dataConnection.Open();
-                        dataCommand.ExecuteNonQuery();
-                        dataConnection.Close();
+                            dataConnection.Open();
+                            dataCommand.ExecuteNonQuery();
+                            dataConnection.Close();
+                        }
                     }
                 }
 
@@ -105,6 +109,70 @@ namespace Setup
                 System.Windows.MessageBox.Show(ex.Message + "" + ex.StackTrace);
             }
         }
+
+        public static Guid ImportCountryAndDefaultLanguage(string conString, CountryLanguageModel model)
+        {
+            try
+            {
+                Guid countryGuid = Guid.NewGuid();
+
+
+                string insertCountryQuery = "Use AdSite;  INSERT [adsite].[Countries] ([ID], [CreatedBy],[CreatedAt], [ModifiedBy],[ModifiedAt], [Name],[Abbreviation], [Path])";
+                insertCountryQuery += " VALUES (@ID, @CreatedBy, @CreatedAt, @ModifiedBy, @ModifiedAt, @Name, @Abbreviation, @Path ) ";
+
+
+                using (SqlConnection dataConnection = new SqlConnection(conString))
+                {
+                    using (SqlCommand dataCommand = new SqlCommand(insertCountryQuery, dataConnection))
+                    {
+                        dataCommand.Parameters.AddWithValue("ID", countryGuid);
+                        dataCommand.Parameters.AddWithValue("CreatedAt", DateTime.Now);
+                        dataCommand.Parameters.AddWithValue("ModifiedAt", DateTime.Now);
+                        dataCommand.Parameters.AddWithValue("CreatedBy", "seedadmin");
+                        dataCommand.Parameters.AddWithValue("ModifiedBy", "seedadmin");
+                        dataCommand.Parameters.AddWithValue("Name", model.CountryName);
+                        dataCommand.Parameters.AddWithValue("Abbreviation", model.CountryAbbreviation);
+                        dataCommand.Parameters.AddWithValue("Path", model.CountryPath);
+
+                        dataConnection.Open();
+                        dataCommand.ExecuteNonQuery();
+                        dataConnection.Close();
+                    }
+                }
+
+
+                string insertDefaultLanguageQuery = "Use AdSite;  INSERT [adsite].[Languages] ([ID], [CultureId],[LanguageName], [LanguageShortName],[CountryId] )";
+                insertDefaultLanguageQuery += " VALUES (@ID, @CultureId, @LanguageName, @LanguageShortName, @CountryId ) ";
+
+
+                using (SqlConnection dataConnection = new SqlConnection(conString))
+                {
+                    using (SqlCommand dataCommand = new SqlCommand(insertDefaultLanguageQuery, dataConnection))
+                    {
+                        dataCommand.Parameters.AddWithValue("ID", Guid.NewGuid());
+                        dataCommand.Parameters.AddWithValue("CultureId", model.LCID); ;
+                        dataCommand.Parameters.AddWithValue("LanguageName", model.LanguageName);
+                        dataCommand.Parameters.AddWithValue("LanguageShortName", model.LanguageShortName);
+                        dataCommand.Parameters.AddWithValue("CountryId", countryGuid);
+
+                        dataConnection.Open();
+                        dataCommand.ExecuteNonQuery();
+                        dataConnection.Close();
+                    }
+                }
+
+                return countryGuid;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message + "" + ex.StackTrace);
+            }
+
+
+            return Guid.Empty;
+        }
+
+
 
         public static string HashPassword(string password)
         {

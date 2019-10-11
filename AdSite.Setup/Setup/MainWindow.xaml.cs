@@ -98,8 +98,8 @@ namespace Setup
 
             if (ImportSQL.ImportSQLScripts(SqlConnectionTextBox.Text, CloneRepoTextBox.Text))
             {
-                Credentials credentialsWindow = new Credentials(SqlConnectionTextBox.Text, CloneRepoTextBox.Text);
-                credentialsWindow.Show();
+                CountrySetup countrySetupWindow = new CountrySetup(SqlConnectionTextBox.Text, CloneRepoTextBox.Text);
+                countrySetupWindow.Show();
                 this.Close();
             }
         }

@@ -18,9 +18,11 @@
 
 @await Html.PartialAsync("_AdminNavigationPartial")
 
+<!--
 <p>
     <a asp-action="Create" class="btn btn-primary"><localize name="Country_CreateNew"></localize></a>
 </p>
+-->
 
 <br />
 
@@ -66,22 +68,22 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Path)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abbreviation)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID" class="btn-link"><localize name="General_Edit"></localize></a> |
-                <a asp-action="Details" asp-route-id="@item.ID" class="btn-link"><localize name="General_Details"></localize></a> |
-                <a asp-action="Delete" asp-route-id="@item.ID" class="btn-link"><localize name="General_Delete"></localize></a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Path)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Abbreviation)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn-link"><localize name="General_Edit"></localize></a> |
+                    <a asp-action="Details" asp-route-id="@item.ID" class="btn-link"><localize name="General_Details"></localize></a> |
+                    <!--<a asp-action="Delete" asp-route-id="@item.ID" class="btn-link"><localize name="General_Delete"></localize></a>-->
+                </td>
+            </tr>
         }
     </tbody>
 </table>
