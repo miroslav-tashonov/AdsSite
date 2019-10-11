@@ -114,7 +114,7 @@ namespace AdSite.Controllers
             var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
             if (user.Id == id)
             {
-                return StatusCode(SERVER_ERROR_CODE).WithWarning(LOCALIZATION_WARNING_SELF_CHANGEROLE);
+                return RedirectToAction(nameof(Index)).WithWarning(LOCALIZATION_WARNING_SELF_CHANGEROLE);
             }
 
             var account = _userManager.FindByIdAsync(id).GetAwaiter().GetResult();
@@ -141,7 +141,7 @@ namespace AdSite.Controllers
 
             if (!addingresult.Succeeded)
             {
-                return StatusCode(SERVER_ERROR_CODE).WithError(LOCALIZATION_ERROR_DEFAULT);
+                return RedirectToAction(nameof(Index)).WithError(LOCALIZATION_ERROR_DEFAULT);
             }
 
 
@@ -187,7 +187,7 @@ namespace AdSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
+                return RedirectToAction(nameof(Index)).WithError(ex.Message);
             }
 
             return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);

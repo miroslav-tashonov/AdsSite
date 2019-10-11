@@ -114,9 +114,6 @@
                             <i class="fa fa-instagram"></i>
                         </a>
                     </li>
-                    <li>
-                        @await Html.PartialAsync("_SelectCountryPartial")
-                    </li>
                 </ul>
             </div>
         </div>
@@ -146,9 +143,11 @@
                         <li>
                             @await Html.PartialAsync("_LoginPartial")
                         </li>
-
                         <li>
                             @await Html.PartialAsync("_SelectLanguagePartial")
+                        </li>
+                        <li>
+                            @await Html.PartialAsync("_SelectCountryPartial")
                         </li>
                     </ul>
                 </div>

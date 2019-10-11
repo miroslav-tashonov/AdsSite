@@ -98,7 +98,7 @@ namespace AdSite.Controllers
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
+                    return RedirectToAction(nameof(Details)).WithError(ex.Message);
                 }
             }
             return View(webSettings);

@@ -124,7 +124,7 @@ namespace AdSite.Controllers
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
+                    return RedirectToAction(nameof(Index)).WithError(ex.Message);
                 }
             }
 
@@ -228,7 +228,7 @@ namespace AdSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
+                return RedirectToAction(nameof(Index)).WithError(ex.Message);
             }
 
             return RedirectToAction(nameof(Index)).WithSuccess(LOCALIZATION_ERROR_CONCURENT_EDIT);

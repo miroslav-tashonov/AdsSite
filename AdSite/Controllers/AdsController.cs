@@ -41,8 +41,6 @@ namespace AdSite.Controllers
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
 
-
-
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);
         private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
@@ -243,7 +241,7 @@ namespace AdSite.Controllers
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, ex.Message);
-                        return StatusCode(SERVER_ERROR_CODE, ex.Message).WithError(ex.Message);
+                        return RedirectToAction(nameof(Index)).WithError(ex.Message);
                     }
                 }
                 else
@@ -278,7 +276,7 @@ namespace AdSite.Controllers
                 }
                 if (ad.OwnerId != CurrentUserId)
                 {
-                    return StatusCode(SERVER_ERROR_CODE).WithError(LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT);
+                    return RedirectToAction(nameof(Index)).WithError(LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT);
                 }
 
                 string serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(ad.AdDetail.AdDetailPictures.Select( f => f.File).ToList());
@@ -390,7 +388,7 @@ namespace AdSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return StatusCode(SERVER_ERROR_CODE).WithError(ex.Message);
+                return RedirectToAction(nameof(Index)).WithError(ex.Message);
             }
 
             return RedirectToAction(nameof(MyAds)).WithSuccess(LOCALIZATION_SUCCESS_DEFAULT);
