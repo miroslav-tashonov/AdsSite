@@ -190,7 +190,7 @@ namespace AdSite.Extensions
                 if (countries != null)
                     foreach (var country in countries)
                     {
-                        if (_languageService.GetAll(country.ID).Count > 0)
+                        if (_languageService.GetAll(country.ID).Count == 0)
                         {
                             LanguageCreateModel language = new LanguageCreateModel();
                             language.CountryId = country.ID;
@@ -203,7 +203,6 @@ namespace AdSite.Extensions
             catch (Exception ex)
             {
                 logger.LogInformation("Language cannot be added ." + ex.Message);
-                throw new Exception("Language cannot be added ." + ex.Message);
             }
         }
 
