@@ -1,11 +1,11 @@
 ﻿@model AdSite.Models.CRUDModels.CategoryTreeViewModel
 @using AdSite.Views.Shared;
+@using AdSite.Services;
 @{
     AdminNavPages.AddActivePage(ViewContext, AdminNavPages.Categories);
 }
 
 @await Html.PartialAsync("_AdminNavigationPartial")
-
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions{
     public string GetAntiXsrfRequestToken()
@@ -113,6 +113,7 @@
         $(function () {
             var deleteMessage = $("#deleteMessage").text();
             var arrayCollection = @Html.Raw(Json.Serialize(Model.CategoriesAsTree));
+            var pathString = @Html.Raw(Json.Serialize(Model.PathString));
 
             $('#jstree').jstree({
                 "core": {
@@ -163,7 +164,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "/Categories/Edit",
+                            url: "/"+ pathString +"/Categories/Edit",
                             data: JSON.stringify(category),
                             contentType: 'application/json',
                             success: function () {
@@ -184,7 +185,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "/Categories/Create",
+                            url: "/"+ pathString +"/Categories/Create",
                             data: JSON.stringify(category),
                             contentType: 'application/json',
                             success: function () {
@@ -206,7 +207,7 @@
                 if (Id) {
                     $.ajax({
                         type: "POST",
-                        url: "/Categories/Delete/" + Id,
+                        url: "/"+ pathString +"/Categories/Delete/" + Id,
                         contentType: 'application/json',
                         success: function () {
                             location.reload();
@@ -227,4 +228,4 @@
 <div id="jstree">
 </div>
 
-<br/>
+<br />

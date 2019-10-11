@@ -106,6 +106,7 @@ namespace AdSite.Models.Mappers
             existingAd.AdDetail.ModifiedBy = entity.ModifiedBy;
             existingAd.AdDetail.AdDetailPictures = pictures;
             existingAd.AdDetail.MainPictureThumbnailFile = entity.MainPictureThumbnail;
+            existingAd.AdDetail.Description = entity.Description;
 
             return existingAd;
         }

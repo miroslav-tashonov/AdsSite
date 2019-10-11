@@ -24,6 +24,7 @@ namespace AdSite.Controllers
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private readonly int SERVER_ERROR_CODE = 500;
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
+        private string CountryPath => _countryService.GetCountryAsViewModel((Guid)HttpContext.Items[COUNTRY_ID]).Path;
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_ERROR_USER_MUST_LOGIN => _localizationService.GetByKey("ErrorMessage_MustLogin", CultureId);
@@ -45,7 +46,7 @@ namespace AdSite.Controllers
             try
             {
                 var jstree = _categoryService.GetCategoriesAsJSTree(CountryId);
-                viewModel = new CategoryTreeViewModel { CategoriesAsTree = jstree };
+                viewModel = new CategoryTreeViewModel { CategoriesAsTree = jstree, PathString = CountryPath };
             }
             catch (Exception ex)
             {

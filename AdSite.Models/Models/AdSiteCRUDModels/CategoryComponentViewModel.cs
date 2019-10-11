@@ -38,6 +38,8 @@ namespace AdSite.Models.CRUDModels
         {
             CategoriesAsTree = new List<JSTreeViewModel>();
         }
+
+        public string PathString { get; set; }
         public ICollection<JSTreeViewModel> CategoriesAsTree { get; set; }
     }
 
