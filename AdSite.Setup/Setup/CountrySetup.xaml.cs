@@ -102,6 +102,12 @@ namespace Setup
                 {
                     NextButton.IsEnabled = true;
                     CountryIds.Add(countryId);
+
+                    CountryNameTextBox.Clear();
+                    CountryPathTextBox.Clear();
+                    CountryAbbreviationTextBox.Clear();
+
+                    MessageBox.Show("Success!");
                 }
                 else
                 {

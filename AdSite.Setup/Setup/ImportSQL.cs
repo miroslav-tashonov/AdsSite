@@ -81,16 +81,17 @@ namespace Setup
                     }
                 }
 
-                string insertUserRoleCountryQuery = "Use AdSite;  INSERT [adsite].[UserRoleCountries] ([ID], [ApplicationUserId], [CountryId], [ApplicationIdentityRoleId])";
-                insertUserRoleCountryQuery += " VALUES (@ID, @ApplicationUserId, @CountryId, @ApplicationIdentityRoleId) ";
-
-
-                using (SqlConnection dataConnection = new SqlConnection(conString))
+                foreach (Guid countryId in countryIds)
                 {
-                    using (SqlCommand dataCommand = new SqlCommand(insertUserRoleCountryQuery, dataConnection))
+                    string insertUserRoleCountryQuery = "Use AdSite;  INSERT [adsite].[UserRoleCountries] ([ID], [ApplicationUserId], [CountryId], [ApplicationIdentityRoleId])";
+                    insertUserRoleCountryQuery += " VALUES (@ID, @ApplicationUserId, @CountryId, @ApplicationIdentityRoleId) ";
+
+
+                    using (SqlConnection dataConnection = new SqlConnection(conString))
                     {
-                        foreach (Guid countryId in countryIds)
+                        using (SqlCommand dataCommand = new SqlCommand(insertUserRoleCountryQuery, dataConnection))
                         {
+
                             dataCommand.Parameters.AddWithValue("ID", Guid.NewGuid());
                             dataCommand.Parameters.AddWithValue("ApplicationUserId", usernameGuid);
                             dataCommand.Parameters.AddWithValue("ApplicationIdentityRoleId", new Guid("19151b2a-2a3e-4b55-a54b-835489bf5e42"));

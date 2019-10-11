@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Setup"
         mc:Ignorable="d"
-        Title="Country Setup" Height="381" Width="550">
+        Title="Country Setup" Height="375" Width="539">
     <Grid>
-        <Button IsEnabled="False" Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="409,294,0,0" VerticalAlignment="Top" Width="87" Click="Button_Click"/>
-        <Label Content="Country Name" HorizontalAlignment="Left" Margin="46,81,0,0" VerticalAlignment="Top"/>
-        <Label Content="Country path (http://localhost/PATH)" HorizontalAlignment="Left" Margin="46,132,0,0" VerticalAlignment="Top"/>
-        <Label Content="Abbreviation" HorizontalAlignment="Left" Margin="46,188,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="CountryNameTextBox" HorizontalAlignment="Left" Margin="298,83,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
-        <TextBox Name="CountryPathTextBox" HorizontalAlignment="Left" Margin="298,136,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
-        <TextBox Name="CountryAbbreviationTextBox" HorizontalAlignment="Left" Margin="298,190,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
-        <Label Content="Site Country Setup" HorizontalAlignment="Left" Margin="148,23,0,0" VerticalAlignment="Top" Width="202" FontSize="20" RenderTransformOrigin="0.738,0.52" Foreground="#FF23B8BF"/>
-        <ComboBox Name="LanguageComboBox" Text="English" HorizontalAlignment="Left" Margin="298,244,0,0" VerticalAlignment="Top" Width="198">
+        <Button IsEnabled="False" Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="402,277,0,0" VerticalAlignment="Top" Width="87" Click="Button_Click"/>
+        <Label Content="Country Name" HorizontalAlignment="Left" Margin="39,64,0,0" VerticalAlignment="Top"/>
+        <Label Content="Country path (http://localhost/PATH)" HorizontalAlignment="Left" Margin="39,115,0,0" VerticalAlignment="Top"/>
+        <Label Content="Abbreviation" HorizontalAlignment="Left" Margin="39,171,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="CountryNameTextBox" HorizontalAlignment="Left" Margin="291,66,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
+        <TextBox Name="CountryPathTextBox" HorizontalAlignment="Left" Margin="291,119,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
+        <TextBox Name="CountryAbbreviationTextBox" HorizontalAlignment="Left" Margin="291,173,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
+        <Label Content="Site Country Setup" HorizontalAlignment="Left" Margin="141,6,0,0" VerticalAlignment="Top" Width="202" FontSize="20" RenderTransformOrigin="0.738,0.52" Foreground="#FF23B8BF"/>
+        <ComboBox Name="LanguageComboBox" Text="English" HorizontalAlignment="Left" Margin="291,227,0,0" VerticalAlignment="Top" Width="198">
             <ComboBoxItem Tag="en-US" Name="English" IsSelected="True">English</ComboBoxItem>
             <ComboBoxItem Tag="de-DE" Name="German">German</ComboBoxItem>
             <ComboBoxItem Tag="it-IT" Name="Italian">Italian</ComboBoxItem>
@@ -25,15 +25,15 @@
             <ComboBoxItem Tag="es-ES" Name="Spanish">Spanish</ComboBoxItem>
         </ComboBox>
 
-        <Label HorizontalAlignment="Left" Margin="46,232,0,0" VerticalAlignment="Top">
+        <Label HorizontalAlignment="Left" Margin="39,215,0,0" VerticalAlignment="Top">
             <TextBlock>
                 Default Language 
                 <LineBreak></LineBreak>
                 (English is advised to import localizations )
             </TextBlock>
         </Label>
-        <Button x:Name="ImportButton" Content="Import Country" HorizontalAlignment="Left" Margin="298,294,0,0" VerticalAlignment="Top" Width="99" Click="ImportButton_Click"/>
-        <Label Content="You can import multiple sites/countries :" HorizontalAlignment="Left" Margin="46,292,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ImportButton" Content="Import Country" HorizontalAlignment="Left" Margin="291,277,0,0" VerticalAlignment="Top" Width="99" Click="ImportButton_Click"/>
+        <Label Content="You can import multiple sites/countries :" HorizontalAlignment="Left" Margin="39,275,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
