@@ -1,6 +1,6 @@
 <b>Installation Steps</b>
 
-Please download Setup-Standalone.exe or Setup-FrameworkDependant.exe that will guide you to setup this project on your windows environment 
+Please download [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T1qTVXaWEjolQoJy) or [Setup-FrameworkDependant.exe](https://drive.google.com/open?id=14u3P6Fd3lB-mEp2pDbhdhUhCOjt0is8r) that will guide you to setup this project on your windows environment 
 <br/>
 <br/>
 Optional: You can also clone AdSite.Setup solution from this repository and produce the same executable file after building AdSite.Setup project.
