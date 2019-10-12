@@ -14,10 +14,10 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 <b>Following use case diagram shows how different roles can use the system</b>
 <br/>
 <br/>
-![alt text](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/ad-site-usecase.jpg) 
+![alt text](AdSite/wwwroot/img/ad-site-usecase.jpg) 
 
 
 <b>Entity Relationship diagram of the database</b>
 <br/>
 <br/>
-![alt text](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) 
+![alt text](AdSite/wwwroot/img/adsite-Database-ER.jpg) 
