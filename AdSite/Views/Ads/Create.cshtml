@@ -73,7 +73,8 @@
                         </div>
                         <div class="form-group">
                             <output id="Filelist"></output>
-                            <input id="MainPictureFile" asp-for="MainPictureFile" class="form-control" type="hidden" />
+                            <input id="MainPictureFile" asp-for="MainPictureFile" value="@(ViewBag.MainPictureSerializedString)" class="form-control" type="hidden" />
+                            <input id="Pictures" asp-for="SerializedAdDetailsPictures" value="@(ViewBag.SerializedPictures)" class="form-control" type="hidden" />
                         </div>
                     </div>
                     <div class="modal-footer">

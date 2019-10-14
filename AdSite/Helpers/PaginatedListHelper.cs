@@ -11,7 +11,7 @@ namespace AdSite.Helpers
     {
         public const int NUMBER_OF_PAGES_PER_SIDE = 5;
 
-        private List<int> PageSizesList { get { return new List<int> { 5, 10, 20 }; } }
+        private List<int> PageSizesList { get { return new List<int> { 10, 20, 50 }; } }
 
         public int PageIndex { get; private set; }
 

@@ -22,8 +22,8 @@ function handleFileSelect(e) {
         fileReader.onload = (function (readerEvt) {
             return function (e) {
                 ApplyFileValidationRules(readerEvt)
-                RenderThumbnail(e, readerEvt);
-                FillAttachmentArray(e, readerEvt)
+                RenderThumbnail(e, readerEvt, i);
+                FillAttachmentArray(e, readerEvt, i)
             };
         })(f);
 
@@ -33,11 +33,12 @@ function handleFileSelect(e) {
 }
 
 function handleFileLoad(files) {
+    debugger;
     if (files === undefined || files.length == 0) return;
     var mainPicture = JSON.parse($("#MainPictureFile").val());
     for (var i = 0, f; f = files[0][i]; i++) {
-        RenderThumbnailOnLoad(f, mainPicture);
-        FillAttachmentOnLoad(f)
+        RenderThumbnailOnLoad(f, mainPicture, i);
+        FillAttachmentOnLoad(f, i);
     }
 }
 
@@ -45,17 +46,29 @@ function handleFileLoad(files) {
 jQuery(function ($) {
     $('div').on('click', '.img-wrap .close', function () {
         var id = $(this).closest('.img-wrap').find('img').data('id');
+        debugger;
         var elementPos = AttachmentArray.map(function (x) { return x.FileName; }).indexOf(id);
         if (elementPos !== -1) {
             AttachmentArray.splice(elementPos, 1);
+            var picturesArray = JSON.parse("[" + $("#Pictures").val() + "]")[0];
+            if (picturesArray) {
+                picturesArray.splice(elementPos, 1);
+                if (picturesArray.length > 0)
+                    $("#Pictures").val("[\"" + picturesArray.join('\",\"') + "\"]");
+                else
+                    $("#Pictures").val("[]");
+            }
+            else {
+
+            }
         }
+        
 
         $(this).parent().find('img').not().remove();
         $(this).parent().find('div').not().remove();
         $(this).parent().parent().find('div').not().remove();
 
-        var lis = document.querySelectorAll('#imgList li');
-        for (var i = 0; li = lis[i]; i++) {
+        for (const li of document.querySelectorAll('#imgList li')) {
             if (li.innerHTML == "") {
                 li.parentNode.removeChild(li);
             }
@@ -92,7 +105,7 @@ function ApplyFileValidationRules(readerEvt) {
     }
 
     if (CheckFileSize(readerEvt.size) == false) {
-        alert("The file (" + readerEvt.name + ") does not match the upload conditions, The maximum file size for uploads should not exceed 300 KB");
+        alert("The file (" + readerEvt.name + ") does not match the upload conditions, The maximum file size for uploads should not exceed 10 MB");
         e.preventDefault();
         return;
     }
@@ -100,7 +113,7 @@ function ApplyFileValidationRules(readerEvt) {
     if (CheckFilesCount(AttachmentArray) == false) {
         if (!filesCounterAlertStatus) {
             filesCounterAlertStatus = true;
-            alert("You have added more than 10 files. According to upload conditions you can upload 10 files maximum");
+            alert("You have added more than 5 files. According to upload conditions you can upload 10 files maximum");
         }
         e.preventDefault();
         return;
@@ -124,7 +137,7 @@ function CheckFileType(fileType) {
 }
 
 function CheckFileSize(fileSize) {
-    if (fileSize < 300000) {
+    if (fileSize < 10000000) {
         return true;
     }
     else {
@@ -140,7 +153,7 @@ function CheckFilesCount(AttachmentArray) {
             len++;
         }
     }
-    if (len > 9) {
+    if (len > 5) {
         return false;
     }
     else {
@@ -148,19 +161,19 @@ function CheckFilesCount(AttachmentArray) {
     }
 }
 
-function RenderThumbnail(e, readerEvt) {
+function RenderThumbnail(e, readerEvt, id) {
     var li = document.createElement('li');
     ul.appendChild(li);
     if (AttachmentArray.length == 0) {
         li.innerHTML = ['<div class="img-wrap selectedThumbnail"> <span class="check">&#10004;</span> <span class="close">&times;</span>' +
-            '<img class="thumb" src="', e.target.result, '"/>' + '</div>'].join('');
+            '<img class="thumb" src="', e.target.result, '" data-id="' + id +'" />' + '</div>'].join('');
 
         //todo SOLID!!
         $("#MainPictureFile").val(e.target.result.substring(e.target.result.indexOf("base64") + 7, e.target.result.length));
     }
     else {
         li.innerHTML = ['<div class="img-wrap"> <span class="close">&times;</span>' +
-            '<img class="thumb" src="', e.target.result, '"/>' + '</div>'].join('');
+            '<img class="thumb" src="', e.target.result, '" data-id="' + id +'" />' + '</div>'].join('');
     }
 
     var div = document.createElement('div');
@@ -170,18 +183,17 @@ function RenderThumbnail(e, readerEvt) {
     document.getElementById('Filelist').insertBefore(ul, null);
 }
 
-function RenderThumbnailOnLoad(file, mainPicture) {
+function RenderThumbnailOnLoad(file, mainPicture, id) {
     var li = document.createElement('li');
     ul.appendChild(li);
 
-    debugger;
     if (file == mainPicture) {
         li.innerHTML = ['<div class="img-wrap selectedThumbnail"> <span class="check">&#10004;</span> <span class="close">&times;</span>' +
-            '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id=""/>' + '</div>'].join('');
+            '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id="'+ id +'"/>' + '</div>'].join('');
     }
     else {
         li.innerHTML = ['<div class="img-wrap"> <span class="close">&times;</span>' +
-            '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id=""/>' + '</div>'].join('');
+            '<img class="thumb" src="', "data:image/jpeg;base64,".concat(file), '" title="" data-id="' + id +'"/>' + '</div>'].join('');
     }
 
 
@@ -192,12 +204,12 @@ function RenderThumbnailOnLoad(file, mainPicture) {
     document.getElementById('Filelist').insertBefore(ul, null);
 }
 
-function FillAttachmentOnLoad(file) {
+function FillAttachmentOnLoad(file, number) {
     AttachmentArray[arrCounter] =
         {
             AttachmentType: 1,
             ObjectType: 1,
-            FileName: "1",
+            FileName: number,
             FileDescription: "Attachment",
             NoteText: "",
             MimeType: 'png',
@@ -208,12 +220,12 @@ function FillAttachmentOnLoad(file) {
 }
 
 
-function FillAttachmentArray(e, readerEvt) {
+function FillAttachmentArray(e, readerEvt, id) {
     AttachmentArray[arrCounter] =
         {
             AttachmentType: 1,
             ObjectType: 1,
-            FileName: readerEvt.name,
+            FileName: id,
             FileDescription: "Attachment",
             NoteText: "",
             MimeType: readerEvt.type,

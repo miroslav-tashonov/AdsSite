@@ -85,6 +85,7 @@ namespace AdSite.Models.CRUDModels
         public IEnumerable<IFormFile> Files { get; set; }
         public string MainPictureFile { get; set; }
         public List<byte[]> FilesAsListOfByteArray { get; set; }
+        public string SerializedAdDetailsPictures { get; set; }
         public byte[] MainPictureThumbnail { get; set; }
 
     }

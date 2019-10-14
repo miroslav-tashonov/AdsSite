@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace AdSite.Controllers
@@ -51,7 +53,7 @@ namespace AdSite.Controllers
 
         public AdsController(IAdService adService, ICityService cityService, IWishlistService wishlistService, ICategoryService categoryService, ICountryService countryService, ILocalizationService localizationService, UserManager<ApplicationUser> userManager, ILogger<AdsController> logger)
         {
-            _wishlistService = wishlistService; 
+            _wishlistService = wishlistService;
             _adService = adService;
             _cityService = cityService;
             _categoryService = categoryService;
@@ -214,16 +216,16 @@ namespace AdSite.Controllers
 
                         #region File Map
                         //need to map files in controller because aspnet core assembly is present in project
-                        if (entity.Files != null)
+                        string[] result;
+                        if (!String.IsNullOrEmpty(entity.SerializedAdDetailsPictures))
                         {
-                            foreach (var file in entity.Files)
-                            {
-                                using (var memoryStream = new MemoryStream())
-                                {
-                                    file.CopyTo(memoryStream);
-                                    entity.FilesAsListOfByteArray.Add(memoryStream.ToArray());
-                                }
-                            }
+                            result = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(entity.SerializedAdDetailsPictures);
+                            entity.MainPictureFile = Newtonsoft.Json.JsonConvert.DeserializeObject<string>(entity.MainPictureFile);
+                            EntityFormMap(result, entity);
+                        }
+                        else
+                        {
+                            MapFiles(entity);
                         }
                         //
                         #endregion
@@ -253,6 +255,29 @@ namespace AdSite.Controllers
 
             ViewBag.Cities = _cityService.GetAllAsLookup(CountryId);
             ViewBag.Categories = _categoryService.GetAllAsLookup(CountryId);
+
+            #region Preserve pictures if model validation fails 
+            string serializedString = String.Empty;
+            string mainPictureSerializedString = string.Empty;
+            if (entity.Files != null && entity.Files.Count() > 0)
+            {
+                MapFiles(entity);
+                serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray);
+                mainPictureSerializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray.First());
+            }
+            if (!String.IsNullOrEmpty(entity.SerializedAdDetailsPictures))
+            {
+                string[] convertResult = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(entity.SerializedAdDetailsPictures);
+                EntityFormMap(convertResult , entity);
+                serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray);
+                mainPictureSerializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray.First());
+            }
+
+            ViewBag.SerializedPictures = serializedString;
+            ViewBag.MainPictureSerializedString = mainPictureSerializedString;
+            #endregion
+
+
             return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);
 
         }
@@ -279,11 +304,11 @@ namespace AdSite.Controllers
                     return RedirectToAction(nameof(Index)).WithError(LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT);
                 }
 
-                string serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(ad.AdDetail.AdDetailPictures.Select( f => f.File).ToList());
+                string serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(ad.AdDetail.AdDetailPictures.Select(f => f.File).ToList());
                 string mainPicture = Newtonsoft.Json.JsonConvert.SerializeObject(ad.MainPictureThumbnail);
-                ad.SerializedAdDetailsPictures = serializedString;
-                ad.MainPictureFile = mainPicture;
-                
+                ViewBag.SerializedPictures = serializedString;
+                ViewBag.MainPictureSerializedString = mainPicture;
+
                 return View(ad);
             }
             catch (Exception ex)
@@ -306,17 +331,18 @@ namespace AdSite.Controllers
                     entity.OwnerId = CurrentUserId;
 
                     #region File Map
-                    //need to map files in controller because aspnet core assembly is present in project
-                    if (entity.Files != null)
+                    //need to map files in controller because aspnet core assembly is present in adsite project
+                    string[] result;
+                    if (!String.IsNullOrEmpty(entity.SerializedAdDetailsPictures))
                     {
-                        foreach (var file in entity.Files)
-                        {
-                            using (var memoryStream = new MemoryStream())
-                            {
-                                file.CopyTo(memoryStream);
-                                entity.FilesAsListOfByteArray.Add(memoryStream.ToArray());
-                            }
-                        }
+                        result = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(entity.SerializedAdDetailsPictures);
+                        entity.MainPictureFile = StripComments(entity.MainPictureFile);
+                        entity.MainPictureFile = Newtonsoft.Json.JsonConvert.DeserializeObject<string>(entity.MainPictureFile);
+                        EntityFormMap(result, entity);
+                    }
+                    else
+                    {
+                        MapFiles(entity);
                     }
                     //
                     #endregion
@@ -351,6 +377,29 @@ namespace AdSite.Controllers
 
             ViewBag.Cities = _cityService.GetAllAsLookup(CountryId);
             ViewBag.Categories = _categoryService.GetAllAsLookup(CountryId);
+
+            #region Preserve pictures if model validation fails 
+            string serializedString = String.Empty;
+            string mainPictureSerializedString = string.Empty;
+            if (entity.Files != null && entity.Files.Count() > 0)
+            {
+                MapFiles(entity);
+                serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray);
+                mainPictureSerializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray.First());
+            }
+            if (!String.IsNullOrEmpty(entity.SerializedAdDetailsPictures))
+            {
+                string[] convertResult = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(entity.SerializedAdDetailsPictures);
+                EntityFormMap(convertResult, entity);
+                serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray);
+                mainPictureSerializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray.First());
+            }
+
+            ViewBag.SerializedPictures = serializedString;
+            ViewBag.MainPictureSerializedString = mainPictureSerializedString;
+            #endregion
+
+
             return View(entity).WithWarning(LOCALIZATION_WARNING_INVALID_MODELSTATE);
 
         }
@@ -403,5 +452,76 @@ namespace AdSite.Controllers
         {
             return _adService.Count();
         }
+
+        private void MapFiles(AdEditModel entity)
+        {
+            if (entity.Files != null)
+            {
+                foreach (var file in entity.Files)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        file.CopyTo(memoryStream);
+                        entity.FilesAsListOfByteArray.Add(memoryStream.ToArray());
+                    }
+                }
+            }
+        }
+
+        private void MapFiles(AdCreateModel entity)
+        {
+            if (entity.Files != null)
+            {
+                foreach (var file in entity.Files)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        file.CopyTo(memoryStream);
+                        entity.FilesAsListOfByteArray.Add(memoryStream.ToArray());
+                    }
+                }
+            }
+        }
+
+        private void EntityFormMap(string[] array, AdCreateModel entity)
+        {
+            if (array != null)
+            {
+                foreach (var byteStream in array)
+                {
+                    byte[] byteArray = System.Convert.FromBase64String(byteStream);
+                    using (MemoryStream stream = new MemoryStream(byteArray))
+                        entity.FilesAsListOfByteArray.Add(stream.ToArray());
+                }
+            }
+        }
+
+        private void EntityFormMap(string[] array, AdEditModel entity)
+        {
+            if (array != null)
+            {
+                foreach (var byteStream in array)
+                {
+                    byte[] byteArray = System.Convert.FromBase64String(byteStream);
+                    using (MemoryStream stream = new MemoryStream(byteArray))
+                        entity.FilesAsListOfByteArray.Add(stream.ToArray());
+                }
+            }
+        }
+
+        private static string StripComments(string input)
+        {
+            // JavaScriptSerializer doesn't accept commented-out JSON, 
+            // so we'll strip them out ourselves;
+            // NOTE: for safety and simplicity, we only support comments on their own lines, 
+            // not sharing lines with real JSON
+
+            input = Regex.Replace(input, @"^\s*//.*$", "", RegexOptions.Multiline);  // removes comments like this
+            input = Regex.Replace(input, @"^\s*/\*(\s|\S)*?\*/\s*$", "", RegexOptions.Multiline); /* comments like this */
+
+            return input;
+        }
+
+
     }
 }

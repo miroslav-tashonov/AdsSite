@@ -312,12 +312,17 @@ namespace AdSite.Services
 
         public bool Update(AdEditModel entity)
         {
-            Ad ad = _repository.Get(entity.ID);
+            Ad ad = _repository.GetAdWithDetails(entity.ID);
             if (ad == null)
             {
                 throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
             }
 
+            if (entity.AdDetail != null && entity.AdDetail.AdDetailPictures != null)
+                foreach(var adDetailMap in entity.AdDetail.AdDetailPictures)
+                {
+                    ad.AdDetail.AdDetailPictures.Remove(adDetailMap);
+                }
 
             entity.MainPictureThumbnail = MagiskImageWrapper.MakeThumbnailImage(System.Convert.FromBase64String(entity.MainPictureFile));
             ad = AdMapper.MapAdFromAdEditModel(entity, ad);
