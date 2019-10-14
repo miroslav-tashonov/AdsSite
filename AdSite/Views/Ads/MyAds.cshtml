@@ -52,30 +52,50 @@
 
                 @foreach (var gridAd in Model)
                 {
-                    <div class="prodlist-i prodlist-inline">
-                        <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
-                            @if (gridAd.MainPicture != null)
-                            {
-                                <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
-                            }
-                            else
-                            {
-                                <img src='~/img/300x311.png' />
-                            }
-                        </a>
-                        <div class="prodlist-i-cont">
-                            <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
-                            <div class="prodlist-i-txt">
-                                @gridAd.Description
-                            </div>
-                            <div class="prodlist-i-action">
-                                <span class="prodlist-i-price">
-                                    <b>$ @gridAd.Price</b>
-                                </span>
-                            </div>
+                <div class="prodlist-i prodlist-inline">
+                    <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
+                        @if (gridAd.MainPicture != null)
+                        {
+                            <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
+                        }
+                        else
+                        {
+                            <img src='~/img/300x311.png' />
+                        }
+                    </a>
+                    <div class="prodlist-i-cont">
+                        <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
+                        <div class="prodlist-i-txt">
+                            @gridAd.Description
                         </div>
-
+                        <div class="prodlist-i-action">
+                            <span class="prodlist-i-price">
+                                <b>$ @gridAd.Price</b>
+                            </span>
+                        </div>
                     </div>
+
+                    <div class="prodlist-i-props-wrap">
+                        <ul class="prodlist-i-props">
+                            <li>
+                                <b><localize name="Owner_Username"></localize></b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
+                            </li>
+                            <li>
+                                <b><localize name="Owner_Phone"></localize></b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
+                            </li>
+                            <li>
+                                <b><localize name="Owner_Mail"></localize></b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
+                            </li>
+                            <li>
+                                <b><localize name="City_Entity"></localize></b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
+                            </li>
+                            <li>
+                                <b><localize name="Category_Entity"></localize></b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
                     <div class="prodlist-inline-actions">
                         <a asp-action="Edit" asp-route-id="@gridAd.ID"> <i class="fa fa-edit fa-2x"></i> </a>
                         <a asp-action="Delete" asp-route-id="@gridAd.ID"> <i class="fa fa-trash fa-2x"></i> </a>
