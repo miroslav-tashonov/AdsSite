@@ -19,8 +19,8 @@ namespace AdSite.Data.Repositories
 
     public class WebSettingsRepository : IWebSettingsRepository
     {
-        private readonly ApplicationDbContext _context;
-        public WebSettingsRepository(ApplicationDbContext context)
+        private readonly IApplicationDbContext _context;
+        public WebSettingsRepository(IApplicationDbContext context)
         {
             _context = context;
         }

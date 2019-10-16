@@ -19,8 +19,8 @@ namespace AdSite.Data.Repositories
 
     public class LocalizationRepository : ILocalizationRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LocalizationRepository(ApplicationDbContext context)
+        private readonly IApplicationDbContext _context;
+        public LocalizationRepository(IApplicationDbContext context)
         {
             _context = context;
         }

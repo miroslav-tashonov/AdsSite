@@ -25,10 +25,10 @@ namespace AdSite.Data.Repositories
 
     public class AdRepository : IAdRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private const int NUMBER_OF_RELATED_ADS = 9;
 
-        public AdRepository(ApplicationDbContext context)
+        public AdRepository(IApplicationDbContext context)
         {
             _context = context;
         }

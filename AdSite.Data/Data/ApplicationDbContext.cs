@@ -1,29 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AdSite.Models;
 using AdSite.Models.DatabaseModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace AdSite.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationIdentityRole, string>
+    public class ApplicationDbContext : 
+        IdentityDbContext<ApplicationUser, ApplicationIdentityRole, string>, IApplicationDbContext
     {
         public readonly string SCHEMA_NAME = "adsite";
 
-        public DbSet<Ad> Ads { get; set; }
-        public DbSet<AdDetail> AdDetails { get; set; }
-        public DbSet<AdDetailPicture> AdDetailPictures { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Localization> Localizations { get; set; }
-        public DbSet<Language> Languages{ get; set; }
-        public DbSet<Wishlist> Wishlists { get; set; }
-        public DbSet<WebSettings> WebSettings { get; set; }
-        public DbSet<UserRoleCountry> UserRoleCountries { get; set; }
+        public virtual DbSet<Ad> Ads { get; set; }
+        public virtual DbSet<AdDetail> AdDetails { get; set; }
+        public virtual DbSet<AdDetailPicture> AdDetailPictures { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<Localization> Localizations { get; set; }
+        public virtual DbSet<Language> Languages{ get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
+        public virtual DbSet<WebSettings> WebSettings { get; set; }
+        public virtual DbSet<UserRoleCountry> UserRoleCountries { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

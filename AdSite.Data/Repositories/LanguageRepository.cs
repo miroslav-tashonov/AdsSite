@@ -20,8 +20,8 @@ namespace AdSite.Data.Repositories
 
     public class LanguageRepository : ILanguageRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LanguageRepository(ApplicationDbContext context)
+        private readonly IApplicationDbContext _context;
+        public LanguageRepository(IApplicationDbContext context)
         {
             _context = context;
         }

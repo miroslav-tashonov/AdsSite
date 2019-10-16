@@ -1,4 +1,5 @@
-﻿using AdSite.Data.Repositories;
+﻿using AdSite.Data;
+using AdSite.Data.Repositories;
 using AdSite.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
@@ -16,7 +17,8 @@ namespace AdSite.Helpers
         //custom services registration
         public static void RegisterApplicationServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IConfiguration>(configuration);
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ILocalizationService, LocalizationService>();

@@ -51,7 +51,7 @@ namespace AdSite.Services
 
         public bool Add(CountryCreateModel entity)
         {
-            if(GetByCountryPath(entity.Path).Path.Length > 0)
+            if(GetByCountryPath(entity.Path)?.Path?.Length > 0)
             {
                 throw new Exception("Country path already exist");
             }
@@ -139,7 +139,7 @@ namespace AdSite.Services
 
         public bool Update(CountryEditModel entity)
         {
-            if (GetByCountryPath(entity.Path).Path.Length > 0)
+            if (GetByCountryPath(entity.Path)?.Path?.Length > 0)
             {
                 throw new Exception("Country path already exist");
             }
