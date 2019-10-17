@@ -78,6 +78,7 @@ namespace AdSite.Services.Tests
             var cityCreateModel = Builder<CityCreateModel>.CreateNew().Build();
 
             Assert.IsTrue(_cityService.Add(cityCreateModel));
+            Assert.IsTrue(_memoryDbContext.Cities.Count() == count + 1);
         }
 
         [Test()]
@@ -87,6 +88,7 @@ namespace AdSite.Services.Tests
             var country = _memoryDbContext.Cities.FirstOrDefault();
 
             Assert.IsTrue(_cityService.Delete(country.ID));
+            Assert.IsTrue(_memoryDbContext.Cities.Count() == count - 1);
         }
 
         [Test()]

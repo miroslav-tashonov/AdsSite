@@ -17,6 +17,8 @@ namespace AdSite.Services
         bool Delete(string userId, Guid countryId);
         bool Add(UserRoleCountryCreateModel category);
         bool Update(UserRoleCountryEditModel category);
+
+        List<UserRoleCountryGridModel> GetAll(Guid countryId);
     }
 
 

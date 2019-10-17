@@ -73,14 +73,17 @@ namespace AdSite.Services.Tests
             var categoryCreateModel = Builder<CategoryCreateModel>.CreateNew().Build();
 
             Assert.IsTrue(_categoryService.Add(categoryCreateModel));
+            Assert.IsTrue(_memoryDbContext.Categories.Count() == count + 1);
         }
 
         [Test()]
         public void DeleteTest()
         {
+            int count = _memoryDbContext.Localizations.Count();
             var category = _memoryDbContext.Categories.FirstOrDefault();
 
             Assert.IsTrue(_categoryService.Delete(category.ID));
+            Assert.IsTrue(count - 1 == _memoryDbContext.Localizations.Count());
         }
 
         [Test()]

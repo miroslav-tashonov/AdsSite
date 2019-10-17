@@ -46,7 +46,9 @@ namespace AdSite.Services
         private string LOCALIZATION_AD_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_Ad_Not_Found", CultureId);
         private string LOCALIZATION_GENERAL_NOT_FOUND => _localizationRepository.GetLocalizationValue("Localization_General_Not_Found", CultureId);
 
-        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, ICategoryRepository categoryRepository, ICityRepository cityRepository, IWishlistRepository wishlistRepository, ILogger<AdService> logger)
+        public AdService(IAdRepository repository, ILocalizationRepository localizationRepository, 
+            ICategoryRepository categoryRepository, ICityRepository cityRepository, 
+            IWishlistRepository wishlistRepository, ILogger<AdService> logger)
         {
             _wishlistRepository = wishlistRepository;
             _localizationRepository = localizationRepository;
@@ -286,7 +288,27 @@ namespace AdSite.Services
             return list;
         }
 
+        public bool Update(AdEditModel entity)
+        {
+            Ad ad = _repository.GetAdWithDetails(entity.ID);
+            if (ad == null)
+            {
+                throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
+            }
 
+            if (entity.AdDetail != null && entity.AdDetail.AdDetailPictures != null)
+                foreach (var adDetailMap in entity.AdDetail.AdDetailPictures)
+                {
+                    ad.AdDetail.AdDetailPictures.Remove(adDetailMap);
+                }
+
+            entity.MainPictureThumbnail = MagiskImageWrapper.MakeThumbnailImage(System.Convert.FromBase64String(entity.MainPictureFile));
+            ad = AdMapper.MapAdFromAdEditModel(entity, ad);
+
+            return _repository.Update(ad);
+        }
+
+        #region Helper Methods
         private List<AdGridViewModel> LoadRelatedAdsForCategories(Guid currentCategoryId)
         {
             var relatedAds = RecursivelyLoadRelatedAdsForCategory(currentCategoryId);
@@ -310,25 +332,7 @@ namespace AdSite.Services
         }
 
 
-        public bool Update(AdEditModel entity)
-        {
-            Ad ad = _repository.GetAdWithDetails(entity.ID);
-            if (ad == null)
-            {
-                throw new Exception(LOCALIZATION_GENERAL_NOT_FOUND + entity.ID);
-            }
-
-            if (entity.AdDetail != null && entity.AdDetail.AdDetailPictures != null)
-                foreach(var adDetailMap in entity.AdDetail.AdDetailPictures)
-                {
-                    ad.AdDetail.AdDetailPictures.Remove(adDetailMap);
-                }
-
-            entity.MainPictureThumbnail = MagiskImageWrapper.MakeThumbnailImage(System.Convert.FromBase64String(entity.MainPictureFile));
-            ad = AdMapper.MapAdFromAdEditModel(entity, ad);
-
-            return _repository.Update(ad);
-        }
+#endregion
 
 
     }
