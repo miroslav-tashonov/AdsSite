@@ -1,21 +1,18 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AdSite.Data.Repositories;
-using AdSite.Data;
+﻿using AdSite.Data;
 using AdSite.Data.Data;
+using AdSite.Data.Repositories;
+using AdSite.Models;
+using AdSite.Models.CRUDModels;
 using AdSite.Models.DatabaseModels;
-using Microsoft.Extensions.DependencyInjection;
+using FizzWare.NBuilder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using AdSite.Models;
-using Microsoft.AspNetCore.Identity;
-using FizzWare.NBuilder;
+using NUnit.Framework;
+using System;
 using System.Linq;
-using AdSite.Models.CRUDModels;
 
 namespace AdSite.Services.Tests
 {

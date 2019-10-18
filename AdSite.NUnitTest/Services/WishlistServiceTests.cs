@@ -1,19 +1,16 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AdSite.Data.Repositories;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
+﻿using AdSite.Data;
 using AdSite.Data.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using NSubstitute;
-using Microsoft.Extensions.Logging;
+using AdSite.Data.Repositories;
 using AdSite.Models;
-using Microsoft.AspNetCore.Identity;
+using AdSite.Models.DatabaseModels;
 using FizzWare.NBuilder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace AdSite.Services.Tests
@@ -75,7 +72,7 @@ namespace AdSite.Services.Tests
             string newUserId = "newuserid";
             var count = _memoryDbContext.Wishlists
                 .Where(c => c.OwnerId == newUserId && c.CountryId == CountryId).Count();
-            
+
             Assert.IsTrue(_wishlistService.Add(AdId, newUserId, CountryId));
             Assert.IsTrue(_memoryDbContext.Wishlists
                 .Where(c => c.OwnerId == newUserId && c.CountryId == CountryId).Count() == count + 1);

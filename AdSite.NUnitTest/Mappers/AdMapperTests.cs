@@ -1,8 +1,5 @@
 ﻿using NUnit.Framework;
-using AdSite.Models.Mappers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AdSite.Models.Mappers.Tests
 {

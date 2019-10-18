@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdSite.TagHelpers
 {
@@ -33,7 +30,7 @@ namespace AdSite.TagHelpers
             if (!_cache.TryGetValue(entryKey, out localizationValue))
             {
                 localizationValue = _localizationService.GetByKey(this.Name, currentCultureId);
-                
+
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromDays(31));
                 _cache.Set(entryKey, localizationValue, cacheEntryOptions);

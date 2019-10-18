@@ -2,15 +2,14 @@
 using AdSite.Mappers;
 using AdSite.Models.CRUDModels;
 using AdSite.Services;
-using AdSite.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
-using Microsoft.Extensions.Configuration;
 
 namespace AdSite.Controllers
 {
@@ -34,7 +33,7 @@ namespace AdSite.Controllers
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
         private string LOCALIZATION_ERROR_CONCURENT_EDIT => _localizationService.GetByKey("ErrorMessage_ConcurrentEdit", CultureId);
 
-        public CountriesController(ICountryService countryService, ILocalizationService localizationService, 
+        public CountriesController(ICountryService countryService, ILocalizationService localizationService,
             ILogger<CountriesController> logger, ILanguageService languageService,
             IApplicationBuilder app, IConfiguration configuration)
         {

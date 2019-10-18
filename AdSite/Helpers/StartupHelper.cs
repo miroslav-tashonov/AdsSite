@@ -63,7 +63,7 @@ namespace AdSite.Helpers
                             {
                                 supportedCultures.Add(new CultureInfo(language.CultureId));
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
 
                             }

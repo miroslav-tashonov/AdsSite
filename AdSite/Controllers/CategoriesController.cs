@@ -1,13 +1,13 @@
-﻿using System;
+﻿using AdSite.Extensions;
+using AdSite.Mappers;
+using AdSite.Models.CRUDModels;
+using AdSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AdSite.Services;
-using AdSite.Models.CRUDModels;
 using Microsoft.Extensions.Logging;
-using AdSite.Mappers;
+using System;
 using System.Threading;
-using AdSite.Extensions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AdSite.Controllers
 {
@@ -22,7 +22,6 @@ namespace AdSite.Controllers
         private readonly ILogger<CategoriesController> _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly int SERVER_ERROR_CODE = 500;
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private string CountryPath => _countryService.GetCountryAsViewModel((Guid)HttpContext.Items[COUNTRY_ID]).Path;
 

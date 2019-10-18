@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
-using AdSite.Services;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using AdSite.Extensions;
 using AdSite.Mappers;
-using System.Threading;
 using AdSite.Models.CRUDModels;
-using AdSite.Extensions;
+using AdSite.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
 
 namespace AdSite.Controllers
 {
@@ -30,7 +23,6 @@ namespace AdSite.Controllers
         private readonly ILogger<LocalizationsController> _logger;
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly int SERVER_ERROR_CODE = 500;
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);

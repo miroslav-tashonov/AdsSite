@@ -1,20 +1,17 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
+﻿using AdSite.Data;
+using AdSite.Data.Data;
+using AdSite.Data.Repositories;
+using AdSite.Models.CRUDModels;
+using AdSite.Models.DatabaseModels;
+using FizzWare.NBuilder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using AdSite.Models.CRUDModels;
-using AdSite.Data.Repositories;
-using AdSite.Models.DatabaseModels;
-using Microsoft.Extensions.DependencyInjection;
-using FizzWare.NBuilder;
-using AdSite.Data;
-using NSubstitute;
-using AdSite.Data.Data;
 using System.Linq;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.EntityFrameworkCore;
 
 namespace AdSite.Services.Tests
 {
@@ -23,7 +20,6 @@ namespace AdSite.Services.Tests
     {
         private ICountryRepository _countryRepository;
         private ICountryService _countryService;
-        private IList<Country> _countries;
         private IApplicationDbContext _memoryDbContext;
 
         [SetUp]
@@ -35,12 +31,12 @@ namespace AdSite.Services.Tests
                 .UseInMemoryDatabase(databaseName: "test_db")
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .Options;
-            _memoryDbContext  = new ApplicationDbContext(options);
+            _memoryDbContext = new ApplicationDbContext(options);
 
             //Arrange
             var _localizationRepo = Substitute.For<ILocalizationRepository>();
             var _loggerRepo = Substitute.For<ILogger<CountryService>>();
-            
+
 
             services.AddTransient<ICountryRepository, CountryRepository>();
             var serviceProvider = services.BuildServiceProvider();
@@ -108,7 +104,7 @@ namespace AdSite.Services.Tests
             var country = _memoryDbContext.Countries.FirstOrDefault();
             var countryViewModel = _countryService.GetCountryAsViewModel(country.ID);
 
-            Assert.IsTrue( country.Name == countryViewModel.Name );
+            Assert.IsTrue(country.Name == countryViewModel.Name);
             Assert.IsTrue(country.Path == countryViewModel.Path);
             Assert.IsTrue(country.ID == countryViewModel.ID);
         }
@@ -138,9 +134,9 @@ namespace AdSite.Services.Tests
         {
             var country = _memoryDbContext.Countries.FirstOrDefault();
             var countryEditModel = Builder<CountryEditModel>.CreateNew()
-                .With(c => c.ID = country.ID )
+                .With(c => c.ID = country.ID)
                 .With(c => c.Path = "someUniquePath").Build();
-            
+
             Assert.IsTrue(_countryService.Update(countryEditModel));
         }
     }

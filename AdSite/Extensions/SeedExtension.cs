@@ -1,6 +1,5 @@
 ﻿using AdSite.Models;
 using AdSite.Models.CRUDModels;
-using AdSite.Models.DatabaseModels;
 using AdSite.Models.Extensions;
 using AdSite.Services;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -219,9 +217,9 @@ namespace AdSite.Extensions
                     foreach (var country in countries)
                     {
                         var _languageService = serviceProvider.GetService<ILanguageService>();
-                        foreach(var countryLanguage in _languageService.GetAll(country.ID))
+                        foreach (var countryLanguage in _languageService.GetAll(country.ID))
                         {
-                            
+
                             string defaultLanguage = configuration["DefaultLanguage:Value"];
                             CultureInfo defaultCultureInfo = new CultureInfo(defaultLanguage);
                             if (countryLanguage.CultureId == defaultCultureInfo.LCID)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AdSite.Extensions;
+﻿using AdSite.Extensions;
 using AdSite.Models;
 using AdSite.Models.AccountViewModels;
 using AdSite.Models.CRUDModels;
@@ -13,6 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AdSite.Controllers
 {
@@ -29,8 +29,6 @@ namespace AdSite.Controllers
         private readonly IUserRoleCountryService _userRoleCountryService;
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-
-        private readonly int SERVER_ERROR_CODE = 500;
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_ERROR_DEFAULT => _localizationService.GetByKey("ErrorMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_SELF_CHANGEROLE => _localizationService.GetByKey("WarningMessage_Self_RoleChange", CultureId);
@@ -132,7 +130,8 @@ namespace AdSite.Controllers
             }
 
             var addingresult = _userManager.AddToRoleAsync(account, parsedRole).GetAwaiter().GetResult();
-            _userRoleCountryService.Add(new UserRoleCountryCreateModel { 
+            _userRoleCountryService.Add(new UserRoleCountryCreateModel
+            {
                 RoleId = role.Id,
                 CountryId = CountryId,
                 ApplicationUserId = account.Id
@@ -250,7 +249,7 @@ namespace AdSite.Controllers
 
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         _userManager.DeleteAsync(user).GetAwaiter().GetResult();
                         throw new Exception(ex.Message);

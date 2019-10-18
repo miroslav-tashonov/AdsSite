@@ -1,21 +1,18 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AdSite.Data.Repositories;
-using AdSite.Data;
+﻿using AdSite.Data;
 using AdSite.Data.Data;
-using AdSite.Models.DatabaseModels;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using NSubstitute;
+using AdSite.Data.Repositories;
 using AdSite.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using FizzWare.NBuilder;
-using System.Linq;
 using AdSite.Models.CRUDModels;
+using AdSite.Models.DatabaseModels;
+using FizzWare.NBuilder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using NUnit.Framework;
+using System;
+using System.Linq;
 
 namespace AdSite.Services.Tests
 {
@@ -79,11 +76,11 @@ namespace AdSite.Services.Tests
         [Test()]
         public void DeleteTest()
         {
-            int count = _memoryDbContext.Localizations.Count();
+            int count = _memoryDbContext.Categories.Count();
             var category = _memoryDbContext.Categories.FirstOrDefault();
 
             Assert.IsTrue(_categoryService.Delete(category.ID));
-            Assert.IsTrue(count - 1 == _memoryDbContext.Localizations.Count());
+            Assert.IsTrue(count - 1 == _memoryDbContext.Categories.Count());
         }
 
         [Test()]
@@ -105,7 +102,7 @@ namespace AdSite.Services.Tests
         [Test()]
         public void GetCategoryAsTreeStructureTest()
         {
-            
+
             var entitiesList = _categoryService.GetCategoryAsTreeStructure(CountryId);
 
             Assert.IsTrue(entitiesList.Count > 0);
@@ -124,7 +121,7 @@ namespace AdSite.Services.Tests
             Category category = Builder<Category>
                 .CreateNew()
                     .With(c => c.ID = parentCategoryId)
-                    .With(c => c.Children  = childrenCategory)
+                    .With(c => c.Children = childrenCategory)
                     .With(cid => cid.CountryId = CountryId).Build();
 
             _memoryDbContext.Categories.Add(category);

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using AdSite.Models.CRUDModels;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+﻿using AdSite.Models.CRUDModels;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 
@@ -68,7 +67,7 @@ namespace AdSite.TagHelpers
                         }
                         catch
                         {
-                            
+
                         }
                     }
                 }

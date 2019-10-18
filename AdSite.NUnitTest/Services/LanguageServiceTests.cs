@@ -1,21 +1,18 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AdSite.Data.Repositories;
-using AdSite.Data;
+﻿using AdSite.Data;
 using AdSite.Data.Data;
+using AdSite.Data.Repositories;
+using AdSite.Models;
+using AdSite.Models.CRUDModels;
 using AdSite.Models.DatabaseModels;
+using FizzWare.NBuilder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Microsoft.Extensions.Logging;
-using AdSite.Models;
-using Microsoft.AspNetCore.Identity;
-using FizzWare.NBuilder;
+using NSubstitute;
+using NUnit.Framework;
+using System;
 using System.Linq;
-using AdSite.Models.CRUDModels;
 
 namespace AdSite.Services.Tests
 {
@@ -57,7 +54,7 @@ namespace AdSite.Services.Tests
                     Builder<Language>.CreateListOfSize(10)
                     .All()
                     .With(c => c.ID = Guid.NewGuid())
-                    .With(lid => lid.CultureId = random.Next(1,1000))
+                    .With(lid => lid.CultureId = random.Next(1, 1000))
                     .With(cid => cid.CountryId = CountryId).Build());
 
             if (_memoryDbContext.Languages.Count() == 0)
@@ -77,7 +74,7 @@ namespace AdSite.Services.Tests
                 .Build();
 
             Assert.IsTrue(_languageService.Add(entityCreateModel));
-            Assert.IsTrue(_memoryDbContext.Localizations.Count() == count + 1);
+            Assert.IsTrue(_memoryDbContext.Languages.Count() == count + 1);
         }
 
         [Test()]
@@ -104,7 +101,7 @@ namespace AdSite.Services.Tests
         public void GetAllTest()
         {
             int count = _memoryDbContext.Languages.Where(c => c.CountryId == CountryId).Count();
-            Assert.IsTrue(count == _languageService.GetAll(CountryId).Count) ;
+            Assert.IsTrue(count == _languageService.GetAll(CountryId).Count);
             Assert.IsTrue(_languageService.GetAll("name", String.Empty, CountryId).Count == count);
             Assert.IsTrue(_languageService.GetAll("postcode", String.Empty, CountryId).Count == count);
 
@@ -116,7 +113,7 @@ namespace AdSite.Services.Tests
             var language = _memoryDbContext.Languages.FirstOrDefault();
             var entity = _languageService.GetByCultureId(language.CultureId, CountryId);
 
-            Assert.IsTrue(language.CultureId == entity.CultureId) ;
+            Assert.IsTrue(language.CultureId == entity.CultureId);
             Assert.IsTrue(language.LanguageName == entity.LanguageName);
             Assert.IsTrue(language.ID == entity.ID);
         }

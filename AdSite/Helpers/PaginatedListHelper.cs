@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdSite.Helpers
 {
@@ -68,10 +65,10 @@ namespace AdSite.Helpers
         {
             get
             {
-                return 
+                return
                     (TotalPages - PageIndex > NUMBER_OF_PAGES_PER_SIDE) ?
-                    NUMBER_OF_PAGES_PER_SIDE + ((PageIndex - 1 > NUMBER_OF_PAGES_PER_SIDE) ? 0 : PageIndex - 1) : 
-                    TotalPages - PageIndex ;
+                    NUMBER_OF_PAGES_PER_SIDE + ((PageIndex - 1 > NUMBER_OF_PAGES_PER_SIDE) ? 0 : PageIndex - 1) :
+                    TotalPages - PageIndex;
             }
         }
 
@@ -80,8 +77,8 @@ namespace AdSite.Helpers
             get
             {
                 return (PageIndex - 1 > NUMBER_OF_PAGES_PER_SIDE) ?
-                    NUMBER_OF_PAGES_PER_SIDE + ((TotalPages - PageIndex > NUMBER_OF_PAGES_PER_SIDE) ? 0 : TotalPages-PageIndex) : 
-                    PageIndex-1; 
+                    NUMBER_OF_PAGES_PER_SIDE + ((TotalPages - PageIndex > NUMBER_OF_PAGES_PER_SIDE) ? 0 : TotalPages - PageIndex) :
+                    PageIndex - 1;
             }
         }
 
@@ -92,7 +89,7 @@ namespace AdSite.Helpers
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
 
-        public static PaginatedList<T> CreatePageAsync( List<T> items, int count, int pageIndex, int pageSize, int maximumPrice)
+        public static PaginatedList<T> CreatePageAsync(List<T> items, int count, int pageIndex, int pageSize, int maximumPrice)
         {
             return new PaginatedList<T>(items, count, pageIndex, pageSize, maximumPrice);
         }

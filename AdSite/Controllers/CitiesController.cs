@@ -16,7 +16,7 @@ namespace AdSite.Controllers
     public class CitiesController : Controller
     {
         string COUNTRY_ID = "CountryId";
-        
+
         private readonly ICityService _cityService;
         private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
@@ -24,7 +24,7 @@ namespace AdSite.Controllers
 
         private int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private const int SERVER_ERROR_CODE = 500;
-        private Guid CountryId => _countryService.Get( (Guid)HttpContext.Items[COUNTRY_ID] );
+        private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_WARNING_INVALID_MODELSTATE => _localizationService.GetByKey("WarningMessage_ModelStateInvalid", CultureId);

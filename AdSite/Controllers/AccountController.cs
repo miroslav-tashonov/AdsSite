@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using AdSite.Extensions;
+using AdSite.Models;
+using AdSite.Models.AccountViewModels;
+using AdSite.Models.CRUDModels;
+using AdSite.Models.Extensions;
+using AdSite.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using AdSite.Models;
-using AdSite.Models.AccountViewModels;
-using AdSite.Services;
-using AdSite.Extensions;
-using AdSite.Models.Extensions;
-using AdSite.Models.CRUDModels;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace AdSite.Controllers
 {
@@ -32,8 +28,6 @@ namespace AdSite.Controllers
         private readonly ICountryService _countryService;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-
-        private readonly int SERVER_ERROR_CODE = 500;
 
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
 

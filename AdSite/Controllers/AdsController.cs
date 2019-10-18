@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -268,7 +267,7 @@ namespace AdSite.Controllers
             if (!String.IsNullOrEmpty(entity.SerializedAdDetailsPictures))
             {
                 string[] convertResult = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(entity.SerializedAdDetailsPictures);
-                EntityFormMap(convertResult , entity);
+                EntityFormMap(convertResult, entity);
                 serializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray);
                 mainPictureSerializedString = Newtonsoft.Json.JsonConvert.SerializeObject(entity.FilesAsListOfByteArray.First());
             }

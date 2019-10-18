@@ -1,19 +1,14 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AdSite.Data.Repositories;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
+﻿using AdSite.Data;
 using AdSite.Data.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using NSubstitute;
-using AdSite.Models;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity;
+using AdSite.Data.Repositories;
+using AdSite.Models.DatabaseModels;
 using FizzWare.NBuilder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace AdSite.Services.Tests
@@ -54,7 +49,7 @@ namespace AdSite.Services.Tests
 
             var adId = Guid.NewGuid();
             var adDetail = Builder<AdDetail>.CreateNew()
-                .With(ad=> ad.ID = Guid.NewGuid())
+                .With(ad => ad.ID = Guid.NewGuid())
                 .With(c => c.AdID = adId).Build();
             _ads = new FakeDbSet<Ad>(
                     Builder<Ad>.CreateListOfSize(10)

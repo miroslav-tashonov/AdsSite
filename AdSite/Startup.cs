@@ -1,15 +1,17 @@
-﻿using System;
+﻿using AdSite.Data;
+using AdSite.Extensions;
+using AdSite.Helpers;
+using AdSite.Models;
+using AdSite.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using AdSite.Data;
-using AdSite.Models;
-using AdSite.Services;
-using Microsoft.AspNetCore.Http;
-using AdSite.Helpers;
-using AdSite.Extensions;
+using System;
+using System.Net;
 
 namespace AdSite
 {
@@ -52,7 +54,7 @@ namespace AdSite
                             facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                         });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -112,10 +114,17 @@ namespace AdSite
 
             foreach (var country in countries)
             {
+
+                app.UseRewriter(new RewriteOptions()
+                            .AddRedirect(@"^$", "/" + country.Path, (int)HttpStatusCode.Redirect)
+                            );
+
                 Guid countryId = country.ID;
                 app.Map("/" + country.Path,
                     app =>
                     {
+
+
                         app.UseMiddleware<CountryMiddleware>(countryId);
 
                         StartupHelper.MapSite(languageService, Configuration, app, countryId);

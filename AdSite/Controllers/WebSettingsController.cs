@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AdSite.Data;
-using AdSite.Models.DatabaseModels;
-using AdSite.Services;
+﻿using AdSite.Extensions;
 using AdSite.Models.CRUDModels;
-using System.Threading;
-using Microsoft.Extensions.Logging;
+using AdSite.Services;
 using Microsoft.AspNetCore.Authorization;
-using AdSite.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AdSite.Controllers
 {
@@ -28,7 +23,6 @@ namespace AdSite.Controllers
 
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly int SERVER_ERROR_CODE = 500;
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
@@ -54,7 +48,7 @@ namespace AdSite.Controllers
 
             return View(webSettings);
         }
-        
+
         // GET: WebSettings/Edit
         public async Task<IActionResult> Edit()
         {
@@ -135,7 +129,7 @@ namespace AdSite.Controllers
 
             return View(webSettings);
         }
-        
+
 
         private bool WebSettingsExistsForCountry(Guid countryId)
         {

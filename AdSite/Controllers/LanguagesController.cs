@@ -1,16 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using AdSite.Services;
-using AdSite.Models.CRUDModels;
-using Microsoft.Extensions.Logging;
-using System.Threading;
+﻿using AdSite.Extensions;
 using AdSite.Mappers;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Http;
-using System.Globalization;
-using AdSite.Extensions;
+using AdSite.Models.CRUDModels;
+using AdSite.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Globalization;
+using System.Threading;
 
 namespace AdSite.Controllers
 {
@@ -26,7 +25,6 @@ namespace AdSite.Controllers
 
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
-        private readonly int SERVER_ERROR_CODE = 500;
         private readonly string ERROR_URL = "/Error/404";
 
         private string LOCALIZATION_SUCCESS_DEFAULT => _localizationService.GetByKey("SuccessMessage_Default", CultureId);

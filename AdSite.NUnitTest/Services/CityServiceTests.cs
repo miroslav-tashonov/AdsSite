@@ -1,21 +1,18 @@
-﻿using NUnit.Framework;
-using AdSite.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AdSite.Data;
+using AdSite.Data.Data;
 using AdSite.Data.Repositories;
-using AdSite.Data;
+using AdSite.Models;
+using AdSite.Models.CRUDModels;
 using AdSite.Models.DatabaseModels;
+using FizzWare.NBuilder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
-using AdSite.Data.Data;
-using FizzWare.NBuilder;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity;
-using AdSite.Models;
+using NSubstitute;
+using NUnit.Framework;
+using System;
 using System.Linq;
-using AdSite.Models.CRUDModels;
 
 namespace AdSite.Services.Tests
 {
@@ -51,7 +48,7 @@ namespace AdSite.Services.Tests
             services.AddTransient<ICityRepository, CityRepository>();
             var serviceProvider = services.BuildServiceProvider();
             _cityRepository = new CityRepository(_memoryDbContext);
-            _cityService = Substitute.For<CityService>(_cityRepository, _localizationRepo, 
+            _cityService = Substitute.For<CityService>(_cityRepository, _localizationRepo,
                 _loggerRepo, _userManager);
 
             _cities = new FakeDbSet<City>(
@@ -95,7 +92,7 @@ namespace AdSite.Services.Tests
         public void ExistsTest()
         {
             var city = _memoryDbContext.Cities.FirstOrDefault();
-            
+
             Assert.IsTrue(_cityService.Exists(city.ID));
         }
 
@@ -104,8 +101,8 @@ namespace AdSite.Services.Tests
         {
             int count = _memoryDbContext.Cities.Where(c => c.CountryId == CountryId).Count();
             Assert.IsTrue(count == _cityService.GetCities(CountryId).Count);
-            Assert.IsTrue(_cityService.GetCities("name", SearchNameString, CountryId).Count>0);
-            Assert.IsTrue(_cityService.GetCities("postcode", SearchPostcodeString, CountryId).Count>0);
+            Assert.IsTrue(_cityService.GetCities("name", SearchNameString, CountryId).Count > 0);
+            Assert.IsTrue(_cityService.GetCities("postcode", SearchPostcodeString, CountryId).Count > 0);
         }
 
 
