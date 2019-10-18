@@ -5,7 +5,7 @@ This project represents multi-site role based ads site built from scratch.
 Please download [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T1qTVXaWEjolQoJy) or [Setup-FrameworkDependant.exe](https://drive.google.com/open?id=14u3P6Fd3lB-mEp2pDbhdhUhCOjt0is8r) that will guide you to setup this project on your windows environment 
 <br/>
 <br/>
-Optional: You can also clone AdSite solution from this repository and produce the same executable file after building AdSite.Setup project.
+Optional: You can also clone this repository and produce the same executable file after building [AdSite.Setup](AdSite.Setup) project.
 <br/>
 <br/>
 Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T1qTVXaWEjolQoJy) doesnt require to have asp.net core 3.0 sdk installed on your environment. If your have any troubles setting up this project using setup, check this [instructions](Instructions.txt) for manual steps.   
