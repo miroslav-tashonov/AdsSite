@@ -13,8 +13,6 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 <br/>
 <br/>
 
-<b>Following [use case diagram](AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) shows how different roles can use the system</b>
+[Use case diagram](/AdsSite/blob/master/AdSite/wwwroot/img/ad-site-usecase.jpg) shows how different roles can use the system
 <br/>
-
-
-<b>[Entity Relationship diagram](AdsSite/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database</b>
+[Entity Relationship diagram](/AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database
