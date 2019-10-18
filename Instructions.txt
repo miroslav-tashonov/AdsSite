@@ -13,10 +13,10 @@ Installation steps
 1. Clone the repository from https://github.com/miroslav-tashonov/AdsSite
 2. Build and clean the project, make sure asp.net core 3.0 sdk is installed in this step
 3. Create Database via sql scripts located on ~\AdsSite\AdSite.Data\Scripts\ execute the scripts in this particular order inside your database management system
-1.Create_Database.sql
-2.Import_Script.sql
-3.Import_Roles.sql
-4.Import_InitialData.sql - you can edit and define your own admin credentials in this script 
+*Create_Database.sql
+*Import_Script.sql
+*Import_Roles.sql
+*Import_InitialData.sql - you can edit and define your own admin credentials in this script 
 
 default :
 username: admin@email.com  password : Admin123!
