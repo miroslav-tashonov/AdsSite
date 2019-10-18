@@ -17,4 +17,4 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 <br/>
 
 
-<b>[Entity Relationship diagram](AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database</b>
+<b>[Entity Relationship diagram](AdsSite/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database</b>
