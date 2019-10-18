@@ -1,4 +1,4 @@
-This project represents multi-site role based ads site. 
+This project represents multi-site role based ads site built from scratch. 
 
 <b>Installation Steps</b>
 
@@ -13,13 +13,8 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 <br/>
 <br/>
 
-<b>Following use case diagram shows how different roles can use the system</b>
+<b>Following [use case diagram](AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg)  shows how different roles can use the system</b>
 <br/>
-<br/>
-![alt text](AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) 
 
 
-<b>Entity Relationship diagram of the database</b>
-<br/>
-<br/>
-![alt text](AdSite/wwwroot/img/adsite-Database-ER.jpg) 
+<b>[Entity Relationship diagram](AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database</b>
