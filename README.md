@@ -20,4 +20,4 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 <br/>
 <br/>
 Screenshots : 
-![alt text](https://imgur.com/uNocJ40)
+![alt text](https://i.imgur.com/uNocJ40.png)
