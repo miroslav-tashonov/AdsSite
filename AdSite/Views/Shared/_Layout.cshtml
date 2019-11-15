@@ -157,7 +157,12 @@
             <div class="container">
                 <nav class="topmenu">
                     <!-- Catalog menu - Start -->
-                    @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true })
+                    <form id="categoriesForm" method="post" asp-controller="Ads" asp-action="Index">
+                        <div class="topcatalog">
+                            <a class="topcatalog-btn"><span><localize name="Ads_AllAds"></localize></span></a>
+                            @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true })
+                        </div>
+                    </form>
                     <!-- Catalog menu - end -->
                     <!-- Main menu - start -->
                     <button type="button" class="mainmenu-btn">Menu</button>

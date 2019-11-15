@@ -1,8 +1,6 @@
 ﻿@model AdSite.Models.CRUDModels.CategoryComponentViewModel;
 
-<form id="categoriesForm" method="post" asp-controller="Ads" asp-action="Index">
-    <div class="topcatalog">
-        <a class="topcatalog-btn"><span><localize name="Ads_AllAds"></localize></span></a>
+
         <ul class="topcatalog-list">
             @if (Model.ComponentCategories != null && Model.ComponentCategories.Any())
             {
@@ -39,5 +37,4 @@
                 document.getElementById('categoriesForm').submit();
             }
         </script>
-    </div>
-</form>
+   

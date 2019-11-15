@@ -16,3 +16,14 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 [Use case diagram](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/ad-site-usecase.jpg) shows how different roles can use the system
 <br/>
 [Entity Relationship diagram](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database
+
+<br/>
+Screenshots : 
+<br />
+<br />
+<p float="left">
+  <img src="https://i.imgur.com/uNocJ40.png" width=100>
+  <img src="https://i.imgur.com/0riw0kK.png" width=100>
+  <img src="https://i.imgur.com/GSmfrlw.png" width=100>
+</p>
+
