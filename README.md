@@ -21,9 +21,14 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 <br/>
 Screenshots : 
 <br />
-<img src="https://i.imgur.com/uNocJ40.png" width=96>
-<img src="https://i.imgur.com/E3LY9qk.png" width=96>
-<img src="https://i.imgur.com/0riw0kK.png" width=96>
-<img src="https://i.imgur.com/GSmfrlw.png" width=96>
+<div style="display: inline-block">
+  <img src="https://i.imgur.com/uNocJ40.png" width=96>
+</div>
+<div style="display: inline-block">
+  <img src="https://i.imgur.com/0riw0kK.png" width=96>
+</div>
+<div style="display: inline-block">
+  <img src="https://i.imgur.com/GSmfrlw.png" width=96>
+</div>
 
 
