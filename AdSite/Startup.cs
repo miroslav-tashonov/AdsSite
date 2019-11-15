@@ -123,10 +123,7 @@ namespace AdSite
                 app.Map("/" + country.Path,
                     app =>
                     {
-
-
                         app.UseMiddleware<CountryMiddleware>(countryId);
-
                         StartupHelper.MapSite(languageService, Configuration, app, countryId);
                     }
                 );
