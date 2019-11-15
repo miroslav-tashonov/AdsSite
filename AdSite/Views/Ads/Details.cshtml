@@ -19,15 +19,14 @@
 
         <div style="float:right;">
 
-            <a> <localize name="General_ShareOnFacebook"></localize> <i class="fa fa-facebook-f fa-2x"></i> </a>
-            <a onclick="window.print();"> <localize name="General_Print"></localize> <i class="fa fa-print fa-2x"></i> </a>
+            <a href="#"> <localize name="General_ShareOnFacebook"></localize> <i class="fa fa-facebook-f"></i> </a>
+            <a onclick="window.print();" href="#"> <localize name="General_Print"></localize> <i class="fa fa-print"></i> </a>
             @if (User.IsInRole("User") && UserManager.GetUserId(User) == Model.Owner.Id)
             {
-                <a asp-action="Edit" asp-route-id="@Model.ID"> <localize name="General_Edit"></localize> <i class="fa fa-edit fa-2x"></i> </a>
-                <a asp-action="Delete" asp-route-id="@Model.ID"> <localize name="General_Delete"></localize> <i class="fa fa-trash fa-2x"></i> </a>
+                <a asp-action="Edit" asp-route-id="@Model.ID"> <localize name="General_Edit"></localize> <i class="fa fa-edit"></i> </a>
+                <a asp-action="Delete" asp-route-id="@Model.ID"> <localize name="General_Delete"></localize> <i class="fa fa-trash"></i> </a>
             }
-            <a asp-action="Index" class="btn btn-default"><localize name="General_BackToList"></localize></a>
-            <div style="color: cadetblue;"> <localize name="Ads_AdCreatedDate"></localize> : @Model.CreatedAt.ToUniversalTime() </div>
+            
 
         </div>
 
@@ -130,6 +129,8 @@
                             <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
                         </a>
                     }
+
+                    <div style="color: cadetblue;"> <localize name="Ads_AdCreatedDate"></localize> : @Model.CreatedAt.ToUniversalTime() </div>
                 </p>
             </div>
 
