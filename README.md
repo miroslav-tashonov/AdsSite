@@ -18,12 +18,12 @@ Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hKLzZieZMKuf3535T
 [Entity Relationship diagram](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database
 
 <br/>
-<br/>
 Screenshots : 
 <br />
+<br />
 <p float="left">
-  <img src="https://i.imgur.com/uNocJ40.png" width=96>
-  <img src="https://i.imgur.com/0riw0kK.png" width=96>
-  <img src="https://i.imgur.com/GSmfrlw.png" width=96>
+  <img src="https://i.imgur.com/uNocJ40.png" width=100>
+  <img src="https://i.imgur.com/0riw0kK.png" width=100>
+  <img src="https://i.imgur.com/GSmfrlw.png" width=100>
 </p>
 
