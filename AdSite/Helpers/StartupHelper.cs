@@ -17,6 +17,7 @@ namespace AdSite.Helpers
         //custom services registration
         public static void RegisterApplicationServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IConfiguration>(configuration);
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
 
