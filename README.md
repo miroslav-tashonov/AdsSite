@@ -1,4 +1,4 @@
-This project represents multi-site role based ads site built with .net core 3.0 from scratch. 
+This project represents multi-site role based ads site built with .net core 3.1 from scratch. 
 
 <b>Installation Steps</b>
 
