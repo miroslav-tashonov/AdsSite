@@ -8,7 +8,7 @@ Please download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B5
 Optional: You can also clone this repository and produce the same executable file after building [AdSite.Setup](AdSite.Setup) project.
 <br/>
 <br/>
-Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0MtfDrsrM5roJUbpBFhj) doesnt require to have asp.net core 3.0 sdk installed on your environment. If your have any troubles setting up this project using setup, check this [instructions](Instructions.txt) for manual steps.   
+Note: [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0MtfDrsrM5roJUbpBFhj) doesnt require to have asp.net core 3.1 sdk installed on your environment. If your have any troubles setting up this project using setup, check this [instructions](Instructions.txt) for manual steps.   
 
 <br/>
 <br/>
