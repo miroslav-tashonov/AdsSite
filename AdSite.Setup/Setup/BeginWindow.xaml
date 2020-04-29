@@ -18,7 +18,7 @@
                 website.
                 <LineBreak/>
                 <LineBreak/>
-                In order to run this project, Visual studio 2019 is required( >= 16.3 with "Data storage and 
+                In order to run this project, Visual studio 2019 is required( >= 16.4 with "Data storage and 
                 <LineBreak/>processing" toolset checked in installer is preferred for DB connection, or optionally you 
                 <LineBreak/>could use standalone MSSQL server instance). 
                 <LineBreak/>
@@ -28,12 +28,12 @@
                 </Hyperlink>
                 <LineBreak/>
                 <LineBreak/>
-                In addition asp.net core sdk 3.0 is also required. 
+                In addition asp.net core sdk 3.1 is also required. 
                 <LineBreak/>
-                Before you proceed you are required to install asp net core sdk 3.0
+                Before you proceed you are required to install asp net core sdk 3.1
                 <LineBreak/>
-                <Hyperlink NavigateUri="https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-windows-x64-installer" RequestNavigate="Hyperlink_RequestNavigate_1">
-                    Download Asp net core sdk 3.0
+                <Hyperlink NavigateUri="https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.100-windows-x64-installer" RequestNavigate="Hyperlink_RequestNavigate_1">
+                    Download Asp net core sdk 3.1
                 </Hyperlink>
 
             </TextBlock>
