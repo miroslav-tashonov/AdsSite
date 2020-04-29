@@ -1,17 +1,17 @@
 Installation requirements
 
-Visual Studio 2019 (>= 16.3.0)
+Visual Studio 2019 (>= 16.4.0)
 Integrated SQL in Visual studio or standalone SQL Server instance
-Asp.net core 3.0 SDK, download links below
+Asp.net core 3.1 SDK, download links below
 
-    Windows: https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-windows-x64-installer
-    Mac: https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-3.0.100-macos-x64-installer
-    Linux: https://dotnet.microsoft.com/download/linux-package-manager/rhel7/sdk-3.0.100
+    Windows: https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.100-windows-x64-installer
+    Mac: https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.100-macos-x64-installer
+    Linux: https://docs.microsoft.com/dotnet/core/install/linux-package-managers
 
 Installation steps
 
 1. Clone the repository from https://github.com/miroslav-tashonov/AdsSite
-2. Build and clean the project, make sure asp.net core 3.0 sdk is installed in this step
+2. Build and clean the project, make sure asp.net core 3.1 sdk is installed in this step
 3. Create Database via sql scripts located on ~\AdsSite\AdSite.Data\Scripts\ execute the scripts in this particular order inside your database management system
 *Create_Database.sql
 *Import_Script.sql
