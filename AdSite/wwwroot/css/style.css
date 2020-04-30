@@ -4530,7 +4530,7 @@ ul.b-crumbs {
     margin: 0;
 }
 .prod-slider li a {
-	display: block;
+	display: block !important;
 }
 .prod-slider li img {
 	display: block;
