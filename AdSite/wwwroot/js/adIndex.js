@@ -5,7 +5,6 @@
 $(function () {
     $("#form").submit(function (e) {
         e.preventDefault();
-        debugger;
         var minMaxPricesArray = $('#priceSlider').val().split(';');
         var cityIds = $('input[type="checkbox"][name="cityIds"]:checked').map(function () { return this.value; }).get();
 
@@ -31,6 +30,7 @@ $(function () {
                 var doc = new DOMParser().parseFromString(data, "text/html");
                 var container = doc.querySelector('#adLoadContainer');
                 $("#adLoadContainer").html(container.innerHTML);
+
                 declareIonRangeSlider();
                 registerCategoriesEvents();
             }

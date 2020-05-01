@@ -33,7 +33,6 @@ function handleFileSelect(e) {
 }
 
 function handleFileLoad(files) {
-    debugger;
     if (files === undefined || files.length == 0) return;
     var mainPicture = JSON.parse($("#MainPictureFile").val());
     for (var i = 0, f; f = files[0][i]; i++) {
@@ -46,7 +45,6 @@ function handleFileLoad(files) {
 jQuery(function ($) {
     $('div').on('click', '.img-wrap .close', function () {
         var id = $(this).closest('.img-wrap').find('img').data('id');
-        debugger;
         var elementPos = AttachmentArray.map(function (x) { return x.FileName; }).indexOf(id);
         if (elementPos !== -1) {
             AttachmentArray.splice(elementPos, 1);

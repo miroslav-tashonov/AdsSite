@@ -115,7 +115,6 @@ function registerCategoriesEvents() {
 
     // Sidebar Categories
     $('#section-sb-toggle').on('click', function () {
-        debugger;
         $('#section-sb-list').slideToggle();
         if ($(this).hasClass('opened'))
             $(this).removeClass("opened");
@@ -124,7 +123,6 @@ function registerCategoriesEvents() {
         return false;
     });
     $("#section-sb-list li.has_child").on("click", ".section-sb-toggle", function () {
-        debugger;
         $(this).parent().next("ul").slideToggle();
         if ($(this).hasClass('opened'))
             $(this).removeClass("opened");
@@ -133,7 +131,6 @@ function registerCategoriesEvents() {
         return false;
     });
     $("#section-sb-list li.has_child").on("click", "a.section-sb-toggle", function () {
-        debugger;
         $(this).parent().next("ul").slideToggle();
         if ($(this).hasClass('opened'))
             $(this).removeClass("opened");
