@@ -7,7 +7,7 @@
         {
             <p class="section-filter-field">
                 <input asp-action="Index" asp-controller="Ads" class="form-control"
-                       id="@city.Id" value="@city.Id" type="checkbox" name="cityIds" onchange="this.form.submit();"
+                       id="@city.Id" value="@city.Id" type="checkbox" name="cityIds" onchange="$('#form').submit();"
                        @(Model.CityIds.Contains(city.Id) ? "checked" : String.Empty) />
                 <label class="section-filter-checkbox" for="@city.Id">@city.Name</label>
             </p>

@@ -4,7 +4,13 @@ function pad(n) {
     return (n < 10) ? ("0" + n) : n;
 }
 
+
 $(document).ready(function () {
+    registerCategoriesEvents();
+});
+
+
+function registerCategoriesEvents() {
 
     // Single Product Tabs
     $('.prod-tabs li').on('click', 'a', function () {
@@ -70,7 +76,7 @@ $(document).ready(function () {
             'height': '0px'
         }, 350);
         $($(this).attr('data-frpoptab')).animate({
-            'height': $($(this).attr('data-frpoptab')).find('.flex-viewport').outerHeight()+'px'
+            'height': $($(this).attr('data-frpoptab')).find('.flex-viewport').outerHeight() + 'px'
         }, 350);
 
         return false;
@@ -87,7 +93,7 @@ $(document).ready(function () {
             'height': '0px'
         }, 350);
         $($(this).attr('data-accordion')).animate({
-            'height': $($(this).attr('data-accordion')).find('.accordion-inner').outerHeight()+'px'
+            'height': $($(this).attr('data-accordion')).find('.accordion-inner').outerHeight() + 'px'
         }, 350);
 
         return false;
@@ -96,19 +102,20 @@ $(document).ready(function () {
     // "All Features" button
     $('.prod-showprops').on('click', function () {
         if ($('.prod-tabs li a.active').attr('data-prodtab') == '#prod-tab-2') {
-            $('html, body').animate({scrollTop: ($('.prod-tabs-wrap').offset().top - 10)}, 700);
+            $('html, body').animate({ scrollTop: ($('.prod-tabs-wrap').offset().top - 10) }, 700);
         } else {
             $('.prod-tabs li a').removeClass('active');
             $('#prod-props').addClass('active');
             $('.prod-tab-cont .prod-tab').css('height', '0px');
             $('#prod-tab-2').css('height', 'auto');
-            $('html, body').animate({scrollTop: ($('.prod-tabs-wrap').offset().top - 10)}, 700);
+            $('html, body').animate({ scrollTop: ($('.prod-tabs-wrap').offset().top - 10) }, 700);
         }
         return false;
     });
 
     // Sidebar Categories
     $('#section-sb-toggle').on('click', function () {
+        debugger;
         $('#section-sb-list').slideToggle();
         if ($(this).hasClass('opened'))
             $(this).removeClass("opened");
@@ -117,6 +124,7 @@ $(document).ready(function () {
         return false;
     });
     $("#section-sb-list li.has_child").on("click", ".section-sb-toggle", function () {
+        debugger;
         $(this).parent().next("ul").slideToggle();
         if ($(this).hasClass('opened'))
             $(this).removeClass("opened");
@@ -124,7 +132,15 @@ $(document).ready(function () {
             $(this).addClass('opened');
         return false;
     });
-
+    $("#section-sb-list li.has_child").on("click", "a.section-sb-toggle", function () {
+        debugger;
+        $(this).parent().next("ul").slideToggle();
+        if ($(this).hasClass('opened'))
+            $(this).removeClass("opened");
+        else
+            $(this).addClass('opened');
+        return false;
+    });
     // Filter Toggle (mobile)
     $('#section-filter-toggle').on('click', function () {
         $(this).next('.section-filter-cont').slideToggle();
@@ -162,12 +178,12 @@ $(document).ready(function () {
         } else {
             $('body').addClass('mainmenu-show');
         }
-            return false;
+        return false;
     });
     $('html').on('click', 'body.mainmenu-show', function () {
         $('body').removeClass('mainmenu-show');
     });
-    $('body').on('click', '.mainmenu', function(event){
+    $('body').on('click', '.mainmenu', function (event) {
         event.stopPropagation();
     });
 
@@ -190,12 +206,12 @@ $(document).ready(function () {
             } else {
                 $('body').addClass('topcatalog-show');
             }
-                return false;
+            return false;
         });
         $('html').on('click', 'body.topcatalog-show', function () {
             $('body').removeClass('topcatalog-show');
         });
-        $('body').on('click', '.topcatalog-list', function(event){
+        $('body').on('click', '.topcatalog-list', function (event) {
             event.stopPropagation();
         });
         $('.topcatalog li .fa').on('click', function () {
@@ -217,7 +233,7 @@ $(document).ready(function () {
         } else {
             $('body').addClass('search-show');
         }
-            return false;
+        return false;
     });
 
     // Search Close
@@ -230,7 +246,7 @@ $(document).ready(function () {
     $('html').on('click', 'body.search-show', function () {
         $('body').removeClass('search-show');
     });
-    $('body').on('click', '.topsearch', function(event){
+    $('body').on('click', '.topsearch', function (event) {
         event.stopPropagation();
     });
 
@@ -259,7 +275,7 @@ $(document).ready(function () {
 
         $('.mainmenu').addClass('sections-show');
 
-        $(window).resize(function() {
+        $(window).resize(function () {
             var menu_sections = $('.mainmenu');
             var menu_width = menu_sections.width();
             var menu_items_width = 0;
@@ -312,7 +328,7 @@ $(document).ready(function () {
 
         $('.fr-pop-tabs').addClass('sections-show');
 
-        $(window).resize(function() {
+        $(window).resize(function () {
             var menu_sections = $('.fr-pop-tabs');
             var menu_width = menu_sections.width();
             var menu_items_width = 0;
@@ -381,11 +397,11 @@ $(document).ready(function () {
     }
 
     // Forms Validation
-    var filterEmail  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,6})+$/;
+    var filterEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,6})+$/;
     $('.form-validate').submit(function () {
         var errors = 0;
         $(this).find('[data-required="text"]').each(function () {
-            if ($(this).attr('data-required-email') == 'email'){
+            if ($(this).attr('data-required-email') == 'email') {
                 if (!filterEmail.test($(this).val())) {
                     $(this).addClass("redborder");
                     errors++;
@@ -408,7 +424,7 @@ $(document).ready(function () {
                 type: "POST",
                 url: 'php/email.php',
                 data: $(this).serialize(),
-                success: function(data) {
+                success: function (data) {
                     form1.append('<p class="form-result">Thank you!</p>');
                     $("form").trigger('reset');
                 }
@@ -425,12 +441,7 @@ $(document).ready(function () {
         if ($(this).val() != "" && ($(this).hasClass("redborder")))
             $(this).removeClass("redborder");
     });
-
-
-});
-
-
-
+}
 
 $(window).load(function () {
 

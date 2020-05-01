@@ -4752,6 +4752,8 @@ prod-thumbs-car li {
 	color: #616161;
 	line-height: 170%;
 	position: relative;
+	border-right: 1px solid #D3D3D3;
+	padding-right: 30px
 }
 .prod-cont h2 {
 	position: relative;

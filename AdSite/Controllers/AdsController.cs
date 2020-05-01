@@ -84,7 +84,7 @@ namespace AdSite.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index([FromForm]PageQueryModel queryModel)
+        public IActionResult Index(PageQueryModel queryModel)
         {
             if (!String.IsNullOrEmpty(queryModel.SearchString))
             {

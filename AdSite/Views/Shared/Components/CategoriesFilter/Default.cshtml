@@ -11,8 +11,7 @@
                    aria-expanded="true"
                    class="@(category.ID == Model.SelectedCategoryId ? "active-category" : String.Empty )"
                    id="@category.ID" value="@category.ID"
-                   onclick="submitModel('@category.ID'); return false;"
-                   >
+                   onclick="submitModel('@category.ID'); return false;">
                     <span class="categ-1-label">
                         @category.Name
                     </span>
@@ -29,7 +28,7 @@
                 <a role="button"
                    aria-expanded="true"
                    class="@(category.ID == Model.SelectedCategoryId ? "active-category" : String.Empty )"
-                   id="@category.ID" value="@category.ID" 
+                   id="@category.ID" value="@category.ID"
                    onclick="submitModel('@category.ID'); return false;">
                     <span class="categ-1-label">@category.Name</span>
                 </a>
@@ -37,14 +36,14 @@
         }
     }
 
-    <input type="hidden" name="CategoryId" id="hiddenCategoryId"  value="@Model.SelectedCategoryId"/>
-    <script>
-    function submitModel(categoryId)
-    {
-        if (!$(event.target).hasClass('section-sb-toggle')) {
-            document.getElementById('hiddenCategoryId').value = categoryId;
-            document.getElementById('form').submit();
+    <input type="hidden" name="CategoryId" id="hiddenCategoryId" value="@Model.SelectedCategoryId" />
+}
+
+<script>
+    function submitModel(categoryId) {
+        if (!$(event.target).hasClass('section-sb-toggle') && !$(event.target).hasClass('section-sb-ico')) {
+            $('#hiddenCategoryId').val(categoryId);
+            $('#form').submit();
         }
     }
-    </script>
-}
+</script>

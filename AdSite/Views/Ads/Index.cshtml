@@ -31,31 +31,10 @@
 @section Scripts {
     <script src="~/js/ion.rangeSlider.min.js" asp-append-version="true"></script>
     <script src="~/js/plugins.js"></script>
+    <script src="~/js/main.js"></script>
     <script src="~/extendedJs/fileUpload.js"></script>
+    <script type="text/javascript" src="~/js/adIndex.js"></script>
 }
-
-
-<script>
-    $(document).ready(function () {
-        $(".price-slider").ionRangeSlider({
-            type: "double",
-            grid: $(this).data('grid'),
-            min: $(this).data('min'),
-            max: $(this).data('max'),
-            from: $(this).data('from'),
-            to: $(this).data('to'),
-            to_min: 1,
-            prefix: $(this).data('prefix'),
-            onFinish: function (data) {
-                $("#minPriceValue").val(data.from);
-                $("#maxPriceValue").val(data.to);
-
-                $('#form').submit();
-            }
-        });
-    });
-
-/**/</script>
 
 <br />
 
@@ -66,7 +45,7 @@
                 <localize name="General_FindBy"></localize>
             </div>
             <div class="col-sm-6">
-                <select name="ColumnName" class="form-control" asp-items="columnListItems"></select>
+                <select id="ColumnName" name="ColumnName" class="form-control" asp-items="columnListItems"></select>
             </div>
 
 
@@ -74,7 +53,7 @@
 
         <div class="col-sm-5">
             <div class="col-sm-10 no-padding">
-                <input type="text" name="SearchString" value="@ViewData["currentFilter"]" class="form-control" />
+                <input type="text" id="SearchString" name="SearchString" value="@ViewData["currentFilter"]" class="form-control" />
             </div>
             <div class="col-sm-2 no-padding">
                 <button type="submit" class="form-control"> <i class="fa fa-search"></i> </button>
@@ -83,13 +62,13 @@
 
         <div class="col-sm-3 no-padding-right">
             <div class="col-sm-8">
-                <select name="SortColumn" class="form-control" asp-items="sortListItems" onchange="this.form.submit();"></select>
+                <select id="SortColumn" name="SortColumn" class="form-control" asp-items="sortListItems" onchange="$('#form').submit();"></select>
             </div>
             <div class="col-sm-4 no-padding-right">
                 <select name="PageSize"
                         class="form-control"
                         asp-items="@(Model.GetPageSizes(ViewData["PageSize"]?.ToString()))"
-                        onchange="this.form.submit();"></select>
+                        onchange="$('#form').submit();"></select>
             </div>
         </div>
     </div>
@@ -99,185 +78,185 @@
 
     <main>
         <section class="container">
+            <div id="adLoadContainer">
+                <div class="section-sb">
+                    <!--Loading ad category filters -->
+                    <div class="section-sb-current">
+                        <h3><a><localize name="Category_Entity"></localize> <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
+                        <ul class="section-sb-list" id="section-sb-list">
+                            @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true, selectedCategoryId = ViewData["CategoryId"] })
+                        </ul>
+                    </div>
 
-            <div class="section-sb">
-                <!--Loading ad category filters -->
-                <div class="section-sb-current">
-                    <h3><a><localize name="Category_Entity"></localize> <span id="section-sb-toggle" class="section-sb-toggle"><span class="section-sb-ico"></span></span></a></h3>
-                    <ul class="section-sb-list" id="section-sb-list">
-                        @await Component.InvokeAsync("CategoriesFilter", new { isFirstCall = true, selectedCategoryId = ViewData["CategoryId"] })
-                    </ul>
-                </div>
+                    <div class="section-filter">
+                        <div class="section-filter-cont">
 
-                <div class="section-filter">
-                    <div class="section-filter-cont">
+                            <!--Price Filter-->
+                            <div class="section-filter-price">
+                                <div id="priceSlider" class="price-slider section-filter-price" data-min="0" data-max="@(Model.MaximumPrice)" data-from="@ViewData["MinimumPrice"]" data-to="@ViewData["MaximumPrice"]" data-prefix="$" data-grid="false"></div>
+                            </div>
 
-                        <!--Price Filter-->
-                        <div class="section-filter-price">
-                            <div id="priceSlider" class="price-slider section-filter-price" data-min="0" data-max="@(Model.MaximumPrice)" data-from="@ViewData["MinimumPrice"]" data-to="@ViewData["MaximumPrice"]" data-prefix="$" data-grid="false"></div>
-                        </div>
+                            <input type="hidden" id="minPriceValue" name="minPriceValue" />
+                            <input type="hidden" id="maxPriceValue" name="maxPriceValue" value="@(Model.MaximumPrice)" />
 
-                        <input type="hidden" id="minPriceValue" name="minPriceValue" />
-                        <input type="hidden" id="maxPriceValue" name="maxPriceValue" value="@(Model.MaximumPrice)" />
-
-                        <!--Cities Filter-->
-                        <div class="section-filter-item opened">
-                            <p class="section-filter-ttl"><localize name="City_Entity"></localize> <i class="fa fa-angle-down"></i></p>
-                            @await Component.InvokeAsync("CitiesFilter", new { isFirstCall = true, cityIds = ViewData["CityIds"] })
+                            <!--Cities Filter-->
+                            <div class="section-filter-item opened">
+                                <p class="section-filter-ttl"><localize name="City_Entity"></localize> <i class="fa fa-angle-down"></i></p>
+                                @await Component.InvokeAsync("CitiesFilter", new { isFirstCall = true, cityIds = ViewData["CityIds"] })
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
-            </div>
 
 
+                <!--Loading ad section -->
+                <div class="section-cont">
+                    <div class="prod-items section-items">
 
-            <!--Loading ad section -->
-            <div class="section-cont">
-                <div class="prod-items section-items">
-
-                    @foreach (var gridAd in Model)
-                    {
-                        <div class="prodlist-i">
-                            <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
-                                @if (gridAd.MainPicture != null)
-                                {
-                                    <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
-                                }
-                                else
-                                {
-                                    <img src='~/img/300x311.png' />
-                                }
-                            </a>
-                            <div class="prodlist-i-cont">
-                                <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
-                                <div class="prodlist-i-txt">
-                                    @gridAd.Description
-                                </div>
-                                <div class="prodlist-i-action">
-                                    <span class="prodlist-i-price">
-                                        <b>$ @gridAd.Price</b>
-                                    </span>
-                                </div>
-                                <p class="prodlist-i-info">
-                                    @if (gridAd.IsInWishlist)
+                        @foreach (var gridAd in Model)
+                        {
+                            <div class="prodlist-i">
+                                <a class="prodlist-i-img" asp-action="Details" asp-route-id="@gridAd.ID">
+                                    @if (gridAd.MainPicture != null)
                                     {
-                                        <a asp-action="Delete"
-                                           asp-controller="Wishlist"
-                                           asp-route-adId=@gridAd.ID
-                                           class="prodlist-i-favorites">
-                                            <i class="fa fa-heart" style="color: crimson"></i><localize name="General_DeleteFromWishlist"></localize>
-                                        </a>
+                                        <img src='data:image;base64,@System.Convert.ToBase64String(gridAd.MainPicture)' />
                                     }
                                     else
                                     {
-                                        <a asp-action="Create"
-                                           asp-controller="Wishlist"
-                                           asp-route-adId=@gridAd.ID
-                                           class="prodlist-i-favorites">
-                                            <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
-                                        </a>
+                                        <img src='~/img/300x311.png' />
                                     }
-                                </p>
-                            </div>
+                                </a>
+                                <div class="prodlist-i-cont">
+                                    <h3><a asp-action="Details" asp-route-id="@gridAd.ID">@gridAd.Name</a></h3>
+                                    <div class="prodlist-i-txt">
+                                        @gridAd.Description
+                                    </div>
+                                    <div class="prodlist-i-action">
+                                        <span class="prodlist-i-price">
+                                            <b>$ @gridAd.Price</b>
+                                        </span>
+                                    </div>
+                                    <p class="prodlist-i-info">
+                                        @if (gridAd.IsInWishlist)
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-controller="Wishlist"
+                                               asp-route-adId=@gridAd.ID
+                                               class="prodlist-i-favorites">
+                                                <i class="fa fa-heart" style="color: crimson"></i><localize name="General_DeleteFromWishlist"></localize>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Create"
+                                               asp-controller="Wishlist"
+                                               asp-route-adId=@gridAd.ID
+                                               class="prodlist-i-favorites">
+                                                <i class="fa fa-heart"></i><localize name="General_AddToWishlist"></localize>
+                                            </a>
+                                        }
+                                    </p>
+                                </div>
 
-                            <div class="prodlist-i-props-wrap">
-                                <ul class="prodlist-i-props">
-                                    <li>
-                                        <b><localize name="Owner_Username"></localize></b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
-                                    </li>
-                                    <li>
-                                        <b><localize name="Owner_Phone"></localize></b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
-                                    </li>
-                                    <li>
-                                        <b><localize name="Owner_Mail"></localize></b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
-                                    </li>
-                                    <li>
-                                        <b><localize name="City_Entity"></localize></b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
-                                    </li>
-                                    <li>
-                                        <b><localize name="Category_Entity"></localize></b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
-                                    </li>
-                                </ul>
-                            </div>
+                                <div class="prodlist-i-props-wrap">
+                                    <ul class="prodlist-i-props">
+                                        <li>
+                                            <b><localize name="Owner_Username"></localize></b> <i class='fa fa-user'></i> @gridAd.Owner?.UserName
+                                        </li>
+                                        <li>
+                                            <b><localize name="Owner_Phone"></localize></b> <i class='fa fa-phone'></i> @gridAd.Owner?.PhoneNumber
+                                        </li>
+                                        <li>
+                                            <b><localize name="Owner_Mail"></localize></b> <i class='fa fa-envelope'></i> @gridAd.Owner?.Email
+                                        </li>
+                                        <li>
+                                            <b><localize name="City_Entity"></localize></b> <i class="fa fa-fort-awesome"></i> @gridAd.City?.Name
+                                        </li>
+                                        <li>
+                                            <b><localize name="Category_Entity"></localize></b> <i class="fa fa-folder-open"></i> @gridAd.Category?.Name
+                                        </li>
+                                    </ul>
+                                </div>
 
-                        </div>
-                    }
+                            </div>
+                        }
+                    </div>
                 </div>
+
+
+                @if (Model.TotalPages > 1)
+                {
+
+                    int counter = Model.PagesBefore;
+                    int forwardCounter = 1;
+                    <ul class="pagi">
+
+                        @if (Model.PageIndex - Model.PagesBefore > 1)
+                        {
+                            <li class="pagi-prev">
+                                <input asp-action="Index" asp-controller="Ads"
+                                       type="submit" value="@(Model.PageIndex - counter)"
+                                       name="PageNumber"
+                                       id="@(Model.PageIndex - counter)"
+                                       onclick="$('#form').submit();"
+                                       class="form-control" />
+                                <i class="fa fa-angle-double-left"></i>
+                            </li>
+                        }
+
+                        @while (counter > 0)
+                        {
+                            <li>
+                                <input asp-action="Index" asp-controller="Ads"
+                                       type="submit" value="@(Model.PageIndex - counter)"
+                                       name="PageNumber"
+                                       id="@(Model.PageIndex - counter)"
+                                       onclick="$('#form').submit();"
+                                       class="form-control" />
+                            </li>
+                            counter = counter - 1;
+                        }
+
+                        <li class="active">
+                            <a>
+                                @Model.PageIndex
+                            </a>
+                        </li>
+
+                        @while (forwardCounter <= Model.PagesLeft)
+                        {
+                            <li>
+                                <input asp-action="Index" asp-controller="Ads"
+                                       type="submit"
+                                       value="@(Model.PageIndex + forwardCounter)"
+                                       name="PageNumber"
+                                       id="@(Model.PageIndex + forwardCounter)"
+                                       onclick="$('#form').submit();"
+                                       class="form-control" />
+                            </li>
+                            forwardCounter = forwardCounter + 1;
+                        }
+
+                        @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
+                        {
+
+                            <li class="pagi-next">
+                                <input asp-action="Index" asp-controller="Ads"
+                                       type="submit"
+                                       value="@(Model.PageIndex - counter)"
+                                       name="PageNumber"
+                                       id="@(Model.PageIndex - counter)"
+                                       onclick="$('#form').submit();"
+                                       class="form-control" />
+                                <i class="fa fa-angle-double-right"></i>
+                            </li>
+                        }
+
+                    </ul>
+                }
             </div>
-
-
-            @if (Model.TotalPages > 1)
-            {
-
-                int counter = Model.PagesBefore;
-                int forwardCounter = 1;
-                <ul class="pagi">
-
-                    @if (Model.PageIndex - Model.PagesBefore > 1)
-                    {
-                        <li class="pagi-prev">
-                            <input asp-action="Index" asp-controller="Ads"
-                                   type="submit" value="@(Model.PageIndex - counter)"
-                                   name="PageNumber"
-                                   id="@(Model.PageIndex - counter)"
-                                   onclick="this.form.submit();"
-                                   class="form-control" />
-                            <i class="fa fa-angle-double-left"></i>
-                        </li>
-                    }
-
-                    @while (counter > 0)
-                    {
-                        <li>
-                            <input asp-action="Index" asp-controller="Ads"
-                                   type="submit" value="@(Model.PageIndex - counter)"
-                                   name="PageNumber"
-                                   id="@(Model.PageIndex - counter)"
-                                   onclick="this.form.submit();"
-                                   class="form-control" />
-                        </li>
-                        counter = counter - 1;
-                    }
-
-                    <li class="active">
-                        <a>
-                            @Model.PageIndex
-                        </a>
-                    </li>
-
-                    @while (forwardCounter <= Model.PagesLeft)
-                    {
-                        <li>
-                            <input asp-action="Index" asp-controller="Ads"
-                                   type="submit"
-                                   value="@(Model.PageIndex + forwardCounter)"
-                                   name="PageNumber"
-                                   id="@(Model.PageIndex + forwardCounter)"
-                                   onclick="this.form.submit();"
-                                   class="form-control" />
-                        </li>
-                        forwardCounter = forwardCounter + 1;
-                    }
-
-                    @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
-                    {
-
-                        <li class="pagi-next">
-                            <input asp-action="Index" asp-controller="Ads"
-                                   type="submit"
-                                   value="@(Model.PageIndex - counter)"
-                                   name="PageNumber"
-                                   id="@(Model.PageIndex - counter)"
-                                   onclick="this.form.submit();"
-                                   class="form-control" />
-                            <i class="fa fa-angle-double-right"></i>
-                        </li>
-                    }
-
-                </ul>
-            }
-
         </section>
     </main>
 </form>

@@ -70,6 +70,14 @@
             <!-- Product Description/Info -->
             <div class="prod-cont">
                 <h1 class="main-ttl"><span>@Html.DisplayFor(model => model.Name)</span></h1>
+
+                <div class="prod-cont-txt">
+                    @if (Model.AdDetail != null)
+                    {
+                        @Html.DisplayFor(model => model.AdDetail.Description)
+                    }
+                </div>
+
                 <div class="prod-info">
                     <p class="prod-price">
                         <b class="item_current_price">$ @Model.Price</b>
@@ -93,12 +101,6 @@
                     </li>
                 </ul>
 
-                <div class="prod-cont-txt">
-                    @if (Model.AdDetail != null)
-                    {
-                        @Html.DisplayFor(model => model.AdDetail.Description)
-                    }
-                </div>
                 <p class="prod-actions">
                     @if (Model.IsInWishlist)
                     {
