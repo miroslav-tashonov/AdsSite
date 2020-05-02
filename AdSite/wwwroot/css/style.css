@@ -1570,6 +1570,12 @@ ul.b-crumbs {
         line-height: 32px;
         height: 32px;
     }
+
+	.pagi li input {
+		width: 33px;
+		cursor: pointer;
+	}
+
         .pagi li a:hover,
         .pagi li input:hover
         {

@@ -1,7 +1,4 @@
-﻿$(document).ready(function () {
-    declareIonRangeSlider();
-});
-
+﻿
 $(function () {
     $("#form").submit(function (e) {
         e.preventDefault();
@@ -15,6 +12,7 @@ $(function () {
             SortColumn: $('#SortColumn option:selected').html(),
             ColumnName: $('#ColumnName option:selected').html(),
             PageSize: $('#PageSize option:selected').html(),
+            PageNumber: $('#PageNumber').val(),
             SearchString: $('#SearchString').val(),
             CategoryId: $('#hiddenCategoryId').val(),
             CityIds: cityIds,
@@ -55,6 +53,12 @@ function declareIonRangeSlider() {
             $('#form').submit();
         }
     });
+}
+
+function SetPageNumber(number) {
+    $('#PageNumber').val(number);
+
+    $('#form').submit();
 }
 
 

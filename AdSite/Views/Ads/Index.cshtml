@@ -34,6 +34,11 @@
     <script src="~/js/main.js"></script>
     <script src="~/extendedJs/fileUpload.js"></script>
     <script type="text/javascript" src="~/js/adIndex.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            declareIonRangeSlider();
+        });
+    </script>
 }
 
 <br />
@@ -183,79 +188,76 @@
                             </div>
                         }
                     </div>
+
+                    @if (Model.TotalPages > 1)
+                    {
+
+                        int counter = Model.PagesBefore;
+                        int forwardCounter = 1;
+                        <ul class="pagi">
+
+                            @if (Model.PageIndex - Model.PagesBefore > 1)
+                            {
+                                <li class="pagi-prev">
+                                    <input asp-action="Index" asp-controller="Ads"
+                                           name="PageNumber"
+                                           value="@(Model.PageIndex - counter)"
+                                           onclick="SetPageNumber(@(Model.PageIndex - counter));"
+                                           class="form-control" />
+                                    <i class="fa fa-angle-double-left"></i>
+                                </li>
+                            }
+
+                            @while (counter > 0)
+                            {
+                                <li>
+                                    <input asp-action="Index" asp-controller="Ads"
+                                           name="PageNumber"
+                                           value="@(Model.PageIndex - counter)"
+                                           onclick="SetPageNumber(@(Model.PageIndex - counter));"
+                                           class="form-control" />
+                                </li>
+                                counter = counter - 1;
+                            }
+
+                            <li class="active">
+                                <a>
+                                    @Model.PageIndex
+                                </a>
+                            </li>
+
+                            @while (forwardCounter <= Model.PagesLeft)
+                            {
+                                <li>
+                                    <input asp-action="Index" asp-controller="Ads"
+                                           name="PageNumber"
+                                           value="@(Model.PageIndex + forwardCounter)"
+                                           onclick="SetPageNumber(@(Model.PageIndex + forwardCounter));"
+                                           class="form-control" />
+                                </li>
+                                forwardCounter = forwardCounter + 1;
+                            }
+
+                            @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
+                            {
+
+                                <li class="pagi-next">
+                                    <input asp-action="Index" asp-controller="Ads"
+                                           name="PageNumber"
+                                           value="@(Model.PageIndex - counter)"
+                                           onclick="SetPageNumber(@(Model.PageIndex - counter));"
+                                           class="form-control" />
+                                    <i class="fa fa-angle-double-right"></i>
+                                </li>
+                            }
+
+                        </ul>
+
+                        <input type="hidden" id="PageNumber" />
+                    }
+
+
                 </div>
-
-
-                @if (Model.TotalPages > 1)
-                {
-
-                    int counter = Model.PagesBefore;
-                    int forwardCounter = 1;
-                    <ul class="pagi">
-
-                        @if (Model.PageIndex - Model.PagesBefore > 1)
-                        {
-                            <li class="pagi-prev">
-                                <input asp-action="Index" asp-controller="Ads"
-                                       type="submit" value="@(Model.PageIndex - counter)"
-                                       name="PageNumber"
-                                       id="@(Model.PageIndex - counter)"
-                                       onclick="$('#form').submit();"
-                                       class="form-control" />
-                                <i class="fa fa-angle-double-left"></i>
-                            </li>
-                        }
-
-                        @while (counter > 0)
-                        {
-                            <li>
-                                <input asp-action="Index" asp-controller="Ads"
-                                       type="submit" value="@(Model.PageIndex - counter)"
-                                       name="PageNumber"
-                                       id="@(Model.PageIndex - counter)"
-                                       onclick="$('#form').submit();"
-                                       class="form-control" />
-                            </li>
-                            counter = counter - 1;
-                        }
-
-                        <li class="active">
-                            <a>
-                                @Model.PageIndex
-                            </a>
-                        </li>
-
-                        @while (forwardCounter <= Model.PagesLeft)
-                        {
-                            <li>
-                                <input asp-action="Index" asp-controller="Ads"
-                                       type="submit"
-                                       value="@(Model.PageIndex + forwardCounter)"
-                                       name="PageNumber"
-                                       id="@(Model.PageIndex + forwardCounter)"
-                                       onclick="$('#form').submit();"
-                                       class="form-control" />
-                            </li>
-                            forwardCounter = forwardCounter + 1;
-                        }
-
-                        @if (Model.TotalPages - Model.PageIndex > Model.PagesLeft)
-                        {
-
-                            <li class="pagi-next">
-                                <input asp-action="Index" asp-controller="Ads"
-                                       type="submit"
-                                       value="@(Model.PageIndex - counter)"
-                                       name="PageNumber"
-                                       id="@(Model.PageIndex - counter)"
-                                       onclick="$('#form').submit();"
-                                       class="form-control" />
-                                <i class="fa fa-angle-double-right"></i>
-                            </li>
-                        }
-
-                    </ul>
-                }
             </div>
         </section>
     </main>
