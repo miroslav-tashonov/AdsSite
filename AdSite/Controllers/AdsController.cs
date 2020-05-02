@@ -37,6 +37,8 @@ namespace AdSite.Controllers
         private const int SERVER_ERROR_CODE = 500;
         private const int FIRST_PAGE_NUMBER = 1;
         private const int DEFAULT_PAGE_SIZE = 10;
+        private string DEFAULT_SEARCH_COLUMN_NAME => "Name";
+        private string DEFAULT_SORT_COLUMN_NAME => "Cheapest";
         private const int PAGE_SIZE = 3;
         private string CurrentUserId => _userManager.GetUserId(User);
         private Guid CountryId => _countryService.Get((Guid)HttpContext.Items[COUNTRY_ID]);
@@ -49,6 +51,7 @@ namespace AdSite.Controllers
         private string LOCALIZATION_ERROR_NOT_FOUND => _localizationService.GetByKey("ErrorMessage_NotFound", CultureId);
         private string LOCALIZATION_ERROR_ONLY_OWNER_CAN_EDIT => _localizationService.GetByKey("ErrorMessage_OnlyOwnerCanEdit", CultureId);
         private string LOCALIZATION_ERROR_CONCURENT_EDIT => _localizationService.GetByKey("ErrorMessage_ConcurrentEdit", CultureId);
+
 
         public AdsController(IAdService adService, ICityService cityService, IWishlistService wishlistService, ICategoryService categoryService, ICountryService countryService, ILocalizationService localizationService, UserManager<ApplicationUser> userManager, ILogger<AdsController> logger)
         {
@@ -93,8 +96,8 @@ namespace AdSite.Controllers
 
             queryModel.CategoryId = (queryModel.CategoryId == Guid.Empty || queryModel.CategoryId == null) ? null : queryModel.CategoryId;
             queryModel.SearchString = String.IsNullOrEmpty(queryModel.SearchString) ? String.Empty : queryModel.SearchString;
-            queryModel.ColumnName = String.IsNullOrEmpty(queryModel.ColumnName) ? String.Empty : queryModel.ColumnName;
-            queryModel.SortColumn = String.IsNullOrEmpty(queryModel.SortColumn) ? String.Empty : queryModel.SortColumn;
+            queryModel.ColumnName = String.IsNullOrEmpty(queryModel.ColumnName) ? DEFAULT_SEARCH_COLUMN_NAME : queryModel.ColumnName;
+            queryModel.SortColumn = String.IsNullOrEmpty(queryModel.SortColumn) ? DEFAULT_SORT_COLUMN_NAME : queryModel.SortColumn;
 
             try
             {
@@ -150,8 +153,8 @@ namespace AdSite.Controllers
             }
 
             searchString = String.IsNullOrEmpty(searchString) ? String.Empty : searchString;
-            columnName = String.IsNullOrEmpty(columnName) ? String.Empty : columnName;
-            sortColumn = String.IsNullOrEmpty(sortColumn) ? String.Empty : sortColumn;
+            columnName = String.IsNullOrEmpty(columnName) ? DEFAULT_SEARCH_COLUMN_NAME : columnName;
+            sortColumn = String.IsNullOrEmpty(sortColumn) ? DEFAULT_SORT_COLUMN_NAME : sortColumn;
             ViewData["CurrentFilter"] = searchString;
             ViewData["CurrentColumn"] = columnName;
             ViewData["SortColumn"] = sortColumn;

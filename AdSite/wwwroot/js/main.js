@@ -4,11 +4,9 @@ function pad(n) {
     return (n < 10) ? ("0" + n) : n;
 }
 
-
 $(document).ready(function () {
     registerCategoriesEvents();
 });
-
 
 function registerCategoriesEvents() {
 
