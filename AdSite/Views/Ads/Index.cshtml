@@ -70,7 +70,8 @@
                 <select id="SortColumn" name="SortColumn" class="form-control" asp-items="sortListItems" onchange="$('#form').submit();"></select>
             </div>
             <div class="col-sm-4 no-padding-right">
-                <select name="PageSize"
+                <select id="PageSize"
+                        name="PageSize"
                         class="form-control"
                         asp-items="@(Model.GetPageSizes(ViewData["PageSize"]?.ToString()))"
                         onchange="$('#form').submit();"></select>
