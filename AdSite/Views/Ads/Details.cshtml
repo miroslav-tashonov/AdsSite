@@ -1,4 +1,5 @@
 ﻿@model AdSite.Models.CRUDModels.AdViewModel
+@using AdSite.Models.DatabaseModels
 @using AdSite.Views.Shared;
 @using Microsoft.AspNetCore.Html;
 @inject UserManager<ApplicationUser> UserManager
@@ -7,6 +8,17 @@
 }
 
 @{
+    //get categories for breadcrumb
+    List<Category> categoriesForBreadcrumb = new List<Category>();
+    var currentCategory = Model.Category;
+    while (currentCategory != null)
+    {
+        categoriesForBreadcrumb.Add(currentCategory);
+        currentCategory = currentCategory.Parent;
+    }
+    categoriesForBreadcrumb.Reverse();
+    //
+
     const int NUMBER_OF_RELATED_ADS = 4;
     int relatedAdsCounter = 0;
     int numberOfRelatedAdGroups = Model.RelatedAds.Count / NUMBER_OF_RELATED_ADS;
@@ -15,10 +27,22 @@
     int numberOfGroupsOfRelatedLinks = numberOfRelatedAdGroups + numberOfRelatedAdGroupsResto;
 }
 
-<br />
-<hr />
 <main>
-    <section class="container">        
+    <section class="container">
+            <ul class="b-crumbs">
+                @foreach (var category in categoriesForBreadcrumb)
+                {
+                    <li>
+                        <a asp-controller="Ads" 
+                           asp-action="Index"
+                           value="@category.ID">
+                            @category?.Name
+                        </a>
+                    </li>
+                }
+            </ul>
+
+
         <!-- Single Product - start -->
         <div class="prod-wrap">
 
@@ -121,6 +145,7 @@
                         </a>
                     }
 
+                    <a onclick="window.open('mailto:@Model.Owner?.Email?subject=@Model.Name')"> <i class="fa fa-envelope"></i> <localize name="General_SendEmail"></localize>  </a>
                     <a href="#"> <i class="fa fa-facebook-f"></i> <localize name="General_ShareOnFacebook"></localize>  </a>
                     <a onclick="window.print();" href="#"> <i class="fa fa-print"></i> <localize name="General_Print"></localize> </a>
                     @if ((User.IsInRole("User") && UserManager.GetUserId(User) == Model.Owner.Id) || User.IsInRole("Admin"))
@@ -162,7 +187,7 @@
                                             <div class="prod-rel-cont">
                                                 <h3><a asp-action="Details" asp-route-id="@Model.RelatedAds[relatedAdsCounter].ID">@Model.RelatedAds[relatedAdsCounter].Name</a></h3>
                                                 <div class="prodlist-i-txt">
-                                                    
+
                                                 </div>
                                                 <div class="prod-rel-actions">
                                                     <span class="prod-rel-price">

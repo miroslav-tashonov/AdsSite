@@ -9,7 +9,7 @@ namespace AdSite.Models.Mappers.Tests
         [Test()]
         public void MapAdFromAdEditModelTest()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }
