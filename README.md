@@ -23,19 +23,5 @@ Note: If your have any troubles setting up this project using setup, check this 
 <br/>
 <br/>
 
-![Use case diagram](https://imgur.com/yx6Ix2L)
-
-[Use case diagram](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/ad-site-usecase.jpg) shows how different roles can use the system
-<br/>
-[Entity Relationship diagram](https://github.com/miroslav-tashonov/AdsSite/blob/master/AdSite/wwwroot/img/adsite-Database-ER.jpg) of the database
-
-<br/>
-Screenshots : 
-<br />
-<br />
-<p float="left">
-  <img src="https://i.imgur.com/uNocJ40.png" width=100>
-  <img src="https://i.imgur.com/0riw0kK.png" width=100>
-  <img src="https://i.imgur.com/GSmfrlw.png" width=100>
-</p>
+![adsite-Database-ER](https://user-images.githubusercontent.com/3856771/99712166-f47f8b00-2aa2-11eb-9466-122bd01c1c1b.jpg)
 
