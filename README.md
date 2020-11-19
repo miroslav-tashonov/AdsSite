@@ -2,7 +2,7 @@ This project represents multi-site role based ads site built with .net5.0 from s
 
 <b>Installation Steps</b>
 
-By default the project relies on docker-compose deployment, hence you should have a containerized applications support (<a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>). If you use VS for development, just use the default docker-compose debug setting and that will create a new database (also into mssql container image), with a new site into the multi-site website, localization, roles into your new mssql container image, or use docker-compose command into cmd. The default access URL is http://localhost:5050/ . For more customization see the optional ways for installation via the setup wizard.
+By default the project relies on docker-compose deployment, hence you should have a containerized applications support (<a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>). If you use VS for development, just use the default docker-compose debug setting and that will create a new database (also into mssql container image), with a new site into the multi-site website, localizations, roles and admin account. Alternatively you can use docker-compose command into cmd. The default access URL is http://localhost:5050/ . For more customization see the optional ways for installation via the setup wizard.
 You can alter you settings and host this project in mac, windows or linux.
 
 Optional installation steps:
