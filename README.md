@@ -12,7 +12,7 @@ By default the project relies on docker-compose deployment, hence you should hav
 <br/>
 <br/>
 <b>Behind the scenes :</b>
-There are two docker images, one for the site and one database image. On project startup there is a seed procedure to create a new database (also into mssql container image) if it doesnt exist, a separate site for the multi-site support, localizations, roles and an admin account. For more customization see the optional ways for installation via the setup wizard.
+There are two docker images, one for the site and one database image. On project startup there is a seed procedure to create a new database (also into mssql container image) if it doesnt exist, a separate site for the multi-site support, localizations, language, roles and an admin account. For more customization see the optional ways for installation via the setup wizard.
 
 
 <i>Optional installation steps:</i>
