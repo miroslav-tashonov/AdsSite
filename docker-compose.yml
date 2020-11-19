@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  adsite:
+    image: ${DOCKER_REGISTRY-}adsite
+    build:
+      context: .
+      dockerfile: AdSite/Dockerfile
+    ports:
+      - "5050:80"
+    depends_on:
+      - db  
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+        SA_PASSWORD: "somepassword"
+        ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"

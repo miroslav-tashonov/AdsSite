@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdSite.Data", "AdSite.Data\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdSite.Services", "AdSite.Services\AdSite.Services.csproj", "{8C9F4721-A8B9-44B2-A5ED-FE0FD0D50347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdSite.NUnitTest", "AdSite.NUnitTest\AdSite.NUnitTest.csproj", "{3835A0F2-0399-4A56-8FF7-DB511959D85A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdSite.NUnitTest", "AdSite.NUnitTest\AdSite.NUnitTest.csproj", "{3835A0F2-0399-4A56-8FF7-DB511959D85A}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2131BDAC-3A27-4FE7-B44E-E9113FF14CD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3835A0F2-0399-4A56-8FF7-DB511959D85A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3835A0F2-0399-4A56-8FF7-DB511959D85A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3835A0F2-0399-4A56-8FF7-DB511959D85A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2131BDAC-3A27-4FE7-B44E-E9113FF14CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2131BDAC-3A27-4FE7-B44E-E9113FF14CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2131BDAC-3A27-4FE7-B44E-E9113FF14CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2131BDAC-3A27-4FE7-B44E-E9113FF14CD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

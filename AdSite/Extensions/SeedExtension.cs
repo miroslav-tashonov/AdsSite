@@ -1,8 +1,10 @@
-﻿using AdSite.Models;
+﻿using AdSite.Data;
+using AdSite.Models;
 using AdSite.Models.CRUDModels;
 using AdSite.Models.Extensions;
 using AdSite.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -144,6 +146,20 @@ namespace AdSite.Extensions
         {"General_Create", "Create" }
         #endregion
         };
+
+
+
+        public static void MigrateDatabase(IServiceProvider serviceProvider)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
+            logger.LogInformation("creating database");
+
+            using (var context = serviceProvider.GetService<ApplicationDbContext>())
+            {
+                context.Database.Migrate();
+                context.Dispose();
+            }
+        }
 
         public static async Task CreateRoles(IServiceProvider serviceProvider)
         {
@@ -297,7 +313,7 @@ namespace AdSite.Extensions
         //public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
         //{
         //    var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
-        //    logger.LogInformation("adding default language");
+        //    logger.LogInformation("adding default user");
 
         //    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
@@ -305,7 +321,7 @@ namespace AdSite.Extensions
         //    if (!userManager.Users.Any(u => u.UserName == "admin@email.com"))
         //    {
         //        var user = new ApplicationUser { LockoutEnabled = false, EmailConfirmed = true, UserName = "admin@email.com", Email = "admin@email.com" };
-        //        var result = await userManager.CreateAsync(user, "Admin123!");
+        //        var result = await userManager.CreateAsync(user, "somepassword");
         //        if (result.Succeeded)
         //        {
         //            result = await userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.Admin));

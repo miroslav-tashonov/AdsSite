@@ -11,6 +11,7 @@ COPY ["AdSite/AdSite.csproj", "AdSite/"]
 COPY ["AdSite.Services/AdSite.Services.csproj", "AdSite.Services/"]
 COPY ["AdSite.Data/AdSite.Data.csproj", "AdSite.Data/"]
 COPY ["AdSite.Models/AdSite.Models.csproj", "AdSite.Models/"]
+
 RUN dotnet restore "AdSite/AdSite.csproj"
 COPY . .
 WORKDIR "/src/AdSite"

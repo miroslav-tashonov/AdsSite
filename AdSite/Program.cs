@@ -15,9 +15,29 @@ namespace AdSite
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("Configs\\nlog.config").GetCurrentClassLogger();
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("Configs/nlog.config").GetCurrentClassLogger();
             logger.Info("app init");
             var host = BuildWebHost(args);
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var serviceProvider = services.GetRequiredService<IServiceProvider>();
+                    var configuration = services.GetRequiredService<IConfiguration>();
+
+                    SeedExtension.MigrateDatabase(serviceProvider);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(exception, "An error occurred while creating roles");
+                }
+                finally
+                {
+                    NLog.LogManager.Shutdown();
+                }
+            }
 
             using (var scope = host.Services.CreateScope())
             {
@@ -43,6 +63,7 @@ namespace AdSite
                 }
             }
 
+
             host.Run();
 
         }
@@ -60,8 +81,8 @@ namespace AdSite
                 {
                     var env = hostingContext.HostingEnvironment;
 
-                    config.AddJsonFile("Configs\\appsettings.json", optional: true)
-                        .AddJsonFile($"Configs\\appsettings.{env.EnvironmentName}.json", optional: true);
+                    config.AddJsonFile("appsettings.json", optional: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
                     config.AddEnvironmentVariables();
                 })

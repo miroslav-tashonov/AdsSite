@@ -31,7 +31,7 @@ namespace AdSite.Services
 
         private readonly int CultureId = Thread.CurrentThread.CurrentCulture.LCID;
         private string LOCALIZATION_LOCALIZATIONCLASS_NOT_FOUND => _repository.GetLocalizationValue("Localization_LocalizationClass_Not_Found", CultureId);
-        private string LOCALIZATION_LOCALIZATIONCLASS_KEY_NOT_FOUND => _repository.GetLocalizationValue("Localization_LocalizationClass_Key_Not_Found", CultureId);
+        private string LOCALIZATION_LOCALIZATIONCLASS_KEY_NOT_FOUND => "Localization key not found : ";//_repository.GetLocalizationValue("Localization_LocalizationClass_Key_Not_Found", CultureId);
         private string LOCALIZATION_LOCALIZATIONCLASS_ENTITY_NOT_FOUND => _repository.GetLocalizationValue("Localization_LocalizationClass__Entity_Not_Found", CultureId);
 
 
