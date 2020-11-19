@@ -2,8 +2,17 @@ This project represents multi-site role based ads site built with .net5.0 from s
 
 <b>Installation Steps</b>
 
-By default the project relies on docker-compose deployment, hence you should have a containerized applications support (<a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>). If you use VS for development, just use the default docker-compose debug setting and that will create a new database (also into mssql container image), with a new site into the multi-site website, localizations, roles and admin account. Alternatively you can use docker-compose command into cmd. The default access URL is http://localhost:5050/ . For more customization see the optional ways for installation via the setup wizard.
-You can alter you settings and host this project in mac, windows or linux.
+Clone and run, that's it :) 
+<br/>
+<br/>
+The default access URL is http://localhost:5050/
+<br/>
+By default the project relies on docker-compose deployment, hence you should have a containerized applications support (<a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>), but you can also alter you settings and host this project in mac, windows or linux.
+<br/>
+<br/>
+<b>Behind the scenes :</b>
+There are two docker images, one for the site and one database image. On project startup there is a seed procedure to create a new database (also into mssql container image) if it doesnt exist, a separate site for the multi-site support, localizations, roles and an admin account. For more customization see the optional ways for installation via the setup wizard.
+
 
 Optional installation steps:
 Download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0MtfDrsrM5roJUbpBFhj) or [Setup-FrameworkDependant.exe](https://drive.google.com/open?id=1zj904FqB3znB8qNeNzD1zfzDFvIHzHuX) that will guide you to setup this project on your windows environment 
