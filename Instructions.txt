@@ -1,18 +1,12 @@
 Installation requirements
 
 Visual Studio 2019 (>= 16.4.0)
-Integrated SQL in Visual studio or standalone SQL Server instance
-Asp.net core 3.1 SDK, download links below
-
-    Windows: https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.100-windows-x64-installer
-    Mac: https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.100-macos-x64-installer
-    Linux: https://docs.microsoft.com/dotnet/core/install/linux-package-managers
+SQL Server Instance
 
 Installation steps
 
 1. Clone the repository from https://github.com/miroslav-tashonov/AdsSite
-2. Build and clean the project, make sure asp.net core 3.1 sdk is installed in this step
-3. Create Database via sql scripts located on ~\AdsSite\AdSite.Data\Scripts\ execute the scripts in this particular order inside your database management system
+2. Create Database via sql scripts located on ~\AdsSite\AdSite.Data\Scripts\ execute the scripts in this particular order inside your database management system
 *Create_Database.sql
 *Import_Script.sql
 *Import_Roles.sql
@@ -21,6 +15,5 @@ Installation steps
 default :
 username: admin@email.com  password : Admin123!
 
-
-4. Execute via IISExpress or host this project 
-5. Login to the site with the credentials you have provided into  Import_InitialData.sql script.
+3. The default build is via docker-compose deployment, you can choose to execute via IISExpress or host this project 
+4. Login to the site with the credentials you have provided into  Import_InitialData.sql script.
