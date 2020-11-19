@@ -16,10 +16,7 @@ There are two docker images, one for the site and one database image. On project
 
 
 <i>Optional installation steps:</i>
-Download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0MtfDrsrM5roJUbpBFhj) or [Setup-FrameworkDependant.exe](https://drive.google.com/open?id=1zj904FqB3znB8qNeNzD1zfzDFvIHzHuX) that will guide you to setup this project on your windows environment 
-<br/>
-<br/>
-Note: If your have any troubles setting up this project using setup, check this [instructions](Instructions.txt) for manual steps.   
+Download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0MtfDrsrM5roJUbpBFhj) or [Setup-FrameworkDependant.exe](https://drive.google.com/open?id=1zj904FqB3znB8qNeNzD1zfzDFvIHzHuX) that will guide you to setup this project on your windows environment. If your have any troubles setting up this project using setup, check this [instructions](Instructions.txt) for manual steps.   
 
 <br/>
 <br/>
