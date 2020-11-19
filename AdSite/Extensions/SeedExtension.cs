@@ -310,28 +310,43 @@ namespace AdSite.Extensions
         }
 
 
-        //public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
-        //{
-        //    var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
-        //    logger.LogInformation("adding default user");
+        public static async Task CreateAdminAccount(IServiceProvider serviceProvider)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedExtension>>();
+            logger.LogInformation("adding default user");
 
-        //    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationIdentityRole>>();
+            var userRoleCountryService = serviceProvider.GetRequiredService<IUserRoleCountryService>();
+            var _countryService = serviceProvider.GetService<ICountryService>();
 
-        //    //todo hide credentials 
-        //    if (!userManager.Users.Any(u => u.UserName == "admin@email.com"))
-        //    {
-        //        var user = new ApplicationUser { LockoutEnabled = false, EmailConfirmed = true, UserName = "admin@email.com", Email = "admin@email.com" };
-        //        var result = await userManager.CreateAsync(user, "somepassword");
-        //        if (result.Succeeded)
-        //        {
-        //            result = await userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.Admin));
-        //            if (result.Succeeded)
-        //            {
-        //                logger.LogInformation("Admin created !!");
-        //            }
-        //        }
-        //    }
-        //}
+            //todo hide credentials 
+            if (!userManager.Users.Any(u => u.UserName == "admin@email.com"))
+            {
+                var user = new ApplicationUser { LockoutEnabled = false, EmailConfirmed = true, UserName = "admin@email.com", Email = "admin@email.com" };
+                var result = await userManager.CreateAsync(user, "Admin123!");
+                if (result.Succeeded)
+                {
+                    result = await userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.Admin));
+                    if (result.Succeeded)
+                    {
+                        var role = roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User))
+                .GetAwaiter().GetResult();
+
+                        userRoleCountryService.Add(
+                            new UserRoleCountryCreateModel
+                            {
+                                ApplicationUserId = user.Id,
+                                CountryId = _countryService.GetAll().First().ID,
+                                RoleId = role.Id
+                            }
+                            );
+
+                        logger.LogInformation("Admin created !!");
+                    }
+                }
+            }
+        }
     }
 
 }
