@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CategoryViewModel } from './models/CategoryViewModel';
 import { WebSettingsModel } from './models/WebSettingsModel';
+import { CategoriesService } from './services/categories.service';
 import { WebSettingsService } from './services/web-settings.service';
 
 @Component({
@@ -9,12 +11,14 @@ import { WebSettingsService } from './services/web-settings.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ClientApp';
+  title = 'Ads Site';
 
+  menuCategories$: Observable<CategoryViewModel[]> | undefined;
   webSettings$: Observable<WebSettingsModel> | undefined;
 
-  //todo countryId
-  constructor(private webSettingsService: WebSettingsService) {
+  //todo: countryId
+  constructor(private webSettingsService: WebSettingsService, private categoriesService: CategoriesService) {
     this.webSettings$ = this.webSettingsService.getWebSettingsModel('99DE8181-09A8-41DB-895E-54E5E0650C3A');
+    this.menuCategories$ = this.categoriesService.getCategoriesTreeMenu('6248DE50-32E7-4C04-82A4-A7EF1D03CD05');
   }
 }

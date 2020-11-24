@@ -65,11 +65,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\models\CategoryViewModel.ts" />
     <None Remove="ClientApp\src\app\models\localizationModel.ts" />
     <None Remove="ClientApp\src\app\models\WebSettingsModel.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\CategoryViewModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\localizationModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\WebSettingsModel.ts" />
   </ItemGroup>

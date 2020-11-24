@@ -89,7 +89,11 @@
         <form id="categoriesForm" method="post" asp-controller="Ads" routerLink="Index">
           <div class="topcatalog">
             <a class="topcatalog-btn"><span><app-localization localizationKey="Ads_AllAds"></app-localization></span></a>
-            <!--@await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true })-->
+            <ul class="topcatalog-list">
+              <ng-container *ngIf="(menuCategories$ | async) as compCategories;">
+                <app-categories-menu [componentCategories$]="compCategories"></app-categories-menu>
+              </ng-container>
+            </ul>
           </div>
         </form>
         <!-- Catalog menu - end -->

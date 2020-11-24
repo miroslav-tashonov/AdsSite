@@ -9,13 +9,16 @@ import { LocalizationService } from './services/localization.service';
 import { WebSettingsService } from './services/web-settings.service';
 import { ContactFormComponent } from './contact-form/contact-form.component';
 import { WebSettingsComponent } from './web-settings/web-settings.component';
+import { CategoriesMenuComponent } from './categories-menu/categories-menu.component';
+import { CategoriesService } from './services/categories.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LocalizationComponent,
     ContactFormComponent,
-    WebSettingsComponent
+    WebSettingsComponent,
+    CategoriesMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,8 @@ import { WebSettingsComponent } from './web-settings/web-settings.component';
   ],
   providers: [
     LocalizationService,
-    WebSettingsService
+    WebSettingsService,
+    CategoriesService
   ],
   bootstrap: [AppComponent]
 })
