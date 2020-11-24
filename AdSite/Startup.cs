@@ -4,13 +4,18 @@ using AdSite.Helpers;
 using AdSite.Models;
 using AdSite.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
 using System.Net;
 
 namespace AdSite
@@ -27,6 +32,11 @@ namespace AdSite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
+
             services.AddMemoryCache();
             services.AddSession(o =>
             {
@@ -98,13 +108,21 @@ namespace AdSite
                 .AddDefaultTokenProviders();
             services.AddMvc().AddNewtonsoftJson();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
             StartupHelper.RegisterApplicationServices(services, Configuration);
             //needed for setting languages that are currently in DB
             StartupHelper.RegisterSupportedLanguages(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILanguageService languageService, ICountryService countryService)
+        public void Configure(IApplicationBuilder app, ILanguageService languageService, ICountryService countryService, IWebHostEnvironment env)
         {
             var countries = countryService.GetAll();
             if (countries == null || countries.Count == 0)
@@ -114,20 +132,30 @@ namespace AdSite
 
             foreach (var country in countries)
             {
-
                 app.UseRewriter(new RewriteOptions()
                             .AddRedirect(@"^$", "/" + country.Path, (int)HttpStatusCode.Redirect)
                             );
 
                 Guid countryId = country.ID;
                 app.Map("/" + country.Path,
-                    app =>
+                    mapper =>
                     {
                         app.UseMiddleware<CountryMiddleware>(countryId);
                         StartupHelper.MapSite(languageService, Configuration, app, countryId);
+
+                        mapper.UseSpa(spa =>
+                        {
+                            spa.Options.SourcePath = "ClientApp";
+                            spa.UseAngularCliServer(npmScript: "start");
+                        });
                     }
                 );
+
+                
+                //
             }
+
+
         }
 
 
