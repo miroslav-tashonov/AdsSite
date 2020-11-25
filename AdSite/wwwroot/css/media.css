@@ -717,6 +717,10 @@
         width: auto;
         z-index: 11;
     }
+    .topmenu .topcatalog .topcatalog-btn:after{
+        display:none;
+    }
+
     .topcatalog-list li ul {
         position: relative;
         top: auto;

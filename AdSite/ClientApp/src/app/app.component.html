@@ -50,33 +50,51 @@
   <div class="header-middle">
     <div class="container header-middle-cont">
       <div class="toplogo">
-        <a asp-controller="Home" routerLink="Index">
+        <a routerLink="/">
           <!--<img src="img/logo-c.png">-->
         </a>
       </div>
       <div class="shop-menu">
-        <ul>
-          <!--
-          @if (User.IsInRole("User"))
-          {
-          <li>
-            <a routerLink="Index"
-               asp-controller="Wishlist">
-              <i class="fa fa-heart"></i>
-              <span class="shop-menu-ttl"><app-localization localizationKey="Wishlist_Name"></app-localization> </span>
-              <span id="topbar-favorites"></span>
-            </a>
-          </li>
-          }
+        <ng-container *ngIf="isUser || isAdmin; else menu;">
+          <ul>
+            <li>
+              <a routerLink="/ads">
+                <i class="fa fa-heart"></i>
+                <span class="shop-menu-ttl"><app-localization localizationKey="Wishlist_Name"></app-localization> </span>
+                <span id="topbar-favorites"></span>
+              </a>
+            </li>
+            <li class="topauth">
+              <a routerLink="/manage">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="shop-menu-ttl"><app-localization localizationKey="Layouts_MyProfile"></app-localization></span>
+              </a>
+            </li>
+            <li class="topauth">
+              <a routerLink="/manage"><span class="shop-menu-ttl">Hello {{currentUser?.userName}}!</span></a>
+            </li>
+            <li>
+              <button class="btn btn-link" (click)="logout()">Log out</button>
+            </li>
 
-          <li>
-            @await Html.PartialAsync("_LoginPartial")
-          </li>
-          <li>
-            @await Html.PartialAsync("_SelectLanguagePartial")
-          </li>
-            -->
-        </ul>
+            <li>
+              <!--@await Html.PartialAsync("_SelectLanguagePartial")-->
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #menu>
+          <ul>
+            <li class="topauth">
+              <a routerLink="/register">
+                <i class="fa fa-lock"></i>
+                <span class="shop-menu-ttl">Registration</span>
+              </a>
+              <a routerLink="/login">
+                <span class="shop-menu-ttl">Login</span>
+              </a>
+            </li>
+          </ul>
+        </ng-template>
       </div>
     </div>
   </div>
@@ -86,16 +104,14 @@
     <div class="container">
       <nav class="topmenu">
         <!-- Catalog menu - Start -->
-        <form id="categoriesForm" method="post" asp-controller="Ads" routerLink="Index">
-          <div class="topcatalog">
-            <a class="topcatalog-btn"><span><app-localization localizationKey="Ads_AllAds"></app-localization></span></a>
-            <ul class="topcatalog-list">
-              <ng-container *ngIf="(menuCategories$ | async) as compCategories;">
-                <app-categories-menu [componentCategories$]="compCategories"></app-categories-menu>
-              </ng-container>
-            </ul>
-          </div>
-        </form>
+        <div class="topcatalog">
+          <a class="topcatalog-btn" routerLink="ads" routerLinkActive="active"><app-localization localizationKey="Ads_AllAds"></app-localization></a>
+          <ul class="topcatalog-list">
+            <ng-container *ngIf="(menuCategories$ | async) as compCategories;">
+              <app-categories-menu [componentCategories$]="compCategories"></app-categories-menu>
+            </ng-container>
+          </ul>
+        </div>
         <!-- Catalog menu - end -->
         <!-- Main menu - start -->
         <button type="button" class="mainmenu-btn">Menu</button>
@@ -125,10 +141,8 @@
         <!-- Search - start -->
         <div class="topsearch">
           <a id="topsearch-btn" class="topsearch-btn" href="#"><i class="fa fa-search"></i></a>
-          <form class="topsearch-form" method="post">
-            <input type="text" name="SearchString" placeholder="Search products" />
-            <button routerLink="Index" routerLinkActive="active" type="submit"><i class="fa fa-search"></i></button>
-          </form>
+          <input type="text" name="SearchString" placeholder="Search products" />
+          <button routerLink="ads" routerLinkActive="active" type="submit"><i class="fa fa-search"></i></button>
         </div>
         <!-- Search - end -->
       </nav>

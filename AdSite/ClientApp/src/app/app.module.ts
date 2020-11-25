@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +11,11 @@ import { ContactFormComponent } from './contact-form/contact-form.component';
 import { WebSettingsComponent } from './web-settings/web-settings.component';
 import { CategoriesMenuComponent } from './categories-menu/categories-menu.component';
 import { CategoriesService } from './services/categories.service';
+import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthenticationService } from './services/authentication.service';
+import { JwtInterceptor } from './interceptors/jwt-interceptor.service';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -18,17 +23,23 @@ import { CategoriesService } from './services/categories.service';
     LocalizationComponent,
     ContactFormComponent,
     WebSettingsComponent,
-    CategoriesMenuComponent
+    CategoriesMenuComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     LocalizationService,
     WebSettingsService,
-    CategoriesService
+    CategoriesService,
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

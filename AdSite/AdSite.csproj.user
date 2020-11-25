@@ -24,6 +24,16 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\src\app\models\RolesEnum.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\src\app\models\User.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
     <TypeScriptCompile Update="ClientApp\src\app\models\CategoryViewModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -34,7 +44,7 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\localizationModel.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\models\LocalizationModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

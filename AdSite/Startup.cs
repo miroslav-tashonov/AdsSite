@@ -3,6 +3,7 @@ using AdSite.Extensions;
 using AdSite.Helpers;
 using AdSite.Models;
 using AdSite.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace AdSite
 {
@@ -52,17 +55,34 @@ namespace AdSite
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             try
             {
-                services.AddAuthentication()
-                        .AddGoogle(googleOptions =>
-                        {
-                            googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                            googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                        })
-                        .AddFacebook(facebookOptions =>
-                        {
-                            facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                            facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                        });
+                services.AddAuthentication(opt =>
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                }).AddJwtBearer(options =>
+                   {
+                       options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                       {
+                           ValidateIssuer = true,
+                           ValidateAudience = true,
+                           ValidateLifetime = true,
+                           ValidateIssuerSigningKey = true,
+
+                           ValidIssuer = "https://localhost:44321",
+                           ValidAudience = "https://localhost:44321",
+                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+                       };
+                   }).AddGoogle(googleOptions =>
+                    {
+                        googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                        googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    })
+                    .AddFacebook(facebookOptions =>
+                    {
+                        facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                        facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                    });
             }
             catch (Exception)
             {
@@ -151,7 +171,7 @@ namespace AdSite
                     }
                 );
 
-                
+
                 //
             }
 

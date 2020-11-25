@@ -21,6 +21,7 @@
     <PackageReference Include="jquery.jstree" Version="3.3.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.0" />
@@ -67,12 +68,16 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\models\CategoryViewModel.ts" />
     <None Remove="ClientApp\src\app\models\localizationModel.ts" />
+    <None Remove="ClientApp\src\app\models\RolesEnum.ts" />
+    <None Remove="ClientApp\src\app\models\User.ts" />
     <None Remove="ClientApp\src\app\models\WebSettingsModel.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\models\CategoryViewModel.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\localizationModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\LocalizationModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\RolesEnum.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\User.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\WebSettingsModel.ts" />
   </ItemGroup>
 

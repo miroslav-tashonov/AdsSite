@@ -5,8 +5,7 @@ import { LocalizationService } from '../services/localization.service';
 
 @Component({
   selector: 'app-localization',
-  templateUrl: './localization.component.html',
-  styleUrls: ['./localization.component.css']
+  templateUrl: './localization.component.html'
 })
 
 export class LocalizationComponent implements OnInit {
