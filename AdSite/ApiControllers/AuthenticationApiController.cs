@@ -45,7 +45,7 @@ namespace AdSite.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public IActionResult Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             try
             {
@@ -54,25 +54,23 @@ namespace AdSite.Controllers
                     return BadRequest("Invalid client request");
                 }
 
-                var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
+                var account = await _userManager.FindByNameAsync(model.Email);
                 if (account == null)
                 {
                     return BadRequest("Account doesnt exist");
                 }
 
-                //custom check if account exist in current country/region 
-                var user = SignIn(account, Guid.Parse(model.CountryId));
-
-                if (user != null)
-                    return Ok(user);
-                else
-                    return BadRequest("Sign in is invalid");
+                if (_userRoleCountryService.Exists(account.Id, model.CountryId))
+                {
+                    return Ok(SignIn(account, model.CountryId));
+                }
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
 
+            return BadRequest();
         }
 
 
@@ -89,17 +87,15 @@ namespace AdSite.Controllers
                 result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
                 if (result.Succeeded)
                 {
-                    AddToUserRole(user, Guid.Parse(model.CountryId));
+                    AddToUserRole(user, model.CountryId);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-                    var account = SignIn(user, Guid.Parse(model.CountryId));
-
-                    if (account != null)
-                        return Ok(account);
-                    else
-                        return BadRequest("Sign in is invalid");
+                    if (_userRoleCountryService.Exists(user.Id, model.CountryId))
+                    {
+                        return Ok(SignIn(user, model.CountryId));
+                    }
                 }
                 else
                 {
@@ -129,15 +125,16 @@ namespace AdSite.Controllers
             var result = await _userManager.UpdateAsync(account);
             if (result.Succeeded)
             {
-                var user = SignIn(account, Guid.Parse(model.CountryId));
-                if (user != null)
-                    return Ok(user);
-                else
-                    return BadRequest("Sign in is invalid");
+                if (_userRoleCountryService.Exists(account.Id, model.CountryId))
+                {
+                    return Ok(SignIn(account, model.CountryId));
+                }
             }
 
             return BadRequest();
         }
+
+        #region Helper Methods
 
         private void AddToUserRole(ApplicationUser user, Guid countryId)
         {
@@ -157,47 +154,38 @@ namespace AdSite.Controllers
 
         private ApplicationUserWithToken SignIn(ApplicationUser account, Guid countryId)
         {
-            if (_userRoleCountryService.Exists(account.Id, countryId))
-            {
-                string roleId = _userRoleCountryService.GetAll(countryId).Where(x => x.ApplicationUserId == account.Id).First().RoleId;
-                var role = _roleManager.FindByIdAsync(roleId).GetAwaiter().GetResult();
+            string roleId = _userRoleCountryService.GetAll(countryId).Where(x => x.ApplicationUserId == account.Id).First().RoleId;
+            var role = _roleManager.FindByIdAsync(roleId).GetAwaiter().GetResult();
 
-                var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+            var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
 
-                var claims = new List<Claim>{
+            var claims = new List<Claim>{
                     new Claim(ClaimTypes.Name, account.UserName),
                     new Claim(ClaimTypes.Role, role.Name)
                 };
 
-                var tokenOptions = new JwtSecurityToken(
-                    issuer: "https://localhost:44321",
-                    audience: "https://localhost:44321",
-                    claims: claims,
-                    expires: DateTime.Now.AddDays(7),
-                    signingCredentials: signingCredentials
-                );
+            var tokenOptions = new JwtSecurityToken(
+                issuer: "https://localhost:44321",
+                audience: "https://localhost:44321",
+                claims: claims,
+                expires: DateTime.Now.AddDays(7),
+                signingCredentials: signingCredentials
+            );
 
-
-                ApplicationUserWithToken user = new ApplicationUserWithToken()
-                {
-                    Email = account.Email,
-                    Id = account.Id,
-                    UserName = account.UserName,
-                    Role = role.Name,
-                    PhoneNumber = account.PhoneNumber,
-                    Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
-                    PasswordHash = account.PasswordHash,
-                };
-
-
-                return user;
-            }
-            else
+            return new ApplicationUserWithToken()
             {
-                return null;
-            }
+                Email = account.Email,
+                Id = account.Id,
+                UserName = account.UserName,
+                Role = role.Name,
+                PhoneNumber = account.PhoneNumber,
+                Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
+                PasswordHash = account.PasswordHash,
+            };
         }
+
+        #endregion
 
     }
 }

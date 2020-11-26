@@ -20,37 +20,10 @@ namespace AdSite.Controllers
         {
             _localizationService = localizationService;
         }
-
-        // GET: api/<LocalizationApiController>
-        [HttpGet]
-        public string Get()
-        {
-            return String.Empty;
-        }
-
-        // GET api/<LocalizationApiController>/5
         [HttpGet("{localizationKey}")]
         public string Get(string localizationKey)
         {
             return _localizationService.GetByKey(localizationKey, Thread.CurrentThread.CurrentCulture.LCID);
-        }
-
-        // POST api/<LocalizationApiController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<LocalizationApiController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<LocalizationApiController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

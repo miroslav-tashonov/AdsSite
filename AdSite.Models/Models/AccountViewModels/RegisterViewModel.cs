@@ -29,6 +29,6 @@ namespace AdSite.Models.AccountViewModels
         [Display(Name = "Phone")]
         public string Phone { get; set; }
 
-        public string CountryId { get; set; }
+        public Guid CountryId { get; set; }
     }
 }

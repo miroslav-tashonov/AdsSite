@@ -23,36 +23,10 @@ namespace AdSite.Controllers
             _categoryService = categoryService;
         }
 
-        // GET: api/<CategoriesApiControllercs>
-        [HttpGet]
-        public CategoryViewModel Get()
-        {
-            return new CategoryViewModel();
-        }
-
-        // GET api/<CategoriesApiControllercs>/5
         [HttpGet("{countryId}")]
-        public IEnumerable<CategoryViewModel> Get(string countryId)
+        public IEnumerable<CategoryViewModel> Get(Guid countryId)
         {
-            return _categoryService.GetCategoryAsTreeStructure(Guid.Parse(countryId));
-        }
-
-        // POST api/<CategoriesApiControllercs>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<CategoriesApiControllercs>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<CategoriesApiControllercs>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return _categoryService.GetCategoryAsTreeStructure(countryId);
         }
     }
 }
