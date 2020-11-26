@@ -23,7 +23,7 @@ export class CategoriesService {
     this.myApiUrl = 'api/CategoriesApi/';
   }
 
-  getCategoriesTreeMenu(countryId: string): Observable<CategoryViewModel[]> {
+  getCategoriesTreeMenu(countryId?: string): Observable<CategoryViewModel[]> {
     return this.http.get<CategoryViewModel[]>(this.myAppUrl + this.myApiUrl + countryId)
       .pipe(
         retry(1),

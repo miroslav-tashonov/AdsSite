@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { CountryService } from '../../../services/country.service';
 
 @Component({
   selector: 'app-login',
@@ -18,13 +19,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   error = '';
-  myAppUrl: string;
-  myApiUrl: string;
 
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
-    this.myAppUrl = environment.appUrl;
-    this.myApiUrl = 'api/AuthenticationApi/login';
-
+  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -33,12 +29,11 @@ export class LoginComponent implements OnInit {
 
   get f() { return this.loginForm.controls; }
 
-  //todo countryId
   onSubmit() {
     const credentials = {
       'Email': this.f.username.value,
       'Password': this.f.password.value,
-      'CountryId': "6248DE50-32E7-4C04-82A4-A7EF1D03CD05"
+      'CountryId': this.countryService.countryId
     }
     this.submitted = true;
 
@@ -47,7 +42,7 @@ export class LoginComponent implements OnInit {
     }
     
     this.loading = true;
-    this.authenticationService.login(this.myAppUrl + this.myApiUrl, credentials.Email, credentials.Password, credentials.CountryId)
+    this.authenticationService.login(credentials.Email, credentials.Password, credentials.CountryId)
       .pipe(first())
       .subscribe(
         data => {

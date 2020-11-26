@@ -21,7 +21,7 @@ export class WebSettingsService {
     this.myApiUrl = 'api/WebSettingsApi/';
   }
 
-  getWebSettingsModel(countryId: string): Observable<WebSettingsModel> {
+  getWebSettingsModel(countryId?: string): Observable<WebSettingsModel> {
     return this.http.get<WebSettingsModel>(this.myAppUrl + this.myApiUrl + countryId)
       .pipe(
         retry(1),

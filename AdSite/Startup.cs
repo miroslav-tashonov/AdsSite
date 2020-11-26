@@ -166,7 +166,7 @@ namespace AdSite
                         mapper.UseSpa(spa =>
                         {
                             spa.Options.SourcePath = "ClientApp";
-                            spa.UseAngularCliServer(npmScript: "start");
+                            spa.UseAngularCliServer(npmScript: "start-"+country.Path);
                         });
                     }
                 );

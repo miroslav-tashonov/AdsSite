@@ -1,48 +1,47 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../../../services/authentication.service';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication.service';
+import { RegisterUser } from '../../../models/User';
+import { CountryService } from '../../../services/country.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-manage',
+  templateUrl: './manage.component.html'
 })
-export class RegisterComponent implements OnInit {
+export class ManageComponent implements OnInit {
   submitted = false;
   loading = false;
   invalidLogin?: boolean;
   loginForm: FormGroup;
+  registerUser: RegisterUser;
 
   error = '';
-  myAppUrl: string;
-  myApiUrl: string;
 
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
-    this.myAppUrl = environment.appUrl;
-    this.myApiUrl = 'api/AuthenticationApi/register';
-
+  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       phone: ['', Validators.required],
     });
+
+    this.registerUser = new RegisterUser();
   }
 
   get f() { return this.loginForm.controls; }
 
-  //todo countryId
   onSubmit() {
-    const credentials = {
-      'Email': this.f.username.value,
-      'Password': this.f.password.value,
-      'Phone': this.f.phone.value,
-      'CountryId': "6248DE50-32E7-4C04-82A4-A7EF1D03CD05"
-    }
+    this.registerUser.email = this.f.email.value;
+    this.registerUser.password = this.f.password.value;
+    this.registerUser.confirmPassword = this.f.confirmPassword.value;
+    this.registerUser.phone = this.f.phone.value;
+    this.registerUser.countryId = this.countryService.countryId;
+
+
     this.submitted = true;
 
     if (this.loginForm.invalid) {
@@ -50,7 +49,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authenticationService.register(this.myAppUrl + this.myApiUrl, credentials.Email, credentials.Password, credentials.Phone, credentials.CountryId)
+    this.authenticationService.update(this.registerUser)
       .pipe(first())
       .subscribe(
         data => {
@@ -69,5 +68,6 @@ export class RegisterComponent implements OnInit {
       confirmPassword: ['', Validators.required],
       phone: ['', Validators.required],
     });
+
   }
 }

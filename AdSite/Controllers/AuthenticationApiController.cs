@@ -12,6 +12,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using AdSite.Models.Extensions;
+using AdSite.Models.CRUDModels;
+using AdSite.Extensions;
 
 namespace AdSite.Controllers
 {
@@ -22,11 +25,20 @@ namespace AdSite.Controllers
         private readonly RoleManager<ApplicationIdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserRoleCountryService _userRoleCountryService;
-        public AuthenticationApiController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationIdentityRole> roleManager, IUserRoleCountryService userRoleCountryService)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
+
+        public AuthenticationApiController(UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationIdentityRole> roleManager,
+            IUserRoleCountryService userRoleCountryService,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _userRoleCountryService = userRoleCountryService;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
         }
 
         [HttpPost, Route("login")]
@@ -49,46 +61,12 @@ namespace AdSite.Controllers
                 }
 
                 //custom check if account exist in current country/region 
-                if (_userRoleCountryService.Exists(account.Id, Guid.Parse(model.CountryId)))
-                {
-                    string roleId = _userRoleCountryService.GetAll(Guid.Parse(model.CountryId)).Where(x => x.ApplicationUserId == account.Id).First().RoleId;
-                    var role = _roleManager.FindByIdAsync(roleId).GetAwaiter().GetResult();
+                var user = SignIn(account, Guid.Parse(model.CountryId));
 
-                    var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                    var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-
-                    var claims = new List<Claim>{
-                    new Claim(ClaimTypes.Name, account.UserName),
-                    new Claim(ClaimTypes.Role, role.Name)
-                };
-
-                    var tokenOptions = new JwtSecurityToken(
-                        issuer: "https://localhost:44321",
-                        audience: "https://localhost:44321",
-                        claims: claims,
-                        expires: DateTime.Now.AddDays(7),
-                        signingCredentials: signingCredentials
-                    );
-
-
-                    ApplicationUserWithToken user = new ApplicationUserWithToken()
-                    {
-                        Email = account.Email,
-                        Id = account.Id,
-                        UserName = account.UserName,
-                        Role = role.Name,
-                        PhoneNumber = account.PhoneNumber,
-                        Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
-                        PasswordHash = account.PasswordHash,
-                    };
-
+                if (user != null)
                     return Ok(user);
-
-                }
                 else
-                {
-                    return BadRequest("This login is invalid in this country.");
-                }
+                    return BadRequest("Sign in is invalid");
             }
             catch (Exception ex)
             {
@@ -96,5 +74,130 @@ namespace AdSite.Controllers
             }
 
         }
+
+
+        [HttpPost, Route("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model, string returnUrl = null)
+        {
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                result = await _userManager.AddToRoleAsync(user, Enum.GetName(typeof(UserRole), UserRole.User));
+                if (result.Succeeded)
+                {
+                    AddToUserRole(user, Guid.Parse(model.CountryId));
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    var account = SignIn(user, Guid.Parse(model.CountryId));
+
+                    if (account != null)
+                        return Ok(account);
+                    else
+                        return BadRequest("Sign in is invalid");
+                }
+                else
+                {
+                    result = await _userManager.DeleteAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        return BadRequest("Failed to delete user after being unable to be added to role.");
+                    }
+                }
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost, Route("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Update([FromBody] RegisterViewModel model, string returnUrl = null)
+        {
+            var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
+            if (account == null)
+            {
+                return BadRequest("Account doesnt exist");
+            }
+
+            var result = await _userManager.UpdateAsync(account);
+            if (result.Succeeded)
+            {
+                var user = SignIn(account, Guid.Parse(model.CountryId));
+                if (user != null)
+                    return Ok(user);
+                else
+                    return BadRequest("Sign in is invalid");
+            }
+
+            return BadRequest();
+        }
+
+        private void AddToUserRole(ApplicationUser user, Guid countryId)
+        {
+            var role = _roleManager.FindByNameAsync(Enum.GetName(typeof(UserRole), UserRole.User))
+                .GetAwaiter().GetResult();
+
+            _userRoleCountryService.Add(
+                new UserRoleCountryCreateModel
+                {
+                    ApplicationUserId = user.Id,
+                    CountryId = countryId,
+                    RoleId = role.Id
+                }
+                );
+        }
+
+
+        private ApplicationUserWithToken SignIn(ApplicationUser account, Guid countryId)
+        {
+            if (_userRoleCountryService.Exists(account.Id, countryId))
+            {
+                string roleId = _userRoleCountryService.GetAll(countryId).Where(x => x.ApplicationUserId == account.Id).First().RoleId;
+                var role = _roleManager.FindByIdAsync(roleId).GetAwaiter().GetResult();
+
+                var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+                var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, account.UserName),
+                    new Claim(ClaimTypes.Role, role.Name)
+                };
+
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: "https://localhost:44321",
+                    audience: "https://localhost:44321",
+                    claims: claims,
+                    expires: DateTime.Now.AddDays(7),
+                    signingCredentials: signingCredentials
+                );
+
+
+                ApplicationUserWithToken user = new ApplicationUserWithToken()
+                {
+                    Email = account.Email,
+                    Id = account.Id,
+                    UserName = account.UserName,
+                    Role = role.Name,
+                    PhoneNumber = account.PhoneNumber,
+                    Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
+                    PasswordHash = account.PasswordHash,
+                };
+
+
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

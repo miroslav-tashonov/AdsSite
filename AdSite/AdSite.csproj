@@ -67,6 +67,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\models\CategoryViewModel.ts" />
+    <None Remove="ClientApp\src\app\models\CountryModel.ts" />
     <None Remove="ClientApp\src\app\models\localizationModel.ts" />
     <None Remove="ClientApp\src\app\models\RolesEnum.ts" />
     <None Remove="ClientApp\src\app\models\User.ts" />
@@ -78,6 +79,9 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\LocalizationModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\RolesEnum.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\User.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\CountryModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\models\WebSettingsModel.ts" />
   </ItemGroup>
 

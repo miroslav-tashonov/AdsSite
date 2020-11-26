@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --verbose",
-    "build": "ng build --base-href=/AdSite/",
+    "start-belgija": "ng serve --verbose --base-href /belgija",
+    "start-england": "ng serve --verbose --base-href /england",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

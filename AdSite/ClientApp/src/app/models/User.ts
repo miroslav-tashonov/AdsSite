@@ -16,3 +16,11 @@ export class User {
   role?: string;
   token?: string;
 }
+
+export class RegisterUser {
+  phone?: string;
+  password?: string;
+  confirmPassword?: string;
+  email?: string;
+  countryId?: string;
+}

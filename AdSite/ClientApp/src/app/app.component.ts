@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { APP_BASE_HREF, LocationStrategy } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CategoryViewModel } from './models/CategoryViewModel';
+import { CountryModel } from './models/CountryModel';
 import { Role } from './models/RolesEnum';
 import { User } from './models/User';
 import { WebSettingsModel } from './models/WebSettingsModel';
 import { AuthenticationService } from './services/authentication.service';
 import { CategoriesService } from './services/categories.service';
+import { CountryService } from './services/country.service';
 import { WebSettingsService } from './services/web-settings.service';
 
 @Component({
@@ -14,17 +17,22 @@ import { WebSettingsService } from './services/web-settings.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent{
   title = 'Ads Site';
   currentUser?: User;
 
+  countryId?: string;
   menuCategories$: Observable<CategoryViewModel[]> | undefined;
   webSettings$: Observable<WebSettingsModel> | undefined;
 
-  //todo: countryId
-  constructor(private webSettingsService: WebSettingsService, private categoriesService: CategoriesService, private authenticationService: AuthenticationService, private router: Router) {
-    this.webSettings$ = this.webSettingsService.getWebSettingsModel('99DE8181-09A8-41DB-895E-54E5E0650C3A');
-    this.menuCategories$ = this.categoriesService.getCategoriesTreeMenu('6248DE50-32E7-4C04-82A4-A7EF1D03CD05');
+  constructor(private locationStrategy: LocationStrategy, private countryService: CountryService, private webSettingsService: WebSettingsService, private categoriesService: CategoriesService, private authenticationService: AuthenticationService, private router: Router) {
+    this.countryService.getCountryId(this.locationStrategy.getBaseHref()).subscribe({
+      next: country => {
+        this.webSettings$ = this.webSettingsService.getWebSettingsModel(country.id);
+        this.menuCategories$ = this.categoriesService.getCategoriesTreeMenu(country.id);
+      }
+    });
+
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
 

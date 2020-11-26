@@ -46,4 +46,12 @@ namespace AdSite.Models.CRUDModels
         [Required]
         public string Path { get; set; }
     }
+
+    public class CountryModel
+    {
+        public Guid ID { get; set; }
+        public string Name { get; set; }
+        public string Abbreviation { get; set; }
+        public string Path { get; set; }
+    }
 }

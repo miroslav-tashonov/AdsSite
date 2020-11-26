@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LocalizationService } from '../services/localization.service';
+import { LocalizationService } from '../../services/localization.service';
 
 @Component({
   selector: 'app-localization',

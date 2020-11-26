@@ -4,18 +4,21 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LocalizationComponent } from './localization/localization.component';
 import { LocalizationService } from './services/localization.service';
 import { WebSettingsService } from './services/web-settings.service';
-import { ContactFormComponent } from './contact-form/contact-form.component';
-import { WebSettingsComponent } from './web-settings/web-settings.component';
-import { CategoriesMenuComponent } from './categories-menu/categories-menu.component';
 import { CategoriesService } from './services/categories.service';
-import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationService } from './services/authentication.service';
 import { JwtInterceptor } from './interceptors/jwt-interceptor.service';
-import { RegisterComponent } from './register/register.component';
+import { LocalizationComponent } from './components/localization/localization.component';
+import { ContactFormComponent } from './components/contact-form/contact-form.component';
+import { WebSettingsComponent } from './components/web-settings/web-settings.component';
+import { CategoriesMenuComponent } from './components/categories-menu/categories-menu.component';
+import { LoginComponent } from './components/account/login/login.component';
+import { RegisterComponent } from './components/account/register/register.component';
+import { ManageComponent } from './components/account/manage/manage.component';
+import { CountryService } from './services/country.service';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,8 @@ import { RegisterComponent } from './register/register.component';
     WebSettingsComponent,
     CategoriesMenuComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ManageComponent
   ],
   imports: [
     BrowserModule,
@@ -35,11 +39,13 @@ import { RegisterComponent } from './register/register.component';
     ReactiveFormsModule
   ],
   providers: [
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     LocalizationService,
     WebSettingsService,
     CategoriesService,
-    AuthenticationService
+    AuthenticationService,
+    CountryService
   ],
   bootstrap: [AppComponent]
 })

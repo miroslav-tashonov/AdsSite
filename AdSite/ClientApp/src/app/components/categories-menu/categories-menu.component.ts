@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CategoryViewModel } from '../models/CategoryViewModel';
+import { CategoryViewModel } from '../../models/CategoryViewModel';
 
 @Component({
   selector: 'app-categories-menu',
