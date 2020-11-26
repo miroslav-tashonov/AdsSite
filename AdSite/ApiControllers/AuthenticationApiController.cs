@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Http;
 using AdSite.Models.Extensions;
 using AdSite.Models.CRUDModels;
 using AdSite.Extensions;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace AdSite.Controllers
 {
@@ -27,18 +29,21 @@ namespace AdSite.Controllers
         private readonly IUserRoleCountryService _userRoleCountryService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _configuration;
 
         public AuthenticationApiController(UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationIdentityRole> roleManager,
             IUserRoleCountryService userRoleCountryService,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _userRoleCountryService = userRoleCountryService;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         [HttpPost, Route("login")]
@@ -148,7 +153,7 @@ namespace AdSite.Controllers
                     CountryId = countryId,
                     RoleId = role.Id
                 }
-                );
+            );
         }
 
 
@@ -157,7 +162,7 @@ namespace AdSite.Controllers
             string roleId = _userRoleCountryService.GetAll(countryId).Where(x => x.ApplicationUserId == account.Id).First().RoleId;
             var role = _roleManager.FindByIdAsync(roleId).GetAwaiter().GetResult();
 
-            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretKey:Value")));
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>{
@@ -166,8 +171,8 @@ namespace AdSite.Controllers
                 };
 
             var tokenOptions = new JwtSecurityToken(
-                issuer: "https://localhost:44321",
-                audience: "https://localhost:44321",
+                issuer: _configuration.GetValue<string>("EnvironmentUrl:Value"),
+                audience: _configuration.GetValue<string>("EnvironmentUrl:Value"),
                 claims: claims,
                 expires: DateTime.Now.AddDays(7),
                 signingCredentials: signingCredentials

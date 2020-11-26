@@ -17,6 +17,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -32,27 +33,20 @@ namespace AdSite
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
             services.AddMemoryCache();
-            services.AddSession(o =>
-            {
-                o.IdleTimeout = TimeSpan.FromSeconds(3600);
-            });
+            services.AddSession(o => { o.IdleTimeout = TimeSpan.FromSeconds(3600); });
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             try
             {
                 services.AddAuthentication(opt =>
@@ -61,19 +55,18 @@ namespace AdSite
                     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
                 }).AddJwtBearer(options =>
-                   {
-                       options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                       {
-                           ValidateIssuer = true,
-                           ValidateAudience = true,
-                           ValidateLifetime = true,
-                           ValidateIssuerSigningKey = true,
-
-                           ValidIssuer = "https://localhost:44321",
-                           ValidAudience = "https://localhost:44321",
-                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
-                       };
-                   }).AddGoogle(googleOptions =>
+                    {
+                        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration.GetValue<string>("EnvironmentUrl:Value"),
+                            ValidAudience = Configuration.GetValue<string>("EnvironmentUrl:Value"),
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretKey:Value")))
+                        };
+                    });/*.AddGoogle(googleOptions =>
                     {
                         googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
                         googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
@@ -82,7 +75,7 @@ namespace AdSite
                     {
                         facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                         facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                    });
+                    });*/
             }
             catch (Exception)
             {
@@ -141,7 +134,6 @@ namespace AdSite
             StartupHelper.RegisterSupportedLanguages(services, Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILanguageService languageService, ICountryService countryService, IWebHostEnvironment env)
         {
             var countries = countryService.GetAll();
@@ -166,13 +158,10 @@ namespace AdSite
                         mapper.UseSpa(spa =>
                         {
                             spa.Options.SourcePath = "ClientApp";
-                            spa.UseAngularCliServer(npmScript: "start-"+country.Path);
+                            spa.UseAngularCliServer(npmScript: "start-" + country.Path);
                         });
                     }
                 );
-
-
-                //
             }
 
 
