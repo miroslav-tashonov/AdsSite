@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
-import { RegisterUser } from '../../../models/User';
+import { RegisterUser, User } from '../../../models/User';
 import { CountryService } from '../../../services/country.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class ManageComponent implements OnInit {
   invalidLogin?: boolean;
   loginForm: FormGroup;
   registerUser: RegisterUser;
+  currentUser?: User;
 
   error = '';
 
@@ -30,6 +31,7 @@ export class ManageComponent implements OnInit {
     });
 
     this.registerUser = new RegisterUser();
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   get f() { return this.loginForm.controls; }

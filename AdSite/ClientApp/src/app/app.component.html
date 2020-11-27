@@ -120,7 +120,6 @@
           <button type="button" class="mainmenu-btn">Menu</button>
 
           <ul class="mainmenu">
-            <!-- @await Html.PartialAsync("_NavigationBar")-->
             <li>
               <a routerLink="Index"
                  routerLinkActive="active">
@@ -137,6 +136,18 @@
               <a routerLink="/contact"
                  routerLinkActive="active">
                 <app-localization localizationKey="Layouts_ContactUs"></app-localization>
+              </a>
+            </li>
+            <li *ngIf="isUser" class="panel-color">
+              <a routerLink="/userspanel"
+                 routerLinkActive="active">
+                <app-localization localizationKey="Layouts_UserPanel"></app-localization>
+              </a>
+            </li>
+            <li *ngIf="isAdmin" class="panel-color">
+              <a routerLink="/adminpanel"
+                 routerLinkActive="active">
+                <app-localization localizationKey="Layouts_AdminPanel"></app-localization>
               </a>
             </li>
           </ul>

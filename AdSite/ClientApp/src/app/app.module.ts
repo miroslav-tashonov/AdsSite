@@ -19,6 +19,8 @@ import { RegisterComponent } from './components/account/register/register.compon
 import { ManageComponent } from './components/account/manage/manage.component';
 import { CountryService } from './services/country.service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { UsersPanelComponent } from './components/users-panel/users-panel.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
     CategoriesMenuComponent,
     LoginComponent,
     RegisterComponent,
-    ManageComponent
+    ManageComponent,
+    UsersPanelComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,

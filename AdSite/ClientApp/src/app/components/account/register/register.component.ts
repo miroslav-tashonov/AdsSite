@@ -24,10 +24,11 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      phone: ['', Validators.required],
+      email: ['', Validators.required, Validators.email],
+      password: ['', Validators.required, Validators.minLength(6)],
+      confirmPassword: ['', Validators.required, Validators.minLength(6)],
+      phone: ['', Validators.required, Validators.pattern("^[0-9]*$"),
+        Validators.minLength(7)],
     });
 
     this.registerUser = new RegisterUser();
@@ -63,10 +64,11 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      phone: ['', Validators.required],
+      email: ['', Validators.required, Validators.email],
+      password: ['', Validators.required, Validators.minLength(6)],
+      confirmPassword: ['', Validators.required, Validators.minLength(6)],
+      phone: ['', Validators.required, Validators.pattern("^[0-9]*$"),
+        Validators.minLength(7)],
     });
   }
 }

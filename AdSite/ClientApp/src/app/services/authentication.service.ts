@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RegisterUser, User } from '../models/User';
 import { environment } from 'src/environments/environment';
+import { LocationStrategy } from '@angular/common';
 
 
 @Injectable({ providedIn: 'root' })
@@ -16,8 +17,8 @@ export class AuthenticationService {
   registerApiUrl: string;
   loginApiUrl: string;
 
-  constructor(private http: HttpClient) {
-    var userJson = localStorage.getItem('currentUser');
+  constructor(private http: HttpClient, private locationStrategy: LocationStrategy) {
+    var userJson = localStorage.getItem('currentUser-' + this.locationStrategy.getBaseHref());
     this.currentUserSubject = userJson !== null ? new BehaviorSubject<User>(JSON.parse(userJson)) : new BehaviorSubject<User>(new User());
     this.currentUser = this.currentUserSubject.asObservable();
 
@@ -37,7 +38,7 @@ export class AuthenticationService {
         // login successful if there's a jwt token in the response
         if (user && user.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('currentUser-' + this.locationStrategy.getBaseHref(), JSON.stringify(user));
           this.currentUserSubject.next(user);
         }
 
@@ -51,7 +52,7 @@ export class AuthenticationService {
         // login successful if there's a jwt token in the response
         if (user && user.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('currentUser-' + this.locationStrategy.getBaseHref(), JSON.stringify(user));
           this.currentUserSubject.next(user);
         }
 
@@ -65,7 +66,7 @@ export class AuthenticationService {
         // login successful if there's a jwt token in the response
         if (user && user.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('currentUser-' + this.locationStrategy.getBaseHref(), JSON.stringify(user));
           this.currentUserSubject.next(user);
         }
 
@@ -77,7 +78,7 @@ export class AuthenticationService {
 
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser-' + this.locationStrategy.getBaseHref());
     this.currentUserSubject.next(new User());
   }
 }
