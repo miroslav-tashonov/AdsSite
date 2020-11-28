@@ -120,7 +120,6 @@ namespace AdSite.Helpers
         {
             app.UseDeveloperExceptionPage();
             app.UseHsts();
-            app.UseSession();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
             app.UseRequestLocalization(
                 BuildLocalizationOptions(languageService, Configuration, countryId)

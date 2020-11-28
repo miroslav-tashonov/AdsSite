@@ -19,8 +19,7 @@ export class RegisterComponent implements OnInit {
   invalidLogin?: boolean;
   loginForm: FormGroup;
   registerUser: RegisterUser;
-
-  error = '';
+  errors: string[];
 
   constructor(private notificationService: NotificationService,private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
 
@@ -32,6 +31,7 @@ export class RegisterComponent implements OnInit {
         Validators.minLength(7)]],
     });
 
+    this.errors = [];
     this.registerUser = new RegisterUser();
   }
 
@@ -58,8 +58,17 @@ export class RegisterComponent implements OnInit {
           this.notificationService.showSuccess('Register account is succesful!', 'Register action');
           this.router.navigate(['/']);
         },
-        error => {
-          this.error = error;
+        thrownError => {
+          this.errors = [];
+          if (thrownError.error.errors) {
+            for (const [key, value] of Object.entries(thrownError.error.errors)) {
+              this.errors.push(thrownError.error.errors[key]);
+            }
+          }
+          else {
+            this.errors.push(thrownError.error);
+          }
+
           this.notificationService.showError('Register account failed!', 'Register action');
           this.loading = false;
         });

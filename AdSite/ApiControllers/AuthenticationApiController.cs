@@ -56,11 +56,6 @@ namespace AdSite.Controllers
         {
             try
             {
-                if (model == null)
-                {
-                    return BadRequest("Invalid client request");
-                }
-
                 var account = await _userManager.FindByNameAsync(model.Email);
                 if (account == null)
                 {
@@ -80,39 +75,18 @@ namespace AdSite.Controllers
             return BadRequest();
         }
 
-        [HttpPost, Route("getUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetUser([FromBody] LoginViewModel model)
-        {
-            try
-            {
-                if (model == null)
-                {
-                    return BadRequest("Invalid client request");
-                }
-
-                var account = await _userManager.FindByNameAsync(model.Email);
-                if (account == null)
-                {
-                    return BadRequest("Account doesnt exist");
-                }
-
-                return Ok(account);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost, Route("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model, string returnUrl = null)
         {
+            var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
+            if (account != null)
+            {
+                return BadRequest("Account already exist");
+            }
+
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -173,9 +147,6 @@ namespace AdSite.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model, string returnUrl = null)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
             if (account == null)
             {

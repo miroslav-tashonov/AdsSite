@@ -1,5 +1,4 @@
 ﻿using AdSite.Data;
-using AdSite.Extensions;
 using AdSite.Helpers;
 using AdSite.Models;
 using AdSite.Services;
@@ -13,12 +12,8 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Configuration;
-using System.IO;
 using System.Net;
 using System.Text;
 
@@ -38,7 +33,6 @@ namespace AdSite
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
             services.AddMemoryCache();
-            services.AddSession(o => { o.IdleTimeout = TimeSpan.FromSeconds(3600); });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => false;
@@ -152,7 +146,6 @@ namespace AdSite
                 app.Map("/" + country.Path,
                     mapper =>
                     {
-                        app.UseMiddleware<CountryMiddleware>(countryId);
                         StartupHelper.MapSite(languageService, Configuration, app, countryId);
 
                         mapper.UseSpa(spa =>

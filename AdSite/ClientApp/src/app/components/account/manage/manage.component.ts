@@ -20,8 +20,7 @@ export class ManageComponent implements OnInit {
   loginForm: FormGroup;
   model: ManageUser;
   currentUser?: User;
-
-  error = '';
+  errors: string[];
 
   constructor(private notificationService: NotificationService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.loginForm = this.formBuilder.group({
@@ -30,7 +29,7 @@ export class ManageComponent implements OnInit {
       Validators.minLength(7)]],
     });
 
-    
+    this.errors = [];
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     this.model = new ManageUser();
     this.model.email = this.currentUser?.email;
@@ -59,8 +58,17 @@ export class ManageComponent implements OnInit {
           this.notificationService.showSuccess('Update account is succesful!', 'Save action');
           this.router.navigate(['/']);
         },
-        error => {
-          this.error = error;
+        thrownError => {
+          this.errors = [];
+          if (thrownError.error.errors) {
+            for (const [key, value] of Object.entries(thrownError.error.errors)) {
+              this.errors.push(thrownError.error.errors[key]);
+            }
+          }
+          else {
+            this.errors.push(thrownError.error);
+          }
+
           this.notificationService.showError('Update account failed!', 'Save action');
           this.loading = false;
         });

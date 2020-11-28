@@ -1,5 +1,14 @@
-<h2>Register</h2>
+<h1>Register</h1>
+<br />
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="alert alert-danger" role="alert" *ngIf="errors.length > 0">
+    <ul>
+      <li *ngFor="let error of errors">
+        {{ error }}
+      </li>
+    </ul>
+  </div>
+
   <div class="form-group">
     <label for="email">Email</label>
     <input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
@@ -21,7 +30,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="confirmPassword">Password</label>
+    <label for="confirmPassword">Confirm Password</label>
     <input type="password" minlength="6" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
     <div *ngIf="submitted && f.confirmPassword.errors" class="form-required">
       <div *ngIf="f.confirmPassword.errors">Passwords doesnt match</div>

@@ -19,13 +19,15 @@ export class LoginComponent implements OnInit {
   invalidLogin?: boolean;
   loginForm: FormGroup;
 
-  error = '';
+  errors: string[];
 
   constructor(private notificationService: NotificationService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+
+    this.errors = [];
   }
 
   get f() { return this.loginForm.controls; }
@@ -50,9 +52,18 @@ export class LoginComponent implements OnInit {
           this.notificationService.showSuccess('Login succesful!','Login action');
           this.router.navigate(['/']);
         },
-        error => {
-          this.error = error;
-          this.notificationService.showError('Login failed!','Login action');
+        thrownError => {
+          this.errors = [];
+          if (thrownError.error.errors) {
+            for (const [key, value] of Object.entries(thrownError.error.errors)) {
+              this.errors.push(thrownError.error.errors[key]);
+            }
+          }
+          else {
+            this.errors.push(thrownError.error);
+          }
+
+          this.notificationService.showError('Login failed!', 'Login action');
           this.loading = false;
         });
   }

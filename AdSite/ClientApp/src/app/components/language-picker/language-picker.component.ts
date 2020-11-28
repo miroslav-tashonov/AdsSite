@@ -5,8 +5,7 @@ import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-language-picker',
-  templateUrl: './language-picker.component.html',
-  styleUrls: ['./language-picker.component.css']
+  templateUrl: './language-picker.component.html'
 })
 export class LanguagePickerComponent implements OnInit {
 
