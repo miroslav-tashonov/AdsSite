@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class LocalizationService {
       'Content-Type': 'application/json; charset=utf-8'
     })
   };
-  constructor(private http: HttpClient) {
+  constructor(private notificationService: NotificationService, private http: HttpClient) {
     this.myAppUrl = environment.appUrl;
     this.myApiUrl = 'api/LocalizationApi/';
   }
@@ -39,6 +40,8 @@ export class LocalizationService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    this.notificationService.showError(errorMessage, "Getting localization error!");
+
     console.log(errorMessage);
     return throwError(errorMessage);
   }

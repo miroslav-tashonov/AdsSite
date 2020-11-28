@@ -11,28 +11,8 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" minlength="6" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-    <div *ngIf="submitted && f.password.errors" class="form-required">
-      <div *ngIf="f.password.errors.required">Password is required</div>
-    </div>
-    <div *ngIf="submitted && f.password.errors" class="form-required">
-      <div *ngIf="f.password.errors.minlength">Minimum length is 6 characters</div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="confirmPassword">Password</label>
-    <input type="password" minlength="6" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
-    <div *ngIf="submitted && f.confirmPassword.errors" class="form-required">
-      <div *ngIf="f.confirmPassword.errors">Passwords doesnt match</div>
-    </div>
-    <div *ngIf="submitted && f.confirmPassword.errors" class="form-required">
-      <div *ngIf="f.confirmPassword.errors.minlength">Minimum length is 6 characters</div>
-    </div>
-  </div>
-  <div class="form-group">
     <label for="phone">Phone</label>
-    <input type="number" formControlName="phone" minLength="7" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+    <input type="number" minLength="7" formControlName="phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
     <div *ngIf="submitted && f.phone.errors" class="form-required">
       <div *ngIf="f.phone.errors.required">Phone is required</div>
     </div>
@@ -47,8 +27,8 @@
   <div class="form-group">
     <button [disabled]="loading" class="btn btn-primary">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-      Register
+      Update Account
     </button>
-    <a routerLink="/login" class="btn btn-link">Login</a>
+    <a routerLink="/resetPassword" class="btn btn-link">Reset Password</a>
   </div>
 </form>

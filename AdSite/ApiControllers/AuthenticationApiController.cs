@@ -18,6 +18,7 @@ using AdSite.Extensions;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AdSite.Controllers
 {
@@ -51,7 +52,7 @@ namespace AdSite.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             try
             {
@@ -110,7 +111,7 @@ namespace AdSite.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Register([FromBody]RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model, string returnUrl = null)
         {
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -143,18 +144,17 @@ namespace AdSite.Controllers
         }
 
         [HttpPost, Route("update")]
-        [Authorize(Roles = "User,Admin")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Update([FromBody]RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Update([FromBody] ManageAccountModel model, string returnUrl = null)
         {
             var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
             if (account == null)
             {
                 return BadRequest("Account doesnt exist");
             }
-
             var result = await _userManager.UpdateAsync(account);
             if (result.Succeeded)
             {
@@ -163,9 +163,42 @@ namespace AdSite.Controllers
                     return Ok(SignIn(account, model.CountryId));
                 }
             }
-
             return BadRequest();
         }
+
+        [HttpPost, Route("resetPassword")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model, string returnUrl = null)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var account = _userManager.FindByNameAsync(model.Email).GetAwaiter().GetResult();
+            if (account == null)
+            {
+                return BadRequest("Account doesnt exist");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(account, model.OldPassword, model.Password);
+            if (result.Succeeded)
+            {
+                if (_userRoleCountryService.Exists(account.Id, model.CountryId))
+                {
+                    return Ok(SignIn(account, model.CountryId));
+                }
+            }
+            else
+            {
+                return BadRequest("Password change error");
+            }
+
+
+            return BadRequest("Something went wrong");
+        }
+
 
         #region Helper Methods
 
@@ -214,7 +247,6 @@ namespace AdSite.Controllers
                 Role = role.Name,
                 PhoneNumber = account.PhoneNumber,
                 Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
-                PasswordHash = account.PasswordHash,
             };
         }
 

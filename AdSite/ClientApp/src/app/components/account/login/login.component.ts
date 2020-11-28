@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { CountryService } from '../../../services/country.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   error = '';
 
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
+  constructor(private notificationService: NotificationService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -46,10 +47,12 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
+          this.notificationService.showSuccess('Login succesful!','Login action');
           this.router.navigate(['/']);
         },
         error => {
           this.error = error;
+          this.notificationService.showError('Login failed!','Login action');
           this.loading = false;
         });
   }

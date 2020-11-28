@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { WebSettingsModel } from '../models/WebSettingsModel';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class WebSettingsService {
       'Content-Type': 'application/json; charset=utf-8'
     })
   };
-  constructor(private http: HttpClient) {
+  constructor(private notificationService: NotificationService, private http: HttpClient) {
     this.myAppUrl = environment.appUrl;
     this.myApiUrl = 'api/WebSettingsApi/';
   }
@@ -38,6 +39,9 @@ export class WebSettingsService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+
+    this.notificationService.showError(errorMessage, "Getting web settings error!");
+
     console.log(errorMessage);
     return throwError(errorMessage);
   }

@@ -24,3 +24,17 @@ export class RegisterUser {
   email?: string;
   countryId?: string;
 }
+
+export class ResetPasswordModel {
+  oldPassword?: string;
+  password?: string;
+  confirmPassword?: string;
+  email?: string;
+  countryId?: string;
+}
+
+export class ManageUser {
+  phone?: string;
+  email?: string;
+  countryId?: string;
+}

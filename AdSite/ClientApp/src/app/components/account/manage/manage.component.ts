@@ -5,8 +5,9 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
-import { RegisterUser, User } from '../../../models/User';
+import { ManageUser, RegisterUser, User } from '../../../models/User';
 import { CountryService } from '../../../services/country.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-manage',
@@ -17,31 +18,31 @@ export class ManageComponent implements OnInit {
   loading = false;
   invalidLogin?: boolean;
   loginForm: FormGroup;
-  registerUser: RegisterUser;
+  model: ManageUser;
   currentUser?: User;
 
   error = '';
 
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
+  constructor(private notificationService: NotificationService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      phone: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
+      Validators.minLength(7)]],
     });
 
-    this.registerUser = new RegisterUser();
+    
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    this.model = new ManageUser();
+    this.model.email = this.currentUser?.email;
+    this.model.phone = this.currentUser?.phoneNumber;
   }
 
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-    this.registerUser.email = this.f.email.value;
-    this.registerUser.password = this.f.password.value;
-    this.registerUser.confirmPassword = this.f.confirmPassword.value;
-    this.registerUser.phone = this.f.phone.value;
-    this.registerUser.countryId = this.countryService.countryId;
+    this.model.email = this.f.email.value;
+    this.model.phone = this.f.phone.value;
+    this.model.countryId = this.countryService.countryId;
 
 
     this.submitted = true;
@@ -51,24 +52,25 @@ export class ManageComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authenticationService.update(this.registerUser)
+    this.authenticationService.update(this.model)
       .pipe(first())
       .subscribe(
         data => {
+          this.notificationService.showSuccess('Update account is succesful!', 'Save action');
           this.router.navigate(['/']);
         },
         error => {
           this.error = error;
+          this.notificationService.showError('Update account failed!', 'Save action');
           this.loading = false;
         });
   }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      phone: ['', Validators.required],
+      email: [this.model.email, [Validators.required, Validators.email]],
+      phone: [this.model.phone, [Validators.required, Validators.pattern("^[0-9]*$"),
+      Validators.minLength(7)]],
     });
 
   }

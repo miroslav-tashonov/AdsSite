@@ -3,14 +3,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CategoryViewModel } from './models/CategoryViewModel';
-import { CountryModel } from './models/CountryModel';
 import { Role } from './models/RolesEnum';
 import { User } from './models/User';
 import { WebSettingsModel } from './models/WebSettingsModel';
 import { AuthenticationService } from './services/authentication.service';
 import { CategoriesService } from './services/categories.service';
 import { CountryService } from './services/country.service';
+import { LanguageService } from './services/language.service';
 import { WebSettingsService } from './services/web-settings.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,7 @@ export class AppComponent{
   menuCategories$: Observable<CategoryViewModel[]> | undefined;
   webSettings$: Observable<WebSettingsModel> | undefined;
 
-  constructor(private locationStrategy: LocationStrategy, private countryService: CountryService, private webSettingsService: WebSettingsService, private categoriesService: CategoriesService, private authenticationService: AuthenticationService, private router: Router) {
+  constructor(private locationStrategy: LocationStrategy, private languageService: LanguageService, private countryService: CountryService, private webSettingsService: WebSettingsService, private categoriesService: CategoriesService, private authenticationService: AuthenticationService, private router: Router) {
     this.countryService.getCountryId(this.locationStrategy.getBaseHref()).subscribe({
       next: country => {
         this.webSettings$ = this.webSettingsService.getWebSettingsModel(country.id);
@@ -48,5 +49,4 @@ export class AppComponent{
     this.authenticationService.logout();
     this.router.navigate(['/']);
   }
-
 }

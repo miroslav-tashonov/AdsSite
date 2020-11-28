@@ -21,6 +21,12 @@ import { CountryService } from './services/country.service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { UsersPanelComponent } from './components/users-panel/users-panel.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { LanguageService } from './services/language.service';
+import { LanguagePickerComponent } from './components/language-picker/language-picker.component';
+import { HomeComponent } from './components/home/home.component';
+import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -33,14 +39,19 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
     RegisterComponent,
     ManageComponent,
     UsersPanelComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    LanguagePickerComponent,
+    HomeComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -49,7 +60,8 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
     WebSettingsService,
     CategoriesService,
     AuthenticationService,
-    CountryService
+    CountryService,
+    LanguageService
   ],
   bootstrap: [AppComponent]
 })

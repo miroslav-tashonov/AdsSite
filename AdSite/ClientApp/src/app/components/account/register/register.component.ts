@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication.service';
 import { RegisterUser } from '../../../models/User';
 import { CountryService } from '../../../services/country.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -21,14 +22,14 @@ export class RegisterComponent implements OnInit {
 
   error = '';
 
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
-    
+  constructor(private notificationService: NotificationService,private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
+
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required, Validators.email],
-      password: ['', Validators.required, Validators.minLength(6)],
-      confirmPassword: ['', Validators.required, Validators.minLength(6)],
-      phone: ['', Validators.required, Validators.pattern("^[0-9]*$"),
-        Validators.minLength(7)],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
+        Validators.minLength(7)]],
     });
 
     this.registerUser = new RegisterUser();
@@ -54,21 +55,23 @@ export class RegisterComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
+          this.notificationService.showSuccess('Register account is succesful!', 'Register action');
           this.router.navigate(['/']);
         },
         error => {
           this.error = error;
+          this.notificationService.showError('Register account failed!', 'Register action');
           this.loading = false;
         });
   }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required, Validators.email],
-      password: ['', Validators.required, Validators.minLength(6)],
-      confirmPassword: ['', Validators.required, Validators.minLength(6)],
-      phone: ['', Validators.required, Validators.pattern("^[0-9]*$"),
-        Validators.minLength(7)],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
+        Validators.minLength(7)]],
     });
   }
 }

@@ -5,6 +5,7 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CategoryViewModel } from '../models/CategoryViewModel';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class CategoriesService {
       'Content-Type': 'application/json; charset=utf-8'
     })
   };
-  constructor(private http: HttpClient) {
+  constructor(private notificationService: NotificationService,private http: HttpClient) {
     this.myAppUrl = environment.appUrl;
     this.myApiUrl = 'api/CategoriesApi/';
   }
@@ -40,6 +41,7 @@ export class CategoriesService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    this.notificationService.showError(errorMessage, "Getting categories error!");
     console.log(errorMessage);
     return throwError(errorMessage);
   }

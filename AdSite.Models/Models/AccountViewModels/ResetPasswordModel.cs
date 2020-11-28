@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdSite.Models.AccountViewModels
 {
-    public class RegisterViewModel
+    public class ResetPasswordModel
     {
         [Required]
         [EmailAddress]
@@ -29,11 +29,6 @@ namespace AdSite.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        [DataType(DataType.Password)]
-        [Phone]
-        [Display(Name = "Phone")]
-        public string Phone { get; set; }
 
         public Guid CountryId { get; set; }
     }
