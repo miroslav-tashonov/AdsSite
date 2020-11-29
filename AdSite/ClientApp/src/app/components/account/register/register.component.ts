@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
   registerUser: RegisterUser;
   errors: string[];
 
-  constructor(private notificationService: NotificationService,private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
+  constructor(private notificationService: NotificationService,private router: Router, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
 
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],

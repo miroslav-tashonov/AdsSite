@@ -14,7 +14,7 @@ export class LanguageService {
   appUrl: string;
   languageApiUrl: string;
 
-  constructor(private notificationService: NotificationService, private http: HttpClient, private locationStrategy: LocationStrategy) {
+  constructor(private notificationService: NotificationService, private http: HttpClient) {
     this.appUrl = environment.appUrl;
     this.languageApiUrl = 'api/LanguageApi/getSupportedCultures';
   }

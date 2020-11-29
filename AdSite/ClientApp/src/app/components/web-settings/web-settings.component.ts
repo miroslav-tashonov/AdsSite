@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-web-settings',
-  templateUrl: './web-settings.component.html',
-  styleUrls: ['./web-settings.component.css']
+  templateUrl: './web-settings.component.html'
 })
 export class WebSettingsComponent implements OnInit {
 

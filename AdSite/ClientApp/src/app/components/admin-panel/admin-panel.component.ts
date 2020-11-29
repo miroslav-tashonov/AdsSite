@@ -8,10 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AdminPanelComponent implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    this.router.navigate([{ outlets: { subAdmin: ['manageusers'] } }], { relativeTo: this.activatedRoute });
+    
   }
 
   ngOnInit(): void {
+    this.router.navigate([{ outlets: { subAdmin: ['manageusers'] } }], { relativeTo: this.activatedRoute });
   }
 
 }

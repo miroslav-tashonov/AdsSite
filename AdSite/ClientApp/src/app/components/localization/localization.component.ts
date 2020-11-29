@@ -15,7 +15,6 @@ export class LocalizationComponent implements OnInit {
 
   constructor(private localizationService: LocalizationService) {
     this.localizationKey = '';
-    this.loadLocalization();
   }
 
   ngOnInit() {

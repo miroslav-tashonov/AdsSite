@@ -27,6 +27,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NotificationService } from './services/notification.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { ToastrModule } from 'ngx-toastr';
     CategoriesService,
     AuthenticationService,
     CountryService,
-    LanguageService
+    LanguageService,
+    NotificationService
   ],
   bootstrap: [AppComponent]
 })

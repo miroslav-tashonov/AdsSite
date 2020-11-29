@@ -7,8 +7,7 @@ import { WebSettingsService } from '../../services/web-settings.service';
 
 @Component({
   selector: 'contact',
-  templateUrl: './contact-form.component.html',
-  styleUrls: ['./contact-form.component.css']
+  templateUrl: './contact-form.component.html'
 })
 export class ContactFormComponent {
   webSettings$: Observable<WebSettingsModel> | undefined;
