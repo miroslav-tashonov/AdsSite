@@ -28,6 +28,20 @@ import { ResetPasswordComponent } from './components/account/reset-password/rese
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NotificationService } from './services/notification.service';
+import { CitiesAllComponent } from './components/cities-all/cities-all.component';
+import { CityComponent } from './components/city/city.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { AddDialogComponent } from './components/cities-all/dialogs/add/add.dialog.component';
+import { EditDialogComponent } from './components/cities-all/dialogs/edit/edit.dialog.component';
+import { DeleteDialogComponent } from './components/cities-all/dialogs/delete/delete.dialog.component';
+import { CityService } from './services/city.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -43,7 +57,12 @@ import { NotificationService } from './services/notification.service';
     AdminPanelComponent,
     LanguagePickerComponent,
     HomeComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    CitiesAllComponent,
+    CityComponent,
+    AddDialogComponent,
+    EditDialogComponent,
+    DeleteDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +71,21 @@ import { NotificationService } from './services/notification.service';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    MatDialogModule,
+    FormsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    MatSortModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatPaginatorModule,
+  ],
+  entryComponents: [
+    AddDialogComponent,
+    EditDialogComponent,
+    DeleteDialogComponent
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -63,7 +96,8 @@ import { NotificationService } from './services/notification.service';
     AuthenticationService,
     CountryService,
     LanguageService,
-    NotificationService
+    NotificationService,
+    CityService
   ],
   bootstrap: [AppComponent]
 })

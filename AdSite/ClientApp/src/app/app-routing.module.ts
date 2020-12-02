@@ -5,6 +5,7 @@ import { ManageComponent } from './components/account/manage/manage.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { CitiesAllComponent } from './components/cities-all/cities-all.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { UsersPanelComponent } from './components/users-panel/users-panel.component';
@@ -29,13 +30,13 @@ const routes: Routes = [
     ] },
   {
     path: 'adminpanel', component: AdminPanelComponent, canActivate: [AuthGuard], data: { roles: [Role.Admin] }, children: [
-      { path: 'manageusers', component: LoginComponent, outlet: 'subAdmin' },
-      { path: 'categories', component: LoginComponent, outlet: 'subAdmin' },
-      { path: 'cities', component: LoginComponent, outlet: 'subAdmin' },
-      { path: 'languages', component: LoginComponent, outlet: 'subAdmin' },
-      { path: 'localizations', component: LoginComponent, outlet: 'subAdmin' },
-      { path: 'webSettings', component: LoginComponent, outlet: 'subAdmin' },
-      { path: 'countries', component: LoginComponent, outlet: 'subAdmin' },
+      { path: 'manageusers', component: LoginComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+      { path: 'categories', component: LoginComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+      { path: 'cities', component: CitiesAllComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+      { path: 'languages', component: LoginComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+      { path: 'localizations', component: LoginComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+      { path: 'webSettings', component: LoginComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+      { path: 'countries', component: LoginComponent, outlet: 'subAdmin', canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
     ] },
   { path: '**', redirectTo: '/' }];
 
