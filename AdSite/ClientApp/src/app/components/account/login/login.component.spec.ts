@@ -56,42 +56,42 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('email field validity', () => {
-    let errors: ValidationErrors | null;
-    let username = component.loginForm.controls['username'];
-    expect(username.valid).toBeFalsy();
+  //it('email field validity', () => {
+  //  let errors: ValidationErrors | null;
+  //  let username = component.loginForm.controls['username'];
+  //  expect(username.valid).toBeFalsy();
 
-    // Email field is required
-    errors = username.errors || {};
-    expect(errors['required']).toBeTruthy();
+  //  // Email field is required
+  //  errors = username.errors || {};
+  //  expect(errors['required']).toBeTruthy();
 
-    // Set email to something
-    username.setValue("test");
-    errors = username.errors || {};
-    expect(errors['required']).toBeFalsy();
+  //  // Set email to something
+  //  username.setValue("test");
+  //  errors = username.errors || {};
+  //  expect(errors['required']).toBeFalsy();
 
-    // Set email to something correct
-    username.setValue("test@example.com");
-    errors = username.errors || {};
-    expect(errors['required']).toBeFalsy();
-  });
+  //  // Set email to something correct
+  //  username.setValue("test@example.com");
+  //  errors = username.errors || {};
+  //  expect(errors['required']).toBeFalsy();
+  //});
 
-  it('password field validity', () => {
-    let errors: ValidationErrors | null;
-    let password = component.loginForm.controls['password'];
+  //it('password field validity', () => {
+  //  let errors: ValidationErrors | null;
+  //  let password = component.loginForm.controls['password'];
 
-    // Email field is required
-    errors = password.errors || {};
-    expect(errors['required']).toBeTruthy();
+  //  // Email field is required
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeTruthy();
 
-    // Set email to something
-    password.setValue("1234");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
+  //  // Set email to something
+  //  password.setValue("1234");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
 
-    // Set email to something correct
-    password.setValue("123456789");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
-  });
+  //  // Set email to something correct
+  //  password.setValue("123456789");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
+  //});
 });

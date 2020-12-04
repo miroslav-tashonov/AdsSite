@@ -19,8 +19,6 @@ import { RegisterComponent } from './components/account/register/register.compon
 import { ManageComponent } from './components/account/manage/manage.component';
 import { CountryService } from './services/country.service';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { UsersPanelComponent } from './components/users-panel/users-panel.component';
-import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { LanguageService } from './services/language.service';
 import { LanguagePickerComponent } from './components/language-picker/language-picker.component';
 import { HomeComponent } from './components/home/home.component';
@@ -42,6 +40,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { NgMatSearchBarModule } from 'ng-mat-search-bar';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -53,8 +64,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     LoginComponent,
     RegisterComponent,
     ManageComponent,
-    UsersPanelComponent,
-    AdminPanelComponent,
     LanguagePickerComponent,
     HomeComponent,
     ResetPasswordComponent,
@@ -62,9 +71,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     CityComponent,
     AddDialogComponent,
     EditDialogComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    FileUploadComponent
   ],
   imports: [
+    BrowserAnimationsModule,
+    FlexLayoutModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -72,8 +84,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    MatDialogModule,
     FormsModule,
+    NgMatSearchBarModule,
+    MatDialogModule,
     MatButtonModule,
     MatInputModule,
     MatIconModule,
@@ -81,6 +94,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatTableModule,
     MatToolbarModule,
     MatPaginatorModule,
+    MatSidenavModule,
+    MatListModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatGridListModule,
+    MatProgressBarModule
   ],
   entryComponents: [
     AddDialogComponent,

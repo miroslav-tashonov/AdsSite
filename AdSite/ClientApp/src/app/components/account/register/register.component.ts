@@ -8,49 +8,66 @@ import { AuthenticationService } from '../../../services/authentication.service'
 import { RegisterUser } from '../../../models/User';
 import { CountryService } from '../../../services/country.service';
 import { NotificationService } from '../../../services/notification.service';
+import { MyErrorStateMatcher } from '../../../models/ErrorStateMatcher';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  submitted = false;
-  loading = false;
-  invalidLogin?: boolean;
-  loginForm: FormGroup;
+
+  addressForm = this.fb.group({
+    userEmail: [null, Validators.compose([
+      Validators.required, Validators.email])
+    ],
+    firstName: [null, Validators.required],
+    lastName: [null, Validators.required],
+    address: [null, Validators.required],
+    address2: null,
+    city: [null, Validators.required],
+    state: [null, Validators.required],
+    telephone: [null, Validators.compose([
+      Validators.required, Validators.minLength(8)])
+    ],
+    password: [null, Validators.compose([
+      Validators.required, Validators.minLength(7)])
+    ],
+    repeatPassword: [null, Validators.compose([
+      Validators.required, Validators.minLength(7)])
+    ],
+    gender: ['male', Validators.required]
+  });
+
+
+  hasUnitNumber = false;
+
+
+  states = [
+    { name: 'Alabama', abbreviation: 'AL' },
+    { name: 'Alaska', abbreviation: 'AK' },
+    { name: 'American Samoa', abbreviation: 'AS' },
+
+  ];
+
   registerUser: RegisterUser;
   errors: string[];
+  hide = true;
+  hideOld = true;
+  matcher = new MyErrorStateMatcher();
 
-  constructor(private notificationService: NotificationService,private router: Router, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
-
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
-        Validators.minLength(7)]],
-    });
-
+  constructor(private fb: FormBuilder, private notificationService: NotificationService,private router: Router, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.errors = [];
     this.registerUser = new RegisterUser();
   }
-
-  get f() { return this.loginForm.controls; }
-
   onSubmit() {
-    this.registerUser.email = this.f.email.value;
-    this.registerUser.password = this.f.password.value;
-    this.registerUser.confirmPassword = this.f.confirmPassword.value;
-    this.registerUser.phone = this.f.phone.value;
-    this.registerUser.countryId = this.countryService.countryId;
+    //this.registerUser.email = this.fb.firstName.value;
+    //this.registerUser.password = this.f.password.value;
+    //this.registerUser.confirmPassword = this.f.confirmPassword.value;
+    //this.registerUser.phone = this.f.phone.value;
+    //this.registerUser.countryId = this.countryService.countryId;
 
-    this.submitted = true;
 
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    this.loading = true;
     this.authenticationService.register(this.registerUser)
       .pipe(first())
       .subscribe(
@@ -70,17 +87,14 @@ export class RegisterComponent implements OnInit {
           }
 
           this.notificationService.showError('Register account failed!', 'Register action');
-          this.loading = false;
         });
   }
 
+  //todo 
+  onFileComplete(data: any) {
+    
+  }
+
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
-        Validators.minLength(7)]],
-    });
   }
 }

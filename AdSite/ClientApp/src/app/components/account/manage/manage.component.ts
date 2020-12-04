@@ -8,27 +8,53 @@ import { first } from 'rxjs/operators';
 import { ManageUser, RegisterUser, User } from '../../../models/User';
 import { CountryService } from '../../../services/country.service';
 import { NotificationService } from '../../../services/notification.service';
+import { MyErrorStateMatcher } from '../../../models/ErrorStateMatcher';
 
 @Component({
   selector: 'app-manage',
-  templateUrl: './manage.component.html'
+  templateUrl: './manage.component.html',
+  styleUrls: ['./manage.component.css']
 })
 export class ManageComponent implements OnInit {
-  submitted = false;
-  loading = false;
-  invalidLogin?: boolean;
-  loginForm: FormGroup;
+  addressForm = this.fb.group({
+    userEmail: [null, Validators.compose([
+      Validators.required, Validators.email])
+    ],
+    firstName: [null, Validators.required],
+    lastName: [null, Validators.required],
+    address: [null, Validators.required],
+    address2: null,
+    city: [null, Validators.required],
+    state: [null, Validators.required],
+    telephone: [null, Validators.compose([
+      Validators.required, Validators.minLength(8)])
+    ],
+    password: [null, Validators.compose([
+      Validators.required, Validators.minLength(7)])
+    ],
+    repeatPassword: [null, Validators.compose([
+      Validators.required, Validators.minLength(7)])
+    ],
+    gender: ['male', Validators.required]
+  });
+
+  hasUnitNumber = false;
+
+  states = [
+    { name: 'Alabama', abbreviation: 'AL' },
+    { name: 'Alaska', abbreviation: 'AK' },
+    { name: 'American Samoa', abbreviation: 'AS' },
+  ];
+
+  registerUser!: RegisterUser;
+  errors: string[];
+  hide = true;
+  hideOld = true;
   model: ManageUser;
   currentUser?: User;
-  errors: string[];
+  matcher = new MyErrorStateMatcher();
 
-  constructor(private notificationService: NotificationService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
-      Validators.minLength(7)]],
-    });
-
+  constructor(private fb: FormBuilder, private notificationService: NotificationService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private authenticationService: AuthenticationService, private countryService: CountryService) {
     this.errors = [];
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     this.model = new ManageUser();
@@ -36,21 +62,12 @@ export class ManageComponent implements OnInit {
     this.model.phone = this.currentUser?.phoneNumber;
   }
 
-  get f() { return this.loginForm.controls; }
-
   onSubmit() {
-    this.model.email = this.f.email.value;
-    this.model.phone = this.f.phone.value;
+    //this.model.email = this.f.email.value;
+    //this.model.phone = this.f.phone.value;
     this.model.countryId = this.countryService.countryId;
 
 
-    this.submitted = true;
-
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    this.loading = true;
     this.authenticationService.update(this.model)
       .pipe(first())
       .subscribe(
@@ -70,16 +87,14 @@ export class ManageComponent implements OnInit {
           }
 
           this.notificationService.showError('Update account failed!', 'Save action');
-          this.loading = false;
         });
   }
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      email: [this.model.email, [Validators.required, Validators.email]],
-      phone: [this.model.phone, [Validators.required, Validators.pattern("^[0-9]*$"),
-      Validators.minLength(7)]],
-    });
+  }
+
+  //todo 
+  onFileComplete(data: any) {
 
   }
 }

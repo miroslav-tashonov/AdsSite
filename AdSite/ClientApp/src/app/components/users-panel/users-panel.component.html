@@ -1,8 +1,0 @@
-<ul class="nav nav-pills">
-  <li><a [routerLink]="[{ outlets: { sub: 'myads' }}]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><app-localization localizationKey="Ads_MyAds"></app-localization></a></li>
-  <li><a [routerLink]="[{ outlets: { sub: 'newad' }}]" ><app-localization localizationKey="Ads_NewAd"></app-localization></a></li>
-  <li><a [routerLink]="[{ outlets: { sub: 'mywishlist' }}]" ><app-localization localizationKey="Wishlist_MyWishlist"></app-localization></a></li>
-  <li><a [routerLink]="[{ outlets: { sub: 'verifications' }}]" ><app-localization localizationKey="General_Verifications"></app-localization></a></li>
-</ul>
-<router-outlet name="sub"></router-outlet>
-<br />

@@ -1,63 +1,155 @@
-<h1>Register</h1>
-<br />
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div class="alert alert-danger" role="alert" *ngIf="errors.length > 0">
-    <ul>
-      <li *ngFor="let error of errors">
-        {{ error }}
-      </li>
-    </ul>
-  </div>
+<form [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()" autocomplete="off">
+  <mat-card class="registration-card">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <mat-card-title>Register account</mat-card-title>
+      <mat-card-subtitle>Form for account registration</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Email" formControlName="userEmail">
+            <mat-error *ngIf="addressForm.controls['firstName'].hasError('email')">
+              Email is <strong>invalid</strong>
+            </mat-error>
+            <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <app-file-upload (complete)="onFileComplete($event)"></app-file-upload>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="First name" formControlName="firstName">
+            <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
+              First name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Last name" formControlName="lastName">
+            <mat-error *ngIf="addressForm.controls['lastName'].hasError('required')">
+              Last name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Password</mat-label>
+            <input [type]="hideOld ? 'password' : 'text'" matInput formControlName="password" [errorStateMatcher]="matcher"
+                   placeholder="Strong password here" autocomplete="off">
+            <mat-icon matSuffix (click)="hideOld = !hideOld">{{hideOld ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="addressForm.controls['password'].hasError('minLength') && !addressForm.controls['password'].hasError('required')">
+              Please put minimum 7 characters
+            </mat-error>
+            <mat-error *ngIf="addressForm.controls['password'].hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Repeat Password</mat-label>
+            <input [type]="hide ? 'password' : 'text'" matInput formControlName="repeatPassword" [errorStateMatcher]="matcher"
+                   placeholder="Strong password here" autocomplete="off">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="addressForm.controls['repeatPassword'].hasError('minLength') && !addressForm.controls['repeatPassword'].hasError('required')">
+              Please put minimum 7 characters
+            </mat-error>
+            <mat-error *ngIf="addressForm.controls['repeatPassword'].hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+<textarea matInput placeholder="Address" formControlName="address"></textarea>
+            <mat-error *ngIf="addressForm.controls['address'].hasError('required')">
+              Address is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="!hasUnitNumber">
+        <div class="col">
+          <button mat-button type="button" (click)="hasUnitNumber = !hasUnitNumber">
+            + Add C/O, Apt, Suite, Unit
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="hasUnitNumber">
+        <div class="col">
+          <mat-form-field class="full-width">
+<textarea matInput placeholder="Address 2" formControlName="address2"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="City" formControlName="city">
+            <mat-error *ngIf="addressForm.controls['city'].hasError('required')">
+              City is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="State" formControlName="state">
+              <mat-option *ngFor="let state of states" [value]="state.abbreviation">
+                {{ state.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addressForm.controls['state'].hasError('required')">
+              State is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Telephone</mat-label>
+            <span matPrefix>+389 &nbsp;</span>
+            <input type="tel" matInput formControlName="telephone" placeholder="70-000-000">
+            <mat-icon matSuffix>mode_edit</mat-icon>
+            <mat-error *ngIf="addressForm.controls['telephone'].hasError('minLength') && !addressForm.controls['telephone'].hasError('required')">
+              Telephone number invalid
+            </mat-error>
+            <mat-error *ngIf="addressForm.controls['telephone'].hasError('required')">
+              Telephone is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-radio-group formControlName="gender">
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="female">Female</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="manageActions">
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+      <button mat-raised-button color="accent" type="reset">Reset Form</button>
+      <a mat-raised-button routerLink="/resetPassword">Reset Password</a>
+    </mat-card-actions>
 
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-    <div *ngIf="submitted && f.email.errors" class="form-required">
-      <div *ngIf="f.email.errors.required">Email is required</div>
-    </div>
-    <div *ngIf="submitted && f.email.errors" class="form-required">
-      <div *ngIf="f.email.errors.email">Email is invalid</div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" minlength="6" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-    <div *ngIf="submitted && f.password.errors" class="form-required">
-      <div *ngIf="f.password.errors.required">Password is required</div>
-    </div>
-    <div *ngIf="submitted && f.password.errors" class="form-required">
-      <div *ngIf="f.password.errors.minlength">Minimum length is 6 characters</div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="confirmPassword">Confirm Password</label>
-    <input type="password" minlength="6" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
-    <div *ngIf="submitted && f.confirmPassword.errors" class="form-required">
-      <div *ngIf="f.confirmPassword.errors">Passwords doesnt match</div>
-    </div>
-    <div *ngIf="submitted && f.confirmPassword.errors" class="form-required">
-      <div *ngIf="f.confirmPassword.errors.minlength">Minimum length is 6 characters</div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="phone">Phone</label>
-    <input type="number" formControlName="phone" minLength="7" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
-    <div *ngIf="submitted && f.phone.errors" class="form-required">
-      <div *ngIf="f.phone.errors.required">Phone is required</div>
-    </div>
-    <div *ngIf="submitted && f.phone.errors" class="form-required">
-      <div *ngIf="f.phone.errors.pattern">Invalid phone number.</div>
-    </div>
-    <div *ngIf="submitted && f.phone.errors" class="form-required">
-      <div *ngIf="f.phone.errors.minlength">Minimum length is 7 characters</div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <button [disabled]="loading" class="btn btn-primary">
-      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-      Register
-    </button>
-    <a routerLink="/login" class="btn btn-link">Login</a>
-  </div>
+  </mat-card>
 </form>

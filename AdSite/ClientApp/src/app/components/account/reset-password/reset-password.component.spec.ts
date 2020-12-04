@@ -55,60 +55,60 @@ describe('ResetPasswordComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('old password field validity', () => {
-    let errors: ValidationErrors | null;
-    let password = component.loginForm.controls['oldPassword'];
+  //it('old password field validity', () => {
+  //  let errors: ValidationErrors | null;
+  //  let password = component.loginForm.controls['oldPassword'];
 
-    // Email field is required
-    errors = password.errors || {};
-    expect(errors['required']).toBeTruthy();
+  //  // Email field is required
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeTruthy();
 
-    // Set email to something
-    password.setValue("1234");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
+  //  // Set email to something
+  //  password.setValue("1234");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
 
-    // Set email to something correct
-    password.setValue("123456789");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
-  });
+  //  // Set email to something correct
+  //  password.setValue("123456789");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
+  //});
 
-  it('password field validity', () => {
-    let errors: ValidationErrors | null;
-    let password = component.loginForm.controls['password'];
+  //it('password field validity', () => {
+  //  let errors: ValidationErrors | null;
+  //  let password = component.loginForm.controls['password'];
 
-    // Email field is required
-    errors = password.errors || {};
-    expect(errors['required']).toBeTruthy();
+  //  // Email field is required
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeTruthy();
 
-    // Set email to something
-    password.setValue("1234");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
+  //  // Set email to something
+  //  password.setValue("1234");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
 
-    // Set email to something correct
-    password.setValue("123456789");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
-  });
+  //  // Set email to something correct
+  //  password.setValue("123456789");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
+  //});
 
-  it('confirmPassword field validity', () => {
-    let errors: ValidationErrors | null;
-    let password = component.loginForm.controls['confirmPassword'];
+  //it('confirmPassword field validity', () => {
+  //  let errors: ValidationErrors | null;
+  //  let password = component.loginForm.controls['confirmPassword'];
 
-    // Email field is required
-    errors = password.errors || {};
-    expect(errors['required']).toBeTruthy();
+  //  // Email field is required
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeTruthy();
 
-    // Set email to something
-    password.setValue("1234");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
+  //  // Set email to something
+  //  password.setValue("1234");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
 
-    // Set email to something correct
-    password.setValue("123456789");
-    errors = password.errors || {};
-    expect(errors['required']).toBeFalsy();
-  });
+  //  // Set email to something correct
+  //  password.setValue("123456789");
+  //  errors = password.errors || {};
+  //  expect(errors['required']).toBeFalsy();
+  //});
 });

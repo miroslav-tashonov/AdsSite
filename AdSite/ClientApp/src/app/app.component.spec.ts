@@ -13,13 +13,11 @@ import { LoginComponent } from './components/account/login/login.component';
 import { ManageComponent } from './components/account/manage/manage.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
-import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { CategoriesMenuComponent } from './components/categories-menu/categories-menu.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { LanguagePickerComponent } from './components/language-picker/language-picker.component';
 import { LocalizationComponent } from './components/localization/localization.component';
-import { UsersPanelComponent } from './components/users-panel/users-panel.component';
 import { WebSettingsComponent } from './components/web-settings/web-settings.component';
 import { JwtInterceptor } from './interceptors/jwt-interceptor.service';
 import { Role } from './models/RolesEnum';
@@ -40,25 +38,25 @@ describe('AppComponent', () => {
     { path: 'register', component: RegisterComponent },
     { path: 'manage', component: ManageComponent, canActivate: [AuthGuard], data: { roles: [Role.User, Role.Admin] } },
     { path: 'resetPassword', component: ResetPasswordComponent, canActivate: [AuthGuard], data: { roles: [Role.User, Role.Admin] } },
-    {
-      path: 'userspanel', component: UsersPanelComponent, canActivate: [AuthGuard], data: { roles: [Role.User] }, children: [
-        { path: 'myads', component: LoginComponent, outlet: 'sub' },
-        { path: 'newad', component: LoginComponent, outlet: 'sub' },
-        { path: 'mywishlist', component: LoginComponent, outlet: 'sub' },
-        { path: 'verifications', component: LoginComponent, outlet: 'sub' },
-      ]
-    },
-    {
-      path: 'adminpanel', component: AdminPanelComponent, canActivate: [AuthGuard], data: { roles: [Role.Admin] }, children: [
-        { path: 'manageusers', component: LoginComponent, outlet: 'subAdmin' },
-        { path: 'categories', component: LoginComponent, outlet: 'subAdmin' },
-        { path: 'cities', component: LoginComponent, outlet: 'subAdmin' },
-        { path: 'languages', component: LoginComponent, outlet: 'subAdmin' },
-        { path: 'localizations', component: LoginComponent, outlet: 'subAdmin' },
-        { path: 'webSettings', component: LoginComponent, outlet: 'subAdmin' },
-        { path: 'countries', component: LoginComponent, outlet: 'subAdmin' },
-      ]
-    },
+    //{
+    //  path: 'userspanel', component: UsersPanelComponent, canActivate: [AuthGuard], data: { roles: [Role.User] }, children: [
+    //    { path: 'myads', component: LoginComponent, outlet: 'sub' },
+    //    { path: 'newad', component: LoginComponent, outlet: 'sub' },
+    //    { path: 'mywishlist', component: LoginComponent, outlet: 'sub' },
+    //    { path: 'verifications', component: LoginComponent, outlet: 'sub' },
+    //  ]
+    //},
+    //{
+    //  path: 'adminpanel', component: AdminPanelComponent, canActivate: [AuthGuard], data: { roles: [Role.Admin] }, children: [
+    //    { path: 'manageusers', component: LoginComponent, outlet: 'subAdmin' },
+    //    { path: 'categories', component: LoginComponent, outlet: 'subAdmin' },
+    //    { path: 'cities', component: LoginComponent, outlet: 'subAdmin' },
+    //    { path: 'languages', component: LoginComponent, outlet: 'subAdmin' },
+    //    { path: 'localizations', component: LoginComponent, outlet: 'subAdmin' },
+    //    { path: 'webSettings', component: LoginComponent, outlet: 'subAdmin' },
+    //    { path: 'countries', component: LoginComponent, outlet: 'subAdmin' },
+    //  ]
+    //},
     { path: '**', redirectTo: '/' }];
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -82,8 +80,6 @@ describe('AppComponent', () => {
         LoginComponent,
         RegisterComponent,
         ManageComponent,
-        UsersPanelComponent,
-        AdminPanelComponent,
         LanguagePickerComponent,
         HomeComponent,
         ResetPasswordComponent
