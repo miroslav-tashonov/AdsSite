@@ -1,0 +1,51 @@
+<!-- header start -->
+<header id="sticky" class="sticky">
+	<div class="mobile-fix-option"></div>
+	<div class="top-header">
+		<div class="container">
+			<app-topbar></app-topbar>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="main-menu">
+					<div class="menu-left">
+						<div class="navbar">
+							<a (click)="openNav()">
+								<div class="bar-style"> 
+									<i class="fa fa-bars sidebar-bar" aria-hidden="true"></i>
+								</div>
+							</a>
+							<div id="mySidenav" class="sidenav">
+						    <a [routerLink]="" class="sidebar-overlay" (click)="closeNav()"></a>
+						    <nav>
+						      <div (click)="closeNav()">
+						        <div class="sidebar-back text-left">
+						          <i class="fa fa-angle-left pr-2" aria-hidden="true"></i> Back
+						        </div>
+						      </div>
+							  <app-left-menu></app-left-menu>
+							</nav>
+							</div>
+						</div>
+						<div class="brand-logo">
+							<a [routerLink]="['/home/one']">
+								<img src="assets/images/icon/logo.png" class="img-fluid" alt="">
+							</a>
+						</div>
+					</div>
+					<div class="menu-right pull-right">
+						<div>
+							<app-navbar></app-navbar>
+						</div>
+						<div>
+							<app-header-widgets [shoppingCartItems]="shoppingCartItems"></app-header-widgets>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- header end -->

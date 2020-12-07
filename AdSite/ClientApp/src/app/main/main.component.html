@@ -1,0 +1,14 @@
+<app-header-one></app-header-one>
+
+<app-left-sidebar *ngIf="url == '/home/eleven'"></app-left-sidebar>
+
+<div [class]="url == '/home/eleven' ? 'left-sidebar_space' : ''"> <!-- Left sidebar menu only -->
+	
+	<router-outlet></router-outlet>
+	
+	<app-footer-one *ngIf="url != '/home/three' && url != '/home/twelve' && url != '/home/thirteen' && url != '/home/fourteen'"></app-footer-one>
+	
+
+</div>
+	
+

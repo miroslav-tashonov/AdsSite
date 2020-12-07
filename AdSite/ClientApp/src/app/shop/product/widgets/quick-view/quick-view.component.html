@@ -1,0 +1,62 @@
+<!-- Quick-view modal popup start-->
+<div class="modal fade bd-example-modal-lg theme-modal quickviewm" [id]="'quick-view'+product.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" *ngFor="let product of products">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content quick-view-modal">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="row">
+          <div class="col-lg-6  col-xs-12">
+            <div class="quick-view-img">
+              <img [src]="!variantImage ? product.pictures[0] : variantImage" alt="" class="img-fluid">
+             </div>
+            </div>
+            <div class="col-lg-6 rtl-text">
+              <div class="product-right">
+                <h2>{{product.name}}</h2>
+                <h3>{{product.price | currency:productsService?.currency:'symbol'}} <del><span class="money">{{product.salePrice | currency:productsService?.currency:'symbol'}}</span></del> </h3>
+                <ul class="color-variant" *ngIf="product.variants">
+                  <li [class]="variant.color" [class.active]="selectedColor == variant.images" (click)="changeVariantImage(variant.images)" *ngFor="let variant of product.variants"></li>
+                </ul>
+                <div class="border-product">
+                  <h6 class="product-title">product details</h6>
+                  <p>{{product.shortDetails}}</p>
+                </div>
+                <div class="product-description border-product">
+                  <div class="size-box" *ngIf="product.size">
+                    <ul>
+                      <li [ngClass]="{'active': selectedSize == size}" *ngFor="let size of product.size">
+                        <a [routerLink]="" (click)="changeVariantSize(size)">{{size}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <h6 class="product-title">quantity</h6>
+                  <div class="qty-box">
+                    <div class="input-group">
+                      <span class="input-group-prepend">
+                        <button type="button" class="btn quantity-left-minus" (click)="decrement()" data-type="minus" data-field="">
+                            <i class="ti-angle-left"></i>
+                        </button>
+                      </span>
+                      <input type="text" name="quantity" disabled class="form-control input-number" value="{{counter}}">
+                      <span class="input-group-prepend">
+                        <button type="button" class="btn quantity-right-plus" (click)="increment()" data-type="plus" data-field="">
+                            <i class="ti-angle-right"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="product-buttons">
+                  <a [routerLink]="" (click)="addToCart(product, counter)" class="btn btn-solid" >add to cart</a>
+                  <a [routerLink]="['/home/left-sidebar/product', product.id]" class="btn btn-solid">view detail</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Quick-view modal popup end-->

@@ -1,0 +1,160 @@
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>collection</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="'/home/one'">home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">collection</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb end -->
+<!-- section start -->
+<section class="section-b-space">
+  <div class="collection-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="collection-content col">
+          <div class="page-main-content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="top-banner-wrapper">
+                    <a [routerLink]="'/home/left-sidebar/collection/men'"><img src="assets/images/mega-menu/2.jpg" class="img-fluid" alt=""></a>
+                    <div class="top-banner-content small-section">
+                      <h4>fashion</h4>
+                      <h5>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h5>
+                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p>
+                    </div>
+                  </div>
+                  <div class="collection-product-wrapper">
+                    <!-- Filter Block Products -->
+                    <div class="product-top-filter">
+                      <div class="container-fluid p-0">
+                        <div class="row">
+                          <div class="col-xl-12">
+                            <div class="filter-main-btn">
+                              <span class="filter-btn btn btn-theme" (click)="mobileFilter()">
+                                <i class="fa fa-filter" aria-hidden="true"></i> Filter
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="product-filter-content">
+                              <div class="search-count">
+                                <h5>Showing Products 1-{{filterItems().length}}</h5>
+                              </div>
+                              <div class="collection-grid-view">
+                                <ul>
+                                  <li>
+                                    <img src="assets/images/icon/2.png" class="product-2-layout-view" (click)="twoCol()">
+                                  </li>
+                                  <li>
+                                    <img src="assets/images/icon/3.png" class="product-3-layout-view" (click)="threeCol()">
+                                  </li>
+                                  <li>
+                                    <img src="assets/images/icon/4.png" class="product-4-layout-view" (click)="fourCol()">
+                                  </li>
+                                  <li>
+                                    <img src="assets/images/icon/6.png" class="product-6-layout-view" (click)="sixCol()">
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="product-page-filter">
+                                <select (change)="onChangeSorting($event.target.value)">
+                                  <option value="asc">Sorting items</option>
+                                  <option value="asc">Ascending Order</option>
+                                  <option value="desc">Descending Order</option>
+                                  <option value="a-z">Alphabetically, A-Z</option>
+                                  <option value="z-a">Alphabetically, Z-A</option>
+                                  <option value="low">Price, low to high</option>
+                                  <option value="high">Price, high to low</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Block Products -->
+                    <!-- Display Products -->
+                    <div class="product-wrapper-grid">
+                      <div class="container-fluid">
+                        <div class="row" [@Animation]="animation">
+                          <div class="col-xl-3 col-md-6 col-grid-box" *ngFor="let product of filterItems() | orderBy:sortByOrder">
+                            <div class="product-box">
+                              <app-product [product]="product"></app-product>
+                            </div>
+                            <!-- Infinite Scroll -->
+                            <div infiniteScroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="2000" (scrolled)="onScroll()" *ngIf="filterItems().length">
+                            </div>
+                          </div>
+                          <div class="col-sm-12 text-center section-b-space mt-5 no-found" *ngIf="!filterItems().length">
+                            <img src="assets/images/empty-search.jpg" class="img-fluid mb-4">
+                            <h3>Sorry! Couldn't find the product you were looking For!!!    </h3>
+                            <p>Please check if you have misspelt something or try searching with other words.</p>
+                            <a [routerLink]="'/home/one'" class="btn btn-solid">continue shopping</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="product-infinitescroll">
+                      <div class="theme-paggination-block">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <div class="text-center col-sm-12">
+                              <div class="infinite-scrolling mt-3 mb-3 d-inline-block">
+                                <img src="assets/images/loader.gif" *ngIf="!finished && filterItems().length">
+                                <div class="loading-more active" *ngIf="finished && filterItems().length">No More Products</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Infinite Scroll -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Collection Sidebar -->
+        <div class="col-sm-3 collection-filter">
+          <div class="coll_sidebar_sticky" sticky>
+            <div class="collection-filter-block">
+              <app-categories></app-categories>
+            </div>
+            <div class="collection-filter-block">
+              <app-brand [tagsFilters]="tags" (tagFilters)="updateTagFilters($event)" *ngIf="tags.length"></app-brand>
+              <app-color [colorsFilters]="colors" (colorFilters)="updateColorFilters($event)" *ngIf="colors.length"></app-color>
+              <app-price (priceFilters)="updatePriceFilters($event)"></app-price>
+            </div>
+            <app-new-product></app-new-product>
+            <div class="collection-sidebar-banner">
+              <a [routerLink]="">
+                <img src="assets/images/side-banner.png" class="img-fluid" alt="">
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- End Collection Sidebar -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- section End -->
+<app-quick-view></app-quick-view>
+<app-modal-cart></app-modal-cart>

@@ -1,0 +1,25 @@
+<div class="img-wrapper">
+	<div class="lable-block">
+		<span class="lable3" *ngIf='product.new'>new</span>
+		<span class="lable4" *ngIf='product.sale'>on sale</span>
+	</div>
+	<div class="front">
+		<a [routerLink]="['/home/left-sidebar/product', product.id]"><img [src]="!variantImage ? product.pictures[0] : variantImage" class="img-fluid" alt=""></a>
+	</div>
+	<div class="cart-box" *ngIf="!productsService?.catalogMode">
+		<button [routerLink]="" (click)="addToCart(product)" [attr.data-target]="'#addtocart'+product.id" data-toggle="modal" title="Add to cart"><i class="ti-shopping-cart" ></i></button>
+		<a [routerLink]="" (click)="addToWishlist(product)" title="Add to Wishlist"><i class="ti-heart" aria-hidden="true"></i></a>
+		<a [routerLink]="" [attr.data-target]="'#quick-view'+product.id" data-toggle="modal" title="Quick View"><i class="ti-search" aria-hidden="true"></i></a>
+		<a [routerLink]="['/home/compare']" (click)="addToCompare(product)" title="Compare"><i class="ti-reload" aria-hidden="true"></i></a>
+	</div>
+</div>
+<div class="product-detail text-center ">
+	<div class="rating">
+		<bar-rating [rate]="5" [readOnly]="true" class="text-center pro-rating"></bar-rating>
+	</div>
+	<a [routerLink]="['/home/left-sidebar/product', product.id]"><h6>{{product.name}}</h6></a>
+	<h4 *ngIf="!productsService?.catalogMode">{{product.price | currency:productsService?.currency:'symbol'}} <del>{{product.salePrice | currency:productsService?.currency:'symbol'}}</del></h4>
+	<ul class="color-variant" *ngIf="product.variants">
+	    <li [class]="variant.color" (click)="changeVariantImage(variant.images)" *ngFor="let variant of product.variants"></li>
+	</ul>
+</div>

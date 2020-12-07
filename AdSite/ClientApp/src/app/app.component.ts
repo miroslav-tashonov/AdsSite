@@ -1,52 +1,16 @@
-import { APP_BASE_HREF, LocationStrategy } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { CategoryViewModel } from './models/CategoryViewModel';
-import { Role } from './models/RolesEnum';
-import { User } from './models/User';
-import { WebSettingsModel } from './models/WebSettingsModel';
-import { AuthenticationService } from './services/authentication.service';
-import { CategoriesService } from './services/categories.service';
-import { CountryService } from './services/country.service';
-import { LanguageService } from './services/language.service';
-import { WebSettingsService } from './services/web-settings.service';
-import { ToastrService } from 'ngx-toastr';
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
-  title = 'Ads Site';
-  currentUser?: User;
-
-  countryId?: string;
-  menuCategories$: Observable<CategoryViewModel[]> | undefined;
-  webSettings$: Observable<WebSettingsModel> | undefined;
-
-  constructor(private locationStrategy: LocationStrategy, private languageService: LanguageService, private countryService: CountryService, private webSettingsService: WebSettingsService, private categoriesService: CategoriesService, private authenticationService: AuthenticationService, private router: Router) {
-    this.countryService.getCountryId(this.locationStrategy.getBaseHref()).subscribe({
-      next: country => {
-        this.webSettings$ = this.webSettingsService.getWebSettingsModel(country.id);
-        this.menuCategories$ = this.categoriesService.getCategoriesTreeMenu(country.id);
-      }
-    });
-
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
-  }
-
-  get isAdmin() {
-    return this.currentUser && this.currentUser.role === Role.Admin;
-  }
-
-  get isUser() {
-    return this.currentUser && this.currentUser.role === Role.User;
-  }
-
-  logout() {
-    this.authenticationService.logout();
-    this.router.navigate(['/']);
-  }
+export class AppComponent {
+	
+   constructor(translate: TranslateService) {
+      translate.setDefaultLang('en');
+      translate.addLangs(['en', 'fr']);
+   }
+	
 }

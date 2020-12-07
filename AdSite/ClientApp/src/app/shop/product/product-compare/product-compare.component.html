@@ -1,0 +1,84 @@
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="page-title">
+                    <h2>compare</h2>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="'/home/one'">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">compare</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb End -->
+<!-- section start -->
+<section class="compare-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="compare-page">
+                     <div class="col-sm-12 empty-cart-cls text-center" *ngIf="!products.length">
+                        <img src="assets/images/empty-compare.png" class="img-fluid mb-4" >
+                          <h3><strong>Compare List is Empty</strong></h3>
+                          <h4>Explore more shortlist some items.</h4>
+                    </div>
+                    <div class="table-wrapper table-responsive" *ngIf="products.length">
+                        <table class="table">
+                            
+                            <thead>
+                            <tr class="th-compare">
+                                <td>Action</td>
+                                <th class="item-row" *ngFor="let product of products">
+                                  <button type="button" (click)="removeItem(product)" class="remove-compare"> Remove </button>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-compare">
+                            <!-- Product Name -->
+                            <tr>
+                                <th class="product-name">Product Name</th>
+                                <td class="grid-link__title" *ngFor="let product of products">{{product.name}}</td>
+                            </tr>
+                            <!-- Product Image -->
+                            <tr>
+                                <th class="product-name ">Product Image</th>
+                                <td class="item-row" *ngFor="let product of products">
+                                    <img [src]="product.pictures[0]" width="185" class="featured-image">
+                                    <div class="product-price product_price"> 
+                                    <strong>On Sale: </strong><span>{{product.price | currency:productsService?.currency:'symbol'}}</span></div>
+                                    <form class="variants clearfix">
+                                      <button title="Add to Cart" (click)="addToCart(product)" class="add-to-cart btn btn-solid">Add to Cart</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <!-- Product Description -->
+                            <tr>
+                                <th class="product-name">Product Description</th>
+                                <td class="item-row" *ngFor="let product of products">
+                                    <p class="description-compare">{{product.shortDetails}}</p>
+                                </td>
+                            </tr>
+                            <!-- Product Availability -->
+                            <tr>
+                                <th class="product-name"> Availability </th>
+                                <td class="available-stock" *ngFor="let product of products">
+                                    <p> Available In stock </p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section ends -->

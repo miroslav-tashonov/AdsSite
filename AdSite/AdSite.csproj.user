@@ -24,37 +24,37 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\FileUploadModel.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\FileUploadModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\ErrorStateMatcher.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\ErrorStateMatcher.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\RolesEnum.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\RolesEnum.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\User.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\User.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\CategoryViewModel.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\CategoryViewModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\WebSettingsModel.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\WebSettingsModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\LocalizationModel.ts">
+    <TypeScriptCompile Update="ClientApp\src\app\OLD_TO_MIGRATE\models\LocalizationModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

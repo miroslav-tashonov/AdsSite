@@ -10,9 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\src\app\models\**" />
     <Compile Remove="lib\**" />
+    <Content Remove="ClientApp\src\app\models\**" />
     <Content Remove="lib\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\models\**" />
     <EmbeddedResource Remove="lib\**" />
+    <EntityDeploy Remove="ClientApp\src\app\models\**" />
+    <None Remove="ClientApp\src\app\models\**" />
     <None Remove="lib\**" />
   </ItemGroup>
 
@@ -73,24 +78,6 @@
     <None Remove="ClientApp\src\app\models\WebSettingsModel.ts" />
   </ItemGroup>
 
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\models\CategoryViewModel.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\CityModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\models\ErrorStateMatcher.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\FileUploadModel.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\SupportedLanguagesModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\models\LocalizationModel.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\RolesEnum.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\User.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\CountryModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\models\WebSettingsModel.ts" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="ClientApp\dist\favicon.ico">

@@ -1,0 +1,30 @@
+<!-- Paragraph-->
+<div class="title1  section-t-space">
+  <h4>special offer</h4>
+  <h2 class="title-inner1">top collection</h2>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 offset-lg-3">
+      <div class="product-para">
+        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Paragraph end -->
+<!-- Product slider -->
+<section class="section-b-space p-t-0">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <ngx-slick-carousel class="product-4 product-m no-arrow" #slickModal="slick-carousel" [config]="productSlideConfig">
+          <div ngxSlickItem class="product-box" *ngFor="let product of products | slice:0:16">
+             <app-product [product]="product"></app-product>
+          </div>
+        </ngx-slick-carousel>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Product slider end -->

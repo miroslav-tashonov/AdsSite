@@ -1,0 +1,132 @@
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>collection</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="'/home/one'">home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">collection</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb end -->
+<!-- section start -->
+<section class="section-b-space">
+  <div class="collection-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="collection-content col">
+          <div class="page-main-content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="collection-product-wrapper">
+                    <!-- Filter Block Products -->
+                    <div class="product-top-filter">
+                      <div class="container-fluid p-0">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="product-filter-content">
+                              <div class="search-count">
+                                <h5>Showing Products 1-{{products.length}}</h5>
+                              </div>
+                              <div class="collection-grid-view">
+                                <ul>
+                                  <li>
+                                    <img src="assets/images/icon/2.png" class="product-2-layout-view" (click)="twoCol()">
+                                  </li>
+                                  <li>
+                                    <img src="assets/images/icon/3.png" class="product-3-layout-view" (click)="threeCol()">
+                                  </li>
+                                  <li>
+                                    <img src="assets/images/icon/4.png" class="product-4-layout-view" (click)="fourCol()">
+                                  </li>
+                                  <li>
+                                    <img src="assets/images/icon/6.png" class="product-6-layout-view" (click)="sixCol()">
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="product-page-filter">
+                                <select (change)="onChangeSorting($event.target.value)">
+                                  <option value="asc">Sorting items</option>
+                                  <option value="asc">Ascending Order</option>
+                                  <option value="desc">Descending Order</option>
+                                  <option value="a-z">Alphabetically, A-Z</option>
+                                  <option value="z-a">Alphabetically, Z-A</option>
+                                  <option value="low">Price, low to high</option>
+                                  <option value="high">Price, high to low</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Block Products -->
+                    <!-- Display Products -->
+                    <div class="product-wrapper-grid">
+                      <div class="container-fluid">
+                        <div class="row" [@Animation]="animation">
+                          <div class="col-xl-3 col-md-6 col-grid-box" *ngFor="let product of products | orderBy:sortByOrder">
+                            <div class="product-box">
+                              <app-product [product]="product"></app-product>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="product-pagination">
+                      <div class="theme-paggination-block">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <div class="col-xl-6 col-md-6 col-sm-12">
+                              <nav aria-label="Page navigation">
+                                <ul class="pagination" *ngIf="paginate.pages && paginate.pages.length">
+                                  <li class="page-item" [ngClass]="{disabled:paginate.currentPage === 1}">
+                                    <a class="page-link" (click)="setPage(paginate.currentPage - 1)" aria-label="Previous">
+                                      <span aria-hidden="true"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                  </li>
+                                  <li class="page-item active" *ngFor="let page of paginate.pages" [ngClass]="{active:paginate.currentPage === page}">
+                                    <a class="page-link" (click)="setPage(page)">{{page}}</a></li>
+                                    <li class="page-item" [ngClass]="{disabled:paginate.currentPage === paginate.totalPages}">
+                                      <a class="page-link" (click)="setPage(paginate.currentPage + 1)" aria-label="Next">
+                                        <span aria-hidden="true"><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+                                        <span class="sr-only">Next</span>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </nav>
+                              </div>
+                              <div class="col-xl-6 col-md-6 col-sm-12">
+                                <div class="product-search-count-bottom">
+                                  <h5>Showing Products 1-{{products.length}}</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- section End -->
+<app-quick-view></app-quick-view>
+<app-modal-cart></app-modal-cart>

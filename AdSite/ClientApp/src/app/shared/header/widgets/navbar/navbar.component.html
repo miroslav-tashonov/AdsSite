@@ -1,0 +1,153 @@
+<nav id="main-nav">
+  <div class="toggle-nav">
+    <i class="fa fa-bars sidebar-bar"></i>
+  </div>
+  <!-- Sample menu definition -->
+  <ul id="main-menu" class="sm pixelstrap sm-horizontal">
+    
+    <li>
+      <div class="mobile-back text-right">
+        Back<i class="fa fa-angle-right pl-2" aria-hidden="true"></i>
+      </div>
+    </li>
+    <!-- 1st Level Menu -->
+    <li *ngFor="let menuItem of menuItems" [class]="menuItem.megaMenu ? 'mega' : ''" [id]="menuItem.megaMenuType == 'large' ? 'hover-cls' : ''">
+        <!-- Sub -->
+        <a href="javascript:void(0)" *ngIf="menuItem.type === 'sub'">
+           {{menuItem.title | translate}}
+        </a>
+        <!-- Link -->
+        <a [routerLink]="!menuItem.type ? null : [menuItem.path]" *ngIf="menuItem.type === 'link'">
+           {{menuItem.title | translate}}
+        </a>
+        <!-- External Link -->
+        <a href="{{ !menuItem.type ? null : menuItem.path }}" *ngIf="menuItem.type === 'extLink'">
+           {{menuItem.title | translate}}
+        </a>
+        <!-- External Tab Link -->
+        <a href="{{ !menuItem.type ? null : menuItem.path }}" *ngIf="menuItem.type === 'extTabLink'">
+           {{menuItem.title | translate}}
+        </a>
+        
+
+        <!-- 2nd Level Menu -->
+        <ul *ngIf="menuItem.children" [class]="menuItem.megaMenu && menuItem.megaMenuType == 'small' ? 'mega-menu feature-menu' : menuItem.megaMenuType == 'medium' ? 'mega-menu feature-menu product-menu' : menuItem.megaMenuType == 'large' ? 'mega-menu full-mega-menu' : '' " [id]="'mega-menu'">
+            <!-- Simple Menu Start-->
+            <ng-container *ngIf="!menuItem.megaMenu">
+              <li *ngFor="let childrenItem of menuItem.children">
+                    <!-- Sub -->
+                    <a href="javascript:void(0)" *ngIf="childrenItem.type === 'sub'">
+                       {{childrenItem.title | translate}}
+                    </a>
+                    <!-- Link -->
+                    <a [routerLink]="!childrenItem.type ? null : [childrenItem.path]" *ngIf="childrenItem.type === 'link' && !menuItem.megaMenu">
+                       {{childrenItem.title | translate}}
+                    </a>
+                    <!-- External Link -->
+                    <a href="{{ !childrenItem.type ? null : childrenItem.path }}" *ngIf="childrenItem.type === 'extLink' && !menuItem.megaMenu">
+                       {{childrenItem.title | translate}}
+                    </a>
+                    <!-- External Tab Link -->
+                    <a href="{{ !childrenItem.type ? null : childrenItem.path }}" target="_blank" *ngIf="childrenItem.type === 'extTabLink' && !menuItem.megaMenu">
+                       {{childrenItem.title | translate}}
+                    </a>
+                    <!-- 3rd Level Menu -->
+                    <ul *ngIf="childrenItem.children">
+                      <li *ngFor="let childrenSubItem of childrenItem.children">
+                          <!-- Link -->
+                          <a [routerLink]="!childrenSubItem.type ? null : [childrenSubItem.path]" *ngIf="childrenSubItem.type === 'link' && !menuItem.megaMenu">
+                             {{childrenSubItem.title | translate}}
+                          </a>
+                          <!-- External Link -->
+                          <a href="{{ !childrenSubItem.type ? null : childrenSubItem.path }}" *ngIf="childrenSubItem.type === 'extLink' && !menuItem.megaMenu">
+                             {{childrenSubItem.title | translate}}
+                          </a>
+                          <!-- External Tab Link -->
+                          <a href="{{ !childrenSubItem.type ? null : childrenSubItem.path }}" target="_blank" *ngIf="childrenSubItem.type === 'extTabLink' && !menuItem.megaMenu">
+                             {{childrenSubItem.title | translate}}
+                          </a>
+                      </li>
+                    </ul>
+              </li>
+            </ng-container>
+            <!-- Simple Menu End-->
+            <!-- Small And Medium Mega Menu Start-->
+            <ng-container *ngIf="menuItem.megaMenu && menuItem.megaMenuType == 'small' || menuItem.megaMenuType == 'medium'">
+            <li>
+              <div class="container">
+                <div class="row">
+                  <div [class]="menuItem.megaMenuType == 'small' ? 'col-xl-4' : menuItem.megaMenuType == 'medium' ? 'col-xl-3' : '' " *ngFor="let childrenItem of menuItem.children">
+                    <!-- Link -->
+                    <a [routerLink]="!childrenItem.type ? null : [childrenItem.path]" *ngIf="childrenItem.type === 'link'">
+                       <img [src]="childrenItem.image" alt="">
+                       <h6>{{childrenItem.title | translate}}</h6>
+                    </a>
+                    <!-- External Link -->
+                    <a href="{{ !childrenItem.type ? null : childrenItem.path }}" *ngIf="childrenItem.type === 'extLink'">
+                       <img [src]="childrenItem.image" alt="">
+                       <h6>{{childrenItem.title | translate}}</h6>
+                    </a>
+                    <!-- External Tab Link -->
+                    <a href="{{ !childrenItem.type ? null : childrenItem.path }}" target="_blank" *ngIf="childrenItem.type === 'extTabLink'">
+                       <img [src]="childrenItem.image" alt="">
+                       <h6>{{childrenItem.title | translate}}</h6>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            </ng-container>
+            <!-- Small And Medium Mega Menu End-->
+            <!-- Large Mega Menu Start-->
+            <ng-container *ngIf="menuItem.megaMenu && menuItem.megaMenuType == 'large'">
+            <li>
+              <div class="container">
+                <div class="row">
+                  <div class="col mega-box" *ngFor="let childrenItem of menuItem.children">
+                    <div class="link-section">
+                      <div class="menu-title">
+                        <h5>{{childrenItem.title | translate}}</h5>
+                      </div>
+                      <div class="menu-content">
+                        <!-- 3nd Level Mega Menu -->
+                        <ul>
+                          <li *ngFor="let childrenSubItem of childrenItem.children">
+                            <!-- Link -->
+                            <a [routerLink]="!childrenSubItem.type ? null : [childrenSubItem.path]" *ngIf="childrenSubItem.type === 'link'">
+                               {{childrenSubItem.title | translate}}
+                            </a>
+                            <!-- External Link -->
+                            <a href="{{ !childrenSubItem.type ? null : childrenSubItem.path }}" *ngIf="childrenSubItem.type === 'extLink'">
+                              {{childrenSubItem.title | translate}}
+                            </a>
+                            <!-- External Tab Link -->
+                            <a href="{{ !childrenSubItem.type ? null : childrenSubItem.path }}" target="_blank" *ngIf="childrenSubItem.type === 'extTabLink'">
+                               {{childrenSubItem.title | translate}}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row banner-padding">
+                <div class="col-xl-6">
+                  <a [routerLink]="'/home/left-sidebar/collection/all'" class="mega-menu-banner">
+                    <img src="assets/images/mega-menu/1.jpg" class="img-fluid d-none d-xl-block " alt="">
+                  </a>
+                </div>
+                <div class="col-xl-6">
+                  <a [routerLink]="'/home/left-sidebar/collection/all'" class="mega-menu-banner">
+                    <img src="assets/images/mega-menu/2.jpg" class="img-fluid d-none d-xl-block" alt="">
+                  </a>
+                </div>
+              </div>
+            </li>
+            </ng-container>
+            <!-- Large Mega Menu End-->
+        </ul>
+    </li>
+
+  </ul>
+</nav>

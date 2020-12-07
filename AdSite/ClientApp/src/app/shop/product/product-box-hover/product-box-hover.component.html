@@ -1,0 +1,32 @@
+<div class="img-wrapper">
+    <div class="ribbon" *ngIf='product.new'><span>new</span></div>
+    <div class="front">
+        <a [routerLink]="['/home/left-sidebar/product', product.id]"><img [src]="product.pictures[0]" class="img-fluid" alt=""></a>
+    </div>
+    <div class="cart-info cart-wrap" *ngIf="!productsService?.catalogMode">
+        <a [routerLink]="" (click)="addToWishlist(product)" title="Add to Wishlist">
+        	<i class="fa fa-heart" aria-hidden="true"></i>
+        </a>
+        <button  title="Add to cart" [attr.data-target]="'#addtocart'+product.id" data-toggle="modal" (click)="addToCart(product)">
+        	<i class="ti-shopping-cart"></i> Add to cart
+        </button>
+        <a [routerLink]="['/home/compare']" (click)="addToCompare(product)" title="Compare">
+        	<i class="fa fa-refresh" aria-hidden="true"></i>
+        </a>
+        <a  [routerLink]="" [attr.data-target]="'#quick-view'+product.id" data-toggle="modal" class="mobile-quick-view" title="Quick View">
+        	<i class="ti-search" aria-hidden="true"></i>
+        </a>
+    </div>
+    <div class="quick-view-part">
+        <a [routerLink]="" [attr.data-target]="'#quick-view'+product.id" data-toggle="modal" title="Quick View">
+        	<i class="ti-search" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+<div class="product-info">
+    <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
+    <a [routerLink]="['/home/left-sidebar/product', product.id]">
+    	<h6>{{product.name}}</h6>
+    </a>
+    <h4 *ngIf="!productsService?.catalogMode">{{product.price | currency:productsService?.currency:'symbol'}}</h4>
+</div>
