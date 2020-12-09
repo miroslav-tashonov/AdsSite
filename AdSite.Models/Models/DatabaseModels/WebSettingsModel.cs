@@ -16,11 +16,17 @@ namespace AdSite.Models.DatabaseModels
         [Required]
         public string Email { get; set; }
 
+        public string LogoImagePath { get; set; }
+        public string Address { get; set; }
+        public string Title { get; set; }
+
         public string FacebookSocialLink { get; set; }
         public string InstagramSocialLink { get; set; }
         public string TwitterSocialLink { get; set; }
         public string GooglePlusSocialLink { get; set; }
         public string VKSocialLink { get; set; }
+
+        
 
         #region Foreign Keys
         public Guid CountryId { get; set; }

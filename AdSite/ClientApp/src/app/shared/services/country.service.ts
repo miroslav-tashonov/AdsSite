@@ -1,6 +1,7 @@
 import { LocationStrategy } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError, first, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -13,16 +14,10 @@ import { NotificationService } from './notification.service';
 export class CountryService{
   appUrl: string;
   countryApiUrl: string;
-  public countryId?: string;
 
   constructor(private notificationService: NotificationService, private http: HttpClient, private locationStrategy: LocationStrategy) {
     this.appUrl = environment.appUrl;
     this.countryApiUrl = 'api/CountriesApi/getCountryId';
-    this.getCountryId(this.locationStrategy.getBaseHref()).subscribe({
-      next: country => {
-        this.countryId = country.id;
-      }
-    });
   }
 
   getCountryId(Path: string) {

@@ -13,6 +13,9 @@ namespace AdSite.Models.Mappers
             return new WebSettingsViewModel()
             {
                 ID = entity.ID,
+                Title = entity.Title,
+                Address = entity.Address,
+                LogoImagePath = entity.LogoImagePath,
                 Phone = entity.Phone,
                 Email = entity.Email,
                 FacebookSocialLink = entity.FacebookSocialLink,

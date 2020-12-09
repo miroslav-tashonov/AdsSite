@@ -3,7 +3,7 @@
       <div class="header-contact">
         <ul>
           <li>{{ 'topbar-title' | translate }}</li>
-          <li><i class="fa fa-phone" aria-hidden="true"></i>{{ 'call-us' | translate }}: 123 - 456 - 7890</li>
+          <li><i class="fa fa-phone" aria-hidden="true"></i>{{ 'call-us' | translate }}: {{ webSettings?.phone }}</li>
         </ul>
       </div>
     </div>
@@ -15,21 +15,43 @@
         <li class="mobile-wishlist">
           <a [routerLink]="'/home/wishlist'"><i class="fa fa-heart" aria-hidden="true"></i>{{ 'wishlist' | translate }}</a>
         </li>
-        <li class="onhover-dropdown mobile-account">
-          <i class="fa fa-user" aria-hidden="true"></i> {{ 'my-account' | translate }}
+        <li class="onhover-dropdown mobile-account" *ngIf="!isUser && !isAdmin">
+          <i class="fa fa-user" aria-hidden="true"></i> {{ 'Actions' | translate }}
           <ul class="onhover-show-div">
             <li>
               <a [routerLink]="'/pages/login'" data-lng="en">
-                  {{ 'login' | translate }}
+                {{ 'login' | translate }}
               </a>
             </li>
             <li>
-              <a [routerLink]="'/home/one'" data-lng="es">
-                  {{ 'logout' | translate }}
+              <a [routerLink]="'/pages/forgetpassword'" data-lng="en">
+                {{ 'Forgot password' | translate }}
+              </a>
+            </li>
+            <li>
+              <a [routerLink]="'/pages/register'" data-lng="en">
+                {{ 'Register' | translate }}
               </a>
             </li>
           </ul>
         </li>
+
+        <li class="onhover-dropdown mobile-account" *ngIf="isUser || isAdmin">
+          <i class="fa fa-user" aria-hidden="true"></i> {{ currentUser?.email }}
+        <ul class="onhover-show-div">
+          <li>
+            <a [routerLink]="'/pages/dashboard'" data-lng="en">
+              {{ 'Dashboard' | translate }}
+            </a>
+          </li>
+          <li>
+            <a data-lng="es" (click)="logout()">
+              {{ 'logout' | translate }}
+            </a>
+          </li>
+        </ul>
+        </li>
+
       </ul>
     </div>
 </div>

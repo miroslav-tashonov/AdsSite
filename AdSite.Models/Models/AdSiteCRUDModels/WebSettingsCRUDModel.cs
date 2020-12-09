@@ -12,6 +12,9 @@ namespace AdSite.Models.CRUDModels
 
         public string Phone { get; set; }
         public string Email { get; set; }
+        public string Address { get; set; }
+        public string Title { get; set; }
+        public string LogoImagePath { get; set; }
 
         public string FacebookSocialLink { get; set; }
         public string InstagramSocialLink { get; set; }
