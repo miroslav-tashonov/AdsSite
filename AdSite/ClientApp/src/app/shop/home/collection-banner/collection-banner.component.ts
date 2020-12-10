@@ -14,13 +14,13 @@ export class CollectionBannerComponent implements OnInit {
   // Collection banner
   public category = [{
     image: 'assets/images/sub-banner1.jpg',
-    save: 'save 50%',
-    title: 'men',
+    save: 'digital equipment',
+    title: 'computers',
     link: '/home/left-sidebar/collection/men'
   }, {
     image: 'assets/images/sub-banner2.jpg',
-    save: 'save 50%',
-    title: 'women',
+      save: 'clothes',
+      title: 'unisex fashion',
     link: '/home/left-sidebar/collection/women'
   }]
 

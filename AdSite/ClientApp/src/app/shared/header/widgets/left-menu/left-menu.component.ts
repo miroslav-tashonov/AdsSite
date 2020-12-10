@@ -1,5 +1,7 @@
+import { LocationStrategy } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from '../../../services/categories.service';
+import { CountryService } from '../../../services/country.service';
 import { MENUITEMS, Menu } from './left-menu-items';
 declare var $: any;
 
@@ -9,19 +11,23 @@ declare var $: any;
   styleUrls: ['./left-menu.component.scss']
 })
 export class LeftMenuComponent implements OnInit {
-  
+
   public menuItems: Menu[];
 
-  constructor(private categoriesService: CategoriesService) { }
+  constructor(private categoriesService: CategoriesService, private countryService: CountryService, private locationStrategy: LocationStrategy) { }
 
   ngOnInit() {
     //todo
     //this.menuItems = MENUITEMS.filter(menuItem => menuItem);
-    this.categoriesService.getCategoriesTreeMenu('99DE8181-09A8-41DB-895E-54E5E0650C3A').subscribe(
-      result => {
-        this.menuItems = result;
+    this.countryService.getCountryId(this.locationStrategy.getBaseHref()).subscribe({
+      next: country => {
+        this.categoriesService.getCategoriesTreeMenu(country.id).subscribe(
+          result => {
+            this.menuItems = result;
+          });
       }
-    );
+    });
+    
   }
 
 }
