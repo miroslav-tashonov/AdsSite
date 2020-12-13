@@ -11,10 +11,14 @@ export class NewProductComponent implements OnInit {
   
   public products : Product[] = [];	
 
+  slideConfig = {
+    "slidesToShow": 3
+  };
+
   constructor(private productsService: ProductsService) { }
 
   ngOnInit() {
-  	this.productsService.getProducts().subscribe(product => this.products = product);
+    this.productsService.getLatestProducts().subscribe(product => this.products = product);
   }
 
 }

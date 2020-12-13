@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Product } from '../../../../shared/classes/product';
 import { CartItem } from '../../../../shared/classes/cart-item';
 import { ProductsService } from '../../../../shared/services/products.service';
@@ -11,8 +11,11 @@ declare var $: any;
   styleUrls: ['./quick-view.component.scss']
 })
 export class QuickViewComponent implements OnInit, OnDestroy {
-  
-  public products           :   Product[] = [];
+
+  @Input() products: Product;
+
+
+  //public products           :   Product[] = [];
   public counter            :   number = 1;
   public variantImage       :   any = '';
   public selectedColor      :   any = '';
@@ -22,7 +25,6 @@ export class QuickViewComponent implements OnInit, OnDestroy {
   	private cartService: CartService) { }
 
   ngOnInit() {
-  	this.productsService.getProducts().subscribe(product => this.products = product);
   }
 
   ngOnDestroy() {

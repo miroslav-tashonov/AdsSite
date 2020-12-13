@@ -61,6 +61,17 @@ export class OrderByPipe implements PipeTransform {
         }
        });
      }
+     else if (val == 'date') { // high to low
+       return Array.from(array).sort((a: any, b: any) => {
+         if (Date.parse(a['createdAt']) > Date.parse(b['createdAt'])) {
+           return -1;
+         } else if (Date.parse(a['createdAt']) < Date.parse(b['createdAt'])) {
+           return 1;
+         } else {
+           return 0;
+         }
+       });
+     }
 
  }
 

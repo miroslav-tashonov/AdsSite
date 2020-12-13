@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, RequestMethod, RequestOptions } from '@angular/http';
 import { ToastrService } from 'ngx-toastr';
 import { Product } from '../classes/product';
 import { BehaviorSubject, Observable, of, Subscriber} from 'rxjs';
 import { map, filter, scan } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
+import { environment } from 'src/environments/environment';
+import { HttpHeaders } from '@angular/common/http';
 
 // Get product from Localstorage
 let products = JSON.parse(localStorage.getItem("compareItem")) || [];
@@ -17,17 +19,48 @@ export class ProductsService {
   public catalogMode : boolean = false;
   
   public compareProducts : BehaviorSubject<Product[]> = new BehaviorSubject([]);
-  public observer   :  Subscriber<{}>;
+  public observer: Subscriber<{}>;
+  public someProducts: BehaviorSubject<Product[]> = new BehaviorSubject([]);
+
+  myAppUrl: string;
+  myApiUrl: string;
+  latestAdsApiUrl: string;
+  relatedAdsApiUrl: string;
+  adProductDetailsApiUrl: string;
 
   // Initialize 
-  constructor(private http: Http,private toastrService: ToastrService) { 
-     this.compareProducts.subscribe(products => products = products);
+  constructor(private http: Http, private toastrService: ToastrService) {
+    this.myAppUrl = environment.appUrl;
+    this.myApiUrl = 'api/AdsApi/';
+    this.latestAdsApiUrl = 'api/AdsApi/getLatestAds';
+    this.adProductDetailsApiUrl = 'api/AdsApi/getProductDetails';
+    this.relatedAdsApiUrl = 'api/AdsApi/getRelatedAds';
+
+    this.compareProducts.subscribe(products => products = products);
   }
 
   // Observable Product Array
   private products(): Observable<Product[]> {
-     return this.http.get('assets/data/products.json').map((res:any) => res.json())
+    return this.http.get(this.myAppUrl + this.myApiUrl).map((res: any) => res.json())
+    //return this.http.get('assets/data/products.json').map((res: any) => res.json())
   }
+
+  private latestProducts(): Observable<Product[]> {
+    return this.http.get(this.myAppUrl + this.latestAdsApiUrl).map((res: any) => res.json())
+  }
+
+  public getLatestProducts(): Observable<Product[]> {
+    return this.latestProducts();
+  }
+
+  private relatedProducts(): Observable<Product[]> {
+    return this.http.get(this.myAppUrl + this.relatedAdsApiUrl).map((res: any) => res.json())
+  }
+
+  public getRelatedProducts(): Observable<Product[]> {
+    return this.relatedProducts();
+  }
+
 
   // Get Products
   public getProducts(): Observable<Product[]> {
@@ -35,8 +68,8 @@ export class ProductsService {
   }
 
   // Get Products By Id
-  public getProduct(id: number): Observable<Product> {
-    return this.products().pipe(map(items => { return items.find((item: Product) => { return item.id === id; }); }));
+  public getProduct(id: string): Observable<Product> {
+    return this.http.post(this.myAppUrl + this.adProductDetailsApiUrl, { 'id': id }).map((res: any) => res.json())
   }
 
    // Get Products By category

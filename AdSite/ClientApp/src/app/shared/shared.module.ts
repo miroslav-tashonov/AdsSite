@@ -15,6 +15,7 @@ import { CountryService } from './services/country.service';
 import { NotificationService } from './services/notification.service';
 import { PaginationService } from "./classes/paginate";
 import { CategoriesService } from './services/categories.service';
+import { CityService } from './services/city.service';
 // Pipes
 import { OrderByPipe } from './pipes/order-by.pipe';
 // components
@@ -75,7 +76,8 @@ import { SocialComponent } from './footer/widgets/social/social.component';
     AuthenticationService,
     CountryService,
     NotificationService,
-    CategoriesService
+    CategoriesService,
+    CityService
   ]
 })
 export class SharedModule { }

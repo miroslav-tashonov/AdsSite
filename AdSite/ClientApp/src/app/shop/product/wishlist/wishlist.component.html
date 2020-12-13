@@ -42,12 +42,12 @@
           <tbody *ngFor="let item of wishlistItems">
             <tr>
               <td>
-                <a [routerLink]="['/home/left-sidebar/product', item.id]">
-                  <img [src]="item.pictures[0]" alt="">
+                <a [routerLink]="['/home/right-image/product', item.id]">
+                  <img [src]="'data:image/jpeg;base64,' + item.pictures[0]" alt="">
                 </a>
               </td>
               <td>
-                <a [routerLink]="['/home/left-sidebar/product', item.id]">{{ item.name }}</a>
+                <a [routerLink]="['/home/right-image/product', item.id]">{{ item.name }}</a>
                 <div class="mobile-cart-content row">
                   <div class="col-xs-3">
                     <p>in stock</p>

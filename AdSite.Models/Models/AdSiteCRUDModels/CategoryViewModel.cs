@@ -14,6 +14,7 @@ namespace AdSite.Models.CRUDModels
         public string Type { get; set; }
         public Guid? ParentId { get; set; }
         public string ImagePath { get; set; }
+        public string Path { get; set; }
         public virtual ICollection<CategoryViewModel> Children { get; set; }
     }
 

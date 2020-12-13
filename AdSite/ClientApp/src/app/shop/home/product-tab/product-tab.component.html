@@ -19,7 +19,7 @@
           <div class="tab-content-cls">
             <div id="tab-4" class="tab-content active default">
               <div class="no-slider row">
-                <div class="product-box" *ngFor="let product of products | slice:0:8">
+                <div class="product-box" *ngFor="let product of products | orderBy:'date' | slice:0:8">
                    <app-product [product]="product"></app-product>
                 </div>
               </div>

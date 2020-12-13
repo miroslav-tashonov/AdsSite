@@ -9,7 +9,7 @@
         <div class="row">
           <div class="col-lg-6  col-xs-12">
             <div class="quick-view-img">
-              <img [src]="!variantImage ? product.pictures[0] : variantImage" alt="" class="img-fluid">
+              <img [src]="!variantImage ? 'data:image/jpeg;base64,' + product.pictures[0] : variantImage" alt="" class="img-fluid">
              </div>
             </div>
             <div class="col-lg-6 rtl-text">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="product-buttons">
                   <a [routerLink]="" (click)="addToCart(product, counter)" class="btn btn-solid" >add to cart</a>
-                  <a [routerLink]="['/home/left-sidebar/product', product.id]" class="btn btn-solid">view detail</a>
+                  <a [routerLink]="['/home/right-image/product', product.id]" class="btn btn-solid">view detail</a>
                 </div>
               </div>
             </div>

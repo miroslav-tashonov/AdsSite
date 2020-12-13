@@ -76,7 +76,7 @@ namespace AdSite.Controllers
             try
             {
                 var viewModel = _adService.GetAdAsViewModel((Guid)id);
-                viewModel.IsInWishlist = _wishlistService.IsInWishlist((Guid)id, CurrentUserId);
+                //viewModel.IsInWishlist = _wishlistService.IsInWishlist((Guid)id, CurrentUserId);
                 return View(viewModel);
             }
             catch (Exception ex)

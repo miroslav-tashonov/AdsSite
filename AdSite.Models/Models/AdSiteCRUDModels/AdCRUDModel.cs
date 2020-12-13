@@ -43,6 +43,9 @@ namespace AdSite.Models.CRUDModels
         public byte[] MainPicture { get; set; }
         public bool IsInWishlist {get; set;}
 
+        public DateTime CreatedAt { get; set; }
+        public List<byte[]> PictureFiles { get; set; }
+
         public Category Category { get; set; }
         public City City { get; set; }        
         public ApplicationUser Owner { get; set; }
@@ -117,6 +120,68 @@ namespace AdSite.Models.CRUDModels
 
         public string SerializedAdDetailsPictures { get; set; }
         public string SerializedMainPicture { get; set; }
+    }
+
+    public class AdGetModel
+    {
+        public Guid id { get; set; }
+    }
+
+
+    public class AdProductsModel
+    {
+        public Guid id { get; set; }
+        public string name { get; set; }
+        public decimal price = 150;
+        public decimal salePrice = 300;
+        public int discount { get; set; }
+
+        public DateTime createdAt { get; set; }
+
+        public List<byte[]> pictures = new List<byte[]>();
+        public string shortDetails { get; set; }
+        public string description { get; set; }
+
+        public string category { get; set; }
+
+        public List<string> tags = new List<string>();
+
+        public bool sale = false;
+
+        public bool @new = false;
+
+        public bool advertised = true;
+
+        public int stock = 5;
+
+        public List<string> colors = new List<string>() { "yellow", "gray", "green" };
+
+        public List<string> size = new List<string>() { "M", "L", "XL" };
+
+        public List<VariantClass> variants = new List<VariantClass>()
+        {
+            new VariantClass
+            {
+                color = "yellow",
+                images = "assets/images/fashion/product/1.jpg"
+            },
+            new VariantClass
+            {
+                color = "gray",
+                images = "assets/images/fashion/product/21.jpg"
+            },
+            new VariantClass
+            {
+                color = "green",
+                images = "assets/images/fashion/product/36.jpg"
+            },
+        };
+    }
+
+    public class VariantClass
+    {
+        public string color { get; set; }
+        public string images { get; set; }
     }
 
 }

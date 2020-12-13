@@ -20,6 +20,8 @@ export interface Product {
   stock?: number;
   new?: boolean;
   sale?: boolean;
+  createdAt?: Date;
+  advertised?: boolean;
   category?: string;
   colors?: ProductColor[];
   size?: ProductTags[];

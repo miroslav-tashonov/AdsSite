@@ -43,6 +43,7 @@ namespace AdSite.Models.Mappers
                     viewModel.ParentId = category.ParentId;
                     viewModel.Children = MapToViewModel(category.Children.ToList());
                     viewModel.ImagePath = category.ImagePath;
+                    viewModel.Path = "/home/left-sidebar/collection/" + category.Name;
 
                     listViewModel.Add(viewModel);
                 }

@@ -1,7 +1,7 @@
 <div class="img-wrapper">
     <div class="front">
-        <a [routerLink]="['/home/left-sidebar/product', product.id]">
-        	<img [src]="product.pictures[0]" class="img-fluid" alt="">
+        <a [routerLink]="['/home/right-image/product', product.id]">
+        	<img [src]="'data:image/jpeg;base64,' + product.pictures[0]" class="img-fluid" alt="">
         </a>
     </div>
     <div class="cart-info cart-wrap" *ngIf="!productsService?.catalogMode">
@@ -20,7 +20,7 @@
     </div>
 </div>
 <div class="product-detail">
-    <a [routerLink]="['/home/left-sidebar/product', product.id]" *ngIf="!productsService?.catalogMode">
+    <a [routerLink]="['/home/right-image/product', product.id]" *ngIf="!productsService?.catalogMode">
         <h6>{{product.name}}</h6>
     </a>
     <h4 *ngIf="!productsService?.catalogMode">{{product.price | currency:productsService?.currency:'symbol'}}</h4>

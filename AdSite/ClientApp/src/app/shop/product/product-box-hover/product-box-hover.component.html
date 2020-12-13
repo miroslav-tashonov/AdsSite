@@ -1,7 +1,7 @@
 <div class="img-wrapper">
     <div class="ribbon" *ngIf='product.new'><span>new</span></div>
     <div class="front">
-        <a [routerLink]="['/home/left-sidebar/product', product.id]"><img [src]="product.pictures[0]" class="img-fluid" alt=""></a>
+        <a [routerLink]="['/home/right-image/product', product.id]"><img [src]="'data:image/jpeg;base64,' + product.pictures[0]" class="img-fluid" alt=""></a>
     </div>
     <div class="cart-info cart-wrap" *ngIf="!productsService?.catalogMode">
         <a [routerLink]="" (click)="addToWishlist(product)" title="Add to Wishlist">
@@ -25,7 +25,7 @@
 </div>
 <div class="product-info">
     <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
-    <a [routerLink]="['/home/left-sidebar/product', product.id]">
+    <a [routerLink]="['/home/right-image/product', product.id]">
     	<h6>{{product.name}}</h6>
     </a>
     <h4 *ngIf="!productsService?.catalogMode">{{product.price | currency:productsService?.currency:'symbol'}}</h4>

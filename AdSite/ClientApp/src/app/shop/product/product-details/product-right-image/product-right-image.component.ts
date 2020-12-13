@@ -26,14 +26,14 @@ export class ProductRightImageComponent implements OnInit {
     public productsService: ProductsService, private wishlistService: WishlistService,
     private cartService: CartService) {
       this.route.params.subscribe(params => {
-        const id = +params['id'];
+        const id = params.id;
         this.productsService.getProduct(id).subscribe(product => this.product = product)
       });
       this.onResize();
   }
 
   ngOnInit() {
-    this.productsService.getProducts().subscribe(product => this.products = product);
+    //this.productsService.getProducts().subscribe(product => this.products = product);
   }
 
   public slideRightConfig = {

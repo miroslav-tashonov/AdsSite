@@ -51,7 +51,7 @@
                             <tr>
                                 <th class="product-name ">Product Image</th>
                                 <td class="item-row" *ngFor="let product of products">
-                                    <img [src]="product.pictures[0]" width="185" class="featured-image">
+                                    <img [src]="'data:image/jpeg;base64,' + product.pictures[0]" width="185" class="featured-image">
                                     <div class="product-price product_price"> 
                                     <strong>On Sale: </strong><span>{{product.price | currency:productsService?.currency:'symbol'}}</span></div>
                                     <form class="variants clearfix">

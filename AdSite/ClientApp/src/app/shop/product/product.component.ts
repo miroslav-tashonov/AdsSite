@@ -17,6 +17,8 @@ export class ProductComponent implements OnInit {
   
   @Input() product : Product;
 
+  public baseImage: "data:image/jpg;base64,";
+
   public variantImage  :  any = ''; 
   public selectedItem  :  any = '';
 
@@ -25,11 +27,6 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit() {  }
-
-  // Add to cart
-  public addToCart(product: Product,  quantity: number = 1) {
-    this.cartService.addToCart(product,quantity);
-  }
 
   // Add to compare
   public addToCompare(product: Product) {

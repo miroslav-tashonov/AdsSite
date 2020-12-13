@@ -24,13 +24,13 @@ public iStyle               = "width:100%; height:100%;"
     public productsService: ProductsService, private wishlistService: WishlistService,
     private cartService: CartService) {
       this.route.params.subscribe(params => {
-        const id = +params['id'];
+        const id = params.id;
         this.productsService.getProduct(id).subscribe(product => this.product = product)
       });
   }
 
   ngOnInit() {
-    this.productsService.getProducts().subscribe(product => this.products = product);
+    //this.productsService.getProducts().subscribe(product => this.products = product);
   }
   
   // product zoom 

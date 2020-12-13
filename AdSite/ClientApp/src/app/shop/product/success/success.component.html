@@ -60,7 +60,7 @@
                     <h3>your order details</h3>
                     <div class="row product-order-detail" *ngFor="let item of orderDetails.product">
                         <div class="col-3">
-                            <img [src]="item.product.pictures[0]" alt="" class="img-fluid">
+                            <img [src]="'data:image/jpeg;base64,' +item.product.pictures[0]" alt="" class="img-fluid">
                         </div>
                         <div class="col-3 order_detail">
                             <div>

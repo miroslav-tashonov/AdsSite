@@ -41,7 +41,7 @@
                 <ngx-slick-carousel class="product-slick" id="p-zoom" #slickModal="slick-carousel" [config]="slideConfig">
                   <div ngxSlickItem *ngFor="let image of product.pictures">
                     <div>
-                      <ngx-img-zoom [previewImageSrc]="image"  [zoomImageSrc]="image" [imgStyle]="'width:100%; height:100%;'"
+                      <ngx-img-zoom [previewImageSrc]="'data:image/jpeg;base64,' + image"  [zoomImageSrc]="'data:image/jpeg;base64,'+image" [imgStyle]="'width:100%; height:100%;'"
                        [resultStyle]="'background-repeat: no-repeat; z-index: 2; position:absolute;background-size: 1614px 2064px;
                        -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); top: 0;left: 100%;'" [lensStyle]="'width:100px; height:100px'" [containerStyle]="'position: relative;'" (mouseover)="onMouseOver()" (mouseout)="onMouseOut()">
                       </ngx-img-zoom>
@@ -53,7 +53,7 @@
                     <ngx-slick-carousel class="slider-nav" #slickModal="slick-carousel" [config]="slideNavConfig">
                       <div ngxSlickItem *ngFor="let image of product.pictures">
                         <div>
-                          <img [src]="image" alt="" class="img-fluid">
+                          <img [src]="'data:image/jpeg;base64,' + image" alt="" class="img-fluid">
                          </div>
                         </div>
                     </ngx-slick-carousel>

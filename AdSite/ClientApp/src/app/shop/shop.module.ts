@@ -32,20 +32,11 @@ import { ColorComponent } from './product/collection/filter/color/color.componen
 import { BrandComponent } from './product/collection/filter/brand/brand.component';
 import { PriceComponent } from './product/collection/filter/price/price.component';
 import { ProductLeftSidebarComponent } from './product/product-details/product-left-sidebar/product-left-sidebar.component';
-import { ProductRightSidebarComponent } from './product/product-details/product-right-sidebar/product-right-sidebar.component';
-import { ProductNoSidebarComponent } from './product/product-details/product-no-sidebar/product-no-sidebar.component';
-import { ProductColLeftComponent } from './product/product-details/product-col-left/product-col-left.component';
-import { ProductColRightComponent } from './product/product-details/product-col-right/product-col-right.component';
-import { ProductColumnComponent } from './product/product-details/product-column/product-column.component';
-import { ProductAccordianComponent } from './product/product-details/product-accordian/product-accordian.component';
-import { ProductLeftImageComponent } from './product/product-details/product-left-image/product-left-image.component';
 import { ProductRightImageComponent } from './product/product-details/product-right-image/product-right-image.component';
-import { ProductVerticalTabComponent } from './product/product-details/product-vertical-tab/product-vertical-tab.component';
 import { RelatedProductsComponent } from './product/product-details/related-products/related-products.component';
 import { SidebarComponent } from './product/product-details/sidebar/sidebar.component';
 import { CategoriesComponent } from './product/widgets/categories/categories.component';
 import { QuickViewComponent } from './product/widgets/quick-view/quick-view.component';
-import { ModalCartComponent } from './product/widgets/modal-cart/modal-cart.component';
 import { NewProductComponent } from './product/widgets/new-product/new-product.component';
 import { SearchComponent } from './product/search/search.component';
 import { ProductCompareComponent } from './product/product-compare/product-compare.component';
@@ -96,20 +87,11 @@ import { NewsletterComponent } from './product/widgets/newsletter/newsletter.com
     BrandComponent,
     PriceComponent,
     ProductLeftSidebarComponent,
-    ProductRightSidebarComponent,
-    ProductNoSidebarComponent,
-    ProductColLeftComponent,
-    ProductColRightComponent,
-    ProductColumnComponent,
-    ProductAccordianComponent,
-    ProductLeftImageComponent,
     ProductRightImageComponent,
-    ProductVerticalTabComponent,
     RelatedProductsComponent,
     SidebarComponent,
     CategoriesComponent,
     QuickViewComponent,
-    ModalCartComponent,
     NewProductComponent,
     SearchComponent,
     ProductCompareComponent,
