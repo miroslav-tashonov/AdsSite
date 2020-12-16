@@ -14,8 +14,8 @@ export class PriceComponent implements OnInit {
 	
   // define min, max and range
   public min : number = 100;
-  public max : number = 1000;
-  public range = [100,1000];
+  public max : number = 105000;
+  public range = [100,105000];
   
   constructor() { }
   

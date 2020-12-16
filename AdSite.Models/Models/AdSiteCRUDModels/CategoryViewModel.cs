@@ -7,6 +7,7 @@ using System.Text;
 
 namespace AdSite.Models.CRUDModels
 {
+    [Serializable]
     public class CategoryViewModel : AuditedEntityViewModel
     {
         public Guid ID { get; set; }
@@ -14,6 +15,8 @@ namespace AdSite.Models.CRUDModels
         public string Type { get; set; }
         public Guid? ParentId { get; set; }
         public string ImagePath { get; set; }
+
+        public bool MegaMenu = false;
         public string Path { get; set; }
         public virtual ICollection<CategoryViewModel> Children { get; set; }
     }

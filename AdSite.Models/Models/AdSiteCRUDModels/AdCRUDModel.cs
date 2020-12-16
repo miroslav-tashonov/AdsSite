@@ -132,8 +132,8 @@ namespace AdSite.Models.CRUDModels
     {
         public Guid id { get; set; }
         public string name { get; set; }
-        public decimal price = 150;
-        public decimal salePrice = 300;
+        public decimal price { get; set; }
+        public decimal salePrice { get; set; }
         public int discount { get; set; }
 
         public DateTime createdAt { get; set; }

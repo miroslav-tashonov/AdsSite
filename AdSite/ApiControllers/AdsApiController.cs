@@ -40,8 +40,8 @@ namespace AdSite.ApiControllers
                 {
                     id = ad.ID,
                     name = ad.Name,
-                    //price = ad.Price,
-                    //salePrice = ad.Price,
+                    price = ad.Price,
+                    salePrice = ad.Price,
                     discount = 50,
                     shortDetails = ad.Description,
                     description = ad.Description,
@@ -78,6 +78,8 @@ namespace AdSite.ApiControllers
                 {
                     id = ad.ID,
                     name = ad.Name,
+                    price = ad.Price,
+                    salePrice = ad.Price,
                     discount = 50,
                     shortDetails = ad.Description,
                     description = ad.Description,
@@ -111,6 +113,8 @@ namespace AdSite.ApiControllers
                 {
                     id = ad.ID,
                     name = ad.Name,
+                    price = ad.Price,
+                    salePrice = ad.Price,
                     discount = 50,
                     shortDetails = ad.Description,
                     description = ad.Description,

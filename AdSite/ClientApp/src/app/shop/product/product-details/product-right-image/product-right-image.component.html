@@ -88,8 +88,8 @@
             </div>
             -->
             <div class="product-buttons" *ngIf="!productsService?.catalogMode">
-              <a [routerLink]="" (click)="addToCart(product, counter)" class="btn btn-solid" [class.disabled]="counter > product.stock">email now</a>
-              <a [routerLink]="" (click)="buyNow(product, counter)" class="btn btn-solid" [class.disabled]="counter > product.stock">call now</a>
+              <a [href]="'mailto:email@email.com'" (click)="addToCart(product, counter)" class="btn btn-solid">email now</a>
+              <a href="tel:+1123-456-7890" (click)="buyNow(product, counter)" class="btn btn-solid">call now</a>
             </div>
             <div class="border-product">
               <h6 class="product-title">product details</h6>
@@ -127,10 +127,6 @@
             <div class="material-border"></div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="profile-top-tab" data-toggle="tab" href="#top-profile" role="tab" aria-selected="false">Details</a>
-            <div class="material-border"></div>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" id="contact-top-tab" data-toggle="tab" href="#top-contact" role="tab" aria-selected="false">Video</a>
             <div class="material-border"></div>
           </li>
@@ -144,41 +140,6 @@
             <p>
               {{product.description}}
             </p>
-          </div>
-          <div class="tab-pane fade" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
-            <p>
-              {{product.description}}
-            </p>
-            <div class="single-product-tables">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Febric</td>
-                    <td>Chiffon</td>
-                  </tr>
-                  <tr>
-                    <td>Color</td>
-                    <td>Red</td>
-                  </tr>
-                  <tr>
-                    <td>Material</td>
-                    <td>Crepe printed</td>
-                  </tr>
-                </tbody>
-              </table>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Length</td>
-                    <td>50 Inches</td>
-                  </tr>
-                  <tr>
-                    <td>Size</td>
-                    <td>S, M, L .XXL</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
           </div>
           <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
             <div class="mt-3 text-center">

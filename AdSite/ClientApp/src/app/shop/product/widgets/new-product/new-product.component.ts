@@ -8,12 +8,9 @@ import { ProductsService } from '../../../../shared/services/products.service';
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
-  
+  public start: number;
+  public end: number;
   public products : Product[] = [];	
-
-  slideConfig = {
-    "slidesToShow": 3
-  };
 
   constructor(private productsService: ProductsService) { }
 

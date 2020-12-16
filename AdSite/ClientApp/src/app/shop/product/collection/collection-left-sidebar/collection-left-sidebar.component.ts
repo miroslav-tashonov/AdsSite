@@ -26,6 +26,8 @@ import * as $ from 'jquery';
 })
 export class CollectionLeftSidebarComponent implements OnInit {
 
+  public max: number;
+  public min: number;
   public products     :   Product[] = [];
   public items        :   Product[] = [];
   public allItems     :   Product[] = [];
@@ -47,7 +49,9 @@ export class CollectionLeftSidebarComponent implements OnInit {
              this.allItems = products  // all products
              this.products = products.slice(0,8)
              this.getTags(products)
-             this.getColors(products)
+              this.getColors(products)
+              this.max = Math.max.apply(Math, this.allItems.map(function (o) { return o.price; }));
+              this.min = Math.min.apply(Math, this.allItems.map(function (o) { return o.price; }));
           })
        });
   }

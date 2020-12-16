@@ -35,7 +35,6 @@
               <th scope="col">image</th>
               <th scope="col">product name</th>
               <th scope="col">price</th>
-              <th scope="col">availability</th>
               <th scope="col">action</th>
             </tr>
           </thead>
@@ -50,18 +49,12 @@
                 <a [routerLink]="['/home/right-image/product', item.id]">{{ item.name }}</a>
                 <div class="mobile-cart-content row">
                   <div class="col-xs-3">
-                    <p>in stock</p>
-                  </div>
-                  <div class="col-xs-3">
                     <h2 class="td-color">{{ item.price | currency:productsService?.currency:'symbol' }}</h2>
                   </div>
                   <div class="col-xs-3">
                     <h2 class="td-color">
                       <a [routerLink]="" (click)="removeItem(item)" class="icon mr-1">
                         <i class="ti-close"></i>
-                      </a>
-                      <a [routerLink]="" (click)="addToCart(item)" class="cart">
-                        <i class="ti-shopping-cart"></i>
                       </a>
                     </h2>
                   </div>
@@ -71,25 +64,13 @@
                 <h2>{{ item.price | currency:productsService?.currency:'symbol' }}</h2>
               </td>
               <td>
-                <p>in stock</p>
-              </td>
-              <td>
                 <a [routerLink]="" (click)="removeItem(item)" class="icon mr-3">
                   <i class="ti-close"></i>
-                </a>
-                <a [routerLink]="'/home/cart'" (click)="addToCart(item)" class="cart">
-                  <i class="ti-shopping-cart"></i>
                 </a>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-    <div class="row wishlist-buttons" *ngIf='wishlistItems.length'>
-      <div class="col-12">
-        <a [routerLink]="['/home/left-side/collection/all']" class="btn btn-solid">continue shopping</a>
-        <a [routerLink]="['/home/checkout']" class="btn btn-solid">check out</a>
       </div>
     </div>
   </div>

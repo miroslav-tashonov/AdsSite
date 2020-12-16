@@ -51,6 +51,8 @@ namespace AdSite.Models.Mappers
             {
                 id = ad.ID,
                 name = ad.Name,
+                price = ad.Price,
+                salePrice = ad.Price,
                 discount = 50,
                 shortDetails = ad.AdDetail?.Description,
                 description = ad.AdDetail?.Description,

@@ -19,7 +19,7 @@
          {{menuItem.title | translate}}
       </a>
       <!-- 2nd Level Menu -->
-      <ul [class]="menuItem.megaMenu ? 'mega-menu clothing-menu' : ''" *ngIf="menuItem.children">
+      <ul [class]="menuItem.megaMenu ? 'mega-menu clothing-menu' : ''" *ngIf="menuItem.children.length">
         
         <!-- Simple Menu Start-->
         <ng-container *ngIf="!menuItem.megaMenu">
@@ -37,7 +37,7 @@
                {{childrenItem.title}}
             </a>
             <!-- 3rd Level Menu -->
-            <ul *ngIf="childrenItem.children">
+            <ul *ngIf="childrenItem.children.length">
               <li *ngFor="let childrenSubItem of childrenItem.children">
                   <!-- Link -->
                   <a [routerLink]="!childrenSubItem.type ? null : [childrenSubItem.path]" *ngIf="childrenSubItem.type === 'link'">
@@ -52,7 +52,7 @@
                      {{childrenSubItem.title}}
                   </a>
                   <!-- 4th Level Menu -->
-                  <ul *ngIf="childrenSubItem.children">
+                  <ul *ngIf="childrenSubItem.children.length">
                     <li *ngFor="let childrenSubSubItem of childrenSubItem.children">
                         <!-- Link -->
                         <a [routerLink]="!childrenSubSubItem.type ? null : [childrenSubSubItem.path]" *ngIf="childrenSubSubItem.type === 'link'">
@@ -67,7 +67,7 @@
                            {{childrenSubSubItem.title}}
                         </a>
                         <!-- 5th Level Menu -->
-                        <ul *ngIf="childrenSubSubItem.children">
+                        <ul *ngIf="childrenSubSubItem.children.length">
                           <li *ngFor="let childrenSubSubSubItem of childrenSubSubItem.children">
                               <!-- Link -->
                               <a [routerLink]="!childrenSubSubSubItem.type ? null : [childrenSubSubSubItem.path]" *ngIf="childrenSubSubSubItem.type === 'link'">
