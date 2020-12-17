@@ -134,7 +134,6 @@ namespace AdSite.ApiControllers
         {
             return Ok(_adService.GetAdAsViewModel(model.id));
         }
-
     }
 
 }

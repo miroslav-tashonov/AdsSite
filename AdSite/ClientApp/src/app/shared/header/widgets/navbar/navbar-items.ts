@@ -15,9 +15,11 @@ export const MENUITEMS: Menu[] = [
   },
   {
     title: 'categories', type: 'sub', megaMenu: true, megaMenuType: 'small', children: [
-      { path: '/home/left-sidebar/collection/all', title: 'category-left-sidebar', image: 'assets/images/feature/category-page.jpg', type: 'link' },
-      { path: '/home/right-sidebar/collection/all', title: 'category-right-sidebar', image: 'assets/images/feature/category-page(right).jpg', type: 'link' },
-      { path: '/home/no-sidebar/collection/all', title: 'category-no-sidebar', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' }
+      { path: '/home/left-sidebar/collection/Cars', title: 'Cars', image: 'assets/images/feature/cars.jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Apartments', title: 'Apartments', image: 'assets/images/feature/category-page(right).jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Diesel', title: 'Diesel', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Small', title: 'Small', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Large', title: 'Large', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' }
     ]
   },
   {
@@ -74,21 +76,6 @@ export const MENUITEMS: Menu[] = [
       },
     ]
   },
-  /*
-  {
-    title: 'products', type: 'sub', megaMenu: true, megaMenuType: 'medium', children: [
-        { path: '/home/left-sidebar/product/1', title: 'left-sidebar', image: 'assets/images/feature/product-page(left-sidebar).jpg', type: 'link' },
-        { path: '/home/right-sidebar/product/1', title: 'right-sidebar', image: 'assets/images/feature/product-page(right-sidebar).jpg', type: 'link' },
-        { path: '/home/no-sidebar/product/1', title: 'no-sidebar',  image: 'assets/images/feature/product-page(no-sidebar).jpg', type: 'link' },
-        { path: '/home/col-left/product/1', title: '3-col-thumbnail-left', image: 'assets/images/feature/product-page(3-col-left).jpg', type: 'link' },
-        { path: '/home/col-right/product/1', title: '3-col-thumbnail-right', image: 'assets/images/feature/product-page(3-col-right).jpg', type: 'link' },
-        { path: '/home/column/product/1', title: 'thumbnail-below', image: 'assets/images/feature/product-page(3-column).jpg', type: 'link' },
-        { path: '/home/accordian/product/1', title: 'accordian-details', image: 'assets/images/feature/product-page(accordian).jpg', type: 'link' },
-        { path: '/home/left-image/product/1', title: 'thumbnail-left', image: 'assets/images/feature/product-page(left-image).jpg', type: 'link' },
-        { path: '/home/right-image/product/1', title: 'thumbnail-right', image: 'assets/images/feature/product-page(right-image).jpg', type: 'link' },
-        { path: '/home/vertical/product/1', title: 'vertical-tab', image: 'assets/images/feature/product-page(vertical-tab).jpg', type: 'link' }
-      ]
-  },*/
   {
     title: 'About us', type: 'link', path: '/pages/about-us'
   },

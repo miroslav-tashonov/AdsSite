@@ -41,8 +41,7 @@ export class ProductsService {
 
   // Observable Product Array
   private products(): Observable<Product[]> {
-    return this.http.get(this.myAppUrl + this.myApiUrl).map((res: any) => res.json())
-    //return this.http.get('assets/data/products.json').map((res: any) => res.json())
+    return this.http.get(this.myAppUrl + this.myApiUrl).map((res: any) => res.json());
   }
 
   private latestProducts(): Observable<Product[]> {

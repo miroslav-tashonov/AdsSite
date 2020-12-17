@@ -13,9 +13,9 @@ export class PriceComponent implements OnInit {
   @Output() priceFilters = new EventEmitter();
 	
   // define min, max and range
-  public min : number = 100;
-  public max : number = 105000;
-  public range = [100,105000];
+  public min : number = 1;
+  public max : number = 999999;
+  public range = [1,999999];
   
   constructor() { }
   

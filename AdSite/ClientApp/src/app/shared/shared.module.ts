@@ -22,7 +22,6 @@ import { OrderByPipe } from './pipes/order-by.pipe';
 import { HeaderOneComponent } from './header/header-one/header-one.component';
 import { LeftSidebarComponent } from './header/left-sidebar/left-sidebar.component';
 import { TopbarOneComponent } from './header/widgets/topbar/topbar-one/topbar-one.component';
-import { TopbarTwoComponent } from './header/widgets/topbar/topbar-two/topbar-two.component';
 import { NavbarComponent } from './header/widgets/navbar/navbar.component';
 import { SettingsComponent } from './header/widgets/settings/settings.component';
 import { LeftMenuComponent } from './header/widgets/left-menu/left-menu.component';
@@ -57,7 +56,6 @@ import { SocialComponent } from './footer/widgets/social/social.component';
     SettingsComponent,
     LeftMenuComponent,
     TopbarOneComponent,
-    TopbarTwoComponent,
     InformationComponent,
     CategoriesComponent,
     WhyWeChooseComponent,
