@@ -1,7 +1,7 @@
 <!-- 1st Level Menu -->
 <!-- Sample menu definition -->
 <ul id="sub-menu" class="sm pixelstrap sm-vertical">
-  <li *ngFor="let menuItem of menuItems">
+  <li *ngFor="let menuItem of menuItems | async">
       <!-- Sub -->
       <a href="javascript:void(0)" *ngIf="menuItem.type === 'sub'">
          {{menuItem.title}}

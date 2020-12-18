@@ -2068,7 +2068,6 @@ header {
   transition: all 0.5s ease;
 }
 .service-block svg path {
-  fill: #ff4c3b;
 }
 .service-block h4 {
   font-weight: 700;

@@ -163,17 +163,14 @@ namespace AdSite.Models.CRUDModels
             new VariantClass
             {
                 color = "yellow",
-                images = "assets/images/fashion/product/1.jpg"
             },
             new VariantClass
             {
                 color = "gray",
-                images = "assets/images/fashion/product/21.jpg"
             },
             new VariantClass
             {
                 color = "green",
-                images = "assets/images/fashion/product/36.jpg"
             },
         };
     }
