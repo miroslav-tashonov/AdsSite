@@ -13,6 +13,14 @@ import { ContactComponent } from './contact/contact.component';
 import { CompareComponent } from './compare/compare.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FaqComponent } from './faq/faq.component';
+import { DashboardNewAdComponent } from './dashboard-new-ad/dashboard-new-ad.component';
+import { DashboardMyAdsComponent } from './dashboard-my-ads/dashboard-my-ads.component';
+import { DashboardWishlistComponent } from './dashboard-wishlist/dashboard-wishlist.component';
+import { DashboardWebSettingsComponent } from './dashboard-web-settings/dashboard-web-settings.component';
+import { DashboardCitiesComponent } from './dashboard-cities/dashboard-cities.component';
+import { DashboardCategoriesComponent } from './dashboard-categories/dashboard-categories.component';
+import { DashboardManageUsersComponent } from './dashboard-manage-users/dashboard-manage-users.component';
+import { DashboardReportedAdsComponent } from './dashboard-reported-ads/dashboard-reported-ads.component';
 
 const routes: Routes = [
   {
@@ -61,6 +69,38 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'dashboard-new-ad',
+        component: DashboardNewAdComponent
+      },
+      {
+        path: 'dashboard-my-ads',
+        component: DashboardMyAdsComponent
+      },
+      {
+        path: 'dashboard-wishlist',
+        component: DashboardWishlistComponent
+      },
+      {
+        path: 'dashboard-web-settings',
+        component: DashboardWebSettingsComponent
+      },
+      {
+        path: 'dashboard-cities',
+        component: DashboardCitiesComponent
+      },
+      {
+        path: 'dashboard-categories',
+        component: DashboardCategoriesComponent
+      },
+      {
+        path: 'dashboard-manage-users',
+        component: DashboardManageUsersComponent
+      },
+      {
+        path: 'dashboard-reported-ads',
+        component: DashboardReportedAdsComponent
       },
       {
         path: 'faq',

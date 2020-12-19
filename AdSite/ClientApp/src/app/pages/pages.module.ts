@@ -15,6 +15,14 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { ContactComponent } from './contact/contact.component';
 import { CompareComponent } from './compare/compare.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardNewAdComponent } from './dashboard-new-ad/dashboard-new-ad.component';
+import { DashboardMyAdsComponent } from './dashboard-my-ads/dashboard-my-ads.component';
+import { DashboardWishlistComponent } from './dashboard-wishlist/dashboard-wishlist.component';
+import { DashboardWebSettingsComponent } from './dashboard-web-settings/dashboard-web-settings.component';
+import { DashboardCitiesComponent } from './dashboard-cities/dashboard-cities.component';
+import { DashboardCategoriesComponent } from './dashboard-categories/dashboard-categories.component';
+import { DashboardReportedAdsComponent } from './dashboard-reported-ads/dashboard-reported-ads.component';
+import { DashboardManageUsersComponent } from './dashboard-manage-users/dashboard-manage-users.component';
 import { FaqComponent } from './faq/faq.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -39,6 +47,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ContactComponent,
     CompareComponent,
     DashboardComponent,
+    DashboardNewAdComponent,
+    DashboardMyAdsComponent,
+    DashboardWishlistComponent,
+    DashboardWebSettingsComponent,
+    DashboardCitiesComponent,
+    DashboardCategoriesComponent,
+    DashboardManageUsersComponent,
+    DashboardReportedAdsComponent,
     FaqComponent,
   ]
 })

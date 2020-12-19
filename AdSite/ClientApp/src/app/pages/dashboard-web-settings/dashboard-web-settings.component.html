@@ -1,0 +1,163 @@
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Dashboard</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="'/home/one'">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+<!-- section start -->
+<section class="section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="account-sidebar">
+          <a class="popup-btn">
+            my account
+          </a>
+        </div>
+        <div class="dashboard-left">
+          <div class="collection-mobile-back">
+            <span class="filter-back">
+              <i class="fa fa-angle-left" aria-hidden="true"></i> back
+            </span>
+          </div>
+          <div class="block-content">
+            <ul>
+              <li><a [routerLink]="'/pages/dashboard'">Account Info</a></li>
+              <li><a [routerLink]="'/pages/dashboard-my-ads'">My ads</a></li>
+              <li><a [routerLink]="'/pages/dashboard-new-ad'">New Ad</a></li>
+              <li><a [routerLink]="'/pages/dashboard-wishlist'">My Wishlist</a></li>
+              <li class="active"><a [routerLink]="'/pages/dashboard-web-settings'">Web Settings</a></li>
+
+              <li><a [routerLink]="'/pages/dashboard-cities'">Cities</a></li>
+              <li><a [routerLink]="'/pages/dashboard-categories'">Categories</a></li>
+              <li><a [routerLink]="'/pages/dashboard-manage-users'">Manage Users</a></li>
+              <li><a [routerLink]="'/pages/dashboard-reported-ads'">Reported Ads</a></li>
+
+              <li class="last"><a [routerLink]="">Log Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="dashboard-right">
+          <div class="dashboard">
+            <div class="checkout-page">
+              <div class="checkout-form">
+                <form>
+                  <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                      <div class="checkout-title">
+                        <h3>Web Settings</h3>
+                      </div>
+                      <div class="row check-out">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">First Name</div>
+                          <input type="text" name="firstname" [formControl]="checkoutForm.controls['firstname']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.firstname.touched && checkoutForm.controls.firstname.errors?.required" class="text text-danger">
+                            First Name is required.
+                          </div>
+                          <div *ngIf="checkoutForm.controls.firstname.touched && checkoutForm.controls.firstname.errors?.pattern" class="text text-danger">
+                            First Name must be an alphabates.
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Last Name </div>
+                          <input type="text" name="lastname" [formControl]="checkoutForm.controls['lastname']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.lastname.touched && checkoutForm.controls.lastname.errors?.required" class="text text-danger">
+                            Last Name is required.
+                          </div>
+                          <div *ngIf="checkoutForm.controls.lastname.touched && checkoutForm.controls.lastname.errors?.pattern" class="text text-danger">
+                            Last Name must be an alphabates.
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Phone</div>
+                          <input type="text" name="phone" [formControl]="checkoutForm.controls['phone']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.phone.touched && checkoutForm.controls.phone.errors?.required" class="text text-danger">
+                            Phone No is required.
+                          </div>
+                          <div *ngIf="checkoutForm.controls.phone.touched && checkoutForm.controls.phone.errors?.pattern" class="text text-danger">
+                            Phone No is must be number.
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Email Address</div>
+                          <input type="text" name="email" [formControl]="checkoutForm.controls['email']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.email.touched && checkoutForm.controls.email.errors?.required" class="text text-danger">
+                            Email is required
+                          </div>
+                          <div *ngIf="checkoutForm.controls.email.touched && checkoutForm.controls.email.errors?.email" class="text text-danger">
+                            Invalid Email
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Country</div>
+                          <select name="country" [formControl]="checkoutForm.controls['country']">
+                            <option value="" selected>Select Country</option>
+                            <option value="India">India</option>
+                            <option value="USA">USA</option>
+                            <option value="Australia">Australia</option>
+                          </select>
+                          <div *ngIf="checkoutForm.controls.country.touched && checkoutForm.controls.country.errors?.required" class="text text-danger">
+                            Country is required
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Address</div>
+                          <input type="text" name="address" [formControl]="checkoutForm.controls['address']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.required" class="text text-danger">
+                            Address is required
+                          </div>
+                          <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.maxlength" class="text text-danger">
+                            Maximum 50 character
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Town/City</div>
+                          <input type="text" name="town" [formControl]="checkoutForm.controls['town']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.town.touched && checkoutForm.controls.town.errors?.required" class="text text-danger">
+                            City is required
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-6 col-xs-12">
+                          <div class="field-label">State</div>
+                          <input type="text" name="state" [formControl]="checkoutForm.controls['state']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.state.touched && checkoutForm.controls.state.errors?.required" class="text text-danger">
+                            State is required
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-6 col-xs-12">
+                          <div class="field-label">Postal Code</div>
+                          <input type="text" name="postalcode" [formControl]="checkoutForm.controls['postalcode']" value="" placeholder="" autocomplete="off">
+                          <div *ngIf="checkoutForm.controls.postalcode.touched && checkoutForm.controls.postalcode.errors?.required" class="text text-danger">
+                            Postalcode is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- section end -->

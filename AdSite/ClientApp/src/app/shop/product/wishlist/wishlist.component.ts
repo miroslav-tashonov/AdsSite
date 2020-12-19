@@ -23,14 +23,7 @@ export class WishlistComponent implements OnInit {
   }
 
   ngOnInit() { }
-
-  // Add to cart
-  public addToCart(product: Product,  quantity: number = 1) {
-     if (quantity > 0)
-      this.cartService.addToCart(product,quantity);
-      this.wishlistService.removeFromWishlist(product);
-  }
-  
+    
   // Remove from wishlist
   public removeItem(product: Product) {
     this.wishlistService.removeFromWishlist(product);
