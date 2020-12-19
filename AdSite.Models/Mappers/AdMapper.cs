@@ -164,6 +164,45 @@ namespace AdSite.Models.Mappers
         }
 
 
+        public static List<AdProductsModel> MapToAdProductsModel(List<Ad> entities)
+        {
+            List<AdProductsModel> adGrid = new List<AdProductsModel>();
+
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    var description = entity.AdDetail?.Description;
+                    var pictures = entity.AdDetail?.AdDetailPictures?.Select(x => x.File).ToList();
+
+                    List<byte[]> picturesArray = new List<byte[]>();
+                    if (pictures != null && pictures.Count > 0)
+                    {
+                        picturesArray.Add(pictures[0]);
+                    }
+
+                    adGrid.Add(new AdProductsModel
+                    {
+                        id = entity.ID,
+                        name = entity.Name,
+                        price = entity.Price,
+                        salePrice = entity.Price,
+                        discount = 50,
+                        shortDetails = description,
+                        description = description,
+                        category = entity.Category?.Name,
+                        tags = new List<string> { entity.City?.Name },
+                        //pictures = ad.PictureFiles,
+                        pictures = picturesArray,
+                        createdAt = entity.CreatedAt
+                    });
+                }
+            }
+
+            return adGrid;
+        }
+
+
         public static WishlistAdGridModel MapToWishlistAdGridModel(Ad entity)
         {
             var mainPicture = entity.AdDetail?.MainPictureThumbnailFile;

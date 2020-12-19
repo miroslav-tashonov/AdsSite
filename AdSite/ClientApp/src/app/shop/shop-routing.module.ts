@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { CollectionLeftSidebarComponent } from './product/collection/collection-left-sidebar/collection-left-sidebar.component';
-import { CollectionRightSidebarComponent } from './product/collection/collection-right-sidebar/collection-right-sidebar.component';
-import { CollectionNoSidebarComponent } from './product/collection/collection-no-sidebar/collection-no-sidebar.component';
 import { ProductLeftSidebarComponent } from './product/product-details/product-left-sidebar/product-left-sidebar.component';
 import { ProductRightImageComponent } from './product/product-details/product-right-image/product-right-image.component';
 import { SearchComponent } from './product/search/search.component';
@@ -24,14 +22,6 @@ const routes: Routes = [
   {
     path: 'left-sidebar/collection/:category',
     component: CollectionLeftSidebarComponent
-  },
-  {
-    path: 'right-sidebar/collection/:category',
-    component: CollectionRightSidebarComponent
-  },
-  {
-    path: 'no-sidebar/collection/:category',
-    component: CollectionNoSidebarComponent
   },
   {
     path: 'left-sidebar/product/:id',

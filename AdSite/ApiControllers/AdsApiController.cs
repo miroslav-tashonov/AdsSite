@@ -22,113 +22,25 @@ namespace AdSite.ApiControllers
         }
 
         // GET: api/<CitiesApiController>
-        [HttpGet]
-        public IActionResult Get()
+        [HttpPost]
+        public IActionResult Get([FromBody] AdGetWithCountryModel model)
         {
-            List<AdProductsModel> list = new List<AdProductsModel>();
-
-            var adsArray = _adService.GetAdGridModel(new Guid("99DE8181-09A8-41DB-895E-54E5E0650C3A"));
-            foreach (var ad in adsArray)
-            {
-                List<byte[]> pictures = new List<byte[]>();
-                if(ad.PictureFiles != null && ad.PictureFiles.Count > 0)
-                {
-                    pictures.Add(ad.PictureFiles[0]); 
-                }
-
-                list.Add(new AdProductsModel
-                {
-                    id = ad.ID,
-                    name = ad.Name,
-                    price = ad.Price,
-                    salePrice = ad.Price,
-                    discount = 50,
-                    shortDetails = ad.Description,
-                    description = ad.Description,
-                    category = ad.Category?.Name,
-                    tags = new List<string> { ad.City?.Name },
-                    //pictures = ad.PictureFiles,
-                    pictures = pictures,
-                    createdAt = ad.CreatedAt
-                });
-            }
-
-            return Ok(list);
+            return Ok(_adService.GetAdGridModel(model.countryId));
         }
 
 
-        [HttpGet, Route("getLatestAds")]
-        public IActionResult GetLatestAds()
+        [HttpPost, Route("getLatestAds")]
+        public IActionResult GetLatestAds([FromBody] AdGetWithCountryModel model)
         {
-            List<AdProductsModel> list = new List<AdProductsModel>();
-
-            var adsArray = _adService.GetAdGridModel(new Guid("99DE8181-09A8-41DB-895E-54E5E0650C3A"))
-                .OrderByDescending(x => x.CreatedAt)
-                .Take(9);
-
-            foreach (var ad in adsArray)
-            {
-                List<byte[]> pictures = new List<byte[]>();
-                if (ad.PictureFiles != null && ad.PictureFiles.Count > 0)
-                {
-                    pictures.Add(ad.PictureFiles[0]);
-                }
-
-                list.Add(new AdProductsModel
-                {
-                    id = ad.ID,
-                    name = ad.Name,
-                    price = ad.Price,
-                    salePrice = ad.Price,
-                    discount = 50,
-                    shortDetails = ad.Description,
-                    description = ad.Description,
-                    category = ad.Category?.Name,
-                    tags = new List<string> { ad.City?.Name },
-                    //pictures = ad.PictureFiles,
-                    pictures = pictures,
-                    createdAt = ad.CreatedAt
-                }) ;
-            }
-
-            return Ok(list);
+            return Ok(_adService.GetAdGridModel(model.countryId).OrderByDescending(x => x.createdAt).Take(9));
         }
 
-        [HttpGet, Route("getRelatedAds")]
-        public IActionResult GetRelatedAds()
+        [HttpPost, Route("getRelatedAds")]
+        public IActionResult GetRelatedAds([FromBody] AdGetWithCountryModel model)
         {
-            List<AdProductsModel> list = new List<AdProductsModel>();
-
-            var adsArray = _adService.GetAdGridModel(new Guid("99DE8181-09A8-41DB-895E-54E5E0650C3A"));
-
-            foreach (var ad in adsArray)
-            {
-                List<byte[]> pictures = new List<byte[]>();
-                if (ad.PictureFiles != null && ad.PictureFiles.Count > 0)
-                {
-                    pictures.Add(ad.PictureFiles[0]);
-                }
-
-                list.Add(new AdProductsModel
-                {
-                    id = ad.ID,
-                    name = ad.Name,
-                    price = ad.Price,
-                    salePrice = ad.Price,
-                    discount = 50,
-                    shortDetails = ad.Description,
-                    description = ad.Description,
-                    category = ad.Category?.Name,
-                    tags = new List<string> { ad.City?.Name },
-                    //pictures = ad.PictureFiles,
-                    pictures = pictures,
-                    createdAt = ad.CreatedAt
-                });
-            }
-
-            return Ok(list);
+            return Ok(_adService.GetAdGridModel(model.countryId));
         }
-
+        
         [HttpPost("{id}"), Route("getProductDetails")]
         public IActionResult GetProductDetails([FromBody]AdGetModel model)
         {

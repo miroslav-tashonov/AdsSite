@@ -16,10 +16,11 @@ export const MENUITEMS: Menu[] = [
   {
     title: 'categories', type: 'sub', megaMenu: true, megaMenuType: 'small', children: [
       { path: '/home/left-sidebar/collection/Cars', title: 'Cars', image: 'assets/images/feature/cars.jpg', type: 'link' },
-      { path: '/home/left-sidebar/collection/Apartments', title: 'Apartments', image: 'assets/images/feature/category-page(right).jpg', type: 'link' },
-      { path: '/home/left-sidebar/collection/Diesel', title: 'Diesel', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' },
-      { path: '/home/left-sidebar/collection/Small', title: 'Small', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' },
-      { path: '/home/left-sidebar/collection/Large', title: 'Large', image: 'assets/images/feature/category-page(no-sidebar).jpg', type: 'link' }
+      { path: '/home/left-sidebar/collection/Apartments', title: 'Apartments', image: 'assets/images/feature/apartments.jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/PC', title: 'PC & Components', image: 'assets/images/feature/pc.jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Mobile', title: 'Mobile Devices', image: 'assets/images/feature/mobile.jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Fashion', title: 'Fashion', image: 'assets/images/feature/fashion.jpg', type: 'link' },
+      { path: '/home/left-sidebar/collection/Sport', title: 'Sport', image: 'assets/images/feature/sport.jpg', type: 'link' }
     ]
   },
   {

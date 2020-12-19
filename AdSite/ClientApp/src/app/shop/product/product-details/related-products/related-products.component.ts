@@ -1,5 +1,7 @@
+import { LocationStrategy } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../../../shared/classes/product';
+import { CountryService } from '../../../../shared/services/country.service';
 import { ProductsService } from '../../../../shared/services/products.service';
 
 @Component({
@@ -10,11 +12,15 @@ import { ProductsService } from '../../../../shared/services/products.service';
 export class RelatedProductsComponent implements OnInit {
 
   public products: Product[] = [];
-  
-  constructor(private productsService: ProductsService) { }
 
-  ngOnInit() {
-    this.productsService.getRelatedProducts().subscribe(product => this.products = product);
+  constructor(private productsService: ProductsService, private countryService: CountryService, private locationStrategy: LocationStrategy) {
+    this.countryService.getCountryId(this.locationStrategy.getBaseHref()).subscribe({
+      next: country => {
+        this.productsService.getRelatedProducts(country.id).subscribe(product => this.products = product);
+      }
+    })
   }
+
+  ngOnInit() {}
 
 }

@@ -20,7 +20,7 @@ namespace AdSite.Services
         bool Add(AdCreateModel ad);
         bool Update(AdEditModel ad);
         List<AdViewModel> GetAds(Guid countryId);
-        List<AdGridViewModel> GetAdGridModel(Guid countryId);
+        List<AdProductsModel> GetAdGridModel(Guid countryId);
         List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count, out int maxPrice);
         List<AdGridViewModel> GetPageForMyAdsGrid(PageModel pageModel, string ownerIdentifier, out int count);
         List<AdGridViewModel> GetPageForAdGridByFilter(PageModel pageModel, FilterModel filterModel , out int count, out int maxPrice);
@@ -155,7 +155,7 @@ namespace AdSite.Services
             return AdMapper.MapToWishlistAdGridModel(entity);
         }
 
-        public List<AdGridViewModel> GetAdGridModel(Guid countryId)
+        public List<AdProductsModel> GetAdGridModel(Guid countryId)
         {
             var entities = _repository.GetAdGrid(countryId);
             if (entities == null)
@@ -163,7 +163,7 @@ namespace AdSite.Services
                 throw new Exception(LOCALIZATION_AD_NOT_FOUND);
             }
 
-            return AdMapper.MapToAdGridModel(entities);
+            return AdMapper.MapToAdProductsModel(entities);
         }
 
         public List<AdGridViewModel> GetPageForAdGrid(PageModel pageModel, out int count, out int maxPrice)

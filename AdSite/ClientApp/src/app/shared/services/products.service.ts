@@ -40,30 +40,30 @@ export class ProductsService {
   }
 
   // Observable Product Array
-  private products(): Observable<Product[]> {
-    return this.http.get(this.myAppUrl + this.myApiUrl).map((res: any) => res.json());
+  private products(countryId: string): Observable<Product[]> {
+    return this.http.post(this.myAppUrl + this.myApiUrl, { 'countryId': countryId }).map((res: any) => res.json());
   }
 
-  private latestProducts(): Observable<Product[]> {
-    return this.http.get(this.myAppUrl + this.latestAdsApiUrl).map((res: any) => res.json())
+  private latestProducts(countryId: string): Observable<Product[]> {
+    return this.http.post(this.myAppUrl + this.latestAdsApiUrl, { 'countryId': countryId }).map((res: any) => res.json())
   }
 
-  public getLatestProducts(): Observable<Product[]> {
-    return this.latestProducts();
+  public getLatestProducts(countryId: string): Observable<Product[]> {
+    return this.latestProducts(countryId);
   }
 
-  private relatedProducts(): Observable<Product[]> {
-    return this.http.get(this.myAppUrl + this.relatedAdsApiUrl).map((res: any) => res.json())
+  private relatedProducts(countryId: string): Observable<Product[]> {
+    return this.http.post(this.myAppUrl + this.relatedAdsApiUrl, { 'countryId': countryId }).map((res: any) => res.json())
   }
 
-  public getRelatedProducts(): Observable<Product[]> {
-    return this.relatedProducts();
+  public getRelatedProducts(countryId: string): Observable<Product[]> {
+    return this.relatedProducts(countryId);
   }
 
 
   // Get Products
-  public getProducts(): Observable<Product[]> {
-    return this.products();
+  public getProducts(countryId: string): Observable<Product[]> {
+    return this.products(countryId);
   }
 
   // Get Products By Id
@@ -72,8 +72,8 @@ export class ProductsService {
   }
 
    // Get Products By category
-  public getProductByCategory(category: string): Observable<Product[]> {
-    return this.products().pipe(map(items => 
+  public getProductByCategory(category: string, countryId: string): Observable<Product[]> {
+    return this.products(countryId).pipe(map(items => 
        items.filter((item: Product) => {
          if(category == 'all')
             return item

@@ -127,6 +127,11 @@ namespace AdSite.Models.CRUDModels
         public Guid id { get; set; }
     }
 
+    public class AdGetWithCountryModel
+    {
+        public Guid countryId { get; set; }
+    }
+
 
     public class AdProductsModel
     {
@@ -152,11 +157,7 @@ namespace AdSite.Models.CRUDModels
 
         public bool advertised = true;
 
-        public int stock = 5;
-
         public List<string> colors = new List<string>() { "yellow", "gray", "green" };
-
-        public List<string> size = new List<string>() { "M", "L", "XL" };
 
         public List<VariantClass> variants = new List<VariantClass>()
         {
@@ -179,6 +180,20 @@ namespace AdSite.Models.CRUDModels
     {
         public string color { get; set; }
         public string images { get; set; }
+    }
+
+    public enum ColorsClass
+    {
+        Yellow = 1,
+        Gray = 2,
+        Green = 3,
+        Red = 4,
+        Orange = 5,
+        Black = 6,
+        White = 7,
+        Blue = 8,
+        Cyan = 9,
+        Magenta = 10,
     }
 
 }

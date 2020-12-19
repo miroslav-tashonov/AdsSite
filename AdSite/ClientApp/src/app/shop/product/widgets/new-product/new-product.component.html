@@ -3,7 +3,7 @@
   <h5 class="title-border">new product</h5>
   <ngx-slick-carousel class="offer-slider no-arrow" #slickModal="slick-carousel">
     <div ngxSlickItem *ngFor="let product of products | slice:0:4 ">
-      <div class="media" *ngFor="let product of products | orderBy:'asc' | slice:0:4">
+      <div class="media" *ngFor="let product of products | orderBy:'date' | slice:0:4">
         <a [routerLink]="['/home/right-image/product', product.id]"><img class="img-fluid" [src]="'data:image/jpeg;base64,'+ product.pictures[0]" alt=""></a>
         <div class="media-body align-self-center">
           <bar-rating [rate]="5" [readOnly]="true"></bar-rating>
