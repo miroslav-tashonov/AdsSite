@@ -1,4 +1,5 @@
-﻿using AdSite.Models.CRUDModels;
+﻿using AdSite.Mappers;
+using AdSite.Models.CRUDModels;
 using AdSite.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace AdSite.ApiControllers
         }
 
 
-        // GET api/<CitiesApiController>/5
+        // GET api/<CitiesApiController>/GUID
         [HttpGet("{countryId}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         public IActionResult Get(Guid countryId)
@@ -36,28 +37,24 @@ namespace AdSite.ApiControllers
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         public void Post([FromBody]CityCreateModel model)
         {
-            model.CreatedAt = DateTime.Now;
-            model.ModifiedAt = DateTime.Now;
-            model.CreatedBy = "mtashonov";
-            model.ModifiedBy = "mtashonov";
+            string currentUser = HttpContext?.User?.Identity?.Name;
+            AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(model, currentUser);
 
             Ok(_cityService.Add(model));
         }
 
-        // PUT api/<CitiesApiController>/5
+        // PUT api/<CitiesApiController>/CityEditModel
         [HttpPut("{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         public void Put([FromBody]CityEditModel model)
         {
-            model.CreatedAt = DateTime.Now;
-            model.ModifiedAt = DateTime.Now;
-            model.CreatedBy = "mtashonov";
-            model.ModifiedBy = "mtashonov";
+            string currentUser = HttpContext?.User?.Identity?.Name;
+            AuditedEntityMapper<CityEditModel>.FillModifyAuditedEntityFields(model, currentUser);
 
             Ok(_cityService.Update(model));
         }
 
-        // DELETE api/<CitiesApiController>/5
+        // DELETE api/<CitiesApiController>/CityGuid
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         public IActionResult Delete(Guid id)
