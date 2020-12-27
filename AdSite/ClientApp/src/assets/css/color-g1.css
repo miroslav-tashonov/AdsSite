@@ -6684,10 +6684,10 @@ footer p {
   margin-left: 10px;
   margin-right: 10px;
 }
-.cart-section tbody tr td .mobile-cart-content h2,
-.wishlist-section tbody tr td .mobile-cart-content h2 {
-  font-size: 20px;
-}
+  .cart-section tbody tr td .mobile-cart-content h2,
+  .wishlist-section tbody tr td .mobile-cart-content h2 {
+    font-size: 20px;
+  }
 .cart-section tfoot tr th,
 .wishlist-section tfoot tr th {
   padding-top: 35px;
@@ -15076,10 +15076,10 @@ background-color: $black;*/
     display: flex;
   }
 
-  .wishlist-section .cart-table thead th:nth-last-child(-n+3) {
+  .wishlist-section .cart-table thead th:nth-last-child(-n+2) {
     display: none;
   }
-  .wishlist-section tbody tr td:nth-last-child(-n+3) {
+  .wishlist-section tbody tr td:nth-last-child(-n+2) {
     display: none;
   }
   .wishlist-section tbody tr td .mobile-cart-content {

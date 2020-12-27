@@ -23,6 +23,8 @@ import { DashboardCitiesComponent } from './dashboard-cities/dashboard-cities.co
 import { DashboardCategoriesComponent } from './dashboard-categories/dashboard-categories.component';
 import { DashboardReportedAdsComponent } from './dashboard-reported-ads/dashboard-reported-ads.component';
 import { DashboardManageUsersComponent } from './dashboard-manage-users/dashboard-manage-users.component';
+import { DashboardCitiesDialogComponent } from './dashboard-cities/dashboard-cities-dialog/dashboard-cities-dialog.component';
+import { DashboardCitiesAddDialogComponent } from './dashboard-cities/dashboard-cities-add-dialog/dashboard-cities-add-dialog.component';
 import { FaqComponent } from './faq/faq.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -55,6 +57,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DashboardCategoriesComponent,
     DashboardManageUsersComponent,
     DashboardReportedAdsComponent,
+    DashboardCitiesDialogComponent,
+    DashboardCitiesAddDialogComponent,
     FaqComponent,
   ]
 })

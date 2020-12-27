@@ -10,12 +10,13 @@ import { rootRouterConfig } from './app.routes';
 // import ngx-translate and the http loader
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 // components
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import * as $ from 'jquery';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { JwtInterceptor } from './shared/services/jwt-interceptor.service';
 
 declare module "@angular/core" {
   interface ModuleWithProviders<T = any> {
@@ -57,7 +58,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     RouterModule.forRoot(rootRouterConfig, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -15075,10 +15075,10 @@ background-color: $black;*/
     display: flex;
   }
 
-  .wishlist-section .cart-table thead th:nth-last-child(-n+3) {
+  .wishlist-section .cart-table thead th:nth-last-child(-n+2) {
     display: none;
   }
-  .wishlist-section tbody tr td:nth-last-child(-n+3) {
+  .wishlist-section tbody tr td:nth-last-child(-n+2) {
     display: none;
   }
   .wishlist-section tbody tr td .mobile-cart-content {

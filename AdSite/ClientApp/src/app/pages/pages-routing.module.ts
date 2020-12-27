@@ -21,6 +21,8 @@ import { DashboardCitiesComponent } from './dashboard-cities/dashboard-cities.co
 import { DashboardCategoriesComponent } from './dashboard-categories/dashboard-categories.component';
 import { DashboardManageUsersComponent } from './dashboard-manage-users/dashboard-manage-users.component';
 import { DashboardReportedAdsComponent } from './dashboard-reported-ads/dashboard-reported-ads.component';
+import { Role } from '../shared/classes/roles';
+import { AuthGuard } from '../shared/services/auth-guard.service';
 
 const routes: Routes = [
   {
@@ -88,7 +90,9 @@ const routes: Routes = [
       },
       {
         path: 'dashboard-cities',
-        component: DashboardCitiesComponent
+        component: DashboardCitiesComponent,
+        canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.User] }
       },
       {
         path: 'dashboard-categories',

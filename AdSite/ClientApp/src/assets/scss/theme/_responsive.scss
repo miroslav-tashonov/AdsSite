@@ -3641,18 +3641,20 @@ background-color: $black;*/
     .cart-table {
       thead {
         th {
-          &:nth-last-child(-n+3) {
+          &:nth-last-child(-n+2) {
             display: none;
           }
         }
       }
     }
+
     tbody {
       tr {
         td {
-          &:nth-last-child(-n+3) {
+          &:nth-last-child(-n+2) {
             display: none;
           }
+
           .mobile-cart-content {
             display: flex;
           }

@@ -1,4 +1,6 @@
-﻿using AdSite.Services;
+﻿using AdSite.Models.CRUDModels;
+using AdSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,36 +22,47 @@ namespace AdSite.ApiControllers
             _cityService = cityService;
         }
 
-        // GET: api/<CitiesApiController>
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(_cityService.GetCities(new Guid("99DE8181-09A8-41DB-895E-54E5E0650C3A")));
-        }
 
         // GET api/<CitiesApiController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{countryId}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        public IActionResult Get(Guid countryId)
         {
-            return "value";
+            return Ok(_cityService.GetCities(countryId));
         }
 
         // POST api/<CitiesApiController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        public void Post([FromBody]CityCreateModel model)
         {
+            model.CreatedAt = DateTime.Now;
+            model.ModifiedAt = DateTime.Now;
+            model.CreatedBy = "mtashonov";
+            model.ModifiedBy = "mtashonov";
+
+            Ok(_cityService.Add(model));
         }
 
         // PUT api/<CitiesApiController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        public void Put([FromBody]CityEditModel model)
         {
+            model.CreatedAt = DateTime.Now;
+            model.ModifiedAt = DateTime.Now;
+            model.CreatedBy = "mtashonov";
+            model.ModifiedBy = "mtashonov";
+
+            Ok(_cityService.Update(model));
         }
 
         // DELETE api/<CitiesApiController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        public IActionResult Delete(Guid id)
         {
+            return Ok(_cityService.Delete(id));
         }
     }
 }

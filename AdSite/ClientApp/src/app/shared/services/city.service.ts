@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { NotificationService } from './notification.service';
 import { environment } from 'src/environments/environment';
-import { CityModel } from '../classes/city';
+import { CityCreateModel, CityEditModel, CityModel } from '../classes/city';
+import { Observable } from 'rxjs/internal/Observable';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +23,8 @@ export class CityService {
     this.myApiUrl = 'api/CitiesApi/';
   }
 
-  get data(): CityModel[] {
-    return this.dataChange.value;
+  get data(): Observable<CityModel[]> {
+    return this.dataChange;
   }
 
   getDialogData() {
@@ -30,8 +32,8 @@ export class CityService {
   }
 
   /** CRUD METHODS */
-  getAllCities(): void {
-    this.httpClient.get<CityModel[]>(this.myAppUrl + this.myApiUrl).subscribe(data => {
+  getAllCities(countryId: string): void {
+    this.httpClient.get<CityModel[]>(this.myAppUrl + this.myApiUrl + countryId).subscribe(data => {
       this.dataChange.next(data);
     },
       (error: HttpErrorResponse) => {
@@ -40,8 +42,9 @@ export class CityService {
   }
 
   // ADD, POST METHOD
-  addItem(city: CityModel): void {
+  addItem(city: CityCreateModel): void {
     this.httpClient.post(this.myAppUrl + this.myApiUrl, city).subscribe(data => {
+      this.getAllCities(city.countryId);
       this.dialogData = city;
       this.notificationService.showSuccess('Successfully added', 'Success!');
     },
@@ -51,8 +54,9 @@ export class CityService {
   }
 
   // UPDATE, PUT METHOD
-  updateItem(city: CityModel): void {
+  updateItem(city: CityEditModel): void {
     this.httpClient.put(this.myAppUrl + this.myApiUrl + city.id, city).subscribe(data => {
+      this.getAllCities(city.countryId);
       this.dialogData = city;
       this.notificationService.showSuccess('Successfully edited', 'Success');
     },
@@ -63,8 +67,9 @@ export class CityService {
   }
 
   // DELETE METHOD
-  deleteItem(id: number): void {
+  deleteItem(id: string, countryId: string): void {
     this.httpClient.delete(this.myAppUrl + this.myApiUrl + id).subscribe(data => {
+      this.getAllCities(countryId);
       this.notificationService.showSuccess('Successfully deleted', 'Success');
     },
       (err: HttpErrorResponse) => {

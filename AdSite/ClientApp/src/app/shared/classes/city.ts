@@ -11,3 +11,16 @@ export class CityModel {
   modifiedBy!: User;
   createdBy!: User;
 }
+
+export class CityEditModel {
+  id!: string;
+  name!: string;
+  postcode!: string;
+  countryId: string;
+}
+
+export class CityCreateModel {
+  name!: string;
+  postcode!: string;
+  countryId: string;
+}
