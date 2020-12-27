@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -31,6 +31,17 @@ export class WebSettingsService {
         retry(1),
         catchError(this.errorHandler)
       );
+  }
+
+  // UPDATE, PUT METHOD
+  updateItem(model: WebSettingsModel): void {
+    this.http.put(this.myAppUrl + this.myApiUrl, model).subscribe(data => {
+      this.notificationService.showSuccess('Successfully edited', 'Success');
+    },
+      (err: HttpErrorResponse) => {
+        this.notificationService.showError('Error occurred. Details: ' + err.name + ' ' + err.message, 'Error');
+      }
+    );
   }
 
   errorHandler(error: { error: { message: string; }; status: any; message: any; }) {

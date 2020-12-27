@@ -1,5 +1,7 @@
-﻿using AdSite.Models.CRUDModels;
+﻿using AdSite.Mappers;
+using AdSite.Models.CRUDModels;
 using AdSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,13 @@ namespace AdSite.Controllers
         public WebSettingsViewModel Get(Guid countryId)
         {
             return _webSettingsService.GetWebSettingsViewModelForCountry(countryId);
+        }
+
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        public void Put([FromBody]WebSettingsEditModel model)
+        {
+            Ok(_webSettingsService.UpdateWebSettingsForCountry(model, model.CountryId));
         }
     }
 }

@@ -101,6 +101,9 @@ namespace AdSite.Services
 
             webSettings.Phone = entity.Phone;
             webSettings.Email = entity.Email;
+            webSettings.Address = entity.Address;
+            webSettings.LogoImagePath = entity.LogoImagePath;
+            webSettings.Title = entity.Title;
             webSettings.FacebookSocialLink = entity.FacebookSocialLink;
             webSettings.TwitterSocialLink = entity.TwitterSocialLink;
             webSettings.VKSocialLink = entity.VKSocialLink;

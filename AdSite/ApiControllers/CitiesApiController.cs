@@ -37,9 +37,7 @@ namespace AdSite.ApiControllers
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         public void Post([FromBody]CityCreateModel model)
         {
-            string currentUser = HttpContext?.User?.Identity?.Name;
-            AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(model, currentUser);
-
+            AuditedEntityMapper<CityCreateModel>.FillCreateAuditedEntityFields(model, HttpContext?.User?.Identity?.Name);
             Ok(_cityService.Add(model));
         }
 
@@ -48,9 +46,7 @@ namespace AdSite.ApiControllers
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         public void Put([FromBody]CityEditModel model)
         {
-            string currentUser = HttpContext?.User?.Identity?.Name;
-            AuditedEntityMapper<CityEditModel>.FillModifyAuditedEntityFields(model, currentUser);
-
+            AuditedEntityMapper<CityEditModel>.FillModifyAuditedEntityFields(model, HttpContext?.User?.Identity?.Name);
             Ok(_cityService.Update(model));
         }
 
