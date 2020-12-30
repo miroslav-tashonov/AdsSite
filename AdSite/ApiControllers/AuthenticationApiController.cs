@@ -50,6 +50,7 @@ namespace AdSite.Controllers
 
         [HttpPost, Route("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -76,6 +77,7 @@ namespace AdSite.Controllers
         }
 
         [HttpPost, Route("register")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
@@ -168,6 +170,43 @@ namespace AdSite.Controllers
 
 
             return BadRequest("Something went wrong");
+        }
+
+
+        [HttpPost, Route("GetAllUsers")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> GetAllUsers(Guid countryId)
+        {
+            var accounts = _userManager.Users.ToList();
+            if (accounts == null)
+            {
+                return BadRequest("Accounts doesnt exist");
+            }
+            return Ok(accounts);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var account = _userManager.FindByIdAsync(id).GetAwaiter().GetResult();
+            if(account == null)
+            {
+                return BadRequest("Account doesnt exist");
+            }
+
+            if (_userRoleCountryService.Delete(id))
+            {
+                if (!_userManager.DeleteAsync(account).GetAwaiter().GetResult().Succeeded)
+                {
+                    return BadRequest("Cannot delete account");
+                }
+                return Ok();
+            }
+            return BadRequest("Delete action failed");
         }
 
 
