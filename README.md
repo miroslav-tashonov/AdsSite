@@ -2,6 +2,8 @@ This project represents multi-site role based ads site built with .net5.0 from s
 
 <b>Installation Steps</b>
 
+https://user-images.githubusercontent.com/3856771/107565277-cc0bb680-6be3-11eb-809d-8442d19ab219.mp4
+
 You should setup the default connection string as your docker mssql image name, clone and run. That's it :) 
 <br/>
 <br/>
