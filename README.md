@@ -23,13 +23,10 @@ This project represents responsive multi-site role based ads site built with .ne
 
 <img src="https://user-images.githubusercontent.com/3856771/107695253-9e407380-6cb0-11eb-9457-62c9a5001441.gif" width="450" height="700"/>
 
-
-<br/>
-
 <br/>
 <h2><a id="user-content-floppy_disk-setup" class="anchor" aria-hidden="true" href="#floppy_disk-setup"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><g-emoji class="g-emoji" alias="floppy_disk" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f4be.png">💾</g-emoji> Setup</h2>
 
-By default the project relies on docker-compose deployment, hence you should have a containerized applications support (<a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>), but you can also alter the settings and host this project in mac, windows or linux.
+By default the project relies on docker-compose deployment, hence you should have a containerized applications support (<a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>), but you can also alter the settings and host this project in mac, windows or linux. If you decide to host it on your local machine without docker than navigate to Adsite/ClientApp, run npm install -> ng build, setup the correct connection string in appsettings config and enjoy the app. 
 <br/>
 <br/>
 <b>Behind the scenes :</b>
@@ -52,3 +49,9 @@ Download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0M
 <br/>
 
 </details>
+
+<h2><a id="user-content-envelope-contact" class="anchor" aria-hidden="true" href="#envelope-contact"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a><g-emoji class="g-emoji" alias="email" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2709.png">✉️</g-emoji> Contact</h2>
+
+<ul>
+<li>Repo created by <a href="https://miroslav-tashonov.github.io" rel="nofollow">Miroslav Tashonov</a> - you are welcome to send me a message</li>
+</ul>
