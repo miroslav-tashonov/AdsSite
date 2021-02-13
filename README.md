@@ -55,7 +55,7 @@ Download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0M
 
 <ul>
 <li>Status: Finishing up remaining Angular 11 components</li>
-<li>To-Do: Stable deployment of docker images of profile build in VS 2019</li>
+<li>To-Do: Stable deployment of docker images on profile build in VS 2019</li>
 <li>To-Do: current plans for future work is to make FE totally independant from the BE and make them communicate via RabbitMQ</li>
 </ul>
 
