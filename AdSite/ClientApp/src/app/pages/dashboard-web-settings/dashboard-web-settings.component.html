@@ -1,0 +1,165 @@
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Dashboard</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="'/home/one'">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+<!-- section start -->
+<section class="section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="account-sidebar">
+          <a class="popup-btn">
+            my account
+          </a>
+        </div>
+        <div class="dashboard-left">
+          <div class="collection-mobile-back">
+            <span class="filter-back">
+              <i class="fa fa-angle-left" aria-hidden="true"></i> back
+            </span>
+          </div>
+          <div class="block-content">
+            <ul>
+              <li><a [routerLink]="'/pages/dashboard'">Account Info</a></li>
+              <li><a [routerLink]="'/pages/dashboard-my-ads'">My ads</a></li>
+              <li><a [routerLink]="'/pages/dashboard-new-ad'">New Ad</a></li>
+              <li><a [routerLink]="'/pages/dashboard-wishlist'">My Wishlist</a></li>
+              <li class="active"><a [routerLink]="'/pages/dashboard-web-settings'">Web Settings</a></li>
+
+              <li><a [routerLink]="'/pages/dashboard-cities'">Cities</a></li>
+              <li><a [routerLink]="'/pages/dashboard-categories'">Categories</a></li>
+              <li><a [routerLink]="'/pages/dashboard-manage-users'">Manage Users</a></li>
+              <li><a [routerLink]="'/pages/dashboard-reported-ads'">Reported Ads</a></li>
+
+              <li class="last"><a [routerLink]="">Log Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="dashboard-right">
+          <div class="dashboard">
+            <div class="checkout-page">
+              <div class="checkout-form">
+                <form (ngSubmit)="onSubmit()">
+                  <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                      <div class="checkout-title">
+                        <h3>Web Settings</h3>
+                      </div>
+                      <div class="row check-out">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Title</div>
+                          <input type="text" name="title" [formControl]="webSettingsForm.controls['title']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.title.touched && webSettingsForm.controls.title.errors?.required" class="text text-danger">
+                            Title is required.
+                          </div>
+                          <div *ngIf="webSettingsForm.controls.title.touched && webSettingsForm.controls.title.errors?.pattern" class="text text-danger">
+                            Title must be an alphabates.
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Logo image path</div>
+                          <input type="text" name="logoimage" [formControl]="webSettingsForm.controls['logoimage']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.logoimage.touched && webSettingsForm.controls.logoimage.errors?.required" class="text text-danger">
+                            Logo image is required.
+                          </div>
+                          <div *ngIf="webSettingsForm.controls.logoimage.touched && webSettingsForm.controls.logoimage.errors?.pattern" class="text text-danger">
+                            Logo image must be an alphabates.
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Phone</div>
+                          <input type="text" name="phone" [formControl]="webSettingsForm.controls['phone']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.phone.touched && webSettingsForm.controls.phone.errors?.required" class="text text-danger">
+                            Phone No is required.
+                          </div>
+                          <div *ngIf="webSettingsForm.controls.phone.touched && webSettingsForm.controls.phone.errors?.pattern" class="text text-danger">
+                            Phone No is must be number.
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                          <div class="field-label">Email Address</div>
+                          <input type="text" name="email" [formControl]="webSettingsForm.controls['email']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.email.touched && webSettingsForm.controls.email.errors?.required" class="text text-danger">
+                            Email is required
+                          </div>
+                          <div *ngIf="webSettingsForm.controls.email.touched && webSettingsForm.controls.email.errors?.email" class="text text-danger">
+                            Invalid Email
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Address</div>
+                          <input type="text" name="address" [formControl]="webSettingsForm.controls['address']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.address.touched && webSettingsForm.controls.address.errors?.required" class="text text-danger">
+                            Address is required
+                          </div>
+                          <div *ngIf="webSettingsForm.controls.address.touched && webSettingsForm.controls.address.errors?.maxlength" class="text text-danger">
+                            Maximum 50 character
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Facebook social link</div>
+                          <input type="text" name="fbSocialLink" [formControl]="webSettingsForm.controls['fbSocialLink']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.fbSocialLink.touched && webSettingsForm.controls.fbSocialLink.errors?.required" class="text text-danger">
+                            FB social link is required
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Instagram Social link</div>
+                          <input type="text" name="instaSocialLink" [formControl]="webSettingsForm.controls['instaSocialLink']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.instaSocialLink.touched && webSettingsForm.controls.instaSocialLink.errors?.required" class="text text-danger">
+                            Instagram Social link is required
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Twitter social link</div>
+                          <input type="text" name="twitterSocialLink" [formControl]="webSettingsForm.controls['twitterSocialLink']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.twitterSocialLink.touched && webSettingsForm.controls.twitterSocialLink.errors?.required" class="text text-danger">
+                            Twitter social link is required
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                          <div class="field-label">Vk Social link</div>
+                          <input type="text" name="vkSocialLink" [formControl]="webSettingsForm.controls['vkSocialLink']" placeholder="" autocomplete="off">
+                          <div *ngIf="webSettingsForm.controls.vkSocialLink.touched && webSettingsForm.controls.vkSocialLink.errors?.required" class="text text-danger">
+                            Vk Social link is required
+                          </div>
+                        </div>
+                        <div>
+                          <button style="display: inline; float:right" class="btn btn-solid">Submit</button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- section end -->

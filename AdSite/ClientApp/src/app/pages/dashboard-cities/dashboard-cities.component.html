@@ -1,0 +1,138 @@
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Dashboard</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="'/home/one'">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+<!-- section start -->
+<section class="section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="account-sidebar">
+          <a class="popup-btn">
+            my account
+          </a>
+        </div>
+        <div class="dashboard-left">
+          <div class="collection-mobile-back">
+            <span class="filter-back">
+              <i class="fa fa-angle-left" aria-hidden="true"></i> back
+            </span>
+          </div>
+          <div class="block-content">
+            <ul>
+              <li><a [routerLink]="'/pages/dashboard'">Account Info</a></li>
+              <li><a [routerLink]="'/pages/dashboard-my-ads'">My ads</a></li>
+              <li><a [routerLink]="'/pages/dashboard-new-ad'">New Ad</a></li>
+              <li><a [routerLink]="'/pages/dashboard-wishlist'">My Wishlist</a></li>
+              <li><a [routerLink]="'/pages/dashboard-web-settings'">Web Settings</a></li>
+
+              <li class="active"><a [routerLink]="'/pages/dashboard-cities'">Cities</a></li>
+              <li><a [routerLink]="'/pages/dashboard-categories'">Categories</a></li>
+              <li><a [routerLink]="'/pages/dashboard-manage-users'">Manage Users</a></li>
+              <li><a [routerLink]="'/pages/dashboard-reported-ads'">Reported Ads</a></li>
+
+              <li class="last"><a [routerLink]="">Log Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="dashboard-right">
+          <div class="dashboard">
+            <div class="page-title">
+              <h2 style="display: inline;">Cities</h2>
+              <button style="display: inline; float:right" class="btn btn-solid" [attr.data-target]="'#cities-dialog'" data-toggle="modal" >Add city</button>
+              <app-dashboard-cities-add-dialog [countryId]="countryId"></app-dashboard-cities-add-dialog>
+            </div>
+            <div class="checkout-page">
+              <div class="checkout-form">
+                <form>
+                  <section class="wishlist-section section-b-space">
+                    <div class="container">
+                      <div class="col-md-12 empty-cart-cls text-center" *ngIf='!(cityItems | async)?.length'>
+                        <img src="assets/images/empty-wishlist.png" alt="Empty cart" title="Emprt cart">
+                        <h3 class="mt-4"><b>City list is Empty</b></h3>
+                        <h4>Explore more shortlist some items.</h4>
+                      </div>
+                      <div class="row" *ngIf='(cityItems | async)?.length'>
+                        <div class="col-sm-12">
+                          <table class="table cart-table table-responsive-xs">
+                            <thead>
+                              <tr class="table-head">
+                                <th scope="col">postcode</th>
+                                <th scope="col">name</th>
+                                <th scope="col">action</th>
+                              </tr>
+                            </thead>
+                            <tbody *ngFor="let item of cityItems | async">
+                              <tr>
+                                <td>
+                                  <a [routerLink]=""> {{ item.postcode }}</a>
+                                  <div class="mobile-cart-content row">
+                                    <div class="col-xs-3">
+                                      <h2 class="td-color">{{ item.name }}</h2>
+                                    </div>
+                                    <div class="col-xs-3">
+                                      <h2 class="td-color">
+                                        <a [routerLink]="" (click)="removeItem(item)" class="icon mr-1">
+                                          <i class="ti-close"></i>
+                                        </a>
+                                      </h2>
+                                    </div>
+                                    <div class="col-xs-3">
+                                      <h2 class="td-color">
+                                        <a [routerLink]="" [attr.data-target]="'#cities-dialog'+item.id" data-toggle="modal" class="icon mr-1">
+                                          <i class="ti-pencil"></i>
+                                        </a>
+                                      </h2>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <h2>{{ item.name }}</h2>
+                                </td>
+                                <td>
+                                  <a [routerLink]="" (click)="removeItem(item)" class="icon mr-3">
+                                    <i class="ti-close"></i>
+                                  </a>
+                                  <a [routerLink]="" [attr.data-target]="'#cities-dialog'+item.id" data-toggle="modal" class="icon mr-3">
+                                    <i class="ti-pencil"></i>
+                                  </a>
+                                </td>
+                              </tr>
+
+                              <app-dashboard-cities-dialog [city]="item"></app-dashboard-cities-dialog>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- section end -->

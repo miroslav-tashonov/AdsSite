@@ -17,8 +17,8 @@ namespace AdSite.Models.CRUDModels
         public Country Country { get; set; }
         public ICollection<Ad> Ads { get; set; }
 
-        DateTime CreatedAt { get; set; }
-        DateTime ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
         ApplicationUser ModifiedBy { get; set; }
         ApplicationUser CreatedBy { get; set; }
     }

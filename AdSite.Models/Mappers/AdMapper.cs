@@ -45,6 +45,24 @@ namespace AdSite.Models.Mappers
             };
         }
 
+        public static AdProductsModel MapToAdProductsModel(Ad ad)
+        {
+            return new AdProductsModel()
+            {
+                id = ad.ID,
+                name = ad.Name,
+                price = ad.Price,
+                salePrice = ad.Price,
+                discount = 50,
+                shortDetails = ad.AdDetail?.Description,
+                description = ad.AdDetail?.Description,
+                category = ad.Category?.Name,
+                tags = new List<string> { ad.City?.Name },
+                pictures = ad.AdDetail?.AdDetailPictures?.Select(x => x.File).ToList(),
+                createdAt = ad.CreatedAt
+            };
+        }
+
         public static Ad MapAdFromAdCreateModel(AdCreateModel entity, List<AdDetailPicture> pictures)
         {
             Ad ad = new Ad
@@ -122,6 +140,7 @@ namespace AdSite.Models.Mappers
                 {
                     var mainPicture = entity.AdDetail?.MainPictureThumbnailFile;
                     var description = entity.AdDetail?.Description;
+                    var pictures = entity.AdDetail?.AdDetailPictures?.Select(x => x.File).ToList();
 
                     adGrid.Add(
                         new AdGridViewModel()
@@ -133,9 +152,50 @@ namespace AdSite.Models.Mappers
                             Category = entity.Category,
                             Owner = entity.Owner,
                             MainPicture = mainPicture,
-                            Description = description
+                            Description = description,
+                            PictureFiles = pictures,
+                            CreatedAt = entity.CreatedAt
                         }
                     );
+                }
+            }
+
+            return adGrid;
+        }
+
+
+        public static List<AdProductsModel> MapToAdProductsModel(List<Ad> entities)
+        {
+            List<AdProductsModel> adGrid = new List<AdProductsModel>();
+
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    var description = entity.AdDetail?.Description;
+                    var pictures = entity.AdDetail?.AdDetailPictures?.Select(x => x.File).ToList();
+
+                    List<byte[]> picturesArray = new List<byte[]>();
+                    if (pictures != null && pictures.Count > 0)
+                    {
+                        picturesArray.Add(pictures[0]);
+                    }
+
+                    adGrid.Add(new AdProductsModel
+                    {
+                        id = entity.ID,
+                        name = entity.Name,
+                        price = entity.Price,
+                        salePrice = entity.Price,
+                        discount = 50,
+                        shortDetails = description,
+                        description = description,
+                        category = entity.Category?.Name,
+                        tags = new List<string> { entity.City?.Name },
+                        //pictures = ad.PictureFiles,
+                        pictures = picturesArray,
+                        createdAt = entity.CreatedAt
+                    });
                 }
             }
 

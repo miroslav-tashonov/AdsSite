@@ -13,4 +13,10 @@ namespace AdSite.Models
         public ICollection<UserRoleCountry> UserRoleCountry { get; set; }
         public ICollection<Ad> Ads { get; set; }
     }
+
+    public class ApplicationUserWithToken : ApplicationUser
+    {
+        public string Token { get; set; }
+        public string Role { get; set; }
+    }
 }

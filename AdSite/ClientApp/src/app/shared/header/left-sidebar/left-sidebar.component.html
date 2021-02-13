@@ -1,0 +1,63 @@
+<!-- header start -->
+<header class="left-header">
+    <div class="mobile-fix-option"></div>
+    <div class="top-header">
+        <div class="container">
+            <app-topbar-two></app-topbar-two>
+        </div>
+    </div>
+    <div class="metro">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="main-menu">
+                        <div class="menu-left">
+                            <div id="mySidenav" class="sidenav">
+                                <nav>
+                                    <div (click)="closeNav()">
+                                        <div class="sidebar-back text-left">
+                                            <i class="fa fa-angle-left pr-2" aria-hidden="true"></i> Back
+                                        </div>
+                                    </div>
+                                    <div class="brand-logo">
+                                        <img [routerLink]="['/home/one']" src="assets/images/icon/logo.png" alt="" class="img-fluid">
+                                    </div>
+                                    <div class="left-sidebar_center">
+                                        <app-left-menu></app-left-menu>
+                                    </div>
+                                    <div class="leftside_social">
+                                        <div>
+                                            <div class="footer-social">
+                                                <ul>
+                                                    <li>
+                                                        <a [routerLink]="['/home/one']"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a [routerLink]="['/home/one']"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a [routerLink]="['/home/one']"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a [routerLink]="['/home/one']"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a [routerLink]="['/home/one']"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="call_us">
+                                                <h5>Call Us: <span>123-456-7898</span></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- header end -->

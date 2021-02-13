@@ -3,6 +3,7 @@ using AdSite.Data.Repositories;
 using AdSite.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -119,15 +120,15 @@ namespace AdSite.Helpers
         {
             app.UseDeveloperExceptionPage();
             app.UseHsts();
-            app.UseSession();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
             app.UseRequestLocalization(
                 BuildLocalizationOptions(languageService, Configuration, countryId)
                 );
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors("CorsPolicy");
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();

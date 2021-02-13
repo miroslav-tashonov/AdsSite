@@ -1,0 +1,44 @@
+
+.register-main {
+  margin-top: 10%;
+}
+
+
+.full-width {
+  width: 100%;
+}
+
+
+.registration-card {
+  min-width: 120px;
+  margin: 20px auto;
+  width: 87%;
+  margin-top:2%;
+}
+
+
+.mat-radio-button {
+  display: block;
+  margin: 5px 0;
+}
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.col {
+  flex: 1;
+  margin-right: 20px;
+}
+
+
+  .col:last-child {
+    margin-right: 0;
+  }
+
+.manageActions {
+  display: table-cell;
+}

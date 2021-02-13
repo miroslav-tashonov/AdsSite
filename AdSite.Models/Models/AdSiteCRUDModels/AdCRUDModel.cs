@@ -43,6 +43,9 @@ namespace AdSite.Models.CRUDModels
         public byte[] MainPicture { get; set; }
         public bool IsInWishlist {get; set;}
 
+        public DateTime CreatedAt { get; set; }
+        public List<byte[]> PictureFiles { get; set; }
+
         public Category Category { get; set; }
         public City City { get; set; }        
         public ApplicationUser Owner { get; set; }
@@ -117,6 +120,80 @@ namespace AdSite.Models.CRUDModels
 
         public string SerializedAdDetailsPictures { get; set; }
         public string SerializedMainPicture { get; set; }
+    }
+
+    public class AdGetModel
+    {
+        public Guid id { get; set; }
+    }
+
+    public class AdGetWithCountryModel
+    {
+        public Guid countryId { get; set; }
+    }
+
+
+    public class AdProductsModel
+    {
+        public Guid id { get; set; }
+        public string name { get; set; }
+        public decimal price { get; set; }
+        public decimal salePrice { get; set; }
+        public int discount { get; set; }
+
+        public DateTime createdAt { get; set; }
+
+        public List<byte[]> pictures = new List<byte[]>();
+        public string shortDetails { get; set; }
+        public string description { get; set; }
+
+        public string category { get; set; }
+
+        public List<string> tags = new List<string>();
+
+        public bool sale = false;
+
+        public bool @new = false;
+
+        public bool advertised = true;
+
+        public List<string> colors = new List<string>() { "yellow", "gray", "green" };
+
+        public List<VariantClass> variants = new List<VariantClass>()
+        {
+            new VariantClass
+            {
+                color = "yellow",
+            },
+            new VariantClass
+            {
+                color = "gray",
+            },
+            new VariantClass
+            {
+                color = "green",
+            },
+        };
+    }
+
+    public class VariantClass
+    {
+        public string color { get; set; }
+        public string images { get; set; }
+    }
+
+    public enum ColorsClass
+    {
+        Yellow = 1,
+        Gray = 2,
+        Green = 3,
+        Red = 4,
+        Orange = 5,
+        Black = 6,
+        White = 7,
+        Blue = 8,
+        Cyan = 9,
+        Magenta = 10,
     }
 
 }

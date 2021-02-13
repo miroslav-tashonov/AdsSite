@@ -16,9 +16,9 @@ namespace AdSite.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("adsite")
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("AdSite.Models.ApplicationIdentityRole", b =>
                 {
@@ -30,18 +30,18 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -60,8 +60,8 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -73,12 +73,12 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -96,17 +96,17 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
@@ -178,7 +178,6 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("MainPictureThumbnailFile")
@@ -251,6 +250,9 @@ namespace AdSite.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedAt")
@@ -439,6 +441,9 @@ namespace AdSite.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("CountryId")
                         .HasColumnType("uniqueidentifier");
 
@@ -455,8 +460,14 @@ namespace AdSite.Data.Migrations
                     b.Property<string>("InstagramSocialLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LogoImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TwitterSocialLink")
@@ -503,7 +514,7 @@ namespace AdSite.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -527,7 +538,7 @@ namespace AdSite.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -626,6 +637,14 @@ namespace AdSite.Data.Migrations
                         .WithMany("Ads")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.AdDetail", b =>
@@ -635,6 +654,8 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("AdSite.Models.DatabaseModels.AdDetail", "AdID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ad");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.AdDetailPicture", b =>
@@ -644,6 +665,8 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("AdDetailID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdDetail");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Category", b =>
@@ -657,6 +680,10 @@ namespace AdSite.Data.Migrations
                     b.HasOne("AdSite.Models.DatabaseModels.Category", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.City", b =>
@@ -666,6 +693,8 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Language", b =>
@@ -675,6 +704,8 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Localization", b =>
@@ -690,6 +721,10 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.UserRoleCountry", b =>
@@ -709,6 +744,12 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationIdentityRole");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.WebSettings", b =>
@@ -718,6 +759,8 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("AdSite.Models.DatabaseModels.Wishlist", b =>
@@ -738,6 +781,12 @@ namespace AdSite.Data.Migrations
                         .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Ad");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -789,6 +838,53 @@ namespace AdSite.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AdSite.Models.ApplicationIdentityRole", b =>
+                {
+                    b.Navigation("UserRoleCountry");
+                });
+
+            modelBuilder.Entity("AdSite.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Ads");
+
+                    b.Navigation("UserRoleCountry");
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Ad", b =>
+                {
+                    b.Navigation("AdDetail");
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.AdDetail", b =>
+                {
+                    b.Navigation("AdDetailPictures");
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Category", b =>
+                {
+                    b.Navigation("Ads");
+
+                    b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.City", b =>
+                {
+                    b.Navigation("Ads");
+                });
+
+            modelBuilder.Entity("AdSite.Models.DatabaseModels.Country", b =>
+                {
+                    b.Navigation("Ads");
+
+                    b.Navigation("Categories");
+
+                    b.Navigation("Cities");
+
+                    b.Navigation("Localizations");
+
+                    b.Navigation("UserRoleCountry");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,22 @@
+.stepBarClass {
+    width:100%;
+    height:10px;
+    background:lightgray;
+    border-radius:5px;
+    z-index: 11 !important;
+}
+
+.stepSliderClass {
+    width:20px;
+    height:20px;
+    background:#fff;
+    border-radius:50%;    
+    border:1px solid #ff4c3b;
+    bottom:-50% !important;
+    z-index: 111 !important;
+}
+
+.stephighlightClass{
+    background:#ff4c3b;
+    z-index: 1 !important;
+}

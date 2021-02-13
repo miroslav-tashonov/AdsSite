@@ -1,0 +1,30 @@
+<!--age verification popup start-->
+<div class="modal fade bd-example-modal-md theme-modal agem" id="ageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body modal13">
+                <div class="container-fluid p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="modal-bg">
+                                <div class="age-content">
+                                    <h2> Age verification</h2>
+                                    <h4>This Website requires you to be 19 years or older to enter. Please enter your Date Of Birth in this fields below in order to continue:</h4>
+                                    <form id="demoForm">
+                                        <div>
+                                            <input type="number" name="day" id="birthDay" [formControl]="authForm.controls['day']" value="" class="form-control" placeholder="DD" min="1" max="2">
+                                            <input type="number" name="month" id="birthMonth" value="" [formControl]="authForm.controls['month']" class="form-control" placeholder="MM" min="1" max="2">
+                                            <input type="number" name="year" id="birthYear" value="" [formControl]="authForm.controls['year']" class="form-control" placeholder="YY" min="1" max="4">
+                                        </div>
+                                        <button type="submit" (click)="ageForm()" class="btn btn-solid">submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--age verification popup end-->

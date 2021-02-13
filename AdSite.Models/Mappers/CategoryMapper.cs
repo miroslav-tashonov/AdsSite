@@ -38,10 +38,12 @@ namespace AdSite.Models.Mappers
                     var viewModel = new CategoryViewModel();
 
                     viewModel.ID = category.ID;
-                    viewModel.Name = category.Name;
+                    viewModel.Title = category.Name;
                     viewModel.Type = category.Type;
                     viewModel.ParentId = category.ParentId;
                     viewModel.Children = MapToViewModel(category.Children.ToList());
+                    viewModel.ImagePath = category.ImagePath;
+                    viewModel.Path = "/home/left-sidebar/collection/" + category.Name;
 
                     listViewModel.Add(viewModel);
                 }

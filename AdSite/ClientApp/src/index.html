@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Ad Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="assets/images/favicon.png" type="image/x-icon" />
+  <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon" />
+  <!--Google font-->
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+</head>
+<body>
+  <!-- pre-loader start -->
+  <div class="loader-wrapper">
+    <div class="loader"></div>
+  </div>
+  <!-- pre-loader end -->
+  <app-root></app-root>
+  <!-- color variation -->
+  <div id="color"></div>
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+  <!-- facebook chat section start -->
+  <div id="fb-root"></div>
+  <script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js#xfbml=1&version=v2.12&autoLogAppEvents=1';
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  </script>
+  <!-- Your customer chat code -->
+  <div class="fb-customerchat" attribution=setup_tool page_id="2123438804574660" theme_color="#ff4c3b" logged_in_greeting="Hi! Welcome to PixelStrap Themes  How can we help you?" logged_out_greeting="Hi! Welcome to PixelStrap Themes  How can we help you?">
+  </div>
+  <!-- facebook chat section end -->
+
+  <!-- tap to top -->
+  <div class="tap-top top-cls">
+      <div>
+          <i class="fa fa-angle-double-up"></i>
+      </div>
+  </div>
+  <!-- tap to top -->
+
+</body>
+
+</html>

@@ -1,17 +1,21 @@
 ﻿using AdSite.Data;
-using AdSite.Extensions;
 using AdSite.Helpers;
 using AdSite.Models;
 using AdSite.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Net;
+using System.Text;
 
 namespace AdSite
 {
@@ -24,35 +28,48 @@ namespace AdSite
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
             services.AddMemoryCache();
-            services.AddSession(o =>
-            {
-                o.IdleTimeout = TimeSpan.FromSeconds(3600);
-            });
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             try
             {
-                services.AddAuthentication()
-                        .AddGoogle(googleOptions =>
+                services.AddAuthentication(opt =>
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                }).AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                         {
-                            googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                            googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                        })
-                        .AddFacebook(facebookOptions =>
-                        {
-                            facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                            facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                        });
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration.GetValue<string>("EnvironmentUrl:Value"),
+                            ValidAudience = Configuration.GetValue<string>("EnvironmentUrl:Value"),
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretKey:Value")))
+                        };
+                    });/*.AddGoogle(googleOptions =>
+                    {
+                        googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                        googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    })
+                    .AddFacebook(facebookOptions =>
+                    {
+                        facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                        facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                    });*/
             }
             catch (Exception)
             {
@@ -98,13 +115,20 @@ namespace AdSite
                 .AddDefaultTokenProviders();
             services.AddMvc().AddNewtonsoftJson();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
             StartupHelper.RegisterApplicationServices(services, Configuration);
             //needed for setting languages that are currently in DB
             StartupHelper.RegisterSupportedLanguages(services, Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILanguageService languageService, ICountryService countryService)
+        public void Configure(IApplicationBuilder app, ILanguageService languageService, ICountryService countryService, IWebHostEnvironment env)
         {
             var countries = countryService.GetAll();
             if (countries == null || countries.Count == 0)
@@ -114,20 +138,26 @@ namespace AdSite
 
             foreach (var country in countries)
             {
-
                 app.UseRewriter(new RewriteOptions()
                             .AddRedirect(@"^$", "/" + country.Path, (int)HttpStatusCode.Redirect)
                             );
 
                 Guid countryId = country.ID;
                 app.Map("/" + country.Path,
-                    app =>
+                    mapper =>
                     {
-                        app.UseMiddleware<CountryMiddleware>(countryId);
                         StartupHelper.MapSite(languageService, Configuration, app, countryId);
+
+                        mapper.UseSpa(spa =>
+                        {
+                            spa.Options.SourcePath = "ClientApp";
+                            spa.UseAngularCliServer(npmScript: "start-" + country.Path);
+                        });
                     }
                 );
             }
+
+
         }
 
 

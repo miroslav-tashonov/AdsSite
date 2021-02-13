@@ -1,0 +1,19 @@
+<!--  logo section -->
+<section class="section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ngx-slick-carousel class="no-arrow" #slickModal="slick-carousel" [config]="logoSlideConfig">
+          <div ngxSlickItem *ngFor="let lg of logo">
+            <div class="logo-block">
+              <a [routerLink]="'/home/one'">
+                <img [src]="lg.image" alt="">
+             </a>
+            </div>
+          </div>
+        </ngx-slick-carousel>
+      </div>
+    </div>
+  </div>
+</section>
+<!--  logo section end-->

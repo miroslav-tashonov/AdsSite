@@ -161,7 +161,6 @@
                     <form id="categoriesForm" method="post" asp-controller="Ads" asp-action="Index">
                         <div class="topcatalog">
                             <a class="topcatalog-btn"><span><localize name="Ads_AllAds"></localize></span></a>
-                            @await Component.InvokeAsync("CategoriesMenu", new { isFirstCall = true })
                         </div>
                     </form>
                     <!-- Catalog menu - end -->

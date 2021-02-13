@@ -1,0 +1,50 @@
+<div class="icon-nav">
+  <ul>
+    <li class="onhover-div mobile-search search-widgets" id="search-widgets">
+      <div>
+        <img src="assets/images/icon/search.png" (click)="openSearch()" class="img-fluid" alt="">
+        <i class="ti-search" (click)="openSearch()"></i>
+      </div>
+    </li>
+    <li class="onhover-div mobile-setting">
+      <div>
+        <img src="assets/images/icon/setting.png" class="img-fluid" alt="">
+        <i class="ti-settings"></i>
+      </div>
+      <div class="show-div setting">
+        <h6>language</h6>
+        <ul>
+          <li><a [routerLink]="" (click)="changeLanguage('en')">English</a> </li>
+          <li><a [routerLink]="" (click)="changeLanguage('fr')">French</a> </li>
+        </ul>
+        <h6 *ngIf="!productsService?.catalogMode">currency</h6>
+        <ul class="list-inline" *ngIf="!productsService?.catalogMode">
+          <li><a [routerLink]="" (click)="updateCurrency('USD')">Dollar</a> </li>
+          <li><a [routerLink]="" (click)="updateCurrency('EUR')">Euro</a> </li>
+          <li><a [routerLink]="" (click)="updateCurrency('INR')">Rupees</a> </li>
+          <li><a [routerLink]="" (click)="updateCurrency('GBP')">Pound</a> </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>
+<!-- Search -->
+<div id="search-overlay" class="search-overlay" *ngIf="show" [ngStyle]="{ 'display': 'block' }">
+  <div>
+    <span class="closebtn" title="Close Overlay" (click)="closeSearch()">×</span>
+    <div class="overlay-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12">
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Search a Product">
+              </div>
+              <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

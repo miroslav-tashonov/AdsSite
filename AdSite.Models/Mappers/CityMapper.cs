@@ -62,6 +62,8 @@ namespace AdSite.Models.Mappers
                             ID = entity.ID,
                             Name = entity.Name,
                             Postcode = entity.Postcode,
+                            CreatedAt = entity.CreatedAt,
+                            ModifiedAt = entity.ModifiedAt
                         }
                     );
                 }

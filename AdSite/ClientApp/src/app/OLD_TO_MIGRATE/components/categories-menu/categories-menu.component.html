@@ -1,0 +1,12 @@
+<li *ngFor="let category of componentCategories$">
+  <a name="CategoryId"
+     [routerLink]="['/Ads', category.id]"
+     [innerHtml]="category.name">
+  </a>
+  <ng-container *ngIf="category.children?.length">
+    <i class="fa fa-angle-right float-right"> </i>
+    <ul>
+      <app-categories-menu [componentCategories$]="category.children"></app-categories-menu>
+    </ul>
+  </ng-container>
+</li>

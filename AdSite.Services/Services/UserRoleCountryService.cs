@@ -14,6 +14,7 @@ namespace AdSite.Services
     public interface IUserRoleCountryService
     {
         bool Exists(string userId, Guid countryId);
+        bool Delete(string userId);
         bool Delete(string userId, Guid countryId);
         bool Add(UserRoleCountryCreateModel category);
         bool Update(UserRoleCountryEditModel category);
@@ -60,6 +61,19 @@ namespace AdSite.Services
             try
             {
                 return _repository.Delete(userId, countryId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Exception while deleting user role country  : {0} - {1} ", ex.StackTrace, ex.Message);
+                throw ex;
+            }
+        }
+
+        public bool Delete(string userId)
+        {
+            try
+            {
+                return _repository.Delete(userId);
             }
             catch (Exception ex)
             {

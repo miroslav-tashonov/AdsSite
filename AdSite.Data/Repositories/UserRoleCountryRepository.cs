@@ -11,6 +11,7 @@ namespace AdSite.Data.Repositories
 {
     public interface IUserRoleCountryRepository : IRepository<UserRoleCountry>
     {
+        bool Delete(string userId);
         public bool Delete(string userId, Guid countryId);
         bool Exists(string userId, Guid countryId);
     }
@@ -55,6 +56,31 @@ namespace AdSite.Data.Repositories
 
             return SaveChangesResult();
         }
+
+        public bool Delete(string userId)
+        {
+            try
+            {
+                var urcs = _context.UserRoleCountries.Where(m => m.ApplicationUserId == userId).ToListAsync().GetAwaiter().GetResult();
+
+                if (urcs == null)
+                {
+                    throw new Exception();
+                }
+
+                foreach (var urc in urcs)
+                {
+                    _context.UserRoleCountries.Remove(urc);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return SaveChangesResult();
+        }
+
 
         public bool Delete(Guid id)
         {

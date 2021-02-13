@@ -1,0 +1,29 @@
+<div class="collection-mobile-back" (click)="mobileFilterBack()">
+  <span class="filter-back">
+    <i class="fa fa-angle-left" aria-hidden="true"></i> back
+  </span>
+</div>
+<div class="collection-collapse-block border-0 open">
+  <h3 class="collapse-block-title">Category</h3>
+  <div class="collection-collapse-block-content">
+    <div class="collection-brand-filter">
+      <ul class="category-list" *ngFor="let menuItem of menuItems">
+        <li><a [routerLink]="'/home/left-sidebar/collection/'+ menuItem?.title">{{menuItem?.title}}</a></li>
+
+        <ng-container *ngIf="menuItem.children">
+          <ng-container *ngFor="let childrenItem of menuItem.children">
+            <li style="margin-left: 15px;">
+              <a [routerLink]="'/home/left-sidebar/collection/' + childrenItem?.title">{{childrenItem?.title}}</a>
+            </li>
+            <ng-container *ngIf="childrenItem.children">
+              <li *ngFor="let childrenItem2 of childrenItem.children" style="margin-left: 25px;">
+                <a [routerLink]="'/home/left-sidebar/collection/' + childrenItem2?.title">{{childrenItem2?.title}}</a>
+              </li>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</div>

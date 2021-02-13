@@ -1,0 +1,64 @@
+<!-- Quick-view modal popup start-->
+<div class="modal fade bd-example-modal-lg theme-modal quickviewm" [id]="'cities-dialog'+city?.id"
+     tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content quick-view-modal">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="checkout-page">
+          <div class="checkout-form">
+            <form (ngSubmit)="onSubmit()" [formGroup]="cityForm">
+              <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                  <div class="checkout-title modal-header">
+                    <h3>Cities</h3>
+                  </div>
+                  <div class="check-out">
+                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                      <input type="hidden" name="id" formControlName="id" [(ngModel)]="city.id" placeholder="">
+                      <div *ngIf="cityForm.controls.id.touched && cityForm.controls.id.errors?.required" class="text text-danger">
+                        Id is required.
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                      <input type="hidden" name="countryId" formControlName="countryId" [(ngModel)]="city.countryId" placeholder="">
+                      <div *ngIf="cityForm.controls.countryId.touched && cityForm.controls.countryId.errors?.required" class="text text-danger">
+                        CountryId is required.
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                      <div class="field-label">Name</div>
+                      <input type="text" name="name" formControlName="name" [(ngModel)]="city.name" placeholder="">
+                      <div *ngIf="cityForm.controls.name.touched && cityForm.controls.name.errors?.required" class="text text-danger">
+                        Name is required.
+                      </div>
+                      <div *ngIf="cityForm.controls.name.touched && cityForm.controls.name.errors?.pattern" class="text text-danger">
+                        Name must be an alphabates.
+                      </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-6 col-xs-12">
+                      <div class="field-label">Postal Code</div>
+                      <input type="text" name="postcode" formControlName="postcode" [(ngModel)]="city.postcode" placeholder="">
+                      <div *ngIf="cityForm.controls.postcode.touched && cityForm.controls.postcode.errors?.required" class="text text-danger">
+                        Postcode is required
+                      </div>
+                    </div>
+                    <div>
+                      <button style="display: inline; float:right" class="btn btn-solid">Submit</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Quick-view modal popup end-->

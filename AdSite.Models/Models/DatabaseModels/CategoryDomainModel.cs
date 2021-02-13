@@ -15,6 +15,8 @@ namespace AdSite.Models.DatabaseModels
         public string Name { get; set; }
         public string Type { get; set; }
 
+        public string ImagePath { get; set; }
+
         #region Foreign Keys & navigation properties
         public Guid CountryId { get; set; }
         public Country Country { get; set; }
