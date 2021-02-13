@@ -7,6 +7,7 @@ This project represents responsive multi-site role based ads site built from scr
 <li><a href="https://devblogs.microsoft.com/dotnet/announcing-net-5-0/" rel="nofollow">NET 5.0</a></li>
 <li><a href="https://jwt.io/introduction" rel="nofollow">JWT Bearer Authentication</a></li>
 <li><a href="https://material.angular.io/" rel="nofollow">Angular v11</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-0.html" rel="nofollow">Typescript 4</a></li>
 <li><a href="https://codecraft.tv/courses/angular/unit-testing/jasmine-and-karma/" rel="nofollow">Jasmine+Karma</a></li>
 <li><a href="https://www.microsoft.com/en-us/sql-server/sql-server-2019" rel="nofollow">MSSQL</a></li>
 <li><a href="https://nunit.org/" rel="nofollow">Nunit/NSubstitute</a></li>
@@ -54,6 +55,7 @@ Download [Setup-Standalone.exe](https://drive.google.com/open?id=1hAup8B57sQO_0M
 
 <ul>
 <li>Status: Finishing up remaining Angular 11 components</li>
+<li>To-Do: Stable deployment of docker images of profile build in VS 2019</li>
 <li>To-Do: current plans for future work is to make FE totally independant from the BE and make them communicate via RabbitMQ</li>
 </ul>
 
