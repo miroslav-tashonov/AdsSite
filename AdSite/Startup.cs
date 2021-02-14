@@ -58,7 +58,7 @@ namespace AdSite
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = Configuration.GetValue<string>("EnvironmentUrl:Value"),
                             ValidAudience = Configuration.GetValue<string>("EnvironmentUrl:Value"),
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretKey:Value")))
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey:Value"]))
                         };
                     });/*.AddGoogle(googleOptions =>
                     {

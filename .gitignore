@@ -13,7 +13,6 @@ logs/
 [Oo]bj/
 [Ll]og/
 appsettings.production.json
-appsettings.json
 node_modules/
 lib/
 /AdSite/Properties/PublishProfiles

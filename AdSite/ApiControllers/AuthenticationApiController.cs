@@ -50,7 +50,7 @@ namespace AdSite.Controllers
 
         [HttpPost, Route("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
+        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "User,Admin")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -233,7 +233,7 @@ namespace AdSite.Controllers
             string roleId = _userRoleCountryService.GetAll(countryId).Where(x => x.ApplicationUserId == account.Id).First().RoleId;
             var role = _roleManager.FindByIdAsync(roleId).GetAwaiter().GetResult();
 
-            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretKey:Value")));
+            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey:Value"]));
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>{
